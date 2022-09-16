@@ -15,6 +15,7 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
+  purple_lints: 0.3.0
 
 dev_dependencies:
   flutter_test:
