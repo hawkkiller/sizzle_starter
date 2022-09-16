@@ -1,0 +1,6 @@
+{
+  "appTitle": "blaze_starter",
+  "@appTitle": {
+    "description": "The title of the application"
+  }
+}

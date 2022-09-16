@@ -1,0 +1,1 @@
+ /Users/platon/StudioProjects/blaze_starter/.dart_tool/flutter_gen/gen_l10n/app_localizations_en.dart /Users/platon/StudioProjects/blaze_starter/.dart_tool/flutter_gen/gen_l10n/app_localizations.dart:  /Users/platon/StudioProjects/blaze_starter/l10n.yaml /Users/platon/StudioProjects/blaze_starter/lib/src/localization/app_en.arb
