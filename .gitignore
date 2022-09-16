@@ -127,3 +127,5 @@ app.*.symbols
 
 # Build
 build/
+
+pubspec.lock
