@@ -1,0 +1,74 @@
+on:
+  push:
+    branches:
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'hotfix/**'
+      - 'support/**'
+      - 'master'
+  pull_request:
+    branches:
+      - 'feature/**'
+      - 'bugfix/**'
+      - 'hotfix/**'
+      - 'support/**'
+  workflow_dispatch:
+
+jobs:
+  test-analyze:
+    runs-on: ubuntu-latest
+    container:
+      image: plugfox/flutter:stable
+      options: --user root
+
+    steps:
+      - name: 🫰 Check flutter version
+        run: flutter --version
+        
+      - name: 🚂 Get latest code
+        uses: actions/checkout@v2
+
+      - name: Git configure
+        run: |
+          git config --global --add safe.directory /opt/flutter
+
+      - name: 🐝 Dart tools activation
+        run: |
+          dart pub global activate coverage
+
+      - name: 🚃 Cache pub modules
+        uses: actions/cache@v2
+        env:
+          cache-name: cache-blaze-pub
+        with:
+          path: |
+            $PWD/.pub_cache/
+          key: ${{ runner.os }}-blaze
+
+      - name: 🗄️ Export pub cache directory
+        run: export PUB_CACHE=$PWD/.pub_cache/
+
+      - name: 👷 Install Dependencies
+        timeout-minutes: 1
+        run: flutter pub get
+
+      - name: 🔎 Check format
+        timeout-minutes: 1
+        run: |
+          flutter format --set-exit-if-changed -l 80 .
+
+      - name: 📈 Check analyzer
+        timeout-minutes: 1
+        run: | 
+          flutter analyze --fatal-infos --fatal-warnings lib
+
+      - name: 🧪 Run tests
+        timeout-minutes: 2
+        run: |
+          flutter test --coverage         
+
+      - name: 📥 Upload coverage to Codecov
+        if: ${{ github.ref == 'refs/heads/master' }}
+        timeout-minutes: 1
+        uses: codecov/codecov-action@v2.1.0
+    
