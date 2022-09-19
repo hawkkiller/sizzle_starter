@@ -1,6 +1,5 @@
-import 'package:blaze_starter/src/core/widget/app.dart';
-import 'package:flutter/material.dart';
+import 'package:blaze_starter/runner_unsupported.dart'
+    if (dart.library.html) 'runner_web.dart'
+    if (dart.library.io) 'runner_io.dart' as runner;
 
-void main() async {
-  runApp(const App());
-}
+Future<void> main() async => runner.run();
