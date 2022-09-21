@@ -1,11 +1,29 @@
 import 'package:blaze_starter/src/core/model/initialization_hook.dart';
 import 'package:blaze_starter/src/core/widget/app.dart';
+import 'package:blaze_starter/src/feature/initialization/logic/initialization_steps.dart';
+import 'package:blaze_starter/src/feature/initialization/logic/intialization_processor.dart';
 import 'package:flutter/material.dart';
 
-mixin AppRunner {
-  static void initializeAndRun(
-    InitializationHook hook,
-  ) {
-    runApp(const App());
+abstract class AppRunner {
+  factory AppRunner() => _AppRunner();
+
+  Future<void> initializeAndRun(InitializationHook hook);
+}
+
+class _AppRunner
+    with InitializationSteps, InitializationProcessor
+    implements AppRunner {
+  @override
+  Future<void> initializeAndRun(InitializationHook hook) async {
+    final bindings = WidgetsFlutterBinding.ensureInitialized()
+      ..deferFirstFrame();
+    final result = await process(
+      steps: steps,
+      hook: hook,
+    );
+    bindings.allowFirstFrame();
+    runApp(
+      App(result: result),
+    );
   }
 }

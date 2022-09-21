@@ -1,27 +1,13 @@
-import 'dart:async';
-import 'dart:developer';
-
+import 'package:blaze_starter/src/feature/initialization/model/initialization_progress.dart';
 import 'package:flutter/material.dart';
 
-void main() => runZonedGuarded<Future<void>>(
-      () async {
-        runApp(const App());
-      },
-      (error, stackTrace) => log(
-        'Top level exception',
-        error: error,
-        stackTrace: stackTrace,
-        level: 1000,
-        name: 'main',
-      ),
-    );
-
-/// {@template app}
-/// App widget
-/// {@endtemplate}
 class App extends StatelessWidget {
-  /// {@macro app}
-  const App({super.key});
+  const App({
+    required this.result,
+    super.key,
+  });
+
+  final InitializationResult result;
 
   @override
   Widget build(BuildContext context) => MaterialApp(
@@ -37,4 +23,4 @@ class App extends StatelessWidget {
           ),
         ),
       );
-} // App
+}
