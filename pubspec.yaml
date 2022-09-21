@@ -15,19 +15,19 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  freezed_annotation: ^2.1.0
-  json_annotation: ^4.7.0
-  l: ^3.2.0
+  freezed_annotation: 2.1.0
+  json_annotation: 4.7.0
+  l: 3.2.0
   purple_lints: 0.3.0
-  shared_preferences: ^2.0.15
-  stack_trace: ^1.10.0
+  shared_preferences: 2.0.15
+  stack_trace: 1.10.0
 
 dev_dependencies:
-  build_runner: ^2.2.1
+  build_runner: 2.2.1
   flutter_test:
     sdk: flutter
-  freezed: ^2.1.1
-  json_serializable: ^6.4.0
+  freezed: 2.1.1
+  json_serializable: 6.4.0
 
 flutter:
   uses-material-design: true
