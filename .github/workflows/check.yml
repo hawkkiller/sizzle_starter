@@ -52,6 +52,9 @@ jobs:
         timeout-minutes: 1
         run: flutter pub get
 
+      - name: 😊 Run codegen
+        run: flutter pub run build_runner build --delete-conflicting-outputs
+
       - name: 🔎 Check format
         timeout-minutes: 1
         run: |
