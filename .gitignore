@@ -128,4 +128,9 @@ app.*.symbols
 # Build
 build/
 
+# Codegen 
+*.freezed.dart
+*.g.dart
+*.gen.dart
+
 pubspec.lock
