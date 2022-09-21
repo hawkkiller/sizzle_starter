@@ -15,10 +15,13 @@ class _AppRunner
     implements AppRunner {
   @override
   Future<void> initializeAndRun(InitializationHook hook) async {
+    final bindings = WidgetsFlutterBinding.ensureInitialized()
+      ..deferFirstFrame();
     final result = await process(
       steps: steps,
       hook: hook,
     );
+    bindings.allowFirstFrame();
     runApp(
       App(result: result),
     );
