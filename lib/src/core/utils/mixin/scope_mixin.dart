@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 mixin ScopeMixin on InheritedWidget {
-
   static T? scopeMaybeOf<T extends InheritedWidget>(
     BuildContext context, {
     bool listen = true,

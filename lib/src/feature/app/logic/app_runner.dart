@@ -21,9 +21,10 @@ class _AppRunner
       steps: steps,
       hook: hook,
     );
-    bindings.allowFirstFrame();
-    runApp(
-      App(result: result),
-    );
+    // Run application
+    App(result: result).run();
+    bindings.addPostFrameCallback((_) {
+      bindings.allowFirstFrame();
+    });
   }
 }

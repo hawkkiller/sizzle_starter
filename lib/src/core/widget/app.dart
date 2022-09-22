@@ -1,8 +1,8 @@
+import 'package:blaze_starter/src/core/widget/app_context.dart';
 import 'package:blaze_starter/src/core/widget/scopes_provider.dart';
 import 'package:blaze_starter/src/feature/initialization/model/initialization_progress.dart';
 import 'package:blaze_starter/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:blaze_starter/src/feature/initialization/widget/repositories_scope.dart';
-import 'package:blaze_starter/src/feature/initialization/model/initialization_progress.dart';
 import 'package:flutter/material.dart';
 
 class App extends StatelessWidget {
@@ -10,6 +10,8 @@ class App extends StatelessWidget {
     required this.result,
     super.key,
   });
+
+  void run() => runApp(this);
 
   final InitializationResult result;
 
@@ -25,18 +27,6 @@ class App extends StatelessWidget {
                 child: child,
               ),
         ],
-        child: MaterialApp(
-          title: 'Material App',
-          home: Scaffold(
-            appBar: AppBar(
-              title: const Text('Material App Bar'),
-            ),
-            body: const SafeArea(
-              child: Center(
-                child: Text('Hello World'),
-              ),
-            ),
-          ),
-        ),
+        child: const AppContext(),
       );
 }

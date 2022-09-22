@@ -20,7 +20,7 @@ class ScopesProvider extends StatefulWidget {
 
 class _ScopesProviderState extends State<ScopesProvider> {
   Widget? _topmostScope;
-  late final List<BuildScope> _buildScopes; 
+  late final List<BuildScope> _buildScopes;
 
   @override
   void didUpdateWidget(ScopesProvider oldWidget) {
