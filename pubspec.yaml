@@ -2,12 +2,12 @@ name: blaze_starter
 description: A new Flutter project.
 
 # Prevent accidental publishing to pub.dev.
-publish_to: 'none'
+publish_to: "none"
 
 version: 0.0.4+1
 
 environment:
-  sdk: '>=2.18.0 <3.0.0'
+  sdk: ">=2.18.0 <3.0.0"
   flutter: ">=3.3.1 <4.0.0"
 
 dependencies:
@@ -16,6 +16,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   freezed_annotation: 2.1.0
+  intl: 0.17.0
   json_annotation: 4.7.0
   l: 3.2.0
   purple_lints: 0.3.0

@@ -1,3 +1,4 @@
+import 'package:blaze_starter/src/core/localization/app_localization.dart';
 import 'package:flutter/material.dart';
 
 class AppContext extends StatelessWidget {
@@ -5,6 +6,8 @@ class AppContext extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => MaterialApp(
+        supportedLocales: AppLocalization.supportedLocales,
+        localizationsDelegates: AppLocalization.localizationsDelegates,
         title: 'Material App',
         home: Scaffold(
           appBar: AppBar(
