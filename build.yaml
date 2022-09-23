@@ -1,0 +1,53 @@
+targets:
+  $default:
+    builders:
+      json_serializable:
+        enabled: true
+        generate_for:
+          - lib/**.dart
+        options:
+          any_map: false
+          checked: false
+          constructor: ""
+          create_factory: true
+          create_field_map: false
+          create_to_json: true
+          disallow_unrecognized_keys: false
+          explicit_to_json: false
+          field_rename: none
+          generic_argument_factories: false
+          ignore_unannotated: false
+          include_if_null: true
+      freezed:
+        enabled: true
+        generate_for:
+          - lib/**.dart
+        options:
+          # generate copy with method
+          copy_with: true
+          # generate equality methods
+          equal: true
+          ## other settings
+          map:
+            map: true
+            map_or_null: true
+            maybe_map: true
+          when:
+            when: true
+            when_or_null: true
+            maybe_when: true
+builders:
+  freezed:
+    import: "package:freezed/builder.dart"
+    builder_factories: ["freezed"]
+    build_extensions: { ".dart": [".freezed.dart"] }
+    auto_apply: dependents
+    build_to: source
+    runs_before: ["json_serializable"]
+
+  json_serializable:
+    import: "package:json_serializable/builder.dart"
+    builder_factories: ["jsonSerializable"]
+    build_extensions: {".dart": ["json_serializable.g.part"]}
+    auto_apply: dependents
+    build_to: cache
