@@ -28,8 +28,6 @@ targets:
           # generate equality methods
           equal: true
           ## other settings
-          from_json: true
-          to_json: true
           map:
             map: true
             map_or_null: true
