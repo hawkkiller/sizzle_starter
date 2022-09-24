@@ -36,6 +36,8 @@ targets:
             when: true
             when_or_null: true
             maybe_when: true
+      theme_tailor:
+        enabled: true
 builders:
   freezed:
     import: "package:freezed/builder.dart"
