@@ -30,8 +30,10 @@ mixin InitializationProcessor {
           wrapper.dependencies,
           wrapper.repositories,
         );
-        wrapper = w;
-        hook.onInitializing?.call(w);
+        if (w != null) {
+          wrapper = w;
+          hook.onInitializing?.call(w);
+        }
       }
     } on Object catch (_) {
       hook.onError?.call(stepCount);
