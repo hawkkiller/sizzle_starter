@@ -4,6 +4,7 @@ import 'package:blaze_starter/src/feature/initialization/model/initialization_pr
 import 'package:blaze_starter/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:blaze_starter/src/feature/initialization/widget/repositories_scope.dart';
 import 'package:flutter/material.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 
 class App extends StatelessWidget {
   const App({
@@ -11,7 +12,12 @@ class App extends StatelessWidget {
     super.key,
   });
 
-  void run() => runApp(this);
+  void run() => runApp(
+        DefaultAssetBundle(
+          bundle: SentryAssetBundle(),
+          child: this,
+        ),
+      );
 
   final InitializationResult result;
 
