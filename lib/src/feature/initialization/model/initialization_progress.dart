@@ -1,4 +1,5 @@
 import 'package:freezed_annotation/freezed_annotation.dart';
+import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'initialization_progress.freezed.dart';
@@ -12,6 +13,7 @@ class ResultingRepositories with _$ResultingRepositories {
 class ResultingDependencies with _$ResultingDependencies {
   const factory ResultingDependencies({
     required SharedPreferences preferences,
+    required GoRouter router,
   }) = _ResultingDependencies;
 
   const ResultingDependencies._();
@@ -30,10 +32,12 @@ class InitializationRepositories with _$InitializationRepositories {
 class InitializationDependencies with _$InitializationDependencies {
   const factory InitializationDependencies({
     SharedPreferences? preferences,
+    GoRouter? router,
   }) = _InitializationDependencies;
 
   ResultingDependencies result() => ResultingDependencies(
         preferences: preferences!,
+        router: router!,
       );
 
   const InitializationDependencies._();
