@@ -23,15 +23,17 @@ dependencies:
   purple_lints: 0.3.0
   shared_preferences: 2.0.15
   stack_trace: 1.10.0
+  theme_tailor_annotation: 1.0.3
   
 
 dev_dependencies:
   build_runner: 2.2.1
   flutter_test:
     sdk: flutter
-  freezed: 2.1.1
+  freezed: 2.1.0+1
   go_router_builder: 1.0.14
   json_serializable: 6.4.0
+  theme_tailor: 1.0.6
 
 flutter:
   uses-material-design: true

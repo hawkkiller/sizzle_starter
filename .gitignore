@@ -132,5 +132,7 @@ build/
 *.freezed.dart
 *.g.dart
 *.gen.dart
+*.gr.dart
+*.tailor.dart
 
 pubspec.lock
