@@ -62,6 +62,9 @@ dependencies:
 
   # Lints
   purple_lints: 0.3.0
+  
+  # Helpers
+  pure: 0.2.0
 
 dev_dependencies:
   # Testing

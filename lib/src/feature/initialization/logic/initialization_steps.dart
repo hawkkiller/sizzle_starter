@@ -2,7 +2,9 @@ import 'dart:async';
 
 import 'package:blaze_starter/src/core/router/routes.dart';
 import 'package:blaze_starter/src/feature/initialization/model/initialization_progress.dart';
+import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 typedef StepAction = FutureOr<InitializationWrapper> Function(
@@ -22,6 +24,9 @@ mixin InitializationSteps {
     },
     'Init Router': (wrapper, d, r) {
       final router = GoRouter(
+        observers: <NavigatorObserver>[
+          SentryNavigatorObserver(),
+        ],
         routes: $appRoutes,
       );
       return wrapper.copyWith(
