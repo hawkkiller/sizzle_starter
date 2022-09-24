@@ -20,8 +20,8 @@ mixin InitializationSteps {
   final steps = <StepDescription, StepAction>{
     'Init Firebase': (wrapper, p1, p2) {
       Firebase.initializeApp(
-        // setup options here options: 
-      );
+          // setup options here options:
+          );
     },
     'Init Shared Preferences': (wrapper, dep, rep) async {
       final sharedPreferences = await SharedPreferences.getInstance();
