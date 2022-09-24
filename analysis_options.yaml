@@ -1,1 +1,6 @@
 include: package:purple_lints/purple_lints.yaml
+
+analyzer:
+  plugins:
+  # see [se](https://drift.simonbinder.eu/docs/using-sql/sql_ide/)
+    - drift
