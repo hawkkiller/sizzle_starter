@@ -32,18 +32,6 @@ jobs:
         run: |
           dart pub global activate coverage
 
-      # - name: 🚃 Cache pub modules
-      #   uses: actions/cache@v2
-      #   env:
-      #     cache-name: cache-blaze-pub
-      #   with:
-      #     path: |
-      #       $PWD/.pub_cache/
-      #     key: ${{ runner.os }}-blaze
-
-      # - name: 🗄️ Export pub cache directory
-      #   run: export PUB_CACHE=$PWD/.pub_cache/
-
       - name: 👷 Install Dependencies
         timeout-minutes: 1
         run: flutter pub get
