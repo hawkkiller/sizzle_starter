@@ -13,5 +13,6 @@ enum Environment {
       throw ArgumentError('Unknown environment: $value');
     }
   }
+
   final String value;
 }
