@@ -1,5 +1,8 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:l/l.dart';
+import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 extension on DateTime {
@@ -56,6 +59,7 @@ mixin Logger {
     StackTrace s,
   ) {
     l.e(_formatError('Top-level', e.toString(), s), s);
+    unawaited(Sentry.captureException(e, stackTrace: s));
   }
 
   static void logFlutterError(
