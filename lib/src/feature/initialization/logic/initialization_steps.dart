@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:blaze_starter/src/core/router/routes.dart';
 import 'package:blaze_starter/src/feature/initialization/model/initialization_progress.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
@@ -18,11 +16,18 @@ typedef StepDescription = String;
 
 mixin InitializationSteps {
   final steps = <StepDescription, StepAction>{
-    'Init Firebase': (wrapper, p1, p2) {
-      Firebase.initializeApp(
-          // setup options here options:
-          );
-    },
+    'Init Firebase': (wrapper, p1, p2) async => wrapper.copyWith(
+          dependencies: p1.copyWith(
+              // app: await Firebase.initializeApp(
+              //   options: const FirebaseOptions(
+              //     apiKey: '',
+              //     appId: '',
+              //     messagingSenderId: '',
+              //     projectId: '',
+              //   ),
+              // ),
+              ),
+        ),
     'Init Shared Preferences': (wrapper, dep, rep) async {
       final sharedPreferences = await SharedPreferences.getInstance();
       return wrapper.copyWith(
@@ -33,9 +38,9 @@ mixin InitializationSteps {
       final router = GoRouter(
         observers: <NavigatorObserver>[
           SentryNavigatorObserver(),
-          FirebaseAnalyticsObserver(
-            analytics: FirebaseAnalytics.instance,
-          ),
+          // FirebaseAnalyticsObserver(
+          //   analytics: FirebaseAnalytics.instanceFor(app: d.app!),
+          // ),
         ],
         routes: $appRoutes,
       );
