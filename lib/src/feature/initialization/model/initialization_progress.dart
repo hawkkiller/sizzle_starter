@@ -14,6 +14,7 @@ class ResultingDependencies with _$ResultingDependencies {
   const factory ResultingDependencies({
     required SharedPreferences preferences,
     required GoRouter router,
+    // required FirebaseApp app,
   }) = _ResultingDependencies;
 
   const ResultingDependencies._();
@@ -33,11 +34,13 @@ class InitializationDependencies with _$InitializationDependencies {
   const factory InitializationDependencies({
     SharedPreferences? preferences,
     GoRouter? router,
+    // FirebaseApp? app,
   }) = _InitializationDependencies;
 
   ResultingDependencies result() => ResultingDependencies(
         preferences: preferences!,
         router: router!,
+        // app: app!,
       );
 
   const InitializationDependencies._();
