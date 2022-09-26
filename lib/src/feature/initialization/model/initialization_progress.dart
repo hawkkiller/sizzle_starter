@@ -5,63 +5,46 @@ import 'package:shared_preferences/shared_preferences.dart';
 part 'initialization_progress.freezed.dart';
 
 @freezed
-class ResultingRepositories with _$ResultingRepositories {
-  const factory ResultingRepositories() = _ResultingRepositories;
+class RepositoriesStore with _$RepositoriesStore {
+  const factory RepositoriesStore() = _RepositoriesStore;
 }
 
 @freezed
-class ResultingDependencies with _$ResultingDependencies {
-  const factory ResultingDependencies({
+class DependenciesStore with _$DependenciesStore {
+  const factory DependenciesStore({
     required SharedPreferences preferences,
     required GoRouter router,
     // required FirebaseApp app,
-  }) = _ResultingDependencies;
+  }) = _DependenciesStore;
 
-  const ResultingDependencies._();
+  const DependenciesStore._();
 }
 
 @freezed
-class InitializationRepositories with _$InitializationRepositories {
-  const factory InitializationRepositories() = _InitializationRepositories;
-
-  ResultingRepositories result() => const ResultingRepositories();
-
-  const InitializationRepositories._();
-}
-
-@freezed
-class InitializationDependencies with _$InitializationDependencies {
-  const factory InitializationDependencies({
+class InitializationProgress with _$InitializationProgress {
+  const factory InitializationProgress({
     SharedPreferences? preferences,
     GoRouter? router,
     // FirebaseApp? app,
-  }) = _InitializationDependencies;
+  }) = _InitializationProgress;
 
-  ResultingDependencies result() => ResultingDependencies(
+  DependenciesStore dependencies() => DependenciesStore(
         preferences: preferences!,
         router: router!,
         // app: app!,
       );
 
-  const InitializationDependencies._();
+  RepositoriesStore repositories() => const RepositoriesStore();
+
+  const InitializationProgress._();
 }
 
 @freezed
 class InitializationResult with _$InitializationResult {
   const factory InitializationResult({
-    required ResultingDependencies dependencies,
-    required ResultingRepositories repositories,
+    required DependenciesStore dependencies,
+    required RepositoriesStore repositories,
     required int stepCount,
     required int msSpent,
   }) = _InitializationResult;
-}
-
-@freezed
-class InitializationWrapper with _$InitializationWrapper {
-  const factory InitializationWrapper({
-    required InitializationRepositories repositories,
-    required InitializationDependencies dependencies,
-  }) = _InitializationWrapper;
-
-  const InitializationWrapper._();
 }

@@ -10,14 +10,14 @@ abstract class InitializationHook {
 
   factory InitializationHook.setup({
     void Function()? onInit,
-    void Function(InitializationWrapper)? onInitializing,
+    void Function(InitializationProgress)? onInitializing,
     void Function(InitializationResult)? onInitialized,
     void Function(int)? onError,
   }) = _Hook;
 
   void Function()? onInit;
 
-  void Function(InitializationWrapper)? onInitializing;
+  void Function(InitializationProgress)? onInitializing;
 
   void Function(InitializationResult)? onInitialized;
 

@@ -15,24 +15,17 @@ mixin InitializationProcessor {
   }) async {
     final stopwatch = Stopwatch()..start();
     var stepCount = 0;
-    var wrapper = const InitializationWrapper(
-      dependencies: InitializationDependencies(),
-      repositories: InitializationRepositories(),
-    );
+    var progress = const InitializationProgress();
     final env = factory.getEnvironmentStore();
     final trackingManager = factory.createTrackingManager(env);
     await trackingManager.enableReporting(shouldSend: !kDebugMode);
     try {
       await for (final step in Stream.fromIterable(steps.entries)) {
         stepCount++;
-        final w = await step.value(
-          wrapper,
-          wrapper.dependencies,
-          wrapper.repositories,
-        );
-        if (w != null) {
-          wrapper = w;
-          hook.onInitializing?.call(w);
+        final p = await step.value(progress);
+        if (p != null) {
+          progress = p;
+          hook.onInitializing?.call(p);
         }
       }
     } on Object catch (_) {
@@ -41,8 +34,8 @@ mixin InitializationProcessor {
     }
     stopwatch.stop();
     final result = InitializationResult(
-      repositories: wrapper.repositories.result(),
-      dependencies: wrapper.dependencies.result(),
+      dependencies: progress.dependencies(),
+      repositories: progress.repositories(),
       stepCount: stepCount,
       msSpent: stopwatch.elapsedMilliseconds,
     );
