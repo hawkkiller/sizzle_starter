@@ -10,15 +10,15 @@ class RepositoriesScope extends InheritedWidget with ScopeMixin {
     super.key,
   });
 
-  final ResultingRepositories repositories;
+  final RepositoriesStore repositories;
 
-  static ResultingRepositories? maybeOf(BuildContext context) =>
+  static RepositoriesStore? maybeOf(BuildContext context) =>
       ScopeMixin.scopeMaybeOf<RepositoriesScope>(
         context,
         listen: false,
       )?.repositories;
 
-  static ResultingRepositories of(BuildContext context) => maybeOf(context)!;
+  static RepositoriesStore of(BuildContext context) => maybeOf(context)!;
 
   @override
   bool updateShouldNotify(RepositoriesScope oldWidget) => false;

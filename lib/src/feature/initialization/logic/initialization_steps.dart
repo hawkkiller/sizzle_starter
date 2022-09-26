@@ -7,34 +7,21 @@ import 'package:go_router/go_router.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-typedef StepAction = FutureOr<InitializationWrapper>? Function(
-  InitializationWrapper wrapper,
-  InitializationDependencies,
-  InitializationRepositories,
+typedef StepAction = FutureOr<InitializationProgress>? Function(
+  InitializationProgress progress,
 );
 typedef StepDescription = String;
 
 mixin InitializationSteps {
   final steps = <StepDescription, StepAction>{
-    'Init Firebase': (wrapper, p1, p2) async => wrapper.copyWith(
-          dependencies: p1.copyWith(
-              // app: await Firebase.initializeApp(
-              //   options: const FirebaseOptions(
-              //     apiKey: '',
-              //     appId: '',
-              //     messagingSenderId: '',
-              //     projectId: '',
-              //   ),
-              // ),
-              ),
-        ),
-    'Init Shared Preferences': (wrapper, dep, rep) async {
+    'Init Firebase': (progress) {},
+    'Init Shared Preferences': (progress) async {
       final sharedPreferences = await SharedPreferences.getInstance();
-      return wrapper.copyWith(
-        dependencies: dep.copyWith(preferences: sharedPreferences),
+      return progress.copyWith(
+        preferences: sharedPreferences,
       );
     },
-    'Init Router': (wrapper, d, r) {
+    'Init Router': (progress) {
       final router = GoRouter(
         observers: <NavigatorObserver>[
           SentryNavigatorObserver(),
@@ -44,8 +31,8 @@ mixin InitializationSteps {
         ],
         routes: $appRoutes,
       );
-      return wrapper.copyWith(
-        dependencies: d.copyWith(router: router),
+      return progress.copyWith(
+        router: router,
       );
     }
   };

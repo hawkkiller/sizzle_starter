@@ -10,15 +10,15 @@ class DependenciesScope extends InheritedWidget with ScopeMixin {
     super.key,
   });
 
-  final ResultingDependencies dependencies;
+  final DependenciesStore dependencies;
 
-  static ResultingDependencies? maybeOf(BuildContext context) =>
+  static DependenciesStore? maybeOf(BuildContext context) =>
       ScopeMixin.scopeMaybeOf<DependenciesScope>(
         context,
         listen: false,
       )?.dependencies;
 
-  static ResultingDependencies of(BuildContext context) => maybeOf(context)!;
+  static DependenciesStore of(BuildContext context) => maybeOf(context)!;
 
   @override
   bool updateShouldNotify(DependenciesScope oldWidget) => false;
