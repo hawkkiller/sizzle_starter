@@ -17,7 +17,7 @@ class _AppRunner
   Future<void> initializeAndRun(InitializationHook hook) async {
     final bindings = WidgetsFlutterBinding.ensureInitialized()
       ..deferFirstFrame();
-    final result = await process(
+    final result = await processInitialization(
       steps: steps,
       hook: hook,
       factory: this,

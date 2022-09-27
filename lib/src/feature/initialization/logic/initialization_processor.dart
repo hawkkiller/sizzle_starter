@@ -8,7 +8,7 @@ import 'package:flutter/foundation.dart';
 part 'initialization_factory.dart';
 
 mixin InitializationProcessor {
-  Future<InitializationResult> process({
+  Future<InitializationResult> processInitialization({
     required Map<StepDescription, StepAction> steps,
     required InitializationFactory factory,
     required InitializationHook hook,
