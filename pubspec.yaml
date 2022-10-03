@@ -30,11 +30,11 @@ dependencies:
   retrofit: 3.0.1+1
 
   # Router
-  go_router: 5.0.1
+  go_router: 5.0.5
 
   # Firebase
-  firebase_analytics: 9.3.6
-  firebase_core: 1.23.0
+  firebase_analytics: 9.3.7
+  firebase_core: 1.24.0
 
   # l10n
   intl: 0.17.0
@@ -58,7 +58,7 @@ dependencies:
   # Logging
   stack_trace: 1.10.0
   l: 3.2.0
-  sentry_flutter: 6.10.0
+  sentry_flutter: 6.11.1
 
   # Lints
   purple_lints: 0.3.0
@@ -74,15 +74,15 @@ dev_dependencies:
   # Codegen
   freezed: 2.1.0+1
   go_router_builder: 1.0.14
-  json_serializable: 6.4.0
+  json_serializable: 6.4.1
   theme_tailor: 1.0.6
   build_runner: 2.2.1
   drift_dev: 2.1.0
-  retrofit_generator: 4.0.3+2
+  retrofit_generator: 4.1.1
 
   # Utilities
   flutter_launcher_icons: 0.10.0
-  flutter_native_splash: 2.2.9
+  flutter_native_splash: 2.2.10+1
 
 flutter:
   uses-material-design: true
