@@ -67,6 +67,9 @@ unlinked_spec.ds
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
 **/android/key.properties
+# Keystore should never be stored in git
+# Instead, save it in a secure location and read it from there
+# i.e. Secrets
 *.jks
 
 # iOS/XCode related
