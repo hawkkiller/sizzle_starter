@@ -1,5 +1,5 @@
 import 'package:blaze_starter/src/core/model/initialization_hook.dart';
-import 'package:blaze_starter/src/core/widget/app.dart';
+import 'package:blaze_starter/src/feature/app/widget/app.dart';
 import 'package:blaze_starter/src/feature/initialization/logic/initialization_processor.dart';
 import 'package:blaze_starter/src/feature/initialization/logic/initialization_steps.dart';
 import 'package:flutter/material.dart';
