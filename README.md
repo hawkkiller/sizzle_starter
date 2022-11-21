@@ -14,7 +14,7 @@ and clean. But, you need kinda good knowledge in Dart and Flutter to understand 
 3. [DartPad](https://dartpad.dev/) - it's a great tool to play with Dart, has some examples and tutorials
 4. [Flutter official codelabs](https://flutter.dev/docs/codelabs) - Flutter Google Codelabs(great starting point)
 5. [Dart official codelabs](https://dart.dev/codelabs) - Dart Google Codelabs(very little, but still)
-6. [Great Roadmap](https://github.com/MbIXjkee/flutter-developer-map)
+6. [Great Roadmap](https://plugfox.dev/flutter-developer-roadmap/)
 7. [Communities](https://plugfox.dev/communities/)
 8. [Influencers](https://plugfox.dev/influencers/)
 9. [Human Resources](https://plugfox.dev/hr/)
