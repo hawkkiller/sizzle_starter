@@ -23,14 +23,13 @@ dependencies:
   rxdart: 0.27.5
 
   # BLoC
-  stream_bloc: 0.5.2
+  stream_bloc: 0.5.3
 
   # HTTTP
-  dio: 4.0.6
-  retrofit: 3.0.1+1
-
+  http: 0.13.5
+  
   # Router
-  go_router: 5.0.5
+  auto_route: 5.0.2
 
   # Firebase
   firebase_analytics: 9.3.7
@@ -53,7 +52,6 @@ dependencies:
   # Codegen annotations
   json_annotation: 4.7.0
   freezed_annotation: 2.1.0
-  theme_tailor_annotation: 1.0.3
 
   # Logging
   stack_trace: 1.10.0
@@ -73,16 +71,14 @@ dev_dependencies:
 
   # Codegen
   freezed: 2.1.0+1
-  go_router_builder: 1.0.14
-  json_serializable: 6.4.1
-  theme_tailor: 1.0.6
+  json_serializable: 6.5.4
   build_runner: 2.2.1
   drift_dev: 2.1.0
-  retrofit_generator: 4.1.1
+  auto_route_generator: 5.0.2
 
   # Utilities
   flutter_launcher_icons: 0.10.0
-  flutter_native_splash: 2.2.10+1
+  flutter_native_splash: 2.2.15
 
 flutter:
   uses-material-design: true
