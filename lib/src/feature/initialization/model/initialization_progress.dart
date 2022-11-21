@@ -1,5 +1,5 @@
+import 'package:blaze_starter/src/core/router/router.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:go_router/go_router.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 part 'initialization_progress.freezed.dart';
@@ -13,7 +13,7 @@ class RepositoriesStore with _$RepositoriesStore {
 class DependenciesStore with _$DependenciesStore {
   const factory DependenciesStore({
     required SharedPreferences preferences,
-    required GoRouter router,
+    required AppRouter router,
     // required FirebaseApp app,
   }) = _DependenciesStore;
 
@@ -24,7 +24,7 @@ class DependenciesStore with _$DependenciesStore {
 class InitializationProgress with _$InitializationProgress {
   const factory InitializationProgress({
     SharedPreferences? preferences,
-    GoRouter? router,
+    AppRouter? router,
     // FirebaseApp? app,
   }) = _InitializationProgress;
 
