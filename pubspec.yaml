@@ -71,15 +71,14 @@ dev_dependencies:
 
   # Codegen
   freezed: 2.1.0+1
-  go_router_builder: 1.0.14
   json_serializable: 6.4.1
   build_runner: 2.2.1
   drift_dev: 2.1.0
+  auto_route_generator: 5.0.2
 
   # Utilities
   flutter_launcher_icons: 0.10.0
   flutter_native_splash: 2.2.10+1
-  auto_route_generator: 5.0.2
 
 flutter:
   uses-material-design: true
