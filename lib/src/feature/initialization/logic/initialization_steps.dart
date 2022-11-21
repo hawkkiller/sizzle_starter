@@ -13,8 +13,11 @@ typedef StepAction = FutureOr<InitializationProgress>? Function(
 typedef StepDescription = String;
 
 mixin InitializationSteps {
-  final steps = <StepDescription, StepAction>{
-    'Init Firebase': (progress) {},
+  final initializationSteps = <StepDescription, StepAction>{
+    ..._dependencies,
+    ..._data,
+  };
+  static final _dependencies = <StepDescription, StepAction>{
     'Init Shared Preferences': (progress) async {
       final sharedPreferences = await SharedPreferences.getInstance();
       return progress.copyWith(
@@ -36,4 +39,5 @@ mixin InitializationSteps {
       );
     }
   };
+  static final _data = <StepDescription, StepAction>{};
 }
