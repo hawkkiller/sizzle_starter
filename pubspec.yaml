@@ -71,7 +71,7 @@ dev_dependencies:
 
   # Codegen
   freezed: 2.1.0+1
-  json_serializable: 6.4.1
+  json_serializable: 6.5.4
   build_runner: 2.2.1
   drift_dev: 2.1.0
   auto_route_generator: 5.0.2
