@@ -23,7 +23,7 @@ dependencies:
   rxdart: 0.27.5
 
   # BLoC
-  stream_bloc: ^0.5.3
+  stream_bloc: 0.5.3
 
   # HTTTP
   http: 0.13.5
@@ -78,7 +78,7 @@ dev_dependencies:
 
   # Utilities
   flutter_launcher_icons: 0.10.0
-  flutter_native_splash: ^2.2.15
+  flutter_native_splash: 2.2.15
 
 flutter:
   uses-material-design: true
