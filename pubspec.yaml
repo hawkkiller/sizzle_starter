@@ -29,7 +29,7 @@ dependencies:
   http: 0.13.4
   
   # Router
-  go_router: 5.0.5
+  auto_route: 5.0.2
 
   # Firebase
   firebase_analytics: 9.3.7
@@ -71,10 +71,10 @@ dev_dependencies:
 
   # Codegen
   freezed: 2.1.0+1
-  go_router_builder: 1.0.14
   json_serializable: 6.4.1
   build_runner: 2.2.1
   drift_dev: 2.1.0
+  auto_route_generator: 5.0.2
 
   # Utilities
   flutter_launcher_icons: 0.10.0
