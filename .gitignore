@@ -131,10 +131,6 @@ app.*.symbols
 build/
 
 # Codegen 
-*.freezed.dart
-*.g.dart
-*.gen.dart
-*.gr.dart
-*.tailor.dart
-
+*.*.dart
+generated_*
 pubspec.lock

@@ -18,7 +18,7 @@ class _AppRunner
     final bindings = WidgetsFlutterBinding.ensureInitialized()
       ..deferFirstFrame();
     final result = await processInitialization(
-      steps: steps,
+      steps: initializationSteps,
       hook: hook,
       factory: this,
     );

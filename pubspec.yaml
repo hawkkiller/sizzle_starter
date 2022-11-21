@@ -26,9 +26,8 @@ dependencies:
   stream_bloc: 0.5.2
 
   # HTTTP
-  dio: 4.0.6
-  retrofit: 3.0.1+1
-
+  http: 0.13.4
+  
   # Router
   go_router: 5.0.5
 
@@ -53,7 +52,6 @@ dependencies:
   # Codegen annotations
   json_annotation: 4.7.0
   freezed_annotation: 2.1.0
-  theme_tailor_annotation: 1.0.3
 
   # Logging
   stack_trace: 1.10.0
@@ -75,10 +73,8 @@ dev_dependencies:
   freezed: 2.1.0+1
   go_router_builder: 1.0.14
   json_serializable: 6.4.1
-  theme_tailor: 1.0.6
   build_runner: 2.2.1
   drift_dev: 2.1.0
-  retrofit_generator: 4.1.1
 
   # Utilities
   flutter_launcher_icons: 0.10.0
