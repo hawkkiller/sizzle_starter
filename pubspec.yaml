@@ -26,7 +26,7 @@ dependencies:
   stream_bloc: 0.5.2
 
   # HTTTP
-  http: 0.13.4
+  http: ^0.13.5
   
   # Router
   go_router: 5.0.5
