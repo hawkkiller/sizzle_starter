@@ -4,9 +4,13 @@ import 'package:blaze_starter/src/feature/initialization/logic/initialization_pr
 import 'package:blaze_starter/src/feature/initialization/logic/initialization_steps.dart';
 import 'package:flutter/material.dart';
 
+/// A class which is responsible for initialization and running the app.
 abstract class AppRunner {
   factory AppRunner() => _AppRunner();
 
+  /// run initialization
+  ///
+  /// if success -> run app
   Future<void> initializeAndRun(InitializationHook hook);
 }
 
