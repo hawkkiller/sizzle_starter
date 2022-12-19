@@ -56,7 +56,7 @@ dependencies:
   # Logging
   stack_trace: 1.10.0
   l: 3.2.0
-  sentry_flutter: 6.11.1
+  sentry_flutter: ^6.18.1
 
   # Lints
   purple_lints: 0.3.0
