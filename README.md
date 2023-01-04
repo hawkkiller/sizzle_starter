@@ -1,4 +1,4 @@
-# Blaze Starter
+# Sizzle Starter
 
 Great template for Flutter projects. 
 During the development of this template, I studied the best practices of the most popular Flutter templates and repositories, tried to combine them in one template, adding something special and new.
@@ -31,6 +31,7 @@ and clean. But, you need kinda good knowledge in Dart and Flutter to understand 
 10. [Flutter Fundamentals](https://plugfox.dev/flutter-fundamentals/)
 11. [Flutter Awesome](https://github.com/Solido/awesome-flutter)
 12. [Dart Awesome](https://github.com/yissachar/awesome-dart)
+13. [Flutter Channel](https://www.youtube.com/@flutterdev)
 
 ## How to run
 1. Click `Use this template` button
