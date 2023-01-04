@@ -2,5 +2,5 @@ include: package:sizzle_lints/sizzle_lints.yaml
 
 analyzer:
   plugins:
-  # see https://drift.simonbinder.eu/docs/using-sql/sql_ide/
+    # see https://drift.simonbinder.eu/docs/using-sql/sql_ide/
     - drift
