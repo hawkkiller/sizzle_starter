@@ -18,7 +18,7 @@ jobs:
   test-analyze:
     runs-on: ubuntu-latest
     container:
-      image: plugfox/flutter:master
+      image: michaellazebny/flutter:master
       options: --user root
 
     steps:
