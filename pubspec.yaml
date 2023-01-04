@@ -32,7 +32,7 @@ dependencies:
   auto_route: 5.0.2
 
   # Firebase
-  firebase_analytics: 9.3.7
+  firebase_analytics: ^9.3.8
   firebase_core: 1.24.0
 
   # l10n
@@ -56,7 +56,7 @@ dependencies:
   # Logging
   stack_trace: 1.10.0
   l: 3.2.0
-  sentry_flutter: 6.11.1
+  sentry_flutter: ^6.18.1
 
   # Lints
   purple_lints: 0.3.0
@@ -72,13 +72,13 @@ dev_dependencies:
   # Codegen
   freezed: 2.1.0+1
   json_serializable: 6.5.4
-  build_runner: 2.2.1
+  build_runner: ^2.3.3
   drift_dev: 2.1.0
   auto_route_generator: 5.0.2
 
   # Utilities
   flutter_launcher_icons: 0.10.0
-  flutter_native_splash: 2.2.15
+  flutter_native_splash: ^2.2.16
 
 flutter:
   uses-material-design: true
