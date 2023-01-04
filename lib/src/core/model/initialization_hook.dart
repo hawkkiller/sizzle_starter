@@ -1,4 +1,4 @@
-import 'package:blaze_starter/src/feature/initialization/model/initialization_progress.dart';
+import 'package:sizzle_starter/src/feature/initialization/model/initialization_progress.dart';
 
 abstract class InitializationHook {
   InitializationHook({

@@ -1,8 +1,8 @@
 import 'dart:async';
 
-import 'package:blaze_starter/src/core/router/router.dart';
-import 'package:blaze_starter/src/feature/initialization/model/initialization_progress.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizzle_starter/src/core/router/router.dart';
+import 'package:sizzle_starter/src/feature/initialization/model/initialization_progress.dart';
 
 typedef StepAction = FutureOr<InitializationProgress>? Function(
   InitializationProgress progress,

@@ -1,6 +1,6 @@
-import 'package:blaze_starter/src/core/router/router.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizzle_starter/src/core/router/router.dart';
 
 part 'initialization_progress.freezed.dart';
 
