@@ -6,8 +6,8 @@ This starter reduces time spent on creating new project. Just click **Use this t
 Below there are some instructions on how to use this template and very useful topics especially for newbies
 
 Credits:
-- [Purple Starter](https://github.com/purplenoodlesoop/purple-starter) - author Yakov Karpov
-- [Plugfox](https://github.com/PlugFox) - author Michael Matiunin
+- [Purple Starter](https://github.com/purplenoodlesoop/purple-starter) - Yakov Karpov
+- [Plugfox](https://github.com/PlugFox) - Michael Matiunin
 
 ---
 # Starting up
