@@ -42,7 +42,7 @@ jobs:
       - name: 🔎 Check format
         timeout-minutes: 1
         run: |
-          find . -name '*.dart' -not -name 'firebase_options.dart' -not -path "*/.dart_tool/*" -not -name '*.*.dart' | xargs dart format -l 100 --set-exit-if-changed
+          dart format -l 100 --set-exit-if-changed $(find lib -name "*.dart" -not \( -name "*.*.dart" \) )
 
       - name: 📈 Check analyzer
         timeout-minutes: 1
