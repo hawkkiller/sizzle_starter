@@ -42,7 +42,7 @@ jobs:
       - name: 🔎 Check format
         timeout-minutes: 1
         run: |
-          flutter format --set-exit-if-changed -l 100 .
+          dart format --set-exit-if-changed -l 100 .
 
       - name: 📈 Check analyzer
         timeout-minutes: 1
