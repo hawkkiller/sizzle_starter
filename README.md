@@ -49,7 +49,7 @@ and clean. But, you need kinda good knowledge in Dart and Flutter to understand 
 - BLoC library
 - Feature Oriented Structure - **BLoC**, **Data**, **Model**, **Widget**
 - Many Useful Libraries
-- Tools|Utils ready to use (native splash, launcher icons ..)
+- Tools | Utils ready to use (native splash, launcher icons ..)
 - Linter rules
 - Build.yaml configured
 - l10n configured
