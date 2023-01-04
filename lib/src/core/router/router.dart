@@ -1,5 +1,5 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:blaze_starter/src/feature/sample/widget/sample_page.dart';
+import 'package:sizzle_starter/src/feature/sample/widget/sample_page.dart';
 
 part 'router.gr.dart';
 
