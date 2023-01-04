@@ -1,4 +1,4 @@
-include: package:purple_lints/purple_lints.yaml
+include: package:sizzle_lints/sizzle_lints.yaml
 
 analyzer:
   plugins:

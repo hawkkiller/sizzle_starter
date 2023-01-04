@@ -28,6 +28,8 @@ class InitializationProgress with _$InitializationProgress {
     // FirebaseApp? app,
   }) = _InitializationProgress;
 
+  const InitializationProgress._();
+
   DependenciesStore dependencies() => DependenciesStore(
         preferences: preferences!,
         router: router!,
@@ -35,8 +37,6 @@ class InitializationProgress with _$InitializationProgress {
       );
 
   RepositoriesStore repositories() => const RepositoriesStore();
-
-  const InitializationProgress._();
 }
 
 @freezed

@@ -8,7 +8,7 @@ abstract class InitializationFactory {
   );
 }
 
-class InitializationFactoryImpl implements InitializationFactory {
+mixin InitializationFactoryImpl implements InitializationFactory {
   @override
   SentryTrackingManager createTrackingManager(
     EnvironmentStore environmentStore,

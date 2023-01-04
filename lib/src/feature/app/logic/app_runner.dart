@@ -5,19 +5,14 @@ import 'package:blaze_starter/src/feature/initialization/logic/initialization_st
 import 'package:flutter/material.dart';
 
 /// A class which is responsible for initialization and running the app.
-abstract class AppRunner {
-  factory AppRunner() => _AppRunner();
-
+class AppRunner
+    with
+        InitializationSteps,
+        InitializationProcessor,
+        InitializationFactoryImpl {
   /// run initialization
   ///
   /// if success -> run app
-  Future<void> initializeAndRun(InitializationHook hook);
-}
-
-class _AppRunner
-    with InitializationSteps, InitializationProcessor, InitializationFactoryImpl
-    implements AppRunner {
-  @override
   Future<void> initializeAndRun(InitializationHook hook) async {
     final bindings = WidgetsFlutterBinding.ensureInitialized()
       ..deferFirstFrame();
