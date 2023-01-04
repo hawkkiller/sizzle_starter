@@ -17,8 +17,7 @@ If second, I would recommend you to read [this](https://flutter.dev/docs) first.
 This project is supposed to be as easy as it could be, at same time flexible 
 and clean. But, you need kinda good knowledge in Dart and Flutter to understand it.
 
-## Few ways to study Flutter\Dart
-*note*: read this readme till down before you start studying / while you are studying
+## Flutter\Dart resources
 1. [Flutter docs](https://flutter.dev/docs) - official docs, one of the best ways of learning
 2. [Dart docs](https://dart.dev/guides) - official dart docs
 3. [DartPad](https://dartpad.dev/) - it's a great tool to play with Dart, has some examples and tutorials
