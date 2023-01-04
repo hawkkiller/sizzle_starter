@@ -1,30 +1,30 @@
 on:
   push:
     branches:
-      - 'feature/**'
-      - 'bugfix/**'
-      - 'hotfix/**'
-      - 'support/**'
-      - 'master'
+      - "feature/**"
+      - "bugfix/**"
+      - "hotfix/**"
+      - "support/**"
+      - "master"
   pull_request:
     branches:
-      - 'feature/**'
-      - 'bugfix/**'
-      - 'hotfix/**'
-      - 'support/**'
+      - "feature/**"
+      - "bugfix/**"
+      - "hotfix/**"
+      - "support/**"
   workflow_dispatch:
 
 jobs:
   test-analyze:
     runs-on: ubuntu-latest
     container:
-      image: plugfox/flutter:stable
+      image: plugfox/flutter:master
       options: --user root
 
     steps:
       - name: 🫰 Check flutter version
         run: flutter --version
-        
+
       - name: 🚂 Get latest code
         uses: actions/checkout@v2
 
@@ -42,20 +42,19 @@ jobs:
       - name: 🔎 Check format
         timeout-minutes: 1
         run: |
-          flutter format --set-exit-if-changed -l 80 .
+          flutter format --set-exit-if-changed -l 100 .
 
       - name: 📈 Check analyzer
         timeout-minutes: 1
-        run: | 
-          flutter analyze --fatal-infos --fatal-warnings 
+        run: |
+          flutter analyze --fatal-infos --fatal-warnings
 
       - name: 🧪 Run tests
         timeout-minutes: 2
         run: |
-          flutter test --coverage         
-        
+          flutter test --coverage
+
       - name: 📥 Upload coverage to Codecov
-        if: ${{ github.ref == 'refs/heads/master' }}
+        if: ${{ github.ref == 'refs/heads/main' }}
         timeout-minutes: 1
         uses: codecov/codecov-action@v2.1.0
-    
