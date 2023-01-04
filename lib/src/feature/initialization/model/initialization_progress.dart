@@ -1,6 +1,6 @@
-import 'package:blaze_starter/src/core/router/router.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizzle_starter/src/core/router/router.dart';
 
 part 'initialization_progress.freezed.dart';
 
@@ -28,6 +28,8 @@ class InitializationProgress with _$InitializationProgress {
     // FirebaseApp? app,
   }) = _InitializationProgress;
 
+  const InitializationProgress._();
+
   DependenciesStore dependencies() => DependenciesStore(
         preferences: preferences!,
         router: router!,
@@ -35,8 +37,6 @@ class InitializationProgress with _$InitializationProgress {
       );
 
   RepositoriesStore repositories() => const RepositoriesStore();
-
-  const InitializationProgress._();
 }
 
 @freezed

@@ -1,7 +1,7 @@
-import 'package:blaze_starter/src/core/utils/mixin/scope_mixin.dart';
-import 'package:blaze_starter/src/feature/initialization/model/initialization_progress.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
+import 'package:sizzle_starter/src/core/utils/mixin/scope_mixin.dart';
+import 'package:sizzle_starter/src/feature/initialization/model/initialization_progress.dart';
 
 class RepositoriesScope extends InheritedWidget with ScopeMixin {
   const RepositoriesScope({

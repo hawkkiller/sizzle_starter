@@ -1,5 +1,5 @@
-import 'package:blaze_starter/src/core/utils/mixin/scope_mixin.dart';
 import 'package:flutter/material.dart';
+import 'package:sizzle_starter/src/core/utils/mixin/scope_mixin.dart';
 
 typedef BuildScope = ScopeMixin Function(Widget child);
 

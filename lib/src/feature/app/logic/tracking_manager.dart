@@ -19,11 +19,11 @@ typedef _CompleteSubscription = void Function([
 ]);
 
 class SentryTrackingManager implements ErrorTrackingManager {
-  final String _sentryDsn;
-
   SentryTrackingManager({
     required String sentryDsn,
   }) : _sentryDsn = sentryDsn;
+
+  final String _sentryDsn;
 
   Completer<StreamSubscription<void>?>? _subscriptionCompleter;
 
