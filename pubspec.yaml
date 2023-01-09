@@ -59,7 +59,7 @@ dependencies:
   sentry_flutter: 6.18.1
 
   # Lints
-  sizzle_lints: 1.0.7
+  sizzle_lints: 1.0.8
 
   # Helpers
   pure: 0.2.0
