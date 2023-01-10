@@ -30,8 +30,7 @@ class _ScopesProviderState extends State<ScopesProvider> {
 
   @override
   void didUpdateWidget(ScopesProvider oldWidget) {
-    if (oldWidget.child != widget.child ||
-        oldWidget.buildScopes != widget.buildScopes) {
+    if (oldWidget.child != widget.child || oldWidget.buildScopes != widget.buildScopes) {
       _computeTopmostScope();
     }
     super.didUpdateWidget(oldWidget);

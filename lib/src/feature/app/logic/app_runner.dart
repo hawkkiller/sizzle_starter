@@ -5,17 +5,12 @@ import 'package:sizzle_starter/src/feature/initialization/logic/initialization_p
 import 'package:sizzle_starter/src/feature/initialization/logic/initialization_steps.dart';
 
 /// A class which is responsible for initialization and running the app.
-class AppRunner
-    with
-        InitializationSteps,
-        InitializationProcessor,
-        InitializationFactoryImpl {
+class AppRunner with InitializationSteps, InitializationProcessor, InitializationFactoryImpl {
   /// run initialization
   ///
   /// if success -> run app
   Future<void> initializeAndRun(InitializationHook hook) async {
-    final bindings = WidgetsFlutterBinding.ensureInitialized()
-      ..deferFirstFrame();
+    final bindings = WidgetsFlutterBinding.ensureInitialized()..deferFirstFrame();
     final result = await processInitialization(
       steps: initializationSteps,
       hook: hook,
