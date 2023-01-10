@@ -1,22 +1,22 @@
 part of 'initialization_processor.dart';
 
 abstract class InitializationFactory {
-  EnvironmentStore getEnvironmentStore();
+  IEnvironmentStore getEnvironmentStore();
 
   SentryTrackingManager createTrackingManager(
-    EnvironmentStore environmentStore,
+    IEnvironmentStore environmentStore,
   );
 }
 
 mixin InitializationFactoryImpl implements InitializationFactory {
   @override
   SentryTrackingManager createTrackingManager(
-    EnvironmentStore environmentStore,
+    IEnvironmentStore environmentStore,
   ) =>
       SentryTrackingManager(
         sentryDsn: environmentStore.sentryDsn,
       );
 
   @override
-  EnvironmentStore getEnvironmentStore() => EnvironmentStore();
+  IEnvironmentStore getEnvironmentStore() => EnvironmentStore();
 }

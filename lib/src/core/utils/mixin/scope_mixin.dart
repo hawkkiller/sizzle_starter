@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+/// A mixin which provides some useful methods for working with inherited widgets.
+/// If you need to get a scope from the context, use [scopeMaybeOf] or [scopeOf].
+/// Also, use this Mixin if you want to provide a scope to descendants.
 mixin ScopeMixin on InheritedWidget {
   static T? scopeMaybeOf<T extends InheritedWidget>(
     BuildContext context, {
@@ -18,12 +21,14 @@ mixin ScopeMixin on InheritedWidget {
     BuildContext context, {
     bool listen = true,
   }) =>
-      scopeMaybeOf<T>(context, listen: listen) ?? _notFoundInheritedWidgetOfExactType<T>();
+      scopeMaybeOf<T>(context, listen: listen) ??
+      _notFoundInheritedWidgetOfExactType<T>();
 
-  static Never _notFoundInheritedWidgetOfExactType<T extends InheritedWidget>() =>
-      throw ArgumentError(
-        'Out of scope, not found inherited widget '
-            'a $T of the exact type',
-        'out_of_scope',
-      );
+  static Never
+      _notFoundInheritedWidgetOfExactType<T extends InheritedWidget>() =>
+          throw ArgumentError(
+            'Out of scope, not found inherited widget '
+                'a $T of the exact type',
+            'out_of_scope',
+          );
 }

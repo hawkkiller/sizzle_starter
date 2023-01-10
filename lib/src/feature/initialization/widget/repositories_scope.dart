@@ -3,6 +3,7 @@ import 'package:flutter/widgets.dart';
 import 'package:sizzle_starter/src/core/utils/mixin/scope_mixin.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/initialization_progress.dart';
 
+/// A widget which is responsible for providing the repositories.
 class RepositoriesScope extends InheritedWidget with ScopeMixin {
   const RepositoriesScope({
     required super.child,
