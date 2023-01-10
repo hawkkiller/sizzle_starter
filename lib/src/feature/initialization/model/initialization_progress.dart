@@ -14,7 +14,6 @@ class DependenciesStore with _$DependenciesStore {
   const factory DependenciesStore({
     required SharedPreferences preferences,
     required AppRouter router,
-    // required FirebaseApp app,
   }) = _DependenciesStore;
 
   const DependenciesStore._();
@@ -25,7 +24,6 @@ class InitializationProgress with _$InitializationProgress {
   const factory InitializationProgress({
     SharedPreferences? preferences,
     AppRouter? router,
-    // FirebaseApp? app,
   }) = _InitializationProgress;
 
   const InitializationProgress._();
@@ -33,7 +31,6 @@ class InitializationProgress with _$InitializationProgress {
   DependenciesStore dependencies() => DependenciesStore(
         preferences: preferences!,
         router: router!,
-        // app: app!,
       );
 
   RepositoriesStore repositories() => const RepositoriesStore();

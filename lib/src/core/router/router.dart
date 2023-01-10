@@ -3,6 +3,7 @@ import 'package:sizzle_starter/src/feature/sample/widget/sample_page.dart';
 
 part 'router.gr.dart';
 
+/// The configuration of app routes.
 @MaterialAutoRouter(
   replaceInRouteName: 'Page,Route',
   routes: [

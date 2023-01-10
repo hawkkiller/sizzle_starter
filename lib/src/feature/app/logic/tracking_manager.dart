@@ -6,10 +6,12 @@ import 'package:pure/pure.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:stream_transform/stream_transform.dart';
 
+/// A class which is responsible for managing error tracking.
 abstract class ErrorTrackingDisabler {
   Future<void> disableReporting();
 }
 
+/// A class which is responsible for managing error tracking.
 abstract class ErrorTrackingManager implements ErrorTrackingDisabler {
   Future<void> enableReporting({required bool shouldSend});
 }
@@ -18,6 +20,7 @@ typedef _CompleteSubscription = void Function([
   StreamSubscription<void>? subscription,
 ]);
 
+///
 class SentryTrackingManager implements ErrorTrackingManager {
   SentryTrackingManager({
     required String sentryDsn,

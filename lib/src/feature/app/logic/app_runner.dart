@@ -16,10 +16,10 @@ class AppRunner with InitializationSteps, InitializationProcessor, Initializatio
       hook: hook,
       factory: this,
     );
-    // Run application
-    App(result: result).run();
     bindings.addPostFrameCallback((_) {
       bindings.allowFirstFrame();
     });
+    // Run application
+    App(result: result).run();
   }
 }

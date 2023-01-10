@@ -7,14 +7,12 @@ import 'package:sizzle_starter/src/feature/initialization/model/initialization_p
 typedef StepAction = FutureOr<InitializationProgress>? Function(
   InitializationProgress progress,
 );
-typedef StepDescription = String;
-
 mixin InitializationSteps {
-  final initializationSteps = <StepDescription, StepAction>{
+  final initializationSteps = <String, StepAction>{
     ..._dependencies,
     ..._data,
   };
-  static final _dependencies = <StepDescription, StepAction>{
+  static final _dependencies = <String, StepAction>{
     'Init Shared Preferences': (progress) async {
       final sharedPreferences = await SharedPreferences.getInstance();
       return progress.copyWith(
@@ -28,5 +26,5 @@ mixin InitializationSteps {
       );
     }
   };
-  static final _data = <StepDescription, StepAction>{};
+  static final _data = <String, StepAction>{};
 }

@@ -6,6 +6,7 @@ import 'package:sizzle_starter/src/feature/initialization/model/initialization_p
 import 'package:sizzle_starter/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/repositories_scope.dart';
 
+/// A widget which is responsible for running the app.
 class App extends StatelessWidget {
   const App({
     required this.result,

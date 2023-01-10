@@ -9,7 +9,7 @@ part 'initialization_factory.dart';
 
 mixin InitializationProcessor {
   Future<InitializationResult> processInitialization({
-    required Map<StepDescription, StepAction> steps,
+    required Map<String, StepAction> steps,
     required InitializationFactory factory,
     required InitializationHook hook,
   }) async {
@@ -18,7 +18,9 @@ mixin InitializationProcessor {
     var progress = const InitializationProgress();
     final env = factory.getEnvironmentStore();
     final trackingManager = factory.createTrackingManager(env);
-    await trackingManager.enableReporting(shouldSend: !kDebugMode);
+    await trackingManager.enableReporting(
+      shouldSend: !kDebugMode && env.isProduction,
+    );
     try {
       await for (final step in Stream.fromIterable(steps.entries)) {
         stepCount++;
