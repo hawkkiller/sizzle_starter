@@ -51,7 +51,6 @@ Below there are some instructions on how to use this template and useful topics 
 - [url_launcher] - A Crossplatform Flutter plugin for launching urls.
 - [funvas] - Funvas is a library for creating animations in Flutter. It is a wrapper around the Canvas API, which makes it easy to create animations.
 
-
 ### Not Recommended libraries
 
 - [hive] - key-value storage for Flutter and Dart. It loads all data into memory, which is not good for large data sets. It is better to use [sqflite] or [drift] for this purpose. If you need a KV storage for small data sets, you can use [shared_preferences]. In addition, you cannot apply migrations, which is a big problem.
@@ -120,6 +119,8 @@ Below there are some instructions on how to use this template and useful topics 
 [funvas]: https://pub.dev/packages/funvas
 [stream_transform]: https://pub.dev/packages/stream_transform
 [url_launcher]: https://pub.dev/packages/url_launcher
+[rxdart]: https://pub.dev/packages/rxdart
+[http]: https://pub.dev/packages/http
 [//]: <not recommended>
 [hive]: https://pub.dev/packages/hive
 [getx]: https://pub.dev/packages/get
