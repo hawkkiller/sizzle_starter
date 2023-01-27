@@ -135,5 +135,5 @@ Below there are some instructions on how to use this template and useful topics 
 
 ## Credits:
 
-- [Purple Starter](https://github.com/purplenoodlesoop/purple-starter) - Yakov Karpov
+- [Purple Starter](https://github.com/purplenoodlesoop) - Yakov Karpov
 - [Plugfox](https://github.com/PlugFox) - Michael Matiunin
