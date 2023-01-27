@@ -18,7 +18,7 @@ jobs:
   test-analyze:
     runs-on: ubuntu-latest
     container:
-      image: michaellazebny/flutter:master
+      image: michaellazebny/flutter:stable
       options: --user root
 
     steps:
