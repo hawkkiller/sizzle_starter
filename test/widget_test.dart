@@ -1,31 +1,87 @@
-// This is an example Flutter widget test.
-//
-// To perform an interaction with a widget in your test, use the WidgetTester
-// utility in the flutter_test package. For example, you can send tap and scroll
-// gestures. You can also use WidgetTester to find child widgets in the widget
-// tree, read text, and verify that the values of widget properties are correct.
-//
-// Visit https://flutter.dev/docs/cookbook/testing/widget/introduction for
-// more information about Widget testing.
-
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:sizzle_starter/src/core/utils/mixin/scope_mixin.dart';
+import 'package:sizzle_starter/src/core/widget/scope_widgets.dart';
 
 void main() {
-  group('MyWidget', () {
-    testWidgets('should display a string of text', (tester) async {
-      // Define a Widget
-      const myWidget = MaterialApp(
-        home: Scaffold(
-          body: Text('Hello'),
-        ),
-      );
-
-      // Build myWidget and trigger a frame.
-      await tester.pumpWidget(myWidget);
-
-      // Verify myWidget shows some text
-      expect(find.byType(Text), findsOneWidget);
-    });
+  group('ScopeProvider test >', () {
+    testWidgets(
+      'ScopesProvider must provide all scopes',
+      (tester) async {
+        await tester.pumpWidget(
+          ScopesProvider(
+            providers: [
+              ScopeProvider(
+                buildScope: (child) => _DummyInheritedWidget(child: child),
+              ),
+              ScopeProvider(
+                buildScope: (child) => _DummyInheritedWidget2(child: child),
+              ),
+            ],
+            child: const Placeholder(),
+          ),
+        );
+        final dummy = tester.widget(find.byType(_DummyInheritedWidget));
+        final dummy2 = tester.widget(find.byType(_DummyInheritedWidget2));
+        expect(
+          dummy,
+          isA<_DummyInheritedWidget>(),
+          reason: '_DummyInheritedWidget must be provided',
+        );
+        expect(
+          dummy2,
+          isA<_DummyInheritedWidget2>(),
+          reason: '_DummyInheritedWidget2 must be provided',
+        );
+      },
+    );
+    testWidgets(
+      'ScopeProvider must provide scope',
+      (tester) async {
+        await tester.pumpWidget(
+          ScopeProvider(
+            buildScope: (child) => _DummyInheritedWidget(child: child),
+            child: const Placeholder(),
+          ),
+        );
+        final dummy = tester.widget(find.byType(_DummyInheritedWidget));
+        expect(
+          dummy,
+          isA<_DummyInheritedWidget>(),
+          reason: '_DummyInheritedWidget must be provided',
+        );
+      },
+    );
+    testWidgets(
+      'ScopeProvider without child must fail',
+      (tester) async {
+        await tester.pumpWidget(
+          ScopeProvider(
+            buildScope: (child) => _DummyInheritedWidget(child: child),
+          ),
+        );
+        expect(tester.takeException(), isArgumentError);
+      },
+    );
   });
+}
+
+class _DummyInheritedWidget extends InheritedWidget with ScopeMixin {
+  const _DummyInheritedWidget({
+    required super.child,
+  });
+
+  @override
+  bool updateShouldNotify(_DummyInheritedWidget oldWidget) => false;
+}
+
+// dummy inherited widget 2
+
+class _DummyInheritedWidget2 extends InheritedWidget with ScopeMixin {
+  const _DummyInheritedWidget2({
+    required super.child,
+  });
+
+  @override
+  bool updateShouldNotify(_DummyInheritedWidget2 oldWidget) => false;
 }
