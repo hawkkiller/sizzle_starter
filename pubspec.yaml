@@ -41,7 +41,7 @@ dependencies:
     sdk: flutter
 
   # Path receiving/manipulation
-  path_provider: 2.0.11
+  path_provider: ^2.0.12
   path: ^1.8.2
 
   # Persisting
