@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:sizzle_starter/src/core/widget/scopes_provider.dart';
+import 'package:sizzle_starter/src/core/widget/scope_widgets.dart';
 import 'package:sizzle_starter/src/feature/app/widget/app_context.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/initialization_progress.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/dependencies_scope.dart';
@@ -24,15 +24,19 @@ class App extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => ScopesProvider(
-        buildScopes: [
-          (child) => DependenciesScope(
-                dependencies: result.dependencies,
-                child: child,
-              ),
-          (child) => RepositoriesScope(
-                repositories: result.repositories,
-                child: child,
-              ),
+        providers: [
+          ScopeProvider(
+            buildScope: (child) => DependenciesScope(
+              dependencies: result.dependencies,
+              child: child,
+            ),
+          ),
+          ScopeProvider(
+            buildScope: (child) => RepositoriesScope(
+              repositories: result.repositories,
+              child: child,
+            ),
+          ),
         ],
         child: const AppContext(),
       );

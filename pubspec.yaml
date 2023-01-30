@@ -79,6 +79,7 @@ dev_dependencies:
   # Utilities
   flutter_launcher_icons: 0.11.0
   flutter_native_splash: 2.2.16
+  dart_code_metrics: ^5.5.1
 
 flutter:
   uses-material-design: true
