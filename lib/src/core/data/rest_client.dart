@@ -7,19 +7,20 @@ import 'package:platform_info/platform_info.dart' as info;
 import 'package:sizzle_starter/src/core/exception/network_exception.dart';
 
 @immutable
-abstract class RestClient {
+class RestClient {
   RestClient({
-    required this.baseUrl,
+    required String baseUrl,
     http.Client? client,
-  }) : client = client ?? http.Client();
+  })  : _client = client ?? http.Client(),
+        _baseUri = Uri.parse(baseUrl);
 
-  final String baseUrl;
-  final http.Client client;
+  final Uri _baseUri;
+  final http.Client _client;
 
-  Future<Map<String, dynamic>> get(
+  Future<Map<String, Object?>> get(
     String path, {
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? queryParams,
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
   }) =>
       _send(
         path,
@@ -28,11 +29,11 @@ abstract class RestClient {
         queryParams: queryParams,
       );
 
-  Future<Map<String, dynamic>> post(
+  Future<Map<String, Object?>> post(
     String path, {
-    required Map<String, dynamic> body,
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? queryParams,
+    required Map<String, Object?> body,
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
   }) =>
       _send(
         path,
@@ -41,11 +42,11 @@ abstract class RestClient {
         queryParams: queryParams,
       );
 
-  Future<Map<String, dynamic>> put(
+  Future<Map<String, Object?>> put(
     String path, {
-    required Map<String, dynamic> body,
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? queryParams,
+    required Map<String, Object?> body,
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
   }) =>
       _send(
         path,
@@ -54,10 +55,10 @@ abstract class RestClient {
         queryParams: queryParams,
       );
 
-  Future<Map<String, dynamic>> delete(
+  Future<Map<String, Object?>> delete(
     String path, {
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? queryParams,
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
   }) =>
       _send(
         path,
@@ -66,11 +67,11 @@ abstract class RestClient {
         queryParams: queryParams,
       );
 
-  Future<Map<String, dynamic>> patch(
+  Future<Map<String, Object?>> patch(
     String path, {
-    required Map<String, dynamic> body,
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? queryParams,
+    required Map<String, Object?> body,
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
   }) =>
       _send(
         path,
@@ -79,40 +80,32 @@ abstract class RestClient {
         queryParams: queryParams,
       );
 
-  Future<Map<String, dynamic>> _send(
+  Future<Map<String, Object?>> _send(
     String path, {
     required String method,
-    Map<String, dynamic>? body,
-    Map<String, dynamic>? headers,
-    Map<String, dynamic>? queryParams,
+    Map<String, Object?>? body,
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
   }) async {
     try {
-      final uri = _buildUri(path, queryParams: queryParams);
-      final request = http.Request(method, uri);
-      if (body != null) request.bodyBytes = _encodeBody(body);
-      request.headers.addAll({
-        if (body != null) ...{
-          'Content-Type': 'application/json;charset=utf-8',
-          'Content-Length': request.bodyBytes.length.toString(),
-        },
-        'Connection': 'Keep-Alive',
-        // the same as `"Cache-Control": "no-cache"`, but deprecated
-        // however, to support older servers that tie to HTTP/1.0 this should
-        // be included. According to RFC this header can be included and used
-        // by the server even if it is HTTP/1.1+
-        'Pragma': 'no-cache',
-        'Accept': 'application/json',
-        'User-Agent': info.Platform.I.version,
-        ...?headers?.map((key, value) => MapEntry(key, value.toString())),
-      });
-      final response = await client.send(request).then(http.Response.fromStream);
+      final request = buildRequest(
+        method: method,
+        path: path,
+        queryParams: queryParams,
+        headers: headers,
+        body: body,
+      );
+      final response = await _client.send(request).then(http.Response.fromStream);
 
       if (response.statusCode > 199 && response.statusCode < 300) {
-        return _decodeResponse(response);
+        return decodeResponse(response);
       } else if (response.statusCode > 499) {
-        throw InternalServerException(statusCode: response.statusCode, message: response.body);
+        throw InternalServerException(
+          statusCode: response.statusCode,
+          message: response.body,
+        );
       } else if (response.statusCode > 399) {
-        final decoded = jsonDecode(response.body) as Map<String, dynamic>?;
+        final decoded = jsonDecode(response.body) as Map<String, Object?>?;
         throw RestClientException(
           statusCode: response.statusCode,
           // TODO(starter): Set there your field which server returns in case of error
@@ -128,8 +121,10 @@ abstract class RestClient {
     }
   }
 
-  List<int> _encodeBody(
-    Map<String, dynamic> body,
+  @protected
+  @visibleForTesting
+  List<int> encodeBody(
+    Map<String, Object?> body,
   ) {
     try {
       return utf8.encode(json.encode(body));
@@ -141,7 +136,9 @@ abstract class RestClient {
     }
   }
 
-  Map<String, dynamic> _decodeResponse(http.Response response) {
+  @protected
+  @visibleForTesting
+  Map<String, Object?> decodeResponse(http.Response response) {
     final contentType = response.headers['content-type'] ?? response.headers['Content-Type'];
     if (contentType?.contains('application/json') ?? false) {
       final body = response.body;
@@ -152,7 +149,7 @@ abstract class RestClient {
           throw RestClientException(message: json['message'].toString());
         }
         // TODO(starter): Set there your field which server returns in case of success
-        return json['data']! as Map<String, dynamic>;
+        return json['data']! as Map<String, Object?>;
       } on Object catch (error, stackTrace) {
         Error.throwWithStackTrace(
           InternalServerException(
@@ -178,12 +175,53 @@ abstract class RestClient {
     }
   }
 
-  Uri _buildUri(
-    String path, {
-    Map<String, dynamic>? queryParams,
+  @protected
+  @visibleForTesting
+  static Uri buildUri({
+    required Uri baseUri,
+    required String path,
+    Map<String, Object?>? queryParams,
   }) {
-    final uri = Uri.parse(p.join(baseUrl, path));
-    if (queryParams == null) return uri;
-    return uri.replace(queryParameters: queryParams);
+    final uri = Uri.tryParse(path);
+    if (uri == null) return baseUri;
+    final queryParameters = <String, Object?>{
+      ...baseUri.queryParameters,
+      ...uri.queryParameters,
+      ...?queryParams,
+    };
+    return baseUri.replace(
+      path: p.normalize(p.join(baseUri.path, uri.path)),
+      queryParameters: queryParameters.isEmpty ? null : queryParameters,
+    );
+  }
+
+  @protected
+  @visibleForTesting
+  http.Request buildRequest({
+    required String method,
+    required String path,
+    Map<String, Object?>? queryParams,
+    Map<String, Object?>? body,
+    Map<String, Object?>? headers,
+  }) {
+    final uri = buildUri(path: path, baseUri: _baseUri, queryParams: queryParams);
+    final request = http.Request(method, uri);
+    if (body != null) request.bodyBytes = encodeBody(body);
+    request.headers.addAll({
+      if (body != null) ...{
+        'Content-Type': 'application/json;charset=utf-8',
+        'Content-Length': request.bodyBytes.length.toString(),
+      },
+      'Connection': 'Keep-Alive',
+      // the same as `"Cache-Control": "no-cache"`, but deprecated
+      // however, to support older servers that tie to HTTP/1.0 this should
+      // be included. According to RFC this header can be included and used
+      // by the server even if it is HTTP/1.1+
+      'Pragma': 'no-cache',
+      'Accept': 'application/json',
+      'User-Agent': info.Platform.I.version,
+      ...?headers?.map((key, value) => MapEntry(key, value.toString())),
+    });
+    return request;
   }
 }
