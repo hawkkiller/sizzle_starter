@@ -139,7 +139,7 @@ class RestClient {
 
   @protected
   @visibleForTesting
-  Map<String, Object?> decodeResponse(http.Response response) {
+  static Map<String, Object?> decodeResponse(http.Response response) {
     final contentType = response.headers['content-type'] ?? response.headers['Content-Type'];
     if (contentType?.contains('application/json') ?? false) {
       final body = response.body;
@@ -152,6 +152,8 @@ class RestClient {
         // TODO(starter): Set there your field which server returns in case of success
         return json['data']! as Map<String, Object?>;
       } on Object catch (error, stackTrace) {
+        if (error is NetworkException) rethrow;
+
         Error.throwWithStackTrace(
           InternalServerException(
             message: 'Server returned invalid json: $error',
