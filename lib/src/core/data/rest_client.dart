@@ -89,6 +89,7 @@ class RestClient {
   }) async {
     try {
       final request = buildRequest(
+        baseUri: _baseUri,
         method: method,
         path: path,
         queryParams: queryParams,
@@ -123,7 +124,7 @@ class RestClient {
 
   @protected
   @visibleForTesting
-  List<int> encodeBody(
+  static List<int> encodeBody(
     Map<String, Object?> body,
   ) {
     try {
@@ -197,14 +198,15 @@ class RestClient {
 
   @protected
   @visibleForTesting
-  http.Request buildRequest({
+  static http.Request buildRequest({
+    required Uri baseUri,
     required String method,
     required String path,
     Map<String, Object?>? queryParams,
     Map<String, Object?>? body,
     Map<String, Object?>? headers,
   }) {
-    final uri = buildUri(path: path, baseUri: _baseUri, queryParams: queryParams);
+    final uri = buildUri(path: path, baseUri: baseUri, queryParams: queryParams);
     final request = http.Request(method, uri);
     if (body != null) request.bodyBytes = encodeBody(body);
     request.headers.addAll({
