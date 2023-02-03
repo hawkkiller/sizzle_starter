@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:sizzle_starter/src/core/data/rest_client.dart';
@@ -202,6 +204,15 @@ void main() {
             () => RestClient.decodeResponse(response),
             returnsNormally,
           );
+        });
+      });
+      group('Encode body', () {
+        test('should encode body correctly', () {
+          final body = {
+            'key': 'value',
+          };
+          final encodedBody = RestClient.encodeBody(body);
+          expect(encodedBody, utf8.encode('{"key":"value"}'));
         });
       });
     },
