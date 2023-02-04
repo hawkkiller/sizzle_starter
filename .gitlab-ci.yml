@@ -1,0 +1,30 @@
+stages:
+  - "test-analyze"
+
+before_script:
+  - "git config --global --add safe.directory /opt/flutter"
+
+# Pull empty flutter image, test and analyze the code
+test-analyze:
+  stage: "test-analyze"
+  image:
+    name: "michaellazebny/flutter:stable"
+  timeout: 10m
+  when: always
+  script:
+    - flutter --version
+
+    - echo "get flutter packages"
+    - flutter pub get
+
+    - echo "Run codegen"
+    - flutter pub run build_runner build --delete-conflicting-outputs
+
+    - echo "Check formatting"
+    - dart format -l 100 --set-exit-if-changed $(find lib name -name "*.dart" -not \( -name "*.*.dart" \) )
+
+    - echo "Analyze Code"
+    - flutter analyze --fatal-infos --fatal-warnings
+
+    - echo "Run tests"
+    - flutter test --coverage -r expanded
