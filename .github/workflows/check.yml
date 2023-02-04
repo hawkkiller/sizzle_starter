@@ -52,7 +52,7 @@ jobs:
       - name: 🧪 Run tests
         timeout-minutes: 2
         run: |
-          flutter test --coverage
+          flutter test --coverage -r expanded
 
       - name: 📥 Upload coverage to Codecov
         if: ${{ github.ref == 'refs/heads/main' }}

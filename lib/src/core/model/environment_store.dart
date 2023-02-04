@@ -1,4 +1,4 @@
-import 'package:sizzle_starter/src/core/enum/environment.dart';
+import 'package:sizzle_starter/src/core/model/enum/environment.dart';
 
 abstract class IEnvironmentStore {
   abstract final Environment environment;
