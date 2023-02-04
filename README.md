@@ -45,10 +45,10 @@ Below there are some instructions on how to use this template and useful topics 
 - developer - log, Timeline, TimelineTask, TimelineTaskArgument
 - meta - annotations
 - typed_data - ByteData, Endian, Float32List, Float64List, Int16List, Int32List, Int64List, Int8List, Uint16List, Uint32List, Uint64List, Uint8ClampedList, Uint8List
-- math
-- io
 - js - interop with JavaScript
 - http - HTTP client
+- math
+- io
 
 ### External
 
