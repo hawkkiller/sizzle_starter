@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/testing.dart';
 import 'package:sizzle_starter/src/core/data/rest_client.dart';
 import 'package:sizzle_starter/src/core/exception/network_exception.dart';
 
@@ -51,7 +52,7 @@ void main() {
           },
         );
       });
-      group('Build request', () {
+      group('Build request >', () {
         late final Uri baseUri;
         setUpAll(
           () => baseUri = Uri.parse('https://example.com'),
@@ -129,7 +130,7 @@ void main() {
           },
         );
       });
-      group('Decode response', () {
+      group('Decode response >', () {
         test(
           'Throw exception if response json is not in right format',
           () {
@@ -206,13 +207,167 @@ void main() {
           );
         });
       });
-      group('Encode body', () {
+      group('Encode body >', () {
         test('should encode body correctly', () {
           final body = {
             'key': 'value',
           };
           final encodedBody = RestClient.encodeBody(body);
           expect(encodedBody, utf8.encode('{"key":"value"}'));
+        });
+      });
+      group('Test HTTP methods >', () {
+        group('GET >', () {
+          late final http.Client client;
+          late final RestClient restClient;
+          setUpAll(() {
+            client = MockClient(
+              (request) async => http.Response(
+                '{"data": {"key": "value"}}',
+                200,
+                headers: {
+                  'content-type': 'application/json',
+                },
+              ),
+            );
+            restClient = RestClient(
+              baseUrl: 'https://example.com',
+              client: client,
+            );
+          });
+          test('should call GET method correctly', () async {
+            final response = await restClient.get(
+              'path',
+              headers: {
+                'key': 'value',
+              },
+            );
+            expect(response, isA<Map<String, dynamic>>());
+          });
+
+          test('should call GET method with query params correctly', () async {
+            final response = await restClient.get(
+              'path',
+              headers: {
+                'key': 'value',
+              },
+              queryParams: {
+                'querykey': 'queryvalue',
+              },
+            );
+            expect(response, isA<Map<String, dynamic>>());
+          });
+
+          test('should throw an exception for an invalid response', () async {
+            final client = MockClient(
+              (request) async => http.Response(
+                'invalid',
+                200,
+                headers: {
+                  'content-type': 'application/json',
+                },
+              ),
+            );
+            final restClient = RestClient(
+              baseUrl: 'https://example.com',
+              client: client,
+            );
+            expect(
+              () => restClient.get('path'),
+              throwsA(isA<RestClientException>()),
+            );
+          });
+
+          test('should throw an exception for an invalid content type', () async {
+            final client = MockClient(
+              (request) async => http.Response(
+                'invalid',
+                200,
+                headers: {
+                  'content-type': 'text/html',
+                },
+              ),
+            );
+            final restClient = RestClient(
+              baseUrl: 'https://example.com',
+              client: client,
+            );
+            expect(
+              () => restClient.get('path'),
+              throwsA(isA<RestClientException>()),
+            );
+          });
+        });
+        group('POST >', () {
+          late final http.Client client;
+          late final RestClient restClient;
+          setUpAll(() {
+            client = MockClient(
+              (request) async => http.Response(
+                '{"data": {"key": "value"}}',
+                200,
+                headers: {
+                  'content-type': 'application/json',
+                },
+              ),
+            );
+            restClient = RestClient(
+              baseUrl: 'https://example.com',
+              client: client,
+            );
+          });
+          test('should call POST method correctly', () async {
+            final response = await restClient.post(
+              'path',
+              headers: {
+                'key': 'value',
+              },
+              body: {
+                'bodykey': 'bodyvalue',
+              },
+            );
+            expect(response, isA<Map<String, dynamic>>());
+          });
+
+          test('should throw an exception for an invalid response', () async {
+            final client = MockClient(
+              (request) async => http.Response(
+                'invalid',
+                200,
+                headers: {
+                  'content-type': 'application/json',
+                },
+              ),
+            );
+            final restClient = RestClient(
+              baseUrl: 'https://example.com',
+              client: client,
+            );
+            expect(
+              () => restClient.post('path', body: {'key': 'value'}),
+              throwsA(isA<RestClientException>()),
+            );
+          });
+
+          test('should throw an exception for an invalid content type', () async {
+            final client = MockClient(
+              (request) async => http.Response(
+                'invalid',
+                200,
+                headers: {
+                  'content-type': 'text/html',
+                },
+              ),
+            );
+            final restClient = RestClient(
+              baseUrl: 'https://example.com',
+              client: client,
+            );
+            expect(
+              () => restClient.post('path', body: {'key': 'value'}),
+              throwsA(isA<RestClientException>()),
+            );
+          });
         });
       });
     },
