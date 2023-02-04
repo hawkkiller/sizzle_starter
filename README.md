@@ -89,7 +89,7 @@ Below there are some instructions on how to use this template and useful topics 
 
 - [hydrated_bloc] - Hydrated Bloc is a library that allows you to persist bloc state. It is a bad idea to persist state. It is better to persist data, but not state. For example, you emitted an error or loading state. It was persisted. Next time, when user opens the app they will see an error or loading state.
 
-## Flutter | Dart resources
+## Flutter & Dart resources
 
 1. [Flutter docs](https://flutter.dev/docs) - official docs, one of the best ways of learning
 2. [Dart docs](https://dart.dev/guides) - official dart docs
