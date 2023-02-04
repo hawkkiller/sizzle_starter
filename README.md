@@ -6,6 +6,24 @@ During the development of this template, I learned best practices of other Flutt
 The starter reduces time spent on creating new project. Just click **Use this template** and here you go.
 Below there are some instructions on how to use this template and useful topics to read.
 
+## About
+
+- 🤟 Easy set-up
+- 📦 Bunch of useful and tested libraries
+- 🚛 GitHub Actions and Gitlab CI configured
+- 🚀 Modern feature-oriented architecture
+- 📌 Robust documentation & great plans for future
+- 🐛 Bug reporting and analytics
+- 😌 Themes and other stuff...
+
+## Contents
+
+- [How to run](#how-to-run)
+- [Recommended libraries](#recommended-libraries)
+  - [Core](#core)
+  - [External](#external)
+- [Not Recommended libraries](#not-recommended-libraries)
+
 ## How to run
 
 1. Click `Use this template` button
@@ -87,23 +105,6 @@ Below there are some instructions on how to use this template and useful topics 
 12. [Dart Awesome](https://github.com/yissachar/awesome-dart)
 13. [Flutter Channel](https://www.youtube.com/@flutterdev)
 
-## Features
-
-- Runners|hooks
-- Initialization
-- Scopes and **ScopeMixin** for easy scopes usage and nesting using **ScopeProvider**
-- BLoC library
-- Feature Oriented Structure - **BLoC**, **Data**, **Model**, **Widget**
-- Many Useful Libraries
-- Tools | Utils ready to use (native splash, launcher icons ..)
-- Linter rules
-- Build.yaml configured
-- l10n configured
-- Errors logging into Sentry
-- Comfortable logger
-- Assets configured
-- Zones and right errors catching
-
 [//]: recommended
 [bloc]: https://pub.dev/packages/bloc
 [flutter_bloc]: https://pub.dev/packages/flutter_bloc
@@ -121,6 +122,7 @@ Below there are some instructions on how to use this template and useful topics 
 [url_launcher]: https://pub.dev/packages/url_launcher
 [rxdart]: https://pub.dev/packages/rxdart
 [http]: https://pub.dev/packages/http
+
 [//]: <not recommended>
 [hive]: https://pub.dev/packages/hive
 [getx]: https://pub.dev/packages/get
@@ -133,7 +135,7 @@ Below there are some instructions on how to use this template and useful topics 
 [hydrated_bloc]: https://pub.dev/packages/hydrated_bloc
 [mobx]: https://pub.dev/packages/mobx
 
-## Credits:
+## Credits
 
 - [Purple Starter](https://github.com/purplenoodlesoop) - Yakov Karpov
 - [Plugfox](https://github.com/PlugFox) - Michael Matiunin
