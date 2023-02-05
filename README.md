@@ -35,11 +35,15 @@ Here are the steps to initialize the dependencies. It is a map of steps, where t
 
 ### initialization_progress
 
-In `initialization_progress` you can store the results of the steps. InitializationProgress is a model that is passed to the steps as an argument. You can add any fields to it. The fields are initialized with `null` values and iteratively filled with the results of the steps. After all the steps are executed, the InitializationProgress is mapped to an immutable models with the same fields, but not null values, that are also described here. See `RepositoriesStore` and `DependenciesStore`. `RepositoriesStore` is obviously used for repositories😁, when `DependenciesStore` is supposed to store general dependencies like SharedPreferences, Database,  All the process is controlled by the `ininitialization_processor`.
+In `initialization_progress` you can store the results of the steps. InitializationProgress is a model that is passed to the steps as an argument. You can add any fields to it. The fields are initialized with `null` values and iteratively filled with the results of the steps. After all the steps are executed, the InitializationProgress is mapped to an immutable models with the same fields, but not null values, that are also described here. See `RepositoriesStore` and `DependenciesStore`. `RepositoriesStore` is obviously used for repositories😁, when `DependenciesStore` is supposed to store general dependencies like SharedPreferences, Database. All the process is controlled by the `ininitialization_processor`.
 
 ### initialization_processor
 
-InitializationProcessor as said previously is controlling all the stuff. It is responsible for calling the steps, storing the result of each and mapping it to the immutable model and returns `InitializationResult` with the time spent, all the models, etc.
+`InitializationProcessor` as said previously is controlling all the stuff. It is responsible for calling the steps, storing the result of each and mapping it to the immutable model and returns `InitializationResult` with the time spent, all the models, etc. Later, all the results are delivered by inherited widgets and can be accessed from BuildContext, see `dependencies_scope` which is in widget folder.
+
+### dependencies_scope
+
+`DependenciesScope` is a widget that provides access to the `DependenciesStore` and `RepositoriesStore`. It is a great DI in a flutter way which gives you a possibility to access your initialized dependencies from context which exists in each widget.
 
 ## Recommended libraries
 
@@ -124,9 +128,16 @@ InitializationProcessor as said previously is controlling all the stuff. It is r
 6. Run `flutter run` to run your app
 7. Here you go, start coding!
 
-### How to initialize app dependencies
+### How to add a new dependency
 
-1. 
+**This section describes how to add a new dependency to your app.** Please, check the [initialization](#initialization) section before.
+
+1. Open `lib/src/feature/initialization/logic/initialization_progress.dart`
+2. Add new dependency to `InitializationProgress` class like others
+3. Add new dependency to your `Store`
+4. Go to `lib/src/feature/initialization/logic/initialization_steps.dart`
+5. Add new entry to the map and write down all the logic needed to initialize your dependency, return new `InitializationProgress` with updated field.
+6. Now, you can use your dependency in your app receiving it from context.
 
 ## Credits
 
