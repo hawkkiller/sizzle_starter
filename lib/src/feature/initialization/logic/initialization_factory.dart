@@ -13,9 +13,7 @@ mixin InitializationFactoryImpl implements InitializationFactory {
   SentryTrackingManager createTrackingManager(
     IEnvironmentStore environmentStore,
   ) =>
-      SentryTrackingManager(
-        sentryDsn: environmentStore.sentryDsn,
-      );
+      SentryTrackingManager(sentryDsn: environmentStore.sentryDsn);
 
   @override
   IEnvironmentStore getEnvironmentStore() => EnvironmentStore();

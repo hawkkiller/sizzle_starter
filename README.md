@@ -6,33 +6,40 @@ During the development of this template, I learned best practices of other Flutt
 The starter reduces time spent on creating new project. Just click **Use this template** and here you go.
 Below there are some instructions on how to use this template and useful topics to read.
 
-## About
-
-- 🤟 Easy set-up
-- 📦 Bunch of useful and tested libraries
+- 🔥 Fast setup
+- 🧜 Extensible, flexible and easy to maintain
+- 📦 Bunch of useful and tested libraries included
 - 🚛 GitHub Actions and Gitlab CI configured
 - 🚀 Modern feature-oriented architecture
 - 📌 Robust documentation & great plans for future
-- 🐛 Bug reporting and analytics
+- 🐛 Bug reporting, errors catching and analytics
 - 😌 Themes and other stuff...
 
 ## Contents
 
-- [How to run](#how-to-run)
+- [Initialization](#initialization)
 - [Recommended libraries](#recommended-libraries)
   - [Core](#core)
   - [External](#external)
 - [Not Recommended libraries](#not-recommended-libraries)
+- [Resources](#resources)
+- [How to guides](#how-to-guides)
+  - [How to run](#how-to-run)
+- [Credits](#credits)
 
-## How to run
+## Initialization
 
-1. Click `Use this template` button
-2. Clone this repository via `git clone`(you can choose HTTPs, but I would recommend SSH as it is really more comfortable and safe)
-3. Decide which platforms your app will be running on
-4. Decided, run `flutter create . --org com.yourdomain --platforms ios,android,... or nothing if you are writing an app for each platform` in your terminal.
-5. Run `flutter pub get` to install all dependencies
-6. Run `flutter run` to run your app
-7. Here you go, start coding!
+### initialization_steps
+
+Here are the steps to initialize the dependencies. It is a map of steps, where the key is the name of the step and the value is a function that fills the `initialization_progress` model. The steps are executed in the order in which they are specified in the map, which gives you the ability to access the results of the previous steps.
+
+### initialization_progress
+
+In `initialization_progress` you can store the results of the steps. InitializationProgress is a model that is passed to the steps as an argument. You can add any fields to it. The fields are initialized with `null` values and iteratively filled with the results of the steps. After all the steps are executed, the InitializationProgress is mapped to an immutable models with the same fields, but not null values, that are also described here. See `RepositoriesStore` and `DependenciesStore`. `RepositoriesStore` is obviously used for repositories😁, when `DependenciesStore` is supposed to store general dependencies like SharedPreferences, Database,  All the process is controlled by the `ininitialization_processor`.
+
+### initialization_processor
+
+InitializationProcessor as said previously is controlling all the stuff. It is responsible for calling the steps, storing the result of each and mapping it to the immutable model and returns `InitializationResult` with the time spent, all the models, etc.
 
 ## Recommended libraries
 
@@ -89,7 +96,7 @@ Below there are some instructions on how to use this template and useful topics 
 
 - [hydrated_bloc] - Hydrated Bloc is a library that allows you to persist bloc state. It is a bad idea to persist state. It is better to persist data, but not state. For example, you emitted an error or loading state. It was persisted. Next time, when user opens the app they will see an error or loading state.
 
-## Flutter & Dart resources
+## Resources
 
 1. [Flutter docs](https://flutter.dev/docs) - official docs, one of the best ways of learning
 2. [Dart docs](https://dart.dev/guides) - official dart docs
@@ -104,6 +111,27 @@ Below there are some instructions on how to use this template and useful topics 
 11. [Flutter Awesome](https://github.com/Solido/awesome-flutter)
 12. [Dart Awesome](https://github.com/yissachar/awesome-dart)
 13. [Flutter Channel](https://www.youtube.com/@flutterdev)
+
+## How to guides
+
+### How to run
+
+1. Click `Use this template` button
+2. Clone this repository via `git clone`
+3. Decide which platforms your app will be running on
+4. Run `flutter create . --org com.yourdomain --platforms ios,android,... or nothing if you are writing an app for each platform` in your terminal.
+5. Run `flutter pub get` to install all dependencies
+6. Run `flutter run` to run your app
+7. Here you go, start coding!
+
+### How to initialize app dependencies
+
+1. 
+
+## Credits
+
+- [Purple Starter](https://github.com/purplenoodlesoop) - Yakov Karpov
+- [Plugfox](https://github.com/PlugFox) - Michael Matiunin
 
 [//]: recommended
 [bloc]: https://pub.dev/packages/bloc
@@ -134,8 +162,3 @@ Below there are some instructions on how to use this template and useful topics 
 [flutter_hooks]: https://pub.dev/packages/flutter_hooks
 [hydrated_bloc]: https://pub.dev/packages/hydrated_bloc
 [mobx]: https://pub.dev/packages/mobx
-
-## Credits
-
-- [Purple Starter](https://github.com/purplenoodlesoop) - Yakov Karpov
-- [Plugfox](https://github.com/PlugFox) - Michael Matiunin
