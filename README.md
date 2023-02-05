@@ -6,15 +6,44 @@ During the development of this template, I learned best practices of other Flutt
 The starter reduces time spent on creating new project. Just click **Use this template** and here you go.
 Below there are some instructions on how to use this template and useful topics to read.
 
-## How to run
+- 🔥 Fast setup
+- 🧜 Extensible, flexible and easy to maintain
+- 📦 Bunch of useful and tested libraries included
+- 🚛 GitHub Actions and Gitlab CI configured
+- 🚀 Modern feature-oriented architecture
+- 📌 Robust documentation & great plans for future
+- 🐛 Bug reporting, errors catching and analytics
+- 😌 Themes and other stuff...
 
-1. Click `Use this template` button
-2. Clone this repository via `git clone`(you can choose HTTPs, but I would recommend SSH as it is really more comfortable and safe)
-3. Decide which platforms your app will be running on
-4. Decided, run `flutter create . --org com.yourdomain --platforms ios,android,... or nothing if you are writing an app for each platform` in your terminal.
-5. Run `flutter pub get` to install all dependencies
-6. Run `flutter run` to run your app
-7. Here you go, start coding!
+## Contents
+
+- [Initialization](#initialization)
+- [Recommended libraries](#recommended-libraries)
+  - [Core](#core)
+  - [External](#external)
+- [Not Recommended libraries](#not-recommended-libraries)
+- [Resources](#resources)
+- [How to guides](#how-to-guides)
+  - [How to run](#how-to-run)
+- [Credits](#credits)
+
+## Initialization
+
+### initialization_steps
+
+Here are the steps to initialize the dependencies. It is a map of steps, where the key is the name of the step and the value is a function that fills the `initialization_progress` model. The steps are executed in the order in which they are specified in the map, which gives you the ability to access the results of the previous steps.
+
+### initialization_progress
+
+In `initialization_progress` you can store the results of the steps. InitializationProgress is a model that is passed to the steps as an argument. You can add any fields to it. The fields are initialized with `null` values and iteratively filled with the results of the steps. After all the steps are executed, the InitializationProgress is mapped to an immutable models with the same fields, but not null values, that are also described here. See `RepositoriesStore` and `DependenciesStore`. `RepositoriesStore` is obviously used for repositories😁, when `DependenciesStore` is supposed to store general dependencies like SharedPreferences, Database. All the process is controlled by the `ininitialization_processor`.
+
+### initialization_processor
+
+`InitializationProcessor` as said previously is controlling all the stuff. It is responsible for calling the steps, storing the result of each and mapping it to the immutable model and returns `InitializationResult` with the time spent, all the models, etc. Later, all the results are delivered by inherited widgets and can be accessed from BuildContext, see `dependencies_scope` which is in widget folder.
+
+### dependencies_scope
+
+`DependenciesScope` is a widget that provides access to the `DependenciesStore` and `RepositoriesStore`. It is a great DI in a flutter way which gives you a possibility to access your initialized dependencies from context which exists in each widget.
 
 ## Recommended libraries
 
@@ -27,10 +56,10 @@ Below there are some instructions on how to use this template and useful topics 
 - developer - log, Timeline, TimelineTask, TimelineTaskArgument
 - meta - annotations
 - typed_data - ByteData, Endian, Float32List, Float64List, Int16List, Int32List, Int64List, Int8List, Uint16List, Uint32List, Uint64List, Uint8ClampedList, Uint8List
-- math
-- io
 - js - interop with JavaScript
 - http - HTTP client
+- math
+- io
 
 ### External
 
@@ -71,7 +100,7 @@ Below there are some instructions on how to use this template and useful topics 
 
 - [hydrated_bloc] - Hydrated Bloc is a library that allows you to persist bloc state. It is a bad idea to persist state. It is better to persist data, but not state. For example, you emitted an error or loading state. It was persisted. Next time, when user opens the app they will see an error or loading state.
 
-## Flutter | Dart resources
+## Resources
 
 1. [Flutter docs](https://flutter.dev/docs) - official docs, one of the best ways of learning
 2. [Dart docs](https://dart.dev/guides) - official dart docs
@@ -87,22 +116,33 @@ Below there are some instructions on how to use this template and useful topics 
 12. [Dart Awesome](https://github.com/yissachar/awesome-dart)
 13. [Flutter Channel](https://www.youtube.com/@flutterdev)
 
-## Features
+## How to guides
 
-- Runners|hooks
-- Initialization
-- Scopes and **ScopeMixin** for easy scopes usage and nesting using **ScopeProvider**
-- BLoC library
-- Feature Oriented Structure - **BLoC**, **Data**, **Model**, **Widget**
-- Many Useful Libraries
-- Tools | Utils ready to use (native splash, launcher icons ..)
-- Linter rules
-- Build.yaml configured
-- l10n configured
-- Errors logging into Sentry
-- Comfortable logger
-- Assets configured
-- Zones and right errors catching
+### How to run
+
+1. Click `Use this template` button
+2. Clone this repository via `git clone`
+3. Decide which platforms your app will be running on
+4. Run `flutter create . --org com.yourdomain --platforms ios,android,... or nothing if you are writing an app for each platform` in your terminal.
+5. Run `flutter pub get` to install all dependencies
+6. Run `flutter run` to run your app
+7. Here you go, start coding!
+
+### How to add a new dependency
+
+**This section describes how to add a new dependency to your app.** Please, check the [initialization](#initialization) section before.
+
+1. Open `lib/src/feature/initialization/logic/initialization_progress.dart`
+2. Add new dependency to `InitializationProgress` class like others
+3. Add new dependency to your `Store`
+4. Go to `lib/src/feature/initialization/logic/initialization_steps.dart`
+5. Add new entry to the map and write down all the logic needed to initialize your dependency, return new `InitializationProgress` with updated field.
+6. Now, you can use your dependency in your app receiving it from context.
+
+## Credits
+
+- [Purple Starter](https://github.com/purplenoodlesoop) - Yakov Karpov
+- [Plugfox](https://github.com/PlugFox) - Michael Matiunin
 
 [//]: recommended
 [bloc]: https://pub.dev/packages/bloc
@@ -121,6 +161,7 @@ Below there are some instructions on how to use this template and useful topics 
 [url_launcher]: https://pub.dev/packages/url_launcher
 [rxdart]: https://pub.dev/packages/rxdart
 [http]: https://pub.dev/packages/http
+
 [//]: <not recommended>
 [hive]: https://pub.dev/packages/hive
 [getx]: https://pub.dev/packages/get
@@ -132,8 +173,3 @@ Below there are some instructions on how to use this template and useful topics 
 [flutter_hooks]: https://pub.dev/packages/flutter_hooks
 [hydrated_bloc]: https://pub.dev/packages/hydrated_bloc
 [mobx]: https://pub.dev/packages/mobx
-
-## Credits:
-
-- [Purple Starter](https://github.com/purplenoodlesoop) - Yakov Karpov
-- [Plugfox](https://github.com/PlugFox) - Michael Matiunin

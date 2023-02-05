@@ -4,7 +4,6 @@ import 'package:sizzle_starter/src/core/widget/scope_widgets.dart';
 import 'package:sizzle_starter/src/feature/app/widget/app_context.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/initialization_progress.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/dependencies_scope.dart';
-import 'package:sizzle_starter/src/feature/initialization/widget/repositories_scope.dart';
 
 /// A widget which is responsible for running the app.
 class App extends StatelessWidget {
@@ -23,21 +22,12 @@ class App extends StatelessWidget {
   final InitializationResult result;
 
   @override
-  Widget build(BuildContext context) => ScopesProvider(
-        providers: [
-          ScopeProvider(
-            buildScope: (child) => DependenciesScope(
-              dependencies: result.dependencies,
-              child: child,
-            ),
-          ),
-          ScopeProvider(
-            buildScope: (child) => RepositoriesScope(
-              repositories: result.repositories,
-              child: child,
-            ),
-          ),
-        ],
+  Widget build(BuildContext context) => ScopeProvider(
+        buildScope: (child) => DependenciesScope(
+          dependencies: result.dependencies,
+          repositories: result.repositories,
+          child: child,
+        ),
         child: const AppContext(),
       );
 }
