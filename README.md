@@ -25,6 +25,7 @@ Below there are some instructions on how to use this template and useful topics 
 - [Resources](#resources)
 - [How to guides](#how-to-guides)
   - [How to run](#how-to-run)
+  - [How to add a new dependency](#how-to-add-a-new-dependency)
 - [Credits](#credits)
 
 ## Initialization
