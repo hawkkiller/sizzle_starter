@@ -45,12 +45,12 @@ dependencies:
   path: ^1.8.2
 
   # Persisting
-  drift: 2.4.2
+  drift: ^2.5.0
   sqlite3_flutter_libs: 0.5.12
   shared_preferences: ^2.0.17
 
   # Codegen annotations
-  json_annotation: 4.7.0
+  json_annotation: ^4.8.0
   freezed_annotation: 2.2.0
 
   # Logging
@@ -72,9 +72,9 @@ dev_dependencies:
 
   # Codegen
   freezed: 2.3.2
-  json_serializable: 6.5.4
+  json_serializable: ^6.6.1
   build_runner: 2.3.3
-  drift_dev: 2.4.1
+  drift_dev: ^2.5.1
   auto_route_generator: 5.0.3
 
   # Utilities
