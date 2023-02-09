@@ -38,12 +38,7 @@ void main() {
         () => processor.processInitialization(
           steps: <String, StepAction>{
             'Init Shared Preferences': (progress) async {
-              SharedPreferences.setMockInitialValues({});
               throw Exception();
-              final sharedPreferences = await SharedPreferences.getInstance();
-              return progress.copyWith(
-                preferences: sharedPreferences,
-              );
             },
             'Init Router': (progress) {
               final router = AppRouter();
