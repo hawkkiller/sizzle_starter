@@ -7,7 +7,7 @@ import 'package:sizzle_starter/src/feature/initialization/logic/initialization_s
 
 void main() {
   group('Initialization Processor >', () {
-    test('processInitialization', () async {
+    test('processInitialization should correctly work', () async {
       const processor = _TestInitializationProcessor();
       final result = await processor.processInitialization(
         steps: <String, StepAction>{
@@ -30,6 +30,33 @@ void main() {
       );
       expect(result, isNotNull);
       expect(result.stepCount, 2);
+    });
+
+    test('processInitialization should fail', () {
+      const processor = _TestInitializationProcessor();
+      expect(
+        () => processor.processInitialization(
+          steps: <String, StepAction>{
+            'Init Shared Preferences': (progress) async {
+              SharedPreferences.setMockInitialValues({});
+              throw Exception();
+              final sharedPreferences = await SharedPreferences.getInstance();
+              return progress.copyWith(
+                preferences: sharedPreferences,
+              );
+            },
+            'Init Router': (progress) {
+              final router = AppRouter();
+              return progress.copyWith(
+                router: router,
+              );
+            }
+          },
+          factory: const _TestInitializationFactory(),
+          hook: InitializationHook.setup(),
+        ),
+        throwsException,
+      );
     });
   });
 }
