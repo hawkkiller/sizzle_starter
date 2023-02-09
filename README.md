@@ -50,17 +50,17 @@ In `initialization_progress` you can store the results of the steps. Initializat
 
 ### Core
 
-- async - Future, Stream, Completer, FutureOr, Zone
-- collection - List, Map, Queue, extensions
-- convert - JSON, UTF8, ASCII, Base64, Hex, LineSplitter
-- core - Object, num, int, double, bool, String, RegExp, Duration, DateTime, Stopwatch, Uri
-- developer - log, Timeline, TimelineTask, TimelineTaskArgument
-- meta - annotations
-- typed_data - ByteData, Endian, Float32List, Float64List, Int16List, Int32List, Int64List, Int8List, Uint16List, Uint32List, Uint64List, Uint8ClampedList, Uint8List
-- js - interop with JavaScript
-- http - HTTP client
-- math
-- io
+- [async](https://api.flutter.dev/flutter/dart-async/dart-async-library.html) - Future, Stream, Completer, FutureOr, Zone
+- [collection](https://api.dart.dev/stable/2.19.2/dart-collection/dart-collection-library.html) - List, Map, Queue, extensions
+- [convert](https://api.dart.dev/stable/2.19.2/dart-convert/dart-convert-library.html) - JSON, UTF8, ASCII, Base64, Hex, LineSplitter
+- [core](https://api.dart.dev/stable/2.19.2/dart-core/dart-core-library.html) - Object, num, int, double, bool, String, RegExp, Duration, DateTime, Stopwatch, Uri
+- [developer](https://api.flutter.dev/flutter/dart-developer/dart-developer-library.html) - log, Timeline, TimelineTask, TimelineTaskArgument
+- [meta](https://api.flutter.dev/flutter/meta/meta-library.html) - annotations
+- [typed_data](https://api.dart.dev/stable/2.19.2/dart-typed_data/dart-typed_data-library.html) - ByteData, Endian, Float32List, Float64List, Int16List, Int32List, Int64List, Int8List, Uint16List, Uint32List, Uint64List, Uint8ClampedList, Uint8List
+- [js](https://api.dart.dev/stable/2.19.2/dart-js/dart-js-library.html) - interop with JavaScript
+- [http](https://pub.dev/packages/http) - HTTP client
+- [math](https://api.dart.dev/stable/2.19.2/dart-math/dart-math-library.html)
+- [io](https://api.dart.dev/stable/2.19.2/dart-io/dart-io-library.html)
 
 ### External
 
