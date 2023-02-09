@@ -1,10 +1,10 @@
 # Sizzle Starter
 
-Great template for Flutter projects.
-During the development of this template, I learned best practices of other Flutter templates and repositories, tried to combine them in one, adding something special and new.
+This Flutter project template provides a starting point for your Flutter projects, saving you time and effort in the setup process. It incorporates best practices and lessons learned from other Flutter templates and repositories, with a few new and unique features.
 
-The starter reduces time spent on creating new project. Just click **Use this template** and here you go.
-Below there are some instructions on how to use this template and useful topics to read.
+To use this template, simply click the "Use this template" button. The instructions below will guide you through the process of setting up and using this template in your own projects.
+
+## Features
 
 - 🔥 Fast setup
 - 🧜 Extensible, flexible and easy to maintain
