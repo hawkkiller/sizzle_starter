@@ -33,7 +33,7 @@ dependencies:
 
   # Firebase
   firebase_analytics: 10.1.0
-  firebase_core: 2.4.1
+  firebase_core: ^2.6.1
 
   # l10n
   intl: 0.17.0
