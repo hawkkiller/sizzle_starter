@@ -32,7 +32,7 @@ dependencies:
   auto_route: 5.0.4
 
   # Firebase
-  firebase_analytics: 10.1.0
+  firebase_analytics: ^10.1.5
   firebase_core: ^2.7.0
 
   # l10n
