@@ -23,7 +23,7 @@ dependencies:
   rxdart: 0.27.7
 
   # BLoC
-  stream_bloc: 0.5.3
+  flutter_bloc: ^8.1.2
 
   # HTTTP
   http: 0.13.5
