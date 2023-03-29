@@ -1,20 +1,16 @@
 import 'package:auto_route/auto_route.dart';
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/feature/sample/widget/sample_page.dart';
+import 'package:sizzle_starter/src/feature/sample/widget/sample_screen.dart';
 
 part 'router.gr.dart';
 
 /// The configuration of app routes.
-@MaterialAutoRouter(
-  replaceInRouteName: 'Page,Route',
-  routes: [
-    AutoRoute<SamplePage>(
-      page: SamplePage,
-      path: '/',
-      initial: true,
-    ),
-  ],
-)
+@AutoRouterConfig(replaceInRouteName: 'Screen,Route')
 class AppRouter extends _$AppRouter {
   AppRouter();
+
+  @override
+  List<AutoRoute> get routes => [
+        AutoRoute(page: SampleRoute.page, path: '/'),
+      ];
 }

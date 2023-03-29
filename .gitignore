@@ -133,4 +133,6 @@ build/
 # Codegen 
 *.*.dart
 generated_*
+
 pubspec.lock
+.metadata
