@@ -5,9 +5,9 @@ import 'package:flutter/material.dart';
 /// SamplePage widget
 /// {@endtemplate}
 @RoutePage()
-class SamplePage extends StatelessWidget {
+class SampleScreen extends StatelessWidget {
   /// {@macro sample_page}
-  const SamplePage({super.key});
+  const SampleScreen({super.key});
 
   @override
   Widget build(BuildContext context) => const Placeholder();
