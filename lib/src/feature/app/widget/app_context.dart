@@ -11,9 +11,7 @@ class AppContext extends StatelessWidget {
   Widget build(BuildContext context) {
     final router = DependenciesScope.dependenciesOf(context).router;
     return MaterialApp.router(
-      routeInformationParser: router.defaultRouteParser(),
-      routeInformationProvider: router.routeInfoProvider(),
-      routerDelegate: router.delegate(),
+      routerConfig: router.config(),
       supportedLocales: AppLocalization.supportedLocales,
       localizationsDelegates: AppLocalization.localizationsDelegates,
       theme: lightThemeData,

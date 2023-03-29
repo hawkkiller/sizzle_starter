@@ -29,7 +29,7 @@ dependencies:
   http: 0.13.5
 
   # Router
-  auto_route: 5.0.4
+  auto_route: 6.0.4
 
   # Firebase
   firebase_analytics: ^10.1.5
@@ -75,7 +75,7 @@ dev_dependencies:
   json_serializable: ^6.6.1
   build_runner: 2.3.3
   drift_dev: ^2.5.1
-  auto_route_generator: 5.0.3
+  auto_route_generator: 6.0.0
 
   # Utilities
   flutter_launcher_icons: 0.11.0
