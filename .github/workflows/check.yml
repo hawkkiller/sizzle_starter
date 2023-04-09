@@ -12,6 +12,7 @@ on:
       - "bugfix/**"
       - "hotfix/**"
       - "support/**"
+      - "dependabot/**"
   workflow_dispatch:
 
 jobs:
