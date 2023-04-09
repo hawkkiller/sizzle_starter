@@ -75,7 +75,7 @@ dev_dependencies:
   json_serializable: ^6.6.1
   build_runner: 2.3.3
   drift_dev: ^2.5.1
-  auto_route_generator: 6.0.0
+  auto_route_generator: ^6.0.3
 
   # Utilities
   flutter_launcher_icons: 0.11.0
