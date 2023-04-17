@@ -78,8 +78,8 @@ dev_dependencies:
   auto_route_generator: ^6.0.3
 
   # Utilities
-  flutter_launcher_icons: 0.11.0
-  flutter_native_splash: 2.2.16
+  flutter_launcher_icons: ^0.13.0
+  flutter_native_splash: ^2.2.19
 
 flutter:
   uses-material-design: true
