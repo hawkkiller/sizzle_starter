@@ -1,9 +1,9 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sizzle_starter/src/core/model/initialization_hook.dart';
 import 'package:sizzle_starter/src/core/router/router.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/initialization_processor.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/initialization_steps.dart';
+import 'package:sizzle_starter/src/feature/initialization/model/initialization_hook.dart';
 
 void main() {
   group('Initialization Processor >', () {

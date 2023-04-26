@@ -1,5 +1,4 @@
 import 'package:auto_route/auto_route.dart';
-import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/feature/sample/widget/sample_screen.dart';
 
 part 'router.gr.dart';

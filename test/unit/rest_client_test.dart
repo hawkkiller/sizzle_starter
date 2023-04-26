@@ -4,7 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
 import 'package:sizzle_starter/src/core/data/rest_client.dart';
-import 'package:sizzle_starter/src/core/exception/network_exception.dart';
+import 'package:sizzle_starter/src/core/utils/exception/network_exception.dart';
 
 void main() {
   group(

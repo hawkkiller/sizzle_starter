@@ -4,7 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
 import 'package:platform_info/platform_info.dart' as info;
-import 'package:sizzle_starter/src/core/exception/network_exception.dart';
+import 'package:sizzle_starter/src/core/utils/exception/network_exception.dart';
 
 @immutable
 class RestClient {

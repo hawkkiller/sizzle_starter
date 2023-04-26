@@ -2,9 +2,9 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/core/model/initialization_hook.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
 import 'package:sizzle_starter/src/feature/app/logic/app_runner.dart' as blaze;
+import 'package:sizzle_starter/src/feature/initialization/model/initialization_hook.dart';
 
 /// Run that uses all platforms
 void sharedRun(InitializationHook hook) {
