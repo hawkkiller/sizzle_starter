@@ -16,6 +16,7 @@ class AppContext extends StatelessWidget {
       localizationsDelegates: AppLocalization.localizationsDelegates,
       theme: lightThemeData,
       darkTheme: darkThemeData,
+      locale: const Locale('es'),
     );
   }
 }
