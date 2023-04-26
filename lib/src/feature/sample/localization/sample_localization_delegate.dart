@@ -1,4 +1,4 @@
-import 'package:sizzle_starter/src/core/localization/generated/generated_localizations.dart';
+import 'package:sizzle_starter/src/core/localization/app_localization.dart';
 import 'package:sizzle_starter/src/core/localization/localization_delegate.dart';
 
 abstract class SampleStrings {
@@ -14,7 +14,7 @@ class SampleLocalizationDelegate extends LocalizationDelegate<SampleStrings> {
 class _SampleStringsImpl implements SampleStrings {
   _SampleStringsImpl(this._appLocalizations);
 
-  final GeneratedLocalizations _appLocalizations;
+  final GeneratedLocalization _appLocalizations;
 
   @override
   String get appTitle => _appLocalizations.appTitle;
