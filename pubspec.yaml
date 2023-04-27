@@ -29,7 +29,7 @@ dependencies:
   http: 0.13.5
 
   # Router
-  auto_route: ^6.0.5
+  auto_route: ^6.3.0
 
   # Firebase
   firebase_analytics: ^10.1.5
