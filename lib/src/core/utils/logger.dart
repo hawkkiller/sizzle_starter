@@ -89,6 +89,15 @@ mixin Logger {
     l.e(_formatError('Flutter', details.exceptionAsString(), stack), stack);
   }
 
+  static bool logPlatformDispatcherError(Object exception, StackTrace stackTrace) {
+    l.e(
+      _formatError('PlatformDispatcher', exception.toString(), stackTrace),
+      stackTrace,
+    );
+    // TODO(mlazebny): check this later
+    return true;
+  }
+
   /// run in a zone
   static T runLogging<T>(T Function() body) => l.capture(body, _logOptions);
 }
