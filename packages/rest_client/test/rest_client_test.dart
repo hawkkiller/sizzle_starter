@@ -1,25 +1,37 @@
 import 'dart:convert';
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart';
-import 'package:sizzle_starter/src/core/data/rest_client.dart';
-import 'package:sizzle_starter/src/core/utils/exception/network_exception.dart';
+import 'package:rest_client/rest_client.dart';
+import 'package:test/test.dart';
 
 void main() {
   group(
-    'RestClient >',
+    'RestClientImpl >',
     () {
+      late final Uri baseUri;
+      late final RestClientBase baseClient;
+      setUpAll(
+        () {
+          baseUri = Uri.parse('https://example.com');
+          baseClient = RestClientBase(
+            baseUrl: baseUri.toString(),
+            client: MockClient(
+              (request) async => http.Response(
+                jsonEncode(
+                  {'key': 'value'},
+                ),
+                200,
+              ),
+            ),
+          );
+        },
+      );
       group('Build URI > ', () {
-        late final Uri baseUri;
-        setUpAll(
-          () => baseUri = Uri.parse('https://example.com'),
-        );
         test(
           'should build a valid URI with preceding slash',
           () {
-            final uri = RestClient.buildUri(
-              baseUri: baseUri,
+            final uri = baseClient.buildUri(
               path: '/path',
             );
             expect(uri.toString(), 'https://example.com/path');
@@ -28,8 +40,7 @@ void main() {
         test(
           'should build a valid URI without preceding slash',
           () {
-            final uri = RestClient.buildUri(
-              baseUri: baseUri,
+            final uri = baseClient.buildUri(
               path: 'path',
             );
             expect(uri.toString(), 'https://example.com/path');
@@ -38,8 +49,7 @@ void main() {
         test(
           'should build a valid URI with query parameters',
           () {
-            final uri = RestClient.buildUri(
-              baseUri: baseUri,
+            final uri = baseClient.buildUri(
               path: 'path?pathkey=pathvalue',
               queryParams: {
                 'key': 'value',
@@ -53,15 +63,10 @@ void main() {
         );
       });
       group('Build request >', () {
-        late final Uri baseUri;
-        setUpAll(
-          () => baseUri = Uri.parse('https://example.com'),
-        );
         test(
           'should build a valid GET request',
           () {
-            final request = RestClient.buildRequest(
-              baseUri: baseUri,
+            final request = baseClient.buildRequest(
               path: 'path',
               method: 'GET',
               headers: {
@@ -76,8 +81,7 @@ void main() {
         test(
           'should build a valid POST request',
           () {
-            final request = RestClient.buildRequest(
-              baseUri: baseUri,
+            final request = baseClient.buildRequest(
               path: 'path',
               method: 'POST',
               headers: {
@@ -96,8 +100,7 @@ void main() {
         test(
           'should build a valid PUT request',
           () {
-            final request = RestClient.buildRequest(
-              baseUri: baseUri,
+            final request = baseClient.buildRequest(
               path: 'path',
               method: 'PUT',
               headers: {
@@ -116,8 +119,7 @@ void main() {
         test(
           'should build a valid DELETE request',
           () {
-            final request = RestClient.buildRequest(
-              baseUri: baseUri,
+            final request = baseClient.buildRequest(
               path: 'path',
               method: 'DELETE',
               headers: {
@@ -142,7 +144,7 @@ void main() {
               },
             );
             expect(
-              () => RestClient.decodeResponse(response),
+              () => baseClient.decodeResponse(response),
               throwsA(isA<InternalServerException>()),
               reason: 'Should throw an exception for an invalid JSON response',
             );
@@ -159,7 +161,7 @@ void main() {
               },
             );
             expect(
-              () => RestClient.decodeResponse(response),
+              () => baseClient.decodeResponse(response),
               throwsA(isA<InternalServerException>()),
             );
           },
@@ -175,7 +177,7 @@ void main() {
               },
             );
             expect(
-              () => RestClient.decodeResponse(response),
+              () => baseClient.decodeResponse(response),
               throwsA(isA<InternalServerException>()),
             );
           },
@@ -189,7 +191,7 @@ void main() {
             },
           );
           expect(
-            () => RestClient.decodeResponse(response),
+            () => baseClient.decodeResponse(response),
             throwsA(isA<RestClientException>()),
           );
         });
@@ -202,7 +204,7 @@ void main() {
             },
           );
           expect(
-            () => RestClient.decodeResponse(response),
+            () => baseClient.decodeResponse(response),
             returnsNormally,
           );
         });
@@ -212,7 +214,7 @@ void main() {
           final body = {
             'key': 'value',
           };
-          final encodedBody = RestClient.encodeBody(body);
+          final encodedBody = baseClient.encodeBody(body);
           expect(encodedBody, utf8.encode('{"key":"value"}'));
         });
       });
