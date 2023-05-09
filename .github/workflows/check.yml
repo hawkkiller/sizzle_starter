@@ -19,7 +19,7 @@ jobs:
   test-analyze:
     runs-on: ubuntu-latest
     container:
-      image: michaellazebny/flutter:stable
+      image: plugfox/flutter:stable
       options: --user root
 
     steps:
@@ -36,6 +36,10 @@ jobs:
       - name: 👷 Install Dependencies
         timeout-minutes: 1
         run: flutter pub get
+
+      - name: 📦 Install dependencies in packages
+        timeout-minutes: 1
+        run: for d in packages/*; do (cd "$d" && flutter pub get); done
 
       - name: 😊 Run codegen
         run: flutter pub run build_runner build --delete-conflicting-outputs

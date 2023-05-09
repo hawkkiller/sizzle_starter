@@ -17,6 +17,8 @@ test-analyze:
     - echo "get flutter packages"
     - flutter pub get
 
+    - cd packages/rest_client && dart pub get && cd ../..
+
     - echo "Run codegen"
     - flutter pub run build_runner build --delete-conflicting-outputs
 
