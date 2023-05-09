@@ -64,6 +64,7 @@ dependencies:
   # Helpers
   pure: 0.2.0
   platform_info: ^3.2.0
+  bloc_concurrency: ^0.2.1
 
 dev_dependencies:
   # Testing
