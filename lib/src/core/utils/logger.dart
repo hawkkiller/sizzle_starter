@@ -78,10 +78,6 @@ mixin Logger {
 
   /// Helper static method to log a flutter error [FlutterError.onError]
   /// like widget overflow, etc.
-  ///
-  /// it isn't sent to the sentry
-  ///
-  ///
   static void logFlutterError(
     FlutterErrorDetails details,
   ) {
@@ -89,6 +85,8 @@ mixin Logger {
     l.e(_formatError('Flutter', details.exceptionAsString(), stack), stack);
   }
 
+  /// Helper static method to log a platform dispatcher error
+  /// like native code errors
   static bool logPlatformDispatcherError(Object exception, StackTrace stackTrace) {
     l.e(
       _formatError('PlatformDispatcher', exception.toString(), stackTrace),
