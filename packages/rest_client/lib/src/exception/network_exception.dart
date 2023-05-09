@@ -1,12 +1,9 @@
 import 'package:meta/meta.dart';
-import 'package:sizzle_starter/src/core/utils/annotation.dart';
 
 @immutable
-@exception
 abstract class NetworkException implements Exception {}
 
 @immutable
-@exception
 class RestClientException implements NetworkException {
   const RestClientException({
     this.message,
@@ -21,7 +18,6 @@ class RestClientException implements NetworkException {
 }
 
 @immutable
-@exception
 class InternalServerException implements NetworkException {
   const InternalServerException({
     this.message,

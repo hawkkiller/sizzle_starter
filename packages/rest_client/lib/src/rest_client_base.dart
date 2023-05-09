@@ -3,12 +3,12 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as p;
-import 'package:platform_info/platform_info.dart' as info;
-import 'package:sizzle_starter/src/core/utils/exception/network_exception.dart';
+import 'package:rest_client/src/exception/network_exception.dart';
+import 'package:rest_client/src/rest_client.dart';
 
 @immutable
-class RestClient {
-  RestClient({
+class RestClientBase implements RestClient {
+  RestClientBase({
     required String baseUrl,
     http.Client? client,
   })  : _client = client ?? http.Client(),
@@ -17,6 +17,7 @@ class RestClient {
   final Uri _baseUri;
   final http.Client _client;
 
+  @override
   Future<Map<String, Object?>> get(
     String path, {
     Map<String, Object?>? headers,
@@ -29,6 +30,7 @@ class RestClient {
         queryParams: queryParams,
       );
 
+  @override
   Future<Map<String, Object?>> post(
     String path, {
     required Map<String, Object?> body,
@@ -42,6 +44,7 @@ class RestClient {
         queryParams: queryParams,
       );
 
+  @override
   Future<Map<String, Object?>> put(
     String path, {
     required Map<String, Object?> body,
@@ -55,6 +58,7 @@ class RestClient {
         queryParams: queryParams,
       );
 
+  @override
   Future<Map<String, Object?>> delete(
     String path, {
     Map<String, Object?>? headers,
@@ -67,6 +71,7 @@ class RestClient {
         queryParams: queryParams,
       );
 
+  @override
   Future<Map<String, Object?>> patch(
     String path, {
     required Map<String, Object?> body,
@@ -89,7 +94,6 @@ class RestClient {
   }) async {
     try {
       final request = buildRequest(
-        baseUri: _baseUri,
         method: method,
         path: path,
         queryParams: queryParams,
@@ -124,7 +128,7 @@ class RestClient {
 
   @protected
   @visibleForTesting
-  static List<int> encodeBody(
+  List<int> encodeBody(
     Map<String, Object?> body,
   ) {
     try {
@@ -139,7 +143,7 @@ class RestClient {
 
   @protected
   @visibleForTesting
-  static Map<String, Object?> decodeResponse(http.Response response) {
+  Map<String, Object?> decodeResponse(http.Response response) {
     final contentType = response.headers['content-type'] ?? response.headers['Content-Type'];
     if (contentType?.contains('application/json') ?? false) {
       final body = response.body;
@@ -180,35 +184,33 @@ class RestClient {
 
   @protected
   @visibleForTesting
-  static Uri buildUri({
-    required Uri baseUri,
+  Uri buildUri({
     required String path,
     Map<String, Object?>? queryParams,
   }) {
     final uri = Uri.tryParse(path);
-    if (uri == null) return baseUri;
+    if (uri == null) return _baseUri;
     final queryParameters = <String, Object?>{
-      ...baseUri.queryParameters,
+      ..._baseUri.queryParameters,
       ...uri.queryParameters,
       ...?queryParams,
     };
-    return baseUri.replace(
-      path: p.normalize(p.join(baseUri.path, uri.path)),
+    return _baseUri.replace(
+      path: p.normalize(p.join(_baseUri.path, uri.path)),
       queryParameters: queryParameters.isEmpty ? null : queryParameters,
     );
   }
 
   @protected
   @visibleForTesting
-  static http.Request buildRequest({
-    required Uri baseUri,
+  http.Request buildRequest({
     required String method,
     required String path,
     Map<String, Object?>? queryParams,
     Map<String, Object?>? body,
     Map<String, Object?>? headers,
   }) {
-    final uri = buildUri(path: path, baseUri: baseUri, queryParams: queryParams);
+    final uri = buildUri(path: path, queryParams: queryParams);
     final request = http.Request(method, uri);
     if (body != null) request.bodyBytes = encodeBody(body);
     request.headers.addAll({
@@ -223,7 +225,6 @@ class RestClient {
       // by the server even if it is HTTP/1.1+
       'Pragma': 'no-cache',
       'Accept': 'application/json',
-      'User-Agent': info.Platform.I.version,
       ...?headers?.map((key, value) => MapEntry(key, value.toString())),
     });
     return request;
