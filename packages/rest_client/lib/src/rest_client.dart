@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+
 import 'package:rest_client/src/rest_client_base.dart';
 
 abstract class RestClient {
