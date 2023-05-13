@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/generated_localizations.dart';
-import 'package:sizzle_starter/src/core/localization/localization_delegate.dart';
-import 'package:sizzle_starter/src/feature/sample/localization/sample_localization_delegate.dart';
 
 typedef GeneratedLocalization = GeneratedLocalizations;
 
@@ -17,15 +15,7 @@ class AppLocalization {
   static const supportedLocales = GeneratedLocalizations.supportedLocales;
 
   /// All the localizations delegates
-  static final localizationsDelegates = <LocalizationsDelegate<dynamic>>[
-    ...GeneratedLocalizations.localizationsDelegates,
-    ...featureDelegates,
-  ];
-
-  /// Feature localization delegates
-  static final featureDelegates = <LocalizationDelegate<Object>>[
-    SampleLocalizationDelegate(),
-  ];
+  static const localizationsDelegates = GeneratedLocalizations.localizationsDelegates;
 
   /// Returns the localized strings for the given [context].
   static T stringOf<T>(BuildContext context) => Localizations.of<T>(context, T)!;
