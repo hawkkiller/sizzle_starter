@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:meta/meta.dart';
 import 'package:sizzle_starter/src/core/utils/mixin/scope_mixin.dart';
 
 typedef BuildScope<T extends Widget> = ScopeMixin<T> Function(Widget child);
 
 typedef BuildWidget = Widget Function(BuildContext context, Widget? child);
 
-@alwaysThrows
 Never _childIsNull() => throw ArgumentError.notNull('child');
 
 class ScopeProvider<T extends Widget> extends StatelessWidget {
