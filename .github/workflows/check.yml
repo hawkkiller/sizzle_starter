@@ -19,7 +19,7 @@ jobs:
   test-analyze:
     runs-on: ubuntu-latest
     container:
-      image: plugfox/flutter:stable
+      image: plugfox/flutter:3.10.0
       options: --user root
 
     steps:
