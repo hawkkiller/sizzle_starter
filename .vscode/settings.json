@@ -1,5 +1,7 @@
 {
   "cmake.configureOnOpen": false,
-  "dart.additionalAnalyzerFileExtensions": ["drift"],
+  "dart.additionalAnalyzerFileExtensions": [
+    "drift"
+  ],
   "dart.lineLength": 100
 }
