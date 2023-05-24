@@ -5,6 +5,7 @@ on:
       - "bugfix/**"
       - "hotfix/**"
       - "support/**"
+      - "dependabot/pub/**"
       - "master"
   pull_request:
     branches:
@@ -12,9 +13,9 @@ on:
       - "bugfix/**"
       - "hotfix/**"
       - "support/**"
-      - "dependabot/**"
+      - "dependabot/pub/**"
   workflow_dispatch:
-
+name: "Test Analyze"
 jobs:
   test-analyze:
     runs-on: ubuntu-latest
