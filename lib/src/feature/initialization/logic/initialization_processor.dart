@@ -15,23 +15,29 @@ mixin InitializationProcessor {
   }) async {
     final stopwatch = Stopwatch()..start();
     var stepCount = 0;
-    var progress = const InitializationProgress();
+    final progress = InitializationProgress();
     final env = factory.getEnvironmentStore();
     final trackingManager = factory.createTrackingManager(env);
     await trackingManager.enableReporting(
       shouldSend: !kDebugMode && env.isProduction,
     );
+    hook.onInit?.call();
     try {
       await for (final step in Stream.fromIterable(steps.entries)) {
         stepCount++;
-        final p = await step.value(progress);
-        if (p != null) {
-          progress = p;
-          hook.onInitializing?.call(p);
-        }
+        final stopWatch = Stopwatch()..start();
+        await step.value(progress);
+        hook.onInitializing?.call(
+          InitializationStepInfo(
+            stepName: step.key,
+            step: stepCount,
+            stepsCount: steps.length,
+            msSpent: (stopWatch..stop()).elapsedMilliseconds,
+          ),
+        );
       }
-    } on Object catch (_) {
-      hook.onError?.call(stepCount);
+    } on Object catch (e) {
+      hook.onError?.call(stepCount, e);
       rethrow;
     }
     stopwatch.stop();
@@ -44,4 +50,18 @@ mixin InitializationProcessor {
     hook.onInitialized?.call(result);
     return result;
   }
+}
+
+class InitializationStepInfo {
+  const InitializationStepInfo({
+    required this.stepName,
+    required this.step,
+    required this.stepsCount,
+    required this.msSpent,
+  });
+
+  final int step;
+  final String stepName;
+  final int stepsCount;
+  final int msSpent;
 }

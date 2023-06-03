@@ -1,0 +1,7 @@
+# used only for development purposes
+android/
+ios/
+macos/
+web/
+windows/
+linux/

@@ -1,3 +1,4 @@
+import 'package:sizzle_starter/src/feature/initialization/logic/initialization_processor.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/initialization_progress.dart';
 
 /// A hook for the initialization process.
@@ -19,18 +20,18 @@ abstract class InitializationHook {
 
   factory InitializationHook.setup({
     void Function()? onInit,
-    void Function(InitializationProgress)? onInitializing,
+    void Function(InitializationStepInfo info)? onInitializing,
     void Function(InitializationResult)? onInitialized,
-    void Function(int)? onError,
+    void Function(int, Object error)? onError,
   }) = _Hook;
 
   void Function()? onInit;
 
-  void Function(InitializationProgress)? onInitializing;
+  void Function(InitializationStepInfo info)? onInitializing;
 
   void Function(InitializationResult)? onInitialized;
 
-  void Function(int)? onError;
+  void Function(int, Object error)? onError;
 }
 
 class _Hook extends InitializationHook {

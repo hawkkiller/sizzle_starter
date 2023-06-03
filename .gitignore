@@ -135,6 +135,5 @@ build/
 generated_*
 lib/src/core/assets/generated/
 
-
 pubspec.lock
 .metadata
