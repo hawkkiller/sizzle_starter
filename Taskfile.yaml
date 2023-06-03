@@ -1,0 +1,22 @@
+version: '3'
+
+tasks:
+  # Template-related, safe to be removed for production
+  tmpl:flutter:create:
+    desc: Initialize flutter platforms
+    summary: |
+      Initialize flutter platforms. 
+      Safe to be deleted for production.
+    deps:
+      - tmpl:git:config
+    cmds:
+      - flutter create .
+
+  tmpl:git:config:
+    desc: Configure git for template development
+    summary: |
+      Configure git for template development. 
+      Safe to be deleted for production.
+    cmds:
+      - git config core.excludesfile .gitignore-dev
+  # Template-related, safe to be removed for production

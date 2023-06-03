@@ -13,13 +13,13 @@ mixin InitializationSteps {
     ..._data,
   };
   static final _dependencies = <String, StepAction>{
-    'Init Shared Preferences': (progress) async {
+    'Shared Preferences': (progress) async {
       final sharedPreferences = await SharedPreferences.getInstance();
       return progress.copyWith(
         preferences: sharedPreferences,
       );
     },
-    'Init Router': (progress) {
+    'Router': (progress) {
       final router = AppRouter();
       return progress.copyWith(
         router: router,

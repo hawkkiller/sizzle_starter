@@ -21,17 +21,26 @@ mixin InitializationProcessor {
     await trackingManager.enableReporting(
       shouldSend: !kDebugMode && env.isProduction,
     );
+    hook.onInit?.call();
     try {
       await for (final step in Stream.fromIterable(steps.entries)) {
         stepCount++;
+        final stopWatch = Stopwatch()..start();
         final p = await step.value(progress);
         if (p != null) {
           progress = p;
-          hook.onInitializing?.call(p);
+          hook.onInitializing?.call(
+            InitializationStepInfo(
+              stepName: step.key,
+              step: stepCount,
+              stepsCount: steps.length,
+              msSpent: (stopWatch..stop()).elapsedMilliseconds,
+            ),
+          );
         }
       }
-    } on Object catch (_) {
-      hook.onError?.call(stepCount);
+    } on Object catch (e) {
+      hook.onError?.call(stepCount, e);
       rethrow;
     }
     stopwatch.stop();
@@ -44,4 +53,18 @@ mixin InitializationProcessor {
     hook.onInitialized?.call(result);
     return result;
   }
+}
+
+class InitializationStepInfo {
+  const InitializationStepInfo({
+    required this.stepName,
+    required this.step,
+    required this.stepsCount,
+    required this.msSpent,
+  });
+
+  final int step;
+  final String stepName;
+  final int stepsCount;
+  final int msSpent;
 }
