@@ -15,7 +15,7 @@ mixin InitializationProcessor {
   }) async {
     final stopwatch = Stopwatch()..start();
     var stepCount = 0;
-    var progress = const InitializationProgress();
+    final progress = InitializationProgress();
     final env = factory.getEnvironmentStore();
     final trackingManager = factory.createTrackingManager(env);
     await trackingManager.enableReporting(
@@ -26,18 +26,15 @@ mixin InitializationProcessor {
       await for (final step in Stream.fromIterable(steps.entries)) {
         stepCount++;
         final stopWatch = Stopwatch()..start();
-        final p = await step.value(progress);
-        if (p != null) {
-          progress = p;
-          hook.onInitializing?.call(
-            InitializationStepInfo(
-              stepName: step.key,
-              step: stepCount,
-              stepsCount: steps.length,
-              msSpent: (stopWatch..stop()).elapsedMilliseconds,
-            ),
-          );
-        }
+        await step.value(progress);
+        hook.onInitializing?.call(
+          InitializationStepInfo(
+            stepName: step.key,
+            step: stepCount,
+            stepsCount: steps.length,
+            msSpent: (stopWatch..stop()).elapsedMilliseconds,
+          ),
+        );
       }
     } on Object catch (e) {
       hook.onError?.call(stepCount, e);
