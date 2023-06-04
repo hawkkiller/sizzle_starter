@@ -1,14 +1,11 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/core/router/router.dart';
 
-part 'initialization_progress.freezed.dart';
-
-class RepositoriesStore {
+final class RepositoriesStore {
   const RepositoriesStore();
 }
 
-class DependenciesStore {
+final class DependenciesStore {
   const DependenciesStore({
     required this.sharedPreferences,
     required this.router,
@@ -18,7 +15,7 @@ class DependenciesStore {
   final AppRouter router;
 }
 
-class InitializationProgress {
+final class InitializationProgress {
   InitializationProgress();
 
   SharedPreferences? sharedPreferences;
@@ -32,12 +29,16 @@ class InitializationProgress {
   RepositoriesStore repositories() => const RepositoriesStore();
 }
 
-@freezed
-class InitializationResult with _$InitializationResult {
-  const factory InitializationResult({
-    required DependenciesStore dependencies,
-    required RepositoriesStore repositories,
-    required int stepCount,
-    required int msSpent,
-  }) = _InitializationResult;
+final class InitializationResult {
+  const InitializationResult({
+    required this.dependencies,
+    required this.repositories,
+    required this.stepCount,
+    required this.msSpent,
+  });
+
+  final DependenciesStore dependencies;
+  final RepositoriesStore repositories;
+  final int stepCount;
+  final int msSpent;
 }
