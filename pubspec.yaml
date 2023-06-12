@@ -45,17 +45,17 @@ dependencies:
   path: 1.8.3
 
   # Persisting
-  drift: 2.8.1
+  drift: 2.8.2
   sqlite3_flutter_libs: 0.5.15
-  shared_preferences: 2.1.1
+  shared_preferences: 2.1.2
 
   # Codegen annotations
   json_annotation: 4.8.1
 
   # Logging
   stack_trace: 1.11.0
-  l: 4.0.0
   sentry_flutter: 7.7.0
+  l: 4.0.1
 
   # Lints
   sizzle_lints: 1.0.10
@@ -75,7 +75,7 @@ dev_dependencies:
 
   # Codegen
   json_serializable: 6.7.0
-  build_runner: 2.4.4
+  build_runner: 2.4.5
   drift_dev: 2.8.3
   auto_route_generator: 7.1.1
 
