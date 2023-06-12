@@ -47,7 +47,7 @@ dependencies:
   # Persisting
   drift: 2.8.1
   sqlite3_flutter_libs: 0.5.15
-  shared_preferences: ^2.1.2
+  shared_preferences: 2.1.2
 
   # Codegen annotations
   json_annotation: 4.8.1
