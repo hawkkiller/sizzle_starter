@@ -45,7 +45,7 @@ dependencies:
   path: 1.8.3
 
   # Persisting
-  drift: 2.8.1
+  drift: ^2.8.2
   sqlite3_flutter_libs: 0.5.15
   shared_preferences: 2.1.1
 
