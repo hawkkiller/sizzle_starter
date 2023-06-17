@@ -5,7 +5,6 @@ import 'package:sizzle_starter/src/feature/initialization/model/initialization_p
 
 abstract class StoresContainer {
   DependenciesStore get dependencies;
-  RepositoriesStore get repositories;
 }
 
 /// A widget which is responsible for providing the dependencies.
@@ -13,32 +12,27 @@ class DependenciesScope extends InheritedWidget with ScopeMixin implements Store
   const DependenciesScope({
     required super.child,
     required this.dependencies,
-    required this.repositories,
     super.key,
   });
 
   @override
   final DependenciesStore dependencies;
 
-  @override
-  final RepositoriesStore repositories;
-
   /// Get only dependencies from the widget
   static DependenciesStore dependenciesOf(BuildContext context) =>
       _maybeOf(context)?.dependencies ??
       ScopeMixin.notFoundInheritedWidgetOfExactType<DependenciesScope>();
 
-  /// Get only repositories from the widget
-  static RepositoriesStore repositoriesOf(BuildContext context) =>
-      _maybeOf(context)?.repositories ??
-      ScopeMixin.notFoundInheritedWidgetOfExactType<DependenciesScope>();
-
+  /// Maybe get the dependencies from the widget
+  /// 
+  /// The dependencies may not be present if they are not provided higher up in the tree.
   static StoresContainer? _maybeOf(BuildContext context) =>
       ScopeMixin.scopeMaybeOf<DependenciesScope>(
         context,
         listen: false,
       );
 
+  /// Get all the initialized dependencies
   static StoresContainer of(BuildContext context) =>
       _maybeOf(context) ?? ScopeMixin.notFoundInheritedWidgetOfExactType<DependenciesScope>();
 

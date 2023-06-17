@@ -17,17 +17,24 @@ To use this template, simply click the "Use this template" button. The instructi
 
 ## Contents
 
-- [Initialization](#initialization)
-- [Themes](#themes)
-- [Recommended libraries](#recommended-libraries)
-  - [Core](#core)
-  - [External](#external)
-- [Not Recommended libraries](#not-recommended-libraries)
-- [Resources](#resources)
-- [How to guides](#how-to-guides)
-  - [How to run](#how-to-run)
-  - [How to add a new dependency](#how-to-add-a-new-dependency)
-- [Credits](#credits)
+- [Sizzle Starter](#sizzle-starter)
+  - [Features](#features)
+  - [Contents](#contents)
+  - [Initialization](#initialization)
+    - [initialization\_steps](#initialization_steps)
+    - [initialization\_progress](#initialization_progress)
+    - [initialization\_processor](#initialization_processor)
+    - [dependencies\_scope](#dependencies_scope)
+  - [Themes](#themes)
+  - [Recommended libraries](#recommended-libraries)
+    - [Core](#core)
+    - [External](#external)
+    - [Not Recommended libraries](#not-recommended-libraries)
+  - [Resources](#resources)
+  - [How to guides](#how-to-guides)
+    - [How to run](#how-to-run)
+    - [How to add a new dependency](#how-to-add-a-new-dependency)
+  - [Credits](#credits)
 
 ## Initialization
 
@@ -37,7 +44,7 @@ Here are the steps to initialize the dependencies. It is a map of steps, where t
 
 ### initialization_progress
 
-In `initialization_progress` you can store the results of the steps. InitializationProgress is a model that is passed to the steps as an argument. You can add any fields to it. The fields are initialized with `null` values and iteratively filled with the results of the steps. After all the steps are executed, the InitializationProgress is mapped to an immutable models with the same fields, but not null values, that are also described here. See `RepositoriesStore` and `DependenciesStore`. `RepositoriesStore` is obviously used for repositories😁, when `DependenciesStore` is supposed to store general dependencies like SharedPreferences, Database. All the process is controlled by the `ininitialization_processor`.
+In `initialization_progress` you can store the results of the steps. InitializationProgress is a model that is passed to the steps as an argument. You can add any fields to it. The fields are initialized with `null` values and iteratively filled with the results of the steps. After all the steps are executed, the InitializationProgress is mapped to an immutable models with the same fields, but not null values, that are also described here. See `DependenciesStore`. `DependenciesStore` is supposed to store dependencies like SharedPreferences, Database, . All the process is controlled by the `ininitialization_processor`.
 
 ### initialization_processor
 
