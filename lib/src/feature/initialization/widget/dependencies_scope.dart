@@ -23,12 +23,16 @@ class DependenciesScope extends InheritedWidget with ScopeMixin implements Store
       _maybeOf(context)?.dependencies ??
       ScopeMixin.notFoundInheritedWidgetOfExactType<DependenciesScope>();
 
+  /// Maybe get the dependencies from the widget
+  /// 
+  /// The dependencies may not be present if they are not provided higher up in the tree.
   static StoresContainer? _maybeOf(BuildContext context) =>
       ScopeMixin.scopeMaybeOf<DependenciesScope>(
         context,
         listen: false,
       );
 
+  /// Get all the initialized dependencies
   static StoresContainer of(BuildContext context) =>
       _maybeOf(context) ?? ScopeMixin.notFoundInheritedWidgetOfExactType<DependenciesScope>();
 
