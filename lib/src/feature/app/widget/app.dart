@@ -25,7 +25,6 @@ class App extends StatelessWidget {
   Widget build(BuildContext context) => ScopeProvider(
         buildScope: (child) => DependenciesScope(
           dependencies: result.dependencies,
-          repositories: result.repositories,
           child: child,
         ),
         child: const AppContext(),

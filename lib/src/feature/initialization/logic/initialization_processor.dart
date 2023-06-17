@@ -43,7 +43,6 @@ mixin InitializationProcessor {
     stopwatch.stop();
     final result = InitializationResult(
       dependencies: progress.dependencies(),
-      repositories: progress.repositories(),
       stepCount: stepCount,
       msSpent: stopwatch.elapsedMilliseconds,
     );
