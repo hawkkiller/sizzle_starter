@@ -15,13 +15,16 @@ class AppLocalization {
   static const supportedLocales = GeneratedLocalizations.supportedLocales;
 
   /// All the localizations delegates
-  static const localizationsDelegates = GeneratedLocalizations.localizationsDelegates;
+  static const localizationsDelegates =
+      GeneratedLocalizations.localizationsDelegates;
 
   /// Returns the localized strings for the given [context].
-  static T stringOf<T>(BuildContext context) => Localizations.of<T>(context, T)!;
+  static T stringOf<T>(BuildContext context) =>
+      Localizations.of<T>(context, T)!;
 
   /// Returns the current locale of the [context].
-  static Locale? localeOf(BuildContext context) => Localizations.localeOf(context);
+  static Locale? localeOf(BuildContext context) =>
+      Localizations.localeOf(context);
 
   /// Loads the [locale].
   static Future<GeneratedLocalizations> load(Locale locale) =>

@@ -1,34 +1,36 @@
+name: "Code Quality"
+
 on:
   push:
-    branches:
-      - "feature/**"
-      - "bugfix/**"
-      - "hotfix/**"
-      - "support/**"
-      - "dependabot/pub/**"
-      - "master"
+    branches: [master]
+
   pull_request:
-    branches:
-      - "feature/**"
-      - "bugfix/**"
-      - "hotfix/**"
-      - "support/**"
-      - "dependabot/pub/**"
+    branches: [master]
+
   workflow_dispatch:
-name: "Test Analyze"
+
 jobs:
   test-analyze:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container:
-      image: plugfox/flutter:3.10.0
+      image: "plugfox/flutter:3.10.5"
       options: --user root
 
     steps:
-      - name: 🫰 Check flutter version
-        run: flutter --version
-
       - name: 🚂 Get latest code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
+
+      - name: 🚃 Cache pub modules
+        uses: actions/cache@v2
+        env:
+          cache-name: pubcache
+        with:
+          path: |
+            $PWD/.pub_cache/
+          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pubspec.yaml') }}
+
+      - name: 🗄️ Export pub cache directory
+        run: export PUB_CACHE=$PWD/.pub_cache/
 
       - name: 🐝 Dart tools activation
         run: |
@@ -40,15 +42,15 @@ jobs:
 
       - name: 📦 Install dependencies in packages
         timeout-minutes: 1
-        run: for d in packages/*; do (cd "$d" && flutter pub get); done
+        run: for package in packages/*; do (cd "$package" && flutter pub get); done
 
       - name: 😊 Run codegen
-        run: flutter pub run build_runner build --delete-conflicting-outputs
+        run: dart run build_runner build --delete-conflicting-outputs
 
       - name: 🔎 Check format
         timeout-minutes: 1
         run: |
-          dart format -l 100 --set-exit-if-changed $(find lib test -name "*.dart" -not \( -name "*.*.dart" \) )
+          dart format --set-exit-if-changed $(find lib test -name "*.dart" -not \( -name "*.*.dart" \) )
 
       - name: 📈 Check analyzer
         timeout-minutes: 1
@@ -63,4 +65,4 @@ jobs:
       - name: 📥 Upload coverage to Codecov
         if: ${{ github.ref == 'refs/heads/main' }}
         timeout-minutes: 1
-        uses: codecov/codecov-action@v2.1.0
+        uses: codecov/codecov-action@v3

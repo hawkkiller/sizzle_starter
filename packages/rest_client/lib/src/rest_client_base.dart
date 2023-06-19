@@ -100,7 +100,8 @@ class RestClientBase implements RestClient {
         headers: headers,
         body: body,
       );
-      final response = await _client.send(request).then(http.Response.fromStream);
+      final response =
+          await _client.send(request).then(http.Response.fromStream);
 
       if (response.statusCode > 199 && response.statusCode < 300) {
         return decodeResponse(response);
@@ -144,7 +145,8 @@ class RestClientBase implements RestClient {
   @protected
   @visibleForTesting
   Map<String, Object?> decodeResponse(http.Response response) {
-    final contentType = response.headers['content-type'] ?? response.headers['Content-Type'];
+    final contentType =
+        response.headers['content-type'] ?? response.headers['Content-Type'];
     if (contentType?.contains('application/json') ?? false) {
       final body = response.body;
       try {

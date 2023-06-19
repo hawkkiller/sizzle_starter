@@ -8,7 +8,9 @@ abstract class StoresContainer {
 }
 
 /// A widget which is responsible for providing the dependencies.
-class DependenciesScope extends InheritedWidget with ScopeMixin implements StoresContainer {
+class DependenciesScope extends InheritedWidget
+    with ScopeMixin
+    implements StoresContainer {
   const DependenciesScope({
     required super.child,
     required this.dependencies,
@@ -34,7 +36,8 @@ class DependenciesScope extends InheritedWidget with ScopeMixin implements Store
 
   /// Get all the initialized dependencies
   static StoresContainer of(BuildContext context) =>
-      _maybeOf(context) ?? ScopeMixin.notFoundInheritedWidgetOfExactType<DependenciesScope>();
+      _maybeOf(context) ??
+      ScopeMixin.notFoundInheritedWidgetOfExactType<DependenciesScope>();
 
   @override
   bool updateShouldNotify(DependenciesScope oldWidget) => false;

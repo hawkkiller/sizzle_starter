@@ -280,7 +280,8 @@ void main() {
             );
           });
 
-          test('should throw an exception for an invalid content type', () async {
+          test('should throw an exception for an invalid content type',
+              () async {
             final client = MockClient(
               (request) async => http.Response(
                 'invalid',
@@ -351,7 +352,8 @@ void main() {
             );
           });
 
-          test('should throw an exception for an invalid content type', () async {
+          test('should throw an exception for an invalid content type',
+              () async {
             final client = MockClient(
               (request) async => http.Response(
                 'invalid',

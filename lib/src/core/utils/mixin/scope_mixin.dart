@@ -25,12 +25,14 @@ mixin ScopeMixin<T extends Widget> on Widget implements ChildContainer {
     BuildContext context, {
     bool listen = true,
   }) =>
-      scopeMaybeOf<T>(context, listen: listen) ?? notFoundInheritedWidgetOfExactType<T>();
+      scopeMaybeOf<T>(context, listen: listen) ??
+      notFoundInheritedWidgetOfExactType<T>();
 
-  static Never notFoundInheritedWidgetOfExactType<T extends InheritedWidget>() =>
-      throw ArgumentError(
-        'Out of scope, not found inherited widget '
-            'a $T of the exact type',
-        'out_of_scope',
-      );
+  static Never
+      notFoundInheritedWidgetOfExactType<T extends InheritedWidget>() =>
+          throw ArgumentError(
+            'Out of scope, not found inherited widget '
+                'a $T of the exact type',
+            'out_of_scope',
+          );
 }

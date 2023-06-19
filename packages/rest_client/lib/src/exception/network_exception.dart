@@ -14,7 +14,8 @@ class RestClientException implements NetworkException {
   final int? statusCode;
 
   @override
-  String toString() => 'RestClientException(message: $message, statusCode: $statusCode)';
+  String toString() =>
+      'RestClientException(message: $message, statusCode: $statusCode)';
 }
 
 @immutable
@@ -28,5 +29,6 @@ class InternalServerException implements NetworkException {
   final int? statusCode;
 
   @override
-  String toString() => 'InternalServerErrorException(message: $message, statusCode: $statusCode)';
+  String toString() =>
+      'InternalServerErrorException(message: $message, statusCode: $statusCode)';
 }

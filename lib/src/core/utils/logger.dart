@@ -7,7 +7,8 @@ import 'package:stack_trace/stack_trace.dart';
 
 extension on DateTime {
   /// Transforms DateTime to String with format: 00:00:00
-  String get formatted => [hour, minute, second].map(Logger._timeFormat).join(':');
+  String get formatted =>
+      [hour, minute, second].map(Logger._timeFormat).join(':');
 }
 
 extension on LogLevel {
@@ -33,7 +34,8 @@ mixin Logger {
   );
 
   /// Formats the time to have [_timeLength] digits
-  static String _timeFormat(int input) => input.toString().padLeft(_timeLength, '0');
+  static String _timeFormat(int input) =>
+      input.toString().padLeft(_timeLength, '0');
 
   /// Formats the message for the [L] library
   static String _formatLoggerMessage(
@@ -87,7 +89,10 @@ mixin Logger {
 
   /// Helper static method to log a platform dispatcher error
   /// like native code errors
-  static bool logPlatformDispatcherError(Object exception, StackTrace stackTrace) {
+  static bool logPlatformDispatcherError(
+    Object exception,
+    StackTrace stackTrace,
+  ) {
     l.e(
       _formatError('PlatformDispatcher', exception.toString(), stackTrace),
       stackTrace,
