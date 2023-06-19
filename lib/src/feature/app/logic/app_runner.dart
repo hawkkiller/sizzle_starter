@@ -11,12 +11,17 @@ import 'package:sizzle_starter/src/feature/initialization/logic/initialization_s
 import 'package:sizzle_starter/src/feature/initialization/model/initialization_hook.dart';
 
 /// A class which is responsible for initialization and running the app.
-class AppRunner with InitializationSteps, InitializationProcessor, InitializationFactoryImpl {
+class AppRunner
+    with
+        InitializationSteps,
+        InitializationProcessor,
+        InitializationFactoryImpl {
   /// run initialization
   ///
   /// if success -> run app
   Future<void> initializeAndRun(InitializationHook hook) async {
-    final bindings = WidgetsFlutterBinding.ensureInitialized()..deferFirstFrame();
+    final bindings = WidgetsFlutterBinding.ensureInitialized()
+      ..deferFirstFrame();
     FlutterError.onError = Logger.logFlutterError;
     PlatformDispatcher.instance.onError = Logger.logPlatformDispatcherError;
     Bloc.observer = AppBlocObserver();

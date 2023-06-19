@@ -4,7 +4,10 @@ import 'package:sizzle_starter/src/core/utils/extensions/string_extension.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
-  void onTransition(Bloc<Object?, Object?> bloc, Transition<Object?, Object?> transition) {
+  void onTransition(
+    Bloc<Object?, Object?> bloc,
+    Transition<Object?, Object?> transition,
+  ) {
     final buffer = StringBuffer()
       ..writeln('Bloc: ${bloc.runtimeType} | ${transition.event.runtimeType}')
       ..write('Transition: ${transition.currentState.runtimeType}')

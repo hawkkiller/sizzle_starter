@@ -1,34 +1,32 @@
+name: "Code Quality"
+
 on:
   push:
-    branches:
-      - "feature/**"
-      - "bugfix/**"
-      - "hotfix/**"
-      - "support/**"
-      - "dependabot/pub/**"
-      - "master"
+    branches: [master]
+
   pull_request:
-    branches:
-      - "feature/**"
-      - "bugfix/**"
-      - "hotfix/**"
-      - "support/**"
-      - "dependabot/pub/**"
+    branches: [master]
+
   workflow_dispatch:
-name: "Test Analyze"
+    inputs:
+      version:
+        description: "Flutter version"
+        required: false
+        default: "3.10.5"
+
+env:
+  DEFAULT_FLUTTER_VERSION: "3.10.5"
+
 jobs:
   test-analyze:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     container:
-      image: plugfox/flutter:3.10.0
+      image: "plugfox/flutter:${{ github.event.inputs.version || github.env.DEFAULT_FLUTTER_VERSION }}"
       options: --user root
 
     steps:
-      - name: 🫰 Check flutter version
-        run: flutter --version
-
       - name: 🚂 Get latest code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: 🐝 Dart tools activation
         run: |
@@ -40,15 +38,15 @@ jobs:
 
       - name: 📦 Install dependencies in packages
         timeout-minutes: 1
-        run: for d in packages/*; do (cd "$d" && flutter pub get); done
+        run: for package in packages/*; do (cd "$package" && flutter pub get); done
 
       - name: 😊 Run codegen
-        run: flutter pub run build_runner build --delete-conflicting-outputs
+        run: dart run build_runner build --delete-conflicting-outputs
 
       - name: 🔎 Check format
         timeout-minutes: 1
         run: |
-          dart format -l 100 --set-exit-if-changed $(find lib test -name "*.dart" -not \( -name "*.*.dart" \) )
+          dart format --set-exit-if-changed $(find lib test -name "*.dart" -not \( -name "*.*.dart" \) )
 
       - name: 📈 Check analyzer
         timeout-minutes: 1

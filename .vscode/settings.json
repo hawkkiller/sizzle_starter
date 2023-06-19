@@ -2,5 +2,5 @@
   "dart.additionalAnalyzerFileExtensions": [
     "drift"
   ],
-  "dart.lineLength": 100
+  "dart.lineLength": 80
 }
