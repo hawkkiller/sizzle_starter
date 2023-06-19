@@ -53,4 +53,4 @@ jobs:
       - name: 📥 Upload coverage to Codecov
         if: ${{ github.ref == 'refs/heads/main' }}
         timeout-minutes: 1
-        uses: codecov/codecov-action@v2.1.0
+        uses: codecov/codecov-action@v3
