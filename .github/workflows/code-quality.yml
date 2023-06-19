@@ -8,11 +8,6 @@ on:
     branches: [master]
 
   workflow_dispatch:
-    inputs:
-      version:
-        description: "Flutter version"
-        required: false
-        default: "3.10.5"
 
 env:
   DEFAULT_FLUTTER_VERSION: "3.10.5"
@@ -21,7 +16,7 @@ jobs:
   test-analyze:
     runs-on: ubuntu-22.04
     container:
-      image: "plugfox/flutter:${{ github.event.inputs.version || github.env.DEFAULT_FLUTTER_VERSION }}"
+      image: "plugfox/flutter:${{ github.env.DEFAULT_FLUTTER_VERSION }}"
       options: --user root
 
     steps:
