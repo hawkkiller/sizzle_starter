@@ -9,14 +9,11 @@ on:
 
   workflow_dispatch:
 
-env:
-  DEFAULT_FLUTTER_VERSION: "3.10.5"
-
 jobs:
   test-analyze:
     runs-on: ubuntu-22.04
     container:
-      image: "plugfox/flutter:$DEFAULT_FLUTTER_VERSION"
+      image: "plugfox/flutter:3.10.5"
       options: --user root
 
     steps:
