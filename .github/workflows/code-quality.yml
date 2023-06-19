@@ -24,7 +24,7 @@ jobs:
         uses: actions/cache@v3
         env:
           cache-name: pubcache
-          pub-cache-dir: "$PUB_CACHE"
+          pub-cache-dir: /var/tmp/.pub-cache
         with:
           path: ${{ env.pub-cache-dir }}
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pubspec.yaml') }}
