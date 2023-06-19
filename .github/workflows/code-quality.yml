@@ -22,7 +22,7 @@ jobs:
 
       - name: List environment
         run: |
-          printnv
+          printenv
           echo $PUB_CACHE
 
       - name: 🚃 Cache pub modules
