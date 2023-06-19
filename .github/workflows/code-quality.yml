@@ -16,7 +16,7 @@ jobs:
   test-analyze:
     runs-on: ubuntu-22.04
     container:
-      image: "plugfox/flutter:${{ github.env.DEFAULT_FLUTTER_VERSION }}"
+      image: "plugfox/flutter:$DEFAULT_FLUTTER_VERSION"
       options: --user root
 
     steps:
