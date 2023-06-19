@@ -29,12 +29,8 @@ jobs:
         env:
           cache-name: pubcache
         with:
-          path: |
-            $PWD/.pub_cache/
+          path: "{{ env.PUB_CACHE }}"
           key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pubspec.yaml') }}
-
-      - name: 🗄️ Export pub cache directory
-        run: export PUB_CACHE=$PWD/.pub_cache/
 
       - name: 🐝 Dart tools activation
         run: |
