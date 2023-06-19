@@ -21,16 +21,12 @@ jobs:
         uses: actions/checkout@v3
 
       - name: 🚃 Cache pub modules
-        uses: actions/cache@v2
-        env:
-          cache-name: pubcache
+        uses: actions/cache@v3
+        env: 
+          cache-path: $PUB_CACHE
         with:
-          path: |
-            $PWD/.pub_cache/
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pubspec.yaml') }}
-
-      - name: 🗄️ Export pub cache directory
-        run: export PUB_CACHE=$PWD/.pub_cache/
+          path: ${{ env.cache-path }}
+          key: ${{ runner.os }}-pubpackages-cache
 
       - name: 🐝 Dart tools activation
         run: |
@@ -39,7 +35,7 @@ jobs:
       - name: 👷 Install Dependencies
         timeout-minutes: 1
         run: flutter pub get
-
+      
       - name: 📦 Install dependencies in packages
         timeout-minutes: 1
         run: for package in packages/*; do (cd "$package" && flutter pub get); done
