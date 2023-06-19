@@ -23,13 +23,10 @@ jobs:
       - name: 🚃 Cache pub modules
         uses: actions/cache@v3
         env: 
-          cache-path: "/var/tmp/.pub-cache"
+          cache-path: $PUB_CACHE
         with:
           path: ${{ env.cache-path }}
           key: ${{ runner.os }}-pub
-
-      - name: 🗄️ Export pub cache directory
-        run: export PUB_CACHE=$PWD/.pub_cache/
 
       - name: 🐝 Dart tools activation
         run: |
@@ -38,6 +35,10 @@ jobs:
       - name: 👷 Install Dependencies
         timeout-minutes: 1
         run: flutter pub get
+      
+      - name: Check pub cache
+        run: |
+          ls -la $PUB_CACHE
 
       - name: 📦 Install dependencies in packages
         timeout-minutes: 1
