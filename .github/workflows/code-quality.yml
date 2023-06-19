@@ -26,7 +26,7 @@ jobs:
           cache-path: $PUB_CACHE
         with:
           path: ${{ env.cache-path }}
-          key: ${{ runner.os }}-pub
+          key: ${{ runner.os }}-pubpackages-cache
 
       - name: 🐝 Dart tools activation
         run: |
@@ -36,10 +36,6 @@ jobs:
         timeout-minutes: 1
         run: flutter pub get
       
-      - name: Check pub cache
-        run: |
-          ls -la $PUB_CACHE
-
       - name: 📦 Install dependencies in packages
         timeout-minutes: 1
         run: for package in packages/*; do (cd "$package" && flutter pub get); done
