@@ -22,7 +22,8 @@ jobs:
 
       - name: List environment
         run: |
-          printenv
+          echo "${env.PUB_CACHE}"
+          echo "${PUB_CACHE}"
 
       - name: 🚃 Cache pub modules
         uses: actions/cache@v3
