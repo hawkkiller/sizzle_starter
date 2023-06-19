@@ -20,6 +20,10 @@ jobs:
       - name: 🚂 Get latest code
         uses: actions/checkout@v3
 
+      - name: List environment
+        run: |
+          printenv
+
       - name: 🚃 Cache pub modules
         uses: actions/cache@v3
         env:
