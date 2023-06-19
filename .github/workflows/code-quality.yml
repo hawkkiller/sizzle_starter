@@ -20,19 +20,17 @@ jobs:
       - name: 🚂 Get latest code
         uses: actions/checkout@v3
 
-      - name: List environment
-        run: |
-          printenv
-          echo $PUB_CACHE
-
       - name: 🚃 Cache pub modules
         uses: actions/cache@v3
         env:
-          cache-name: pubcache
+          cache-name: cache-pub-modules
         with:
           path: |
-            $PUB_CACHE
-          key: ${{ runner.os }}-${{ env.cache-name }}-${{ hashFiles('**/pubspec.yaml') }}
+            $PWD/.pub_cache/
+          key: ${{ runner.os }}-dart
+
+      - name: 🗄️ Export pub cache directory
+        run: export PUB_CACHE=$PWD/.pub_cache/
 
       - name: 🐝 Dart tools activation
         run: |
