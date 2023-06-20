@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sizzle_starter/src/core/utils/mixin/scope_mixin.dart';
-import 'package:sizzle_starter/src/feature/initialization/model/initialization_progress.dart';
+import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dart';
 
+/// The container for all the dependencies
 abstract class StoresContainer {
-  DependenciesStore get dependencies;
+  Dependencies get dependencies;
 }
 
 /// A widget which is responsible for providing the dependencies.
@@ -18,10 +19,10 @@ class DependenciesScope extends InheritedWidget
   });
 
   @override
-  final DependenciesStore dependencies;
+  final Dependencies dependencies;
 
   /// Get only dependencies from the widget
-  static DependenciesStore dependenciesOf(BuildContext context) =>
+  static Dependencies dependenciesOf(BuildContext context) =>
       _maybeOf(context)?.dependencies ??
       ScopeMixin.notFoundInheritedWidgetOfExactType<DependenciesScope>();
 

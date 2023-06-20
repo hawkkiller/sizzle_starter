@@ -1,5 +1,5 @@
 import 'package:sizzle_starter/src/feature/initialization/logic/initialization_processor.dart';
-import 'package:sizzle_starter/src/feature/initialization/model/initialization_progress.dart';
+import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dart';
 
 /// A hook for the initialization process.
 ///
