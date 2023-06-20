@@ -2,25 +2,20 @@ import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/core/router/router.dart';
-import 'package:sizzle_starter/src/feature/initialization/model/initialization_progress.dart';
+import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dart';
 
-typedef StepAction = FutureOr<void>? Function(
-  InitializationProgress progress,
-);
+typedef StepAction = FutureOr<void>? Function(Dependencies$Mutable progress);
+
+/// 
 mixin InitializationSteps {
   final initializationSteps = <String, StepAction>{
-    ..._dependencies,
-    ..._data,
-  };
-  static final _dependencies = <String, StepAction>{
     'Shared Preferences': (progress) async {
       final sharedPreferences = await SharedPreferences.getInstance();
       progress.sharedPreferences = sharedPreferences;
     },
-    'Router': (progress) {
+    'App Router': (progress) {
       final router = AppRouter();
       progress.router = router;
     }
   };
-  static final _data = <String, StepAction>{};
 }

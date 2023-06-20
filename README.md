@@ -1,35 +1,43 @@
 # Sizzle Starter
 
-This Flutter project template provides a starting point for your Flutter projects, saving you time and effort in the setup process. It incorporates best practices and lessons learned from other Flutter templates and repositories, with a few new and unique features.
+This is an immensely adaptable Flutter initiation starter, crafted with an ideally predetermined layout and encompassing libraries that can be used across a vast array of applications.
 
-To use this template, simply click the "Use this template" button. The instructions below will guide you through the process of setting up and using this template in your own projects.
+To take advantage of this module, simply click on the "Use this template" button. The subsequent instructions will guide you through the process of integrating and deploying this starter within your distinct projects.
 
 ## Features
 
-- 🔥 Fast setup
-- 🧜 Extensible, flexible and easy to maintain
-- 📦 Bunch of useful and tested libraries included
-- 🚛 GitHub Actions and Gitlab CI configured
-- 🚀 Modern feature-oriented architecture
-- 📌 Robust documentation & great plans for future
-- 🐛 Bug reporting, errors catching and analytics
-- 😌 Themes and other stuff...
+- 🔥 Rapid installation process
+- 🧜 Designed to be flexible, easy to expand, and simple to maintain
+- 📦 Assortment of reliable and tested libraries included
+- 🚛 GitHub Actions and GitLab CI pre-configured
+- 🚀 Cutting-edge, feature-centric architecture
+- 📌 Comprehensive documentation and exciting roadmap ahead
+- 🐛 Bug reporting, error tracking and analytical capabilities
+- 😌 Themes and additional amenities...
 
-## Contents
+## Table Of Contents
 
 - [Sizzle Starter](#sizzle-starter)
   - [Features](#features)
-  - [Contents](#contents)
+  - [Table Of Contents](#table-of-contents)
   - [Initialization](#initialization)
-    - [initialization\_steps](#initialization_steps)
-    - [initialization\_progress](#initialization_progress)
-    - [initialization\_processor](#initialization_processor)
-    - [dependencies\_scope](#dependencies_scope)
+    - [Initialization Steps](#initialization-steps)
+    - [Initialization Progress](#initialization-progress)
+    - [Initialization Processor](#initialization-processor)
+    - [Dependencies Scope](#dependencies-scope)
   - [Themes](#themes)
   - [Recommended libraries](#recommended-libraries)
     - [Core](#core)
     - [External](#external)
-    - [Not Recommended libraries](#not-recommended-libraries)
+  - [Not Recommended libraries](#not-recommended-libraries)
+    - [hive](#hive)
+    - [getx](#getx)
+    - [get\_it](#get_it)
+    - [ferry](#ferry)
+    - [flutter\_hooks](#flutter_hooks)
+    - [mobx](#mobx)
+    - [riverpod](#riverpod)
+    - [hydrated\_bloc](#hydrated_bloc)
   - [Resources](#resources)
   - [How to guides](#how-to-guides)
     - [How to run](#how-to-run)
@@ -39,25 +47,39 @@ To use this template, simply click the "Use this template" button. The instructi
 
 ## Initialization
 
-### initialization_steps
+### Initialization Steps
 
 Here are the steps to initialize the dependencies. It is a map of steps, where the key is the name of the step and the value is a function that fills the `initialization_progress` model. The steps are executed in the order in which they are specified in the map, which gives you the ability to access the results of the previous steps.
 
-### initialization_progress
+### Initialization Progress
 
-In `initialization_progress` you can store the results of the steps. InitializationProgress is a model that is passed to the steps as an argument. You can add any fields to it. The fields are initialized with `null` values and iteratively filled with the results of the steps. After all the steps are executed, the InitializationProgress is mapped to an immutable models with the same fields, but not null values, that are also described here. See `DependenciesStore`. `DependenciesStore` is supposed to store dependencies like SharedPreferences, Database, . All the process is controlled by the `ininitialization_processor`.
+```dart
+final class InitializationProgress {
+  InitializationProgress();
 
-### initialization_processor
+  SharedPreferences? sharedPreferences;
+  AppRouter? router;
 
-`InitializationProcessor` as said previously is controlling all the stuff. It is responsible for calling the steps, storing the result of each and mapping it to the immutable model and returns `InitializationResult` with the time spent, all the models, etc. Later, all the results are delivered by inherited widgets and can be accessed from BuildContext, see `dependencies_scope` which is in widget folder.
+  DependenciesStore dependencies() => DependenciesStore(
+        sharedPreferences: sharedPreferences!,
+        router: router!,
+      );
+}
+```
 
-### dependencies_scope
+In `initialization_progress` you can store the results of the steps. It is a model that is passed to each step and then returned to the `InitializationProcessor` which maps it to the immutable model.
 
-`DependenciesScope` is a widget that provides access to the `DependenciesStore` and `RepositoriesStore`. It is a great DI in a flutter way which gives you a possibility to access your initialized dependencies from context which exists in each widget.
+### Initialization Processor
+
+`InitializationProcessor` as said previously is controlling all the stuff. It is responsible for running the steps, storing the result of each and mapping it to the immutable model. It returns `InitializationResult` with spent time, immutable progress model, etc. Later, all the results are delivered by inherited widgets and can be accessed from BuildContext, see `dependencies_scope` which is in the widget folder.
+
+### Dependencies Scope
+
+`DependenciesScope` is inherited widget that provides access to `Dependendencies`. It is a great DI in a flutter way which gives you a possibility to access your initialized dependencies from context which exists in each widget.
 
 ## Themes
 
-Color scheme is generated by [Material Theme Builder](https://www.figma.com/community/plugin/1034969338659738588/Material-Theme-Builder). Then, generated code is added to `core/theme/color_schemes.dart`. Then, pretty simple theme datas are passes to MaterialApp in `app_context.dart`. This way you can easily change the color scheme of the app with many pros:
+Color scheme is generated by [Material Theme Builder](https://www.figma.com/community/plugin/1034969338659738588/Material-Theme-Builder). Then, generated code is added to `core/theme/color_schemes.dart`. Then, pretty simple theme datas are passed to MaterialApp in `app_context.dart`. This way you can easily change the color scheme of the app with many pros:
 
 - Creating own design system in Figma
 - Support of dynamic color schemes
@@ -68,17 +90,18 @@ Color scheme is generated by [Material Theme Builder](https://www.figma.com/comm
 
 ### Core
 
-- [async](https://api.flutter.dev/flutter/dart-async/dart-async-library.html) - Future, Stream, Completer, FutureOr, Zone
-- [collection](https://api.dart.dev/stable/2.19.2/dart-collection/dart-collection-library.html) - List, Map, Queue, extensions
-- [convert](https://api.dart.dev/stable/2.19.2/dart-convert/dart-convert-library.html) - JSON, UTF8, ASCII, Base64, Hex, LineSplitter
-- [core](https://api.dart.dev/stable/2.19.2/dart-core/dart-core-library.html) - Object, num, int, double, bool, String, RegExp, Duration, DateTime, Stopwatch, Uri
-- [developer](https://api.flutter.dev/flutter/dart-developer/dart-developer-library.html) - log, Timeline, TimelineTask, TimelineTaskArgument
-- [meta](https://api.flutter.dev/flutter/meta/meta-library.html) - annotations
-- [typed_data](https://api.dart.dev/stable/2.19.2/dart-typed_data/dart-typed_data-library.html) - ByteData, Endian, Float32List, Float64List, Int16List, Int32List, Int64List, Int8List, Uint16List, Uint32List, Uint64List, Uint8ClampedList, Uint8List
-- [js](https://api.dart.dev/stable/2.19.2/dart-js/dart-js-library.html) - interop with JavaScript
-- [http](https://pub.dev/packages/http) - HTTP client
-- [math](https://api.dart.dev/stable/2.19.2/dart-math/dart-math-library.html)
-- [io](https://api.dart.dev/stable/2.19.2/dart-io/dart-io-library.html)
+- [async] - Future, Stream, Completer, FutureOr, Zone
+- [collection] - List, Map, Queue, extensions
+- [convert] - JSON, UTF8, ASCII, Base64, Hex, LineSplitter
+- [core] - Object, num, int, double, bool, String, RegExp, Duration, DateTime, Stopwatch, Uri
+- [developer] - log, Timeline, TimelineTask, TimelineTaskArgument
+- [meta] - annotations
+- [typed_data] - ByteData, Endian, Float32List, Float64List, Int16List, Int32List, Int64List, Int8List, Uint16List, Uint32List, Uint64List, Uint8ClampedList, Uint8List
+- [js] - interop with JavaScript
+- [http] - HTTP client
+- [math] - Math library: Random, min, max, pow, sin, cos, tan, atan2, e, pi, ...
+- [io] - I/O support for non web applications
+- [http] - A composable, Future-based library for making HTTP requests
 
 ### External
 
@@ -99,25 +122,60 @@ Color scheme is generated by [Material Theme Builder](https://www.figma.com/comm
 - [url_launcher] - A Crossplatform Flutter plugin for launching urls.
 - [funvas] - Funvas is a library for creating animations in Flutter. It is a wrapper around the Canvas API, which makes it easy to create animations.
 
-### Not Recommended libraries
+## Not Recommended libraries
 
-- [hive] - key-value storage for Flutter and Dart. It loads all data into memory, which is not good for large data sets. It is better to use [sqflite] or [drift] for this purpose. If you need a KV storage for small data sets, you can use [shared_preferences]. In addition, you cannot apply migrations, which is a big problem.
+### [hive]
 
-- [getx] - GetX is a library for Flutter that tries to combine everything in one package like navigation, state-management, storage, etc. Therefore, it is usually considered as a framework. However, everything is not so good. Even an idea to combine all the stuff is mad from the beginning. Moreover, the source code is awful. It has a lot of bugs, not only talking about the documentation, coverage, etc. On top of that, there is no single approach to write the code. In addition, the idea of how to manage the logic\business logic and all the stuff is completely non-engineering. That is why projects that use this lib are very difficult to maintain. Hence many problems arise. It becomes really tough to produce new features, releases.
+1. **Lack of thorough testing**: Compared to SQLite, Hive has significantly less testing, raising concerns about its reliability.
+2. **No built-in failure recovery**: If a Hive database encounters an issue, it doesn't have a built-in mechanism to recover or fallback.
+3. **Complexity of queries**: Simple key-value queries are straightforward, but anything more complex requires a significant amount of code.
+4. **Non-standard**: Hive is not an industry standard and its implementation appears to be hastily put together.
+5. **Poor support and maintenance**: The database seems to have been abandoned, and its maintenance is questionable.
+6. **No migration support**: Any changes to models can potentially crash the application, and the only workaround seems to be deleting the entire database with each version.
+7. **Mutable models**: This can cause problems in a database.
+8. **Misleading documentation and benchmarks**: Claims made in the documentation and benchmarks don't match the actual performance.
+9. **Performance issues**: Hive is significantly slower than SQLite.
+10. **Small community**: Hive's community is much smaller compared to SQLite's, leading to less support and fewer resources.
+11. **Memory management issues**: Hive keeps all data in memory, which can cause issues for larger datasets.
+12. **Hardcoded adapters and keys**: This makes the code hard to follow and maintain.
+13. **No synchronization between isolates**: Attempting to interact with the same box across isolates can lead to a crash.
+14. **Poor code generation**: The autogenerated code is difficult to work with, making JSON storage or protobufs in shared_preferences seem like better alternatives.
+15. **Lack of database features**: Hive lacks key database features like relations, foreign keys, joins, triggers, virtual and generated fields, views, and temporary tables.
+16. **Complexity of testing**: Testing Hive databases is non-intuitive compared to SQLite where a :memory: database can be used.
+17. **Limited capabilities**: Lack of support for handling JSON or in-database search functionality.
+18. **No field indexes**: Any non-key-based queries require full database scans.
+19. **No transactions**: Hive does not support transactions, making it unsuitable for financial applications.
+20. **Reliability issues**: Due to many of the above reasons, Hive's reliability is questionable.
+21. **Limited external software support**: There's a lack of tools to interact with Hive, hindering inspection and design of the database.
+22. **Non-transferable experience**: Due to its non-standard nature and project abandonment, time spent learning Hive could be considered wasted, with limited transferable knowledge or benefits to one's career.
 
-- [get_it] - Service locator with all the problems that come in. Basically, you register your objects in the map and access them throughthout the app. Obviously, having a possibility to access any object wherever you want from any place is a destructive idea. For example, you can pull one entity out of a completely different layer and/or location in the application, change its state, dispose resources, and so on. Even if you know it's not good to do that, it still doesn't prohibit you from doing it, or juniors with less experience. Moreover, in such cases it's better to have global variables, because they will be more understandable. To summarize, you deprive yourself of a transparent dependency injection, moreover, you are likely to violate the principle of dependency inversion. If you still need the [get_it], then I would recommend you to use [injectable]. All in all, constructors are the best way to inject dependencies. In Flutter, you can use BuildContext to inject dependencies.
+### [getx]
 
-- [ferry] - GraphQL codegen for Dart and Flutter. Generally, it is usable, but generates a lot of code. It can happen that at some point the time spent on codegen and build will be more than a few hours, or even not work at all. Moreover, using this package is fraught with the fact that the size of your application will also be increased by huge numbers, 20-60 megabytes
+GetX is a library for Flutter that tries to combine everything in one package like navigation, state-management, storage, etc. Therefore, it is usually considered as a framework. However, everything is not so good. Even an idea to combine all the stuff is mad from the beginning. Moreover, the source code is awful. It has a lot of bugs, not only talking about the documentation, coverage, etc. On top of that, there is no single approach to write the code. In addition, the idea of how to manage the logic\business logic and all the stuff is completely non-engineering. That is why projects that use this lib are very difficult to maintain. Hence many problems arise. It becomes really tough to produce new features, releases.
 
-- [dio] - HTTP client for Dart, which has many features. However, it has some drawbacks. It comes with DioError builtin which is thrown all the time losing all stacktrace. I would recommend to use [http] instead.
+### [get_it]
 
-- [flutter_hooks] - Hooks are only pointless tricks, imposing their own rules and complicating the flow. Also, the creation of subscriptions, animations will be greatly complicated. To summarize, this package will not make your life easier, you will not write code faster, on the contrary, you are more likely to have difficulties. I would advise you to use snippets instead and a more Flutter way with StatefulWidget and State.
+Service locator with all the problems that come in. Basically, you register your objects in the map and access them throughthout the app. Obviously, having a possibility to access any object wherever you want from any place is a destructive idea. For example, you can pull one entity out of a completely different layer and/or location in the application, change its state, dispose resources, and so on. Even if you know it's not good to do that, it still doesn't prohibit you from doing it, or juniors with less experience. Moreover, in such cases it's better to have global variables, because they will be more understandable. To summarize, you deprive yourself of a clear dependency injection, moreover, you are likely to violate the principle of dependency inversion. If you still need the [get_it], then I would recommend you to use [injectable]. All in all, constructors are the best way to inject dependencies. In Flutter, you can use BuildContext to inject dependencies.
 
-- [mobx] - MobX is a reactive state management library. You are likely to have many implicit subscriptions that cause rebuilds. I'd suggest to use [bloc] or Value Notifier instead.
+### [ferry]
 
-- [riverpod] - Riverpod is kinda popular library for state _management_. It is based on global variables that store state. Let alone creating a bunch of global variables, it is also a bad idea to store state in global variables. Moreover, it is not easy to test.
+GraphQL codegen for Dart and Flutter. Generally, it is usable, but generates a lot of code. It can happen that at some point the time spent on codegen and build will be more than a few hours, or even not work at all. Moreover, using this package is fraught with the fact that the size of your application will also be increased by huge numbers, 20-60 megabytes
 
-- [hydrated_bloc] - Hydrated Bloc is a library that allows you to persist bloc state. It is a bad idea to persist state. It is better to persist data, but not state. For example, you emitted an error or loading state. It was persisted. Next time, when user opens the app they will see an error or loading state.
+### [flutter_hooks]
+
+Hooks are only pointless tricks, imposing their own rules and complicating the flow. Also, the creation of subscriptions, animations will be greatly complicated. To summarize, this package will not make your life easier, you will not write code faster, on the contrary, you are more likely to have difficulties. I would advise you to use snippets instead and a more Flutter way with StatefulWidget and State.
+
+### [mobx]
+
+MobX is a reactive state management library. You are likely to have many implicit subscriptions that cause rebuilds. I'd suggest to use [bloc] or Value Notifier instead.
+
+### [riverpod]
+
+Riverpod is kinda popular library for state _management_. It is based on global variables that store state. Let alone creating a bunch of global variables, it is also a bad idea to store state in global variables. Moreover, it is not easy to test.
+
+### [hydrated_bloc]
+
+Hydrated Bloc is a library that allows you to persist bloc state. It is a bad idea to persist state. It is better to persist data, but not state. For example, you emitted an error or loading state. It was persisted. Next time, when user opens the app they will see an error or loading state.
 
 ## Resources
 
@@ -167,7 +225,7 @@ Color scheme is generated by [Material Theme Builder](https://www.figma.com/comm
 - [Purple Starter](https://github.com/purplenoodlesoop) - Yakov Karpov
 - [Plugfox](https://github.com/PlugFox) - Michael Matiunin
 
-[//]: recommended
+[//]: <recommended>
 [bloc]: https://pub.dev/packages/bloc
 [flutter_bloc]: https://pub.dev/packages/flutter_bloc
 [sqflite]: https://pub.dev/packages/sqflite
@@ -183,6 +241,18 @@ Color scheme is generated by [Material Theme Builder](https://www.figma.com/comm
 [stream_transform]: https://pub.dev/packages/stream_transform
 [url_launcher]: https://pub.dev/packages/url_launcher
 [rxdart]: https://pub.dev/packages/rxdart
+
+[//]: <core>
+[async]: https://api.flutter.dev/flutter/dart-async/dart-async-library.html
+[collection]: https://api.dart.dev/stable/2.19.2/dart-collection/dart-collection-library.html
+[convert]: https://api.dart.dev/stable/2.19.2/dart-convert/dart-convert-library.html
+[core]: https://api.dart.dev/stable/2.19.2/dart-core/dart-core-library.html
+[developer]: https://api.flutter.dev/flutter/dart-developer/dart-developer-library.html
+[meta]: https://api.flutter.dev/flutter/meta/meta-library.html
+[typed_data]: https://api.dart.dev/stable/2.19.2/dart-typed_data/dart-typed_data-library.html
+[js]: https://api.dart.dev/stable/2.19.2/dart-js/dart-js-library.html
+[math]: https://api.dart.dev/stable/2.19.2/dart-math/dart-math-library.html
+[io]: https://api.dart.dev/stable/2.19.2/dart-io/dart-io-library.html
 [http]: https://pub.dev/packages/http
 
 [//]: <not recommended>
@@ -191,7 +261,6 @@ Color scheme is generated by [Material Theme Builder](https://www.figma.com/comm
 [get_it]: https://pub.dev/packages/get_it
 [injectable]: https://pub.dev/packages/injectable
 [ferry]: https://pub.dev/packages/ferry
-[dio]: https://pub.dev/packages/dio
 [riverpod]: https://pub.dev/packages/riverpod
 [flutter_hooks]: https://pub.dev/packages/flutter_hooks
 [hydrated_bloc]: https://pub.dev/packages/hydrated_bloc
