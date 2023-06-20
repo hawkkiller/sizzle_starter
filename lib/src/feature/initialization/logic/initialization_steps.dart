@@ -6,7 +6,7 @@ import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dar
 
 typedef StepAction = FutureOr<void>? Function(Dependencies$Mutable progress);
 
-/// 
+///
 mixin InitializationSteps {
   final initializationSteps = <String, StepAction>{
     'Shared Preferences': (progress) async {

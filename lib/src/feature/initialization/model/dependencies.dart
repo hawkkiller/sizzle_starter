@@ -14,7 +14,7 @@ abstract interface class Dependencies {
 }
 
 /// Mutable version of dependencies
-/// 
+///
 /// Used to build dependencies
 final class Dependencies$Mutable implements Dependencies {
   Dependencies$Mutable();
@@ -33,7 +33,7 @@ final class Dependencies$Mutable implements Dependencies {
 }
 
 /// Immutable version of dependencies
-/// 
+///
 /// Used to store dependencies
 final class _Dependencies$Immutable implements Dependencies {
   const _Dependencies$Immutable({
@@ -46,7 +46,7 @@ final class _Dependencies$Immutable implements Dependencies {
 
   @override
   final AppRouter router;
-  
+
   @override
   Dependencies freeze() => this;
 }
