@@ -54,20 +54,19 @@ Here are the steps to initialize the dependencies. It is a map of steps, where t
 ### Initialization Progress
 
 ```dart
-final class InitializationProgress {
-  InitializationProgress();
+abstract interface class Dependencies {
+  /// Shared preferences
+  abstract final SharedPreferences sharedPreferences;
 
-  SharedPreferences? sharedPreferences;
-  AppRouter? router;
+  /// App router
+  abstract final AppRouter router;
 
-  DependenciesStore dependencies() => DependenciesStore(
-        sharedPreferences: sharedPreferences!,
-        router: router!,
-      );
+  /// Freeze dependencies, so they cannot be modified
+  Dependencies freeze();
 }
 ```
 
-In `initialization_progress` you can store the results of the steps. It is a model that is passed to each step and then returned to the `InitializationProcessor` which maps it to the immutable model.
+In `dependencies` you can store the results of the steps. There is mutable a model that is passed to each step and then immutable one is returned to the `InitializationProcessor` which maps it to the immutable model.
 
 ### Initialization Processor
 
