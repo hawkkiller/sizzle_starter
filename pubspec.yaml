@@ -30,11 +30,6 @@ dependencies:
   # BLoC
   flutter_bloc: 8.1.3
 
-  # Network
-  http: 0.13.6
-  rest_client:
-    path: packages/rest_client
-
   # Router
   auto_route: 7.4.0
 
@@ -64,6 +59,13 @@ dependencies:
   bloc_concurrency: 0.2.2
   path: ^1.8.3
   path_provider: ^2.0.15
+  
+  # Packages
+  rest_client:
+    path: packages/rest_client
+  
+  database:
+    path: packages/database
 
 dev_dependencies:
   # Testing
