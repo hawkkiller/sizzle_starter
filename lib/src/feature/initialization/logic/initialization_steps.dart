@@ -6,7 +6,7 @@ import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dar
 typedef StepAction = FutureOr<void>? Function(Dependencies$Mutable progress);
 
 /// The initialization steps, which are executed in the order they are defined.
-/// 
+///
 /// The [Dependencies] object is passed to each step, which allows the step to
 /// set the dependency, and the next step to use it.
 mixin InitializationSteps {
