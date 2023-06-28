@@ -215,12 +215,11 @@ Hydrated Bloc is a library that allows you to persist bloc state. It is a bad id
 
 **This section describes how to add a new dependency to your app.** Please, check the [initialization](#initialization) section before.
 
-1. Open `lib/src/feature/initialization/logic/initialization_progress.dart`
-2. Add new dependency to `InitializationProgress` class like others
-3. Add new dependency to your `Store`
-4. Go to `lib/src/feature/initialization/logic/initialization_steps.dart`
-5. Add new entry to the map and write down all the logic needed to initialize your dependency, return new `InitializationProgress` with updated field.
-6. Now, you can use your dependency in your app receiving it from context.
+1. Open `lib/src/feature/initialization/model/dependencies.dart`
+2. Add new dependency to `Dependencies$Mutable` and `Dependencies$Immutable`
+3. Go to `lib/src/feature/initialization/logic/initialization_steps.dart`
+4. Add new entry to the map and write down all the logic needed to initialize your dependency and set it in the `Dependencies$Mutable` object
+5. Now, you can use the dependency in the app receiving it from context.
 
 ## Star History
 
