@@ -23,10 +23,10 @@ tasks:
       - dart run build_runner watch --delete-conflicting-outputs
 
   # Template-related, safe to be removed for production
-  tmpl:flutter:create:
-    desc: Initialize flutter platforms
+  tmpl:init:
+    desc: Initialize template for development
     summary: |
-      Initialize flutter platforms. 
+      Initialize template for development.
       Safe to be deleted for production.
     deps:
       - tmpl:git:config

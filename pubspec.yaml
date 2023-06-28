@@ -38,8 +38,6 @@ dependencies:
   firebase_core: 2.14.0
 
   # Persisting
-  drift: 2.8.2
-  sqlite3_flutter_libs: 0.5.15
   shared_preferences: 2.1.2
 
   # Codegen annotations
@@ -75,7 +73,6 @@ dev_dependencies:
   # Codegen
   json_serializable: 6.7.0
   build_runner: 2.4.5
-  drift_dev: 2.8.3
   auto_route_generator: 7.1.1
 
   # Utils
