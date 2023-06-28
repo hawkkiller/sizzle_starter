@@ -177,7 +177,7 @@ MobX is a reactive state management library. You are likely to have many implici
 
 ### [riverpod]
 
-Riverpod is kinda popular library for state _management_. It is based on global variables that store state. Let alone creating a bunch of global variables, it is also a bad idea to store state in global variables. Moreover, it is not easy to test.
+Riverpod is kinda popular library for state *management*. It is based on global variables that store state. Let alone creating a bunch of global variables, it is also a bad idea to store state in global variables. Moreover, it is not easy to test.
 
 ### [hydrated_bloc]
 
