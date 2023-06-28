@@ -1,16 +1,16 @@
 # Sizzle Starter
 
-This is an immensely adaptable Flutter initiation starter, crafted with an ideally predetermined layout and encompassing libraries that can be used across a vast array of applications.
+This is an immensely adaptable Flutter starter, crafted with an ideally predetermined layout and encompassing libraries that can be used across a vast array of applications.
 
-To take advantage of this module, simply click on the "Use this template" button. The subsequent instructions will guide you through the process of integrating and deploying this starter within your distinct projects.
+To take advantage of this repository, simply click on the "Use this template" button. The subsequent instructions will guide you through the process of integrating and deploying this starter within your distinct projects.
 
 ## Features
 
 - 🔥 Rapid installation process
 - 🧜 Designed to be flexible, easy to expand, and simple to maintain
-- 📦 Assortment of reliable and tested libraries included
+- 📦 Assortment of reliable and tested libraries
 - 🚛 GitHub Actions and GitLab CI pre-configured
-- 🚀 Cutting-edge, feature-centric architecture
+- 🚀 Cutting-edge, feature-oriented architecture
 - 📌 Comprehensive documentation and exciting roadmap ahead
 - 🐛 Bug reporting, error tracking and analytical capabilities
 - 😌 Themes and additional amenities...
