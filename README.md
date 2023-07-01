@@ -95,9 +95,9 @@ If you are building for the *Web* too, you should go to [https://drift.simonbind
 
 ## Example Apps
 
-1. Catty - simple, but pretty app that uses ChatGPT and cats api to show different cat pictures and generate the facts.
-2. AuthEx - an example of implementing request authentication, interceptors and route guards.
-3. Midjourney Client UI - this app utilizes the midjourney_client library to generate images.
+1. [Catty](https://github.com/hawkkiller/catty) - simple, but pretty app that uses ChatGPT and cats api to show different cat pictures and generate the facts.
+2. [AuthEx](https://github.com/hawkkiller/authex) - an example of implementing request authentication, interceptors and route guards.
+3. [Midjourney Client UI](https://github.com/hawkkiller/midjourney_client_ui) - this app utilizes the midjourney_client library to generate images.
 
 ## Recommended libraries
 
