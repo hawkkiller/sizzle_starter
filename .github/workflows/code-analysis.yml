@@ -1,0 +1,20 @@
+name: "Code Analysis"
+
+on:
+  push:
+    branches: [main]
+
+  pull_request:
+    branches: [main]
+
+  workflow_dispatch:
+
+jobs:
+  flutter_package:
+    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
+    with:
+      working_directory: "/"
+      # TODO: Set min_coverage to your desired value.
+      min_coverage: 0
+      setup: |
+        dart pub run build_runner build --delete-conflicting-outputs
