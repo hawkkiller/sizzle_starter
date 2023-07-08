@@ -1,10 +1,9 @@
-// Authored by Yakov K.
 import 'dart:async';
 
-import 'package:l/l.dart';
+import 'package:logging/logging.dart' as logging;
 import 'package:pure/pure.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:stream_transform/stream_transform.dart';
+import 'package:sizzle_starter/src/core/utils/logger.dart';
 
 /// A class which is responsible for managing error tracking.
 abstract class ErrorTrackingDisabler {
@@ -20,7 +19,7 @@ typedef _CompleteSubscription = void Function([
   StreamSubscription<void>? subscription,
 ]);
 
-///
+/// A class which is responsible for managing error tracking.
 class SentryTrackingManager implements ErrorTrackingManager {
   SentryTrackingManager({
     required String sentryDsn,
@@ -30,20 +29,19 @@ class SentryTrackingManager implements ErrorTrackingManager {
 
   Completer<StreamSubscription<void>?>? _subscriptionCompleter;
 
-  static Stream<LogMessageWithStackTrace> get _warningsAndErrors =>
-      l.where(_isWarningOrError).whereType<LogMessageWithStackTrace>();
+  /// Catch only warnings and errors
+  static Stream<logging.LogRecord> get _warningsAndErrors =>
+      logging.Logger.root.onRecord.where(_isWarningOrError);
 
-  static bool _true() => true;
-  static bool _false() => false;
-
-  static bool _isWarningOrError(LogMessage message) => message.level.maybeWhen(
-        warning: _true,
-        error: _true,
-        orElse: _false,
-      );
+  static bool _isWarningOrError(logging.LogRecord log) => switch (log) {
+        logging.Level.WARNING => true,
+        logging.Level.SEVERE => true,
+        logging.Level.SHOUT => true,
+        _ => false,
+      };
 
   static Future<SentryId> _captureException(
-    LogMessageWithStackTrace message,
+    logging.LogRecord message,
   ) =>
       Sentry.captureException(
         message.message,
@@ -93,7 +91,7 @@ class SentryTrackingManager implements ErrorTrackingManager {
   Future<void> disableReporting() async {
     final subscription = await _subscriptionCompleter?.future;
     if (subscription == null) {
-      l.w(
+      logger.warning(
         'Tried disabling error reporting when '
         'it was not enabled in the first place.',
       );

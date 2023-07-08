@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:l/l.dart';
 import 'package:sizzle_starter/src/core/utils/extensions/string_extension.dart';
+import 'package:sizzle_starter/src/core/utils/logger.dart';
 
 class AppBlocObserver extends BlocObserver {
   @override
@@ -13,7 +13,7 @@ class AppBlocObserver extends BlocObserver {
       ..write('Transition: ${transition.currentState.runtimeType}')
       ..writeln(' -> ${transition.nextState.runtimeType}')
       ..writeln('New State: ${transition.nextState.toString().limit(100)}');
-    l.i(buffer.toString());
+    logger.info(buffer.toString());
     super.onTransition(bloc, transition);
   }
 
@@ -22,13 +22,17 @@ class AppBlocObserver extends BlocObserver {
     final buffer = StringBuffer()
       ..writeln('Bloc: ${bloc.runtimeType} | ${event.runtimeType}')
       ..writeln('Event: ${event.toString().limit(100)}');
-    l.i(buffer.toString());
+    logger.info(buffer.toString());
     super.onEvent(bloc, event);
   }
 
   @override
   void onError(BlocBase<Object?> bloc, Object error, StackTrace stackTrace) {
-    l.e('Bloc: ${bloc.runtimeType} | $error', stackTrace);
+    logger.error(
+      'Bloc: ${bloc.runtimeType}',
+      error: error,
+      stackTrace: stackTrace,
+    );
     super.onError(bloc, error, stackTrace);
   }
 }
