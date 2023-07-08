@@ -2,7 +2,7 @@ import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dar
 import 'package:sizzle_starter/src/feature/initialization/model/environment_store.dart';
 
 /// Initialization progress
-/// @{nodoc}
+/// @nodoc
 final class InitializationProgress {
   const InitializationProgress({
     required this.dependencies,

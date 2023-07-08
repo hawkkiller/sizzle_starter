@@ -22,8 +22,8 @@ class AppRunner
   Future<void> initializeAndRun(InitializationHook hook) async {
     final bindings = WidgetsFlutterBinding.ensureInitialized()
       ..deferFirstFrame();
-    FlutterError.onError = Logger.logFlutterError;
-    PlatformDispatcher.instance.onError = Logger.logPlatformDispatcherError;
+    FlutterError.onError = logger.logFlutterError;
+    PlatformDispatcher.instance.onError = logger.logPlatformDispatcherError;
     Bloc.observer = AppBlocObserver();
     Bloc.transformer = sequential();
 
