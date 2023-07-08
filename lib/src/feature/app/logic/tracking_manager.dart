@@ -3,9 +3,7 @@ import 'dart:async';
 import 'package:logging/logging.dart' as logging;
 import 'package:pure/pure.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:sizzle_starter/runner_shared.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
-import 'package:stream_transform/stream_transform.dart';
 
 /// A class which is responsible for managing error tracking.
 abstract class ErrorTrackingDisabler {
