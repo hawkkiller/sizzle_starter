@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sizzle_starter/src/core/utils/mixin/scope_mixin.dart';
 import 'package:sizzle_starter/src/core/widget/scope_widgets.dart';
 
 void main() {
@@ -66,7 +65,7 @@ void main() {
   });
 }
 
-class _DummyInheritedWidget extends InheritedWidget with ScopeMixin {
+class _DummyInheritedWidget extends InheritedWidget {
   const _DummyInheritedWidget({
     required super.child,
   });
@@ -77,7 +76,7 @@ class _DummyInheritedWidget extends InheritedWidget with ScopeMixin {
 
 // dummy inherited widget 2
 
-class _DummyInheritedWidget2 extends InheritedWidget with ScopeMixin {
+class _DummyInheritedWidget2 extends InheritedWidget {
   const _DummyInheritedWidget2({
     required super.child,
   });
