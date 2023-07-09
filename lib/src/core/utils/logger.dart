@@ -29,6 +29,7 @@ base class LogOptions {
   const LogOptions({
     this.showTime = true,
     this.showEmoji = true,
+    this.logInRelease = false,
     this.level = LoggerLevel.info,
     this.formatter,
   });
@@ -38,6 +39,8 @@ base class LogOptions {
   final bool showTime;
 
   final bool showEmoji;
+
+  final bool logInRelease;
 
   final String Function({
     required String message,
@@ -149,6 +152,10 @@ final class AppLogger$Logging extends AppLogger {
     L Function() fn, [
     LogOptions options = const LogOptions(),
   ]) {
+    if (kReleaseMode && !options.logInRelease) {
+      return fn();
+    }
+
     logger.level = switch (options.level) {
       LoggerLevel.error => logging.Level.SEVERE,
       LoggerLevel.warning => logging.Level.WARNING,
