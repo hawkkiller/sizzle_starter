@@ -11,15 +11,10 @@ mixin ScopeMixin<T extends Widget> on Widget implements ChildContainer {
   static T? scopeMaybeOf<T extends InheritedWidget>(
     BuildContext context, {
     bool listen = true,
-  }) {
-    T? inhW;
-    if (listen) {
-      inhW = context.dependOnInheritedWidgetOfExactType<T>();
-    } else {
-      inhW = context.getElementForInheritedWidgetOfExactType<T>()?.widget as T?;
-    }
-    return inhW;
-  }
+  }) =>
+      listen
+          ? context.dependOnInheritedWidgetOfExactType<T>()
+          : context.getInheritedWidgetOfExactType<T>();
 
   static T scopeOf<T extends InheritedWidget>(
     BuildContext context, {
