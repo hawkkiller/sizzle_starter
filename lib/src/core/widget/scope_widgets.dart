@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/core/utils/mixin/scope_mixin.dart';
 
-typedef BuildScope<T extends Widget> = ScopeMixin<T> Function(Widget child);
+typedef BuildScope = Widget Function(Widget child);
 
 typedef BuildWidget = Widget Function(BuildContext context, Widget? child);
 
 Never _childIsNull() => throw ArgumentError.notNull('child');
 
-class ScopeProvider<T extends Widget> extends StatelessWidget {
+class ScopeProvider extends StatelessWidget {
   const ScopeProvider({
     required this.buildScope,
     this.child,
     super.key,
   });
 
-  final BuildScope<T> buildScope;
+  final BuildScope buildScope;
 
   final Widget? child;
 
