@@ -111,7 +111,7 @@ abstract interface class AppLogger {
 }
 
 final class AppLogger$Logging extends AppLogger {
-  final logger = logging.Logger.root;
+  final logger = logging.Logger('SizzleLogger');
 
   @override
   void debug(Object message) => logger.fine(message);
@@ -156,15 +156,9 @@ final class AppLogger$Logging extends AppLogger {
       return fn();
     }
 
-    logger.level = switch (options.level) {
-      LoggerLevel.error => logging.Level.SEVERE,
-      LoggerLevel.warning => logging.Level.WARNING,
-      LoggerLevel.info => logging.Level.INFO,
-      LoggerLevel.debug => logging.Level.FINE,
-      LoggerLevel.verbose => logging.Level.FINEST,
-    };
-
-    logger.onRecord.listen((event) {
+    logger.onRecord
+        .where((event) => event.loggerName == 'SizzleLogger')
+        .listen((event) {
       final message = options.formatter?.call(
             message: event.message,
             stackTrace: event.stackTrace,
@@ -176,6 +170,18 @@ final class AppLogger$Logging extends AppLogger {
             time: event.time,
             error: event.error,
           );
+
+      final logLevel = switch (event.level) {
+        logging.Level.SEVERE => LoggerLevel.error,
+        logging.Level.WARNING => LoggerLevel.warning,
+        logging.Level.INFO => LoggerLevel.info,
+        logging.Level.FINE || logging.Level.FINER => LoggerLevel.debug,
+        _ => LoggerLevel.verbose,
+      };
+
+      if (logLevel.compareTo(options.level) < 0) {
+        return;
+      }
 
       debugPrint(message);
     });

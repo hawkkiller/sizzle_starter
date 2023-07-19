@@ -20,9 +20,7 @@ void main() {
         logger.logZoneError,
       );
     },
-    const LogOptions(
-      level: LoggerLevel.verbose,
-    ),
+    const LogOptions(),
   );
 }
 
