@@ -155,6 +155,7 @@ final class AppLogger$Logging extends AppLogger {
     if (kReleaseMode && !options.logInRelease) {
       return fn();
     }
+    logging.hierarchicalLoggingEnabled = true;
 
     logger.onRecord
         .where((event) => event.loggerName == 'SizzleLogger')
