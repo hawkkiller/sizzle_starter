@@ -31,7 +31,7 @@ dependencies:
   flutter_bloc: 8.1.3
 
   # Router
-  auto_route: 7.7.0
+  auto_route: 7.7.1
 
   # Firebase
   firebase_analytics: 10.4.3
