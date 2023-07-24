@@ -34,7 +34,7 @@ dependencies:
   auto_route: 7.7.0
 
   # Firebase
-  firebase_analytics: 10.4.3
+  firebase_analytics: 10.4.4
   firebase_core: 2.15.0
 
   # Persisting
