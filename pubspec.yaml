@@ -11,7 +11,7 @@ environment:
   flutter: ">=3.10.5 <4.0.0"
 
 dependencies:
-  # SDK
+  # FLUTTER SDK
   flutter:
     sdk: flutter
   collection: 1.17.1
@@ -40,16 +40,10 @@ dependencies:
   # Persisting
   shared_preferences: 2.2.0
 
-  # Codegen annotations
-  json_annotation: 4.8.1
-
   # Logging
   stack_trace: 1.11.0
   sentry_flutter: 7.8.0
   logging: 1.2.0
-
-  # Lints
-  sizzle_lints: 1.0.10
 
   # Utils
   pure: 0.2.0
@@ -71,9 +65,11 @@ dev_dependencies:
     sdk: flutter
 
   # Codegen
-  json_serializable: 6.7.1
   build_runner: 2.4.6
   auto_route_generator: 7.2.0
+
+  # Lints
+  sizzle_lints: 1.0.10
 
   # Utils
   flutter_launcher_icons: 0.13.1
