@@ -15,5 +15,6 @@ jobs:
     with:
       # TODO: Set min_coverage to your desired value.
       min_coverage: 0
-      setup: |
-        dart pub run build_runner build --delete-conflicting-outputs
+#      TODO: if you have a `build_runner` script, uncomment the following lines.
+#      setup: |
+#        dart pub run build_runner build --delete-conflicting-outputs
