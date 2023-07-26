@@ -111,7 +111,6 @@ If you are building for the *Web* too, you should go to [https://drift.simonbind
 - [meta] - annotations
 - [typed_data] - ByteData, Endian, Float32List, Float64List, Int16List, Int32List, Int64List, Int8List, Uint16List, Uint32List, Uint64List, Uint8ClampedList, Uint8List
 - [js] - interop with JavaScript
-- [http] - HTTP client
 - [math] - Math library: Random, min, max, pow, sin, cos, tan, atan2, e, pi, ...
 - [io] - I/O support for non web applications
 - [http] - A composable, Future-based library for making HTTP requests
@@ -127,7 +126,6 @@ If you are building for the *Web* too, you should go to [https://drift.simonbind
 - [drift] - A type-safe, composable SQL client for Dart and Flutter
 - [sqflite] - A wrapper around SQLite for Flutter, but I'd recommend to use [drift] instead
 - [shared_preferences] - A persistent key-value store for Flutter
-- [http] - A composable, Future-based library for making HTTP requests
 - [rive] - Great tool and library for creating animations. Moreover, their editor is also written in Flutter.
 - [rxdart] - RxDart is a reactive programming library for Dart and Flutter. It provides a set of extension methods on Dart Streams and StreamControllers to transform and combine streams in a declarative way. It also provides a set of Subjects that extend StreamControllers to allow for broadcasting of the latest value(-s) to new listeners.
 - [stream_transform] - A collection of Stream transformers
