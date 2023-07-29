@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/core/utils/mixin/scope_mixin.dart';
 
 typedef BuildScope = Widget Function(Widget child);
 
@@ -24,7 +23,7 @@ class ScopeProvider extends StatelessWidget {
 
 /// A widget that provides a list of scopes to its descendants.
 /// The order of the scope matters.
-class ScopesProvider extends StatelessWidget with ScopeMixin {
+class ScopesProvider extends StatelessWidget {
   const ScopesProvider({
     required this.child,
     required this.providers,
@@ -34,7 +33,6 @@ class ScopesProvider extends StatelessWidget with ScopeMixin {
   /// The widget below this widget in the tree.
   /// Note that if you want to read values from the scopes, check if
   /// you have right [BuildContext] for that.
-  @override
   final Widget child;
 
   /// List of scopes to provide to descendants.
