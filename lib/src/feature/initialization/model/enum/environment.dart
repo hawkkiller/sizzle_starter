@@ -1,7 +1,7 @@
 /// Simple enum to represent the environment
 enum Environment {
-  dev('dev'),
-  prod('prod');
+  dev('DEV'),
+  prod('PROD');
 
   const Environment(this.value);
 
@@ -12,20 +12,20 @@ enum Environment {
   /// Example:
   ///
   /// ```dart
-  /// final env = Environment.fromEnvironment('dev'); // OK
-  /// final env = Environment.fromEnvironment('prod'); // OK
+  /// final env = Environment.fromEnvironment('DEV'); // OK
+  /// final env = Environment.fromEnvironment('PROD'); // OK
   /// // Throws an ArgumentError
   /// final env = Environment.fromEnvironment('invalid');
   /// ```
-  static Environment fromEnvironment(String value) {
-    if (value == 'dev') {
-      return Environment.dev;
-    } else if (value == 'prod') {
-      return Environment.prod;
-    } else {
-      throw ArgumentError('Unknown environment: $value');
-    }
-  }
+  static Environment fromString(String value) => switch (value) {
+        'DEV' => dev,
+        'PROD' => prod,
+        _ => throw ArgumentError.value(
+            value,
+            'value',
+            'Invalid environment',
+          ),
+      };
 
   /// The string representation of the environment
   ///

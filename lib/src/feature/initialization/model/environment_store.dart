@@ -10,7 +10,7 @@ abstract class IEnvironmentStore {
 class EnvironmentStore extends IEnvironmentStore {
   EnvironmentStore();
 
-  static final _env = Environment.fromEnvironment(
+  static final _env = Environment.fromString(
     const String.fromEnvironment('env'),
   );
 
