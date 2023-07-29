@@ -82,7 +82,7 @@ If you don't need the database, just remove the dependency.
 ## Example Apps
 
 1. [Catty](https://github.com/hawkkiller/catty) - simple, but pretty app that uses ChatGPT and cats api to show different cat pictures and generate the facts.
-2. [Auther](https://github.com/hawkkiller/auther) - an example of implementing request authentication, interceptors and route guards.
+2. [Auther](https://github.com/hawkkiller/auther) - Full stack example of DART at both ends. This shows the authentication logic in real world conditions, profile and session management. 
 3. [Midjourney Client UI](https://github.com/hawkkiller/midjourney_client_ui) - this app utilizes the midjourney_client library to generate images.
 
 ## Recommended libraries
