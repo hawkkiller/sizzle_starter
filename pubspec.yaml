@@ -13,12 +13,12 @@ environment:
   flutter: ">=3.10.5 <4.0.0"
 
 dependencies:
-  # FLUTTER SDK
+  # Flutter SDK
   flutter:
     sdk: flutter
-  collection: 1.17.1
-  async: 2.11.0
-  meta: 1.9.1
+  collection: any
+  async: any
+  meta: any
 
   # Localization
   intl: 0.18.0
