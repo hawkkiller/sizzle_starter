@@ -37,7 +37,7 @@ dependencies:
 
   # Logging
   stack_trace: 1.11.0
-  sentry_flutter: 7.8.0
+  sentry_flutter: 7.9.0
   logging: 1.2.0
 
   # Utils
