@@ -148,7 +148,7 @@ If you don't need the database, just remove the dependency.
 
 ### [isar]
 
-Isar is developed by the same author hive does. Generally, it is based on bindings to Rust which has bindings to C library called [libmdx](https://github.com/erthink/libmdbx). This statement alone sounds weird as Dart has FFI and can operate that library without using any superfasta Rust at all.. Then, a lot of points about Hive apply to isar as well, if not all. 
+Isar is developed by the same author as hive. In general, it is based on Rust, which has bindings to a C library called libmdx. This statement alone sounds odd, as Dart has FFI and can use this library without using superfasta Rust at all. Then many, if not all, of the points about Hive also apply to isar.
 
 ### [getx]
 
