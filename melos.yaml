@@ -1,0 +1,8 @@
+name: sizzle_starter
+
+packages:
+  - packages/*
+
+scripts:
+  analyze:
+    exec: dart analyze .
