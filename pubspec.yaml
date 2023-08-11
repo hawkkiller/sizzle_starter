@@ -60,12 +60,13 @@ dev_dependencies:
     sdk: flutter
 
   # Lints
-  sizzle_lints: 1.0.10
+  sizzle_lints: 2.0.1
 
   # Utils
-  flutter_launcher_icons: 0.13.1
-  flutter_native_splash: 2.3.1
   flutter_gen_runner: 5.3.1
+  flutter_native_splash: 2.3.1
+  flutter_launcher_icons: 0.13.1
+  intl_utils: 2.8.4
 
 flutter:
   uses-material-design: true
