@@ -1,22 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/core/utils/extensions/context_extension.dart';
+import 'package:sizzle_starter/src/core/localization/app_localization.dart';
 
 /// {@template sample_page}
 /// SamplePage widget
 /// {@endtemplate}
-class SampleScreen extends StatelessWidget {
+class HomeScreen extends StatelessWidget {
   /// {@macro sample_page}
-  const SampleScreen({super.key});
+  const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) => Scaffold(
         appBar: AppBar(
-          title: Text(context.stringOf().appTitle),
+          title: Text(Localization.of(context).appTitle),
         ),
         body: Column(
           children: [
             Text(
-              context.stringOf().samplePlaceholder('Misha'),
+              Localization.of(context).samplePlaceholder('Sizzle Starter'),
             ),
           ],
         ),

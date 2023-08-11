@@ -22,8 +22,8 @@ dependencies:
 
   # Localization
   intl: 0.18.0
-  # flutter_localizations:
-  #   sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
   # Stream
   stream_transform: 2.1.0
@@ -72,7 +72,6 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  # Enable generation of localized Strings from arb files.
   generate: false
 
   assets:
@@ -82,3 +81,10 @@ flutter:
 flutter_gen:
   output: lib/src/core/assets/generated
   line_length: 80
+
+flutter_intl:
+  enabled: true
+  class_name: GeneratedLocalization
+  main_locale: en
+  arb_dir: lib/src/core/localization/translations
+  output_dir: lib/src/core/localization/generated
