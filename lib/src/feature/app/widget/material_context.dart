@@ -1,19 +1,23 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sizzle_starter/src/core/localization/app_localization.dart';
 import 'package:sizzle_starter/src/core/theme/theme.dart';
 import 'package:sizzle_starter/src/feature/home/widget/home_screen.dart';
 
-/// A widget which is responsible for providing the app context.
-class AppContext extends StatefulWidget {
-  const AppContext({super.key});
+/// {@template material_context}
+/// [MaterialContext] is an entry point to the material context.
+/// 
+/// This widget sets locales, themes and routing.
+/// {@endtemplate}
+class MaterialContext extends StatefulWidget {
+  /// {@macro material_context}
+  const MaterialContext({super.key});
 
   @override
-  State<AppContext> createState() => _AppContextState();
+  State<MaterialContext> createState() => _MaterialContextState();
 }
 
-class _AppContextState extends State<AppContext> {
+class _MaterialContextState extends State<MaterialContext> {
   @override
   Widget build(BuildContext context) => MaterialApp(
         supportedLocales: Localization.supportedLocales,
@@ -23,9 +27,9 @@ class _AppContextState extends State<AppContext> {
           GlobalWidgetsLocalizations.delegate,
           Localization.localizationDelegate,
         ],
-        theme: $lightThemeData,
-        darkTheme: $darkThemeData,
-        locale: const Locale('es'),
+        theme: defaultLightThemeData,
+        darkTheme: defaultDarkThemeData,
+        locale: const Locale('en'),
         home: const HomeScreen(),
       );
 }

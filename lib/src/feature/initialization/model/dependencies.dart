@@ -49,4 +49,11 @@ final class InitializationResult {
   final Dependencies dependencies;
   final int stepCount;
   final int msSpent;
+
+  @override
+  String toString() => 'InitializationResult('
+      'dependencies: $dependencies, '
+      'stepCount: $stepCount, '
+      'msSpent: $msSpent'
+      ')';
 }
