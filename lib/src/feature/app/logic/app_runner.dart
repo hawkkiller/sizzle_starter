@@ -1,6 +1,7 @@
+import 'dart:async';
 import 'dart:ui';
 
-import 'package:bloc_concurrency/bloc_concurrency.dart';
+import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizzle_starter/src/core/bloc/observer.dart';
@@ -23,7 +24,7 @@ final class AppRunner
     FlutterError.onError = logger.logFlutterError;
     PlatformDispatcher.instance.onError = logger.logPlatformDispatcherError;
     Bloc.observer = AppBlocObserver();
-    Bloc.transformer = sequential();
+    Bloc.transformer = bloc_concurrency.sequential();
 
     final result = await processInitialization(
       steps: initializationSteps,
