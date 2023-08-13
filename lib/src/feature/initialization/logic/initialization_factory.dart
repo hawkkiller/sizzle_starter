@@ -4,7 +4,6 @@ part of 'initialization_processor.dart';
 /// Factory for creating pre-initialized objects.
 /// {@endtemplate}
 abstract class InitializationFactory {
-
   /// Get the environment store.
   IEnvironmentStore getEnvironmentStore();
 

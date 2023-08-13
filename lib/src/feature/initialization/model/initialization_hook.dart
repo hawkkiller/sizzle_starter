@@ -6,7 +6,7 @@ import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dar
 ///
 /// The [onInit] is called before the initialization process starts.
 ///
-/// The [onInitializing] is called when the 
+/// The [onInitializing] is called when the
 /// initialization process is in progress.
 ///
 /// The [onInitialized] is called when the initialization process is finished.
