@@ -34,7 +34,7 @@ final class AppRunner
 
     bindings.allowFirstFrame();
 
-    // Run application
+    // Attach this widget to the root of the tree.
     App(result: result).attach();
   }
 }
