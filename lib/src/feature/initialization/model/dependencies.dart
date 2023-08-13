@@ -31,15 +31,15 @@ abstract base class Dependencies with Diagnosticable {
 ///
 /// Used to build dependencies
 /// {@endtemplate}
-final class Dependencies$Mutable extends Dependencies {
+final class DependenciesMutable extends Dependencies {
   /// {@macro mutable_dependencies}
-  Dependencies$Mutable();
+  DependenciesMutable();
 
   @override
   late SharedPreferences sharedPreferences;
 
   @override
-  Dependencies freeze() => _Dependencies$Immutable(
+  Dependencies freeze() => _DependenciesImmutable(
         sharedPreferences: sharedPreferences,
       );
 }
@@ -49,9 +49,9 @@ final class Dependencies$Mutable extends Dependencies {
 ///
 /// Used to store dependencies
 /// {@endtemplate}
-final class _Dependencies$Immutable extends Dependencies {
+final class _DependenciesImmutable extends Dependencies {
   /// {@macro immutable_dependencies}
-  const _Dependencies$Immutable({
+  const _DependenciesImmutable({
     required this.sharedPreferences,
   });
 

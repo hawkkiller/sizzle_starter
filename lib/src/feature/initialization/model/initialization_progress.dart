@@ -12,7 +12,7 @@ final class InitializationProgress {
   });
 
   /// Mutable version of dependencies
-  final Dependencies$Mutable dependencies;
+  final DependenciesMutable dependencies;
 
   /// Environment store
   final IEnvironmentStore environmentStore;

@@ -22,7 +22,7 @@ mixin InitializationProcessor {
     var stepCount = 0;
     final env = factory.getEnvironmentStore();
     final progress = InitializationProgress(
-      dependencies: Dependencies$Mutable(),
+      dependencies: DependenciesMutable(),
       environmentStore: env,
     );
     final trackingManager = factory.createTrackingManager(env);
