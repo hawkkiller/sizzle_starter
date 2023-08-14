@@ -3,29 +3,43 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart' as logging;
 
-final AppLogger logger = AppLogger$Logging();
+/// Logger instance
+final Logger logger = AppLogger$Logging();
 
 /// Possible levels of logging
 enum LoggerLevel implements Comparable<LoggerLevel> {
+  /// Error level
   error._(1000),
+
+  /// Warning level
   warning._(800),
+
+  /// Info level
   info._(600),
+
+  /// Debug level
   debug._(400),
+
+  /// Verbose level
   verbose._(200);
 
   const LoggerLevel._(this.value);
 
+  /// Value of the level
   final int value;
 
   @override
   int compareTo(LoggerLevel other) => value.compareTo(other.value);
 
   @override
-  String toString() => '$runtimeType($value)';
+  String toString() => '$LoggerLevel($value)';
 }
 
-/// Logger options
+/// {@template log_options}
+/// Options for the logger
+/// {@endtemplate}
 base class LogOptions {
+  /// {@macro log_options}
   const LogOptions({
     this.showTime = true,
     this.showEmoji = true,
@@ -34,14 +48,19 @@ base class LogOptions {
     this.formatter,
   });
 
+  /// Log level
   final LoggerLevel level;
 
+  /// Whether to show time
   final bool showTime;
 
+  /// Whether to show emoji
   final bool showEmoji;
 
+  /// Whether to log in release mode
   final bool logInRelease;
 
+  /// Formatter for the log message
   final String Function({
     required String message,
     required StackTrace? stackTrace,
@@ -49,8 +68,11 @@ base class LogOptions {
   })? formatter;
 }
 
-/// Logger message
+/// {@template log_message}
+/// Log message
+/// {@endtemplate}
 base class LogMessage {
+  /// {@macro log_message}
   const LogMessage({
     required this.message,
     required this.logLevel,
@@ -58,17 +80,21 @@ base class LogMessage {
     this.time,
   });
 
+  /// Log message
   final String message;
 
+  /// Stack trace
   final StackTrace? stackTrace;
 
+  /// Time of the log
   final DateTime? time;
 
+  /// Log level
   final LoggerLevel logLevel;
 }
 
 /// Logger interface
-abstract interface class AppLogger {
+abstract interface class Logger {
   /// Logs the error to the console
   void error(Object message, {Object? error, StackTrace? stackTrace});
 
@@ -110,11 +136,12 @@ abstract interface class AppLogger {
   }
 }
 
-final class AppLogger$Logging extends AppLogger {
-  final logger = logging.Logger('SizzleLogger');
+/// Default logger using logging package
+final class AppLogger$Logging extends Logger {
+  final _logger = logging.Logger('SizzleLogger');
 
   @override
-  void debug(Object message) => logger.fine(message);
+  void debug(Object message) => _logger.fine(message);
 
   @override
   void error(
@@ -122,17 +149,17 @@ final class AppLogger$Logging extends AppLogger {
     Object? error,
     StackTrace? stackTrace,
   }) =>
-      logger.severe(
+      _logger.severe(
         message,
         error,
         stackTrace,
       );
 
   @override
-  void info(Object message) => logger.info(message);
+  void info(Object message) => _logger.info(message);
 
   @override
-  Stream<LogMessage> get logs => logger.onRecord.map(
+  Stream<LogMessage> get logs => _logger.onRecord.map(
         (record) => LogMessage(
           message: record.message,
           stackTrace: record.stackTrace,
@@ -157,7 +184,7 @@ final class AppLogger$Logging extends AppLogger {
     }
     logging.hierarchicalLoggingEnabled = true;
 
-    logger.onRecord
+    _logger.onRecord
         .where((event) => event.loggerName == 'SizzleLogger')
         .listen((event) {
       final message = options.formatter?.call(
@@ -199,13 +226,14 @@ final class AppLogger$Logging extends AppLogger {
     required DateTime time,
     Object? error,
   }) =>
-      '${logLevel.emoji} ${time.formatTime()} | $message ${error != null ? '| $error' : ''}';
+      '${logLevel.emoji} ${time.formatTime()}'
+      ' | $message ${error != null ? '| $error' : ''}';
 
   @override
-  void verbose(Object message) => logger.finest(message);
+  void verbose(Object message) => _logger.finest(message);
 
   @override
-  void warning(Object message) => logger.warning(message);
+  void warning(Object message) => _logger.warning(message);
 }
 
 extension on DateTime {

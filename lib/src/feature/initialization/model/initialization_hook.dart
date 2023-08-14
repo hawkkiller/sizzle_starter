@@ -1,16 +1,20 @@
 import 'package:sizzle_starter/src/feature/initialization/logic/initialization_processor.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dart';
 
+/// {@template initialization_hook}
 /// A hook for the initialization process.
 ///
 /// The [onInit] is called before the initialization process starts.
 ///
-/// The [onInitializing] is called when the initialization process is in progress.
+/// The [onInitializing] is called when the
+/// initialization process is in progress.
 ///
 /// The [onInitialized] is called when the initialization process is finished.
 ///
 /// The [onError] is called when the initialization process is failed.
+/// {@endtemplate}
 abstract interface class InitializationHook {
+  /// {@macro initialization_hook}
   InitializationHook({
     this.onInit,
     this.onInitializing,
