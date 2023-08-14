@@ -11,7 +11,6 @@ abstract class NetworkException implements Exception {}
 /// {@endtemplate}
 @immutable
 class RestClientException implements NetworkException {
-
   /// {@macro rest_client_exception}
   const RestClientException({
     this.message,
