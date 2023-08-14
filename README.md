@@ -82,7 +82,7 @@ If you don't need the database, just remove the dependency.
 ## Example Apps
 
 1. [Catty](https://github.com/hawkkiller/catty) - simple, but pretty app that uses ChatGPT and cats api to show different cat pictures and generate the facts.
-2. [Auther](https://github.com/hawkkiller/auther) - Full stack example of DART at both ends. This shows the authentication logic in real world conditions, profile and session management. 
+2. [Auther](https://github.com/hawkkiller/auther) - Full stack example of DART at both ends. This shows the authentication logic in real world conditions, profile and session management.
 3. [Midjourney Client UI](https://github.com/hawkkiller/midjourney_client_ui) - this app utilizes the midjourney_client library to generate images.
 
 ## Recommended libraries
@@ -211,9 +211,9 @@ Hydrated Bloc is a library that allows you to persist bloc state. It is a bad id
 **This section describes how to add a new dependency to your app.** Please, check the [initialization](#initialization) section before.
 
 1. Open `lib/src/feature/initialization/model/dependencies.dart`
-2. Add new dependency to `Dependencies$Mutable` and `Dependencies$Immutable`
+2. Add new dependency to `DependenciesMutable` and `DependenciesImmutable`
 3. Go to `lib/src/feature/initialization/logic/initialization_steps.dart`
-4. Add new entry to the map and write down all the logic needed to initialize your dependency and set it in the `Dependencies$Mutable` object
+4. Add new entry to the map and write down all the logic needed to initialize your dependency and set it in the `DependenciesMutable` object
 5. Now, you can use the dependency in the app receiving it from context.
 
 ## Star History

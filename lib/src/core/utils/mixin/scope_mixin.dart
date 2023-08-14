@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 
-abstract class ChildContainer {
-  Widget? get child;
-}
-
-/// A mixin which provides some useful methods for working with inherited widgets.
-/// If you need to get a scope from the context, use [scopeMaybeOf] or [scopeOf].
-/// Also, use this Mixin if you want to provide a scope to descendants.
-mixin ScopeMixin<T extends Widget> on Widget implements ChildContainer {
+/// {@template scope_mixin}
+/// Provides useful tools for working with [InheritedWidget].
+/// {@endtemplate}
+mixin ScopeMixin<T extends Widget> on Widget {
+  /// {@template scope_maybe_of}
+  /// Obtain the nearest widget of the given type T,
+  /// which must be the type of a concrete [InheritedWidget] subclass,
+  /// and register this build context with that widget such that
+  /// when that widget changes (or a new widget of that type is introduced,
+  /// or the widget goes away), this build context is rebuilt so that it can
+  /// obtain new values from that widget.
+  /// {@endtemplate}
   static T? scopeMaybeOf<T extends InheritedWidget>(
     BuildContext context, {
     bool listen = true,
@@ -16,6 +20,8 @@ mixin ScopeMixin<T extends Widget> on Widget implements ChildContainer {
           ? context.dependOnInheritedWidgetOfExactType<T>()
           : context.getInheritedWidgetOfExactType<T>();
 
+  /// {@macro scope_maybe_of}
+  /// If the widget is not found, an exception will be thrown.
   static T scopeOf<T extends InheritedWidget>(
     BuildContext context, {
     bool listen = true,
@@ -23,6 +29,10 @@ mixin ScopeMixin<T extends Widget> on Widget implements ChildContainer {
       scopeMaybeOf<T>(context, listen: listen) ??
       notFoundInheritedWidgetOfExactType<T>();
 
+  /// {@template not_found_inherited_widget_of_exact_type}
+  /// This throws an exception when there is
+  /// no inherited widget of the exact type.
+  /// {@endtemplate}
   static Never
       notFoundInheritedWidgetOfExactType<T extends InheritedWidget>() =>
           throw ArgumentError(
