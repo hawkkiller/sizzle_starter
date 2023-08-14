@@ -1,6 +1,9 @@
 /// Simple enum to represent the environment
 enum Environment {
+  /// Development environment
   dev('DEV'),
+
+  /// Production environment
   prod('PROD');
 
   const Environment(this.value);

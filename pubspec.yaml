@@ -60,19 +60,19 @@ dev_dependencies:
     sdk: flutter
 
   # Lints
-  sizzle_lints: 1.0.10
+  sizzle_lints: 2.0.1
 
   # Utils
-  flutter_launcher_icons: 0.13.1
-  flutter_native_splash: 2.3.1
   flutter_gen_runner: 5.3.1
-  melos: ^3.1.1
+  flutter_native_splash: 2.3.1
+  flutter_launcher_icons: 0.13.1
+  melos: 3.1.1
+  intl_utils: 2.8.4
 
 flutter:
   uses-material-design: true
 
-  # Enable generation of localized Strings from arb files.
-  generate: true
+  generate: false
 
   assets:
     # Add assets from the images directory to the application.
@@ -81,3 +81,10 @@ flutter:
 flutter_gen:
   output: lib/src/core/assets/generated
   line_length: 80
+
+flutter_intl:
+  enabled: true
+  class_name: GeneratedLocalization
+  main_locale: en
+  arb_dir: lib/src/core/localization/translations
+  output_dir: lib/src/core/localization/generated
