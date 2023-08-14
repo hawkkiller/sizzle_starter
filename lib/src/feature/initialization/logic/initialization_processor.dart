@@ -8,7 +8,11 @@ import 'package:sizzle_starter/src/feature/initialization/model/initialization_p
 
 part 'initialization_factory.dart';
 
+/// {@template initialization_processor}
+/// A class which is responsible for processing initialization steps.
+/// {@endtemplate}
 mixin InitializationProcessor {
+  /// Process initialization steps.
   Future<InitializationResult> processInitialization({
     required Map<String, StepAction> steps,
     required InitializationFactory factory,
@@ -18,7 +22,7 @@ mixin InitializationProcessor {
     var stepCount = 0;
     final env = factory.getEnvironmentStore();
     final progress = InitializationProgress(
-      dependencies: Dependencies$Mutable(),
+      dependencies: DependenciesMutable(),
       environmentStore: env,
     );
     final trackingManager = factory.createTrackingManager(env);
@@ -55,7 +59,11 @@ mixin InitializationProcessor {
   }
 }
 
+/// {@template initialization_step_info}
+/// A class which contains information about initialization step.
+/// {@endtemplate}
 class InitializationStepInfo {
+  /// {@macro initialization_step_info}
   const InitializationStepInfo({
     required this.stepName,
     required this.step,
@@ -63,8 +71,15 @@ class InitializationStepInfo {
     required this.msSpent,
   });
 
+  /// The number of the step.
   final int step;
+
+  /// The name of the step.
   final String stepName;
+
+  /// The total number of steps.
   final int stepsCount;
+
+  /// The number of milliseconds spent on the step.
   final int msSpent;
 }
