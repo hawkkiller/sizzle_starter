@@ -60,7 +60,7 @@ dev_dependencies:
     sdk: flutter
 
   # Lints
-  sizzle_lints: 1.0.10
+  sizzle_lints: 2.0.1
 
   # Utils
   flutter_launcher_icons: 0.13.1
