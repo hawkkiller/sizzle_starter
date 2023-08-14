@@ -184,11 +184,16 @@ class RestClientBase implements RestClient {
       try {
         final json = jsonDecode(body) as Map<String, Object?>;
         // TODO(starter): Set there your field
-        if (json['message'] != null) {
-          throw RestClientException(message: json['message'].toString());
+        if (json case {'message': final String message}) {
+          throw RestClientException(message: message);
         }
         // TODO(starter): Set there your field
-        return json['data']! as Map<String, Object?>;
+        if (json case {'data': final Map<String, Object?> data}) {
+          return data;
+        }
+        throw RestClientException(
+          message: 'Server returned invalid json: $json',
+        );
       } on Object catch (error, stackTrace) {
         if (error is NetworkException) rethrow;
 
