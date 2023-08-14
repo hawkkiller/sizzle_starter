@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart' as logging;
 
 /// Logger instance
-final AppLogger logger = AppLogger$Logging();
+final Logger logger = AppLogger$Logging();
 
 /// Possible levels of logging
 enum LoggerLevel implements Comparable<LoggerLevel> {
@@ -94,7 +94,7 @@ base class LogMessage {
 }
 
 /// Logger interface
-abstract interface class AppLogger {
+abstract interface class Logger {
   /// Logs the error to the console
   void error(Object message, {Object? error, StackTrace? stackTrace});
 
@@ -137,7 +137,7 @@ abstract interface class AppLogger {
 }
 
 /// Default logger using logging package
-final class AppLogger$Logging extends AppLogger {
+final class AppLogger$Logging extends Logger {
   final _logger = logging.Logger('SizzleLogger');
 
   @override

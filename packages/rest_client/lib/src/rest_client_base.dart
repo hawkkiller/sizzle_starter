@@ -6,8 +6,10 @@ import 'package:path/path.dart' as p;
 import 'package:rest_client/src/exception/network_exception.dart';
 import 'package:rest_client/src/rest_client.dart';
 
+/// {@macro rest_client}
 @immutable
 class RestClientBase implements RestClient {
+  /// {@macro rest_client}
   RestClientBase({
     required String baseUrl,
     http.Client? client,
@@ -114,7 +116,8 @@ class RestClientBase implements RestClient {
         final decoded = jsonDecode(response.body) as Map<String, Object?>?;
         throw RestClientException(
           statusCode: response.statusCode,
-          // TODO(starter): Set there your field which server returns in case of error
+          // TODO(starter): Set there your field which
+          // server returns in case of error
           message: decoded?['message'] as String?,
         );
       }
@@ -127,13 +130,14 @@ class RestClientBase implements RestClient {
     }
   }
 
+  /// Encodes [body] to JSON and then to UTF8
   @protected
   @visibleForTesting
   List<int> encodeBody(
     Map<String, Object?> body,
   ) {
     try {
-      return utf8.encode(json.encode(body));
+      return json.fuse(utf8).encode(body);
     } on Object catch (e, stackTrace) {
       Error.throwWithStackTrace(
         RestClientException(message: 'Error occured during encoding body $e'),
@@ -142,6 +146,34 @@ class RestClientBase implements RestClient {
     }
   }
 
+  /// Decode response body to JSON
+  ///
+  /// Throws [RestClientException] if response body is not valid JSON
+  ///
+  /// Throws [NetworkException] if response body is not valid JSON
+  ///
+  /// This works only if the server sends responses in a unified way
+  ///
+  /// For example, if the server returns an error,
+  /// it should return a JSON object with the key `message`
+  ///
+  /// ```json
+  /// {
+  ///  "message": "Error message"
+  /// }
+  /// ```
+  ///
+  /// If the server returns a successful response,
+  /// it should return a JSON object with the key `data`
+  ///
+  /// ```json
+  /// {
+  ///   "data": {
+  ///     "id": 1,
+  ///     "name": "John Doe"
+  ///   }
+  /// }
+  /// ```
   @protected
   @visibleForTesting
   Map<String, Object?> decodeResponse(http.Response response) {
@@ -151,14 +183,16 @@ class RestClientBase implements RestClient {
       final body = response.body;
       try {
         final json = jsonDecode(body) as Map<String, Object?>;
-        // TODO(starter): Set there your field which server returns in case of error
+        // TODO(starter): Set there your field
         if (json['message'] != null) {
           throw RestClientException(message: json['message'].toString());
         }
-        // TODO(starter): Set there your field which server returns in case of success
+        // TODO(starter): Set there your field
         return json['data']! as Map<String, Object?>;
       } on Object catch (error, stackTrace) {
         if (error is NetworkException) rethrow;
+
+        final _body = body.length > 100 ? '${body.substring(0, 100)}...' : body;
 
         Error.throwWithStackTrace(
           InternalServerException(
@@ -166,7 +200,7 @@ class RestClientBase implements RestClient {
           ),
           StackTrace.fromString(
             '$stackTrace\n'
-            'Body: "${body.length > 100 ? '${body.substring(0, 100)}...' : body}"',
+            'Body: "$_body"',
           ),
         );
       }
@@ -184,6 +218,7 @@ class RestClientBase implements RestClient {
     }
   }
 
+  /// Builds [Uri] from [path] and [queryParams]
   @protected
   @visibleForTesting
   Uri buildUri({
@@ -203,6 +238,8 @@ class RestClientBase implements RestClient {
     );
   }
 
+  /// Builds [http.Request] from [method], [path],
+  /// [queryParams], [body] and [headers]
   @protected
   @visibleForTesting
   http.Request buildRequest({

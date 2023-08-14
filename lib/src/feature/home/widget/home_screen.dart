@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/core/localization/app_localization.dart';
+import 'package:sizzle_starter/src/core/localization/localization.dart';
 
 /// {@template sample_page}
 /// SamplePage widget
