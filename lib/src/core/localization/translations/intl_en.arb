@@ -2,5 +2,7 @@
     "appTitle": "sizzle_starter",
     "@appTitle": {
       "description": "The title of the application"
-    }
+    },
+    "light_themes": "Light Themes",
+    "dark_themes": "Dark Themes"
   }

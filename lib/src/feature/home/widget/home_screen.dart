@@ -16,85 +16,49 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  Widget build(BuildContext context) {
-    final themeScope = ThemeScope.of(context);
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.background,
-      body: CustomScrollView(
-        slivers: [
-          SliverAppBar(
-            actions: [
-              if (!ThemeScope.of(context).theme.type.isSystem)
-                Switch(
-                  thumbColor: MaterialStatePropertyAll(
-                    themeScope.theme.colorScheme?.onPrimaryContainer,
-                  ),
-                  trackColor: MaterialStatePropertyAll(
-                    themeScope.theme.colorScheme?.onPrimaryContainer
-                        .withOpacity(
-                      0.5,
-                    ),
-                  ),
-                  thumbIcon: MaterialStateProperty.resolveWith((states) {
-                    if (states.contains(MaterialState.selected)) {
-                      return Icon(
-                        Icons.nightlight_round,
-                        color: themeScope.theme.colorScheme?.onPrimary,
-                      );
-                    }
-                    return Icon(
-                      Icons.wb_sunny,
-                      color: themeScope.theme.colorScheme?.onPrimary,
-                    );
-                  }),
-                  value: ThemeScope.of(context).theme.colorScheme?.brightness ==
-                      Brightness.light,
-                  onChanged: (value) {
-                    final theme = ThemeScope.of(context).theme;
-                    final brightness = theme.colorScheme?.brightness;
-
-                    if (brightness == Brightness.light) {
-                      ThemeScope.of(context).setTheme(
-                        theme.copyWith(
-                          colorScheme: theme.colorScheme?.copyWith(
-                            brightness: Brightness.dark,
-                          ),
-                        ),
-                      );
-                    } else {
-                      ThemeScope.of(context).setTheme(
-                        theme.copyWith(
-                          colorScheme: theme.colorScheme?.copyWith(
-                            brightness: Brightness.light,
-                          ),
-                        ),
-                      );
-                    }
-                  },
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.background,
+        body: CustomScrollView(
+          slivers: [
+            SliverAppBar(
+              title: Text(Localization.of(context).appTitle),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate.fixed([
+                Text(
+                  Localization.of(context).light_themes,
+                  style: Theme.of(context).textTheme.titleMedium,
                 ),
-            ],
-            title: Text(Localization.of(context).appTitle),
-          ),
-          const SliverToBoxAdapter(
-            child: _ThemeSelector(),
-          ),
-        ],
-      ),
-    );
-  }
+                _ThemeSelector(AppTheme.lightValues),
+              ]),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate.fixed([
+                Text(
+                  Localization.of(context).dark_themes,
+                  style: Theme.of(context).textTheme.titleMedium,
+                ),
+                _ThemeSelector(AppTheme.darkValues),
+              ]),
+            ),
+          ],
+        ),
+      );
 }
 
 class _ThemeSelector extends StatelessWidget {
-  const _ThemeSelector();
+  const _ThemeSelector(this._themes);
+
+  final List<AppTheme> _themes;
 
   @override
   Widget build(BuildContext context) => SizedBox(
         height: 100,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: AppTheme.values.length,
+          itemCount: _themes.length,
           itemBuilder: (context, index) {
-            final theme = AppTheme.values[index];
+            final theme = _themes[index];
 
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -118,14 +82,7 @@ class _ThemeCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
           ),
           child: InkWell(
-            onTap: () => ThemeScope.of(context).setTheme(
-              _theme.copyWith(
-                colorScheme: _theme.colorScheme?.copyWith(
-                  brightness:
-                      ThemeScope.of(context).theme.colorScheme?.brightness,
-                ),
-              ),
-            ),
+            onTap: () => ThemeScope.of(context).setTheme(_theme),
             borderRadius: BorderRadius.circular(4),
             child: SizedBox(
               width: 64,

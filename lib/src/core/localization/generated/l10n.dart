@@ -60,6 +60,26 @@ class GeneratedLocalization {
       args: [],
     );
   }
+
+  /// `Light Themes`
+  String get light_themes {
+    return Intl.message(
+      'Light Themes',
+      name: 'light_themes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dark Themes`
+  String get dark_themes {
+    return Intl.message(
+      'Dark Themes',
+      name: 'dark_themes',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate
