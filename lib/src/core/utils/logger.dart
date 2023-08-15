@@ -239,7 +239,7 @@ final class AppLogger$Logging extends Logger {
 extension on DateTime {
   /// Transforms DateTime to String with format: 00:00:00
   String formatTime() =>
-      [hour, minute, second].map((i) => i.toString().padLeft(2)).join(':');
+      [hour, minute, second].map((i) => i.toString().padLeft(2, '0')).join(':');
 }
 
 extension on logging.Level {

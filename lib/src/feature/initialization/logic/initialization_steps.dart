@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizzle_starter/src/feature/app/data/theme_datasource.dart';
+import 'package:sizzle_starter/src/feature/app/data/theme_repository.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/initialization_progress.dart';
 
@@ -18,6 +20,14 @@ mixin InitializationSteps {
     'Shared Preferences': (progress) async {
       final sharedPreferences = await SharedPreferences.getInstance();
       progress.dependencies.sharedPreferences = sharedPreferences;
+    },
+    'Theme Repository': (progress) async {
+      final sharedPreferences = progress.dependencies.sharedPreferences;
+      final themeDataSource = ThemeDataSourceImpl(
+        sharedPreferences: sharedPreferences,
+      );
+      final themeRepository = ThemeRepositoryImpl(themeDataSource);
+      progress.dependencies.themeRepository = themeRepository;
     },
   };
 }

@@ -60,16 +60,6 @@ class GeneratedLocalization {
       args: [],
     );
   }
-
-  /// `Sample placeholder {value}`
-  String samplePlaceholder(Object value) {
-    return Intl.message(
-      'Sample placeholder $value',
-      name: 'samplePlaceholder',
-      desc: 'Sample placeholder',
-      args: [value],
-    );
-  }
 }
 
 class AppLocalizationDelegate

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizzle_starter/src/core/widget/scope_widgets.dart';
 import 'package:sizzle_starter/src/feature/app/widget/material_context.dart';
+import 'package:sizzle_starter/src/feature/app/widget/theme_scope.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/initialization_processor.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/dependencies_scope.dart';
@@ -47,6 +48,11 @@ class App extends StatelessWidget {
             ScopeProvider(
               buildScope: (child) => DependenciesScope(
                 dependencies: result.dependencies,
+                child: child,
+              ),
+            ),
+            ScopeProvider(
+              buildScope: (child) => ThemeScope(
                 child: child,
               ),
             ),

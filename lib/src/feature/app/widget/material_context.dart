@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sizzle_starter/src/core/localization/localization.dart';
-import 'package:sizzle_starter/src/core/theme/theme.dart';
+import 'package:sizzle_starter/src/feature/app/widget/theme_scope.dart';
 import 'package:sizzle_starter/src/feature/home/widget/home_screen.dart';
 
 /// {@template material_context}
@@ -19,17 +19,21 @@ class MaterialContext extends StatefulWidget {
 
 class _MaterialContextState extends State<MaterialContext> {
   @override
-  Widget build(BuildContext context) => MaterialApp(
-        supportedLocales: Localization.supportedLocales,
-        localizationsDelegates: const [
-          GlobalMaterialLocalizations.delegate,
-          GlobalCupertinoLocalizations.delegate,
-          GlobalWidgetsLocalizations.delegate,
-          Localization.localizationDelegate,
-        ],
-        theme: defaultLightThemeData,
-        darkTheme: defaultDarkThemeData,
-        locale: const Locale('en'),
-        home: const HomeScreen(),
-      );
+  Widget build(BuildContext context) {
+    final theme = ThemeScope.of(context).theme;
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      supportedLocales: Localization.supportedLocales,
+      localizationsDelegates: const [
+        GlobalMaterialLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        Localization.localizationDelegate,
+      ],
+      theme: theme.lightTheme,
+      darkTheme: theme.darkTheme,
+      locale: const Locale('en'),
+      home: const HomeScreen(),
+    );
+  }
 }
