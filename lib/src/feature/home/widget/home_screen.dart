@@ -25,18 +25,30 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
             SliverList(
               delegate: SliverChildListDelegate.fixed([
-                Text(
-                  Localization.of(context).light_themes,
-                  style: Theme.of(context).textTheme.titleMedium,
+                Padding(
+                  padding: const EdgeInsets.only(left: 8, top: 8),
+                  child: Text(
+                    Localization.of(context).light_themes,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
+                  ),
                 ),
                 _ThemeSelector(AppTheme.lightValues),
               ]),
             ),
             SliverList(
               delegate: SliverChildListDelegate.fixed([
-                Text(
-                  Localization.of(context).dark_themes,
-                  style: Theme.of(context).textTheme.titleMedium,
+                Padding(
+                  padding: const EdgeInsets.only(left: 8),
+                  child: Text(
+                    Localization.of(context).dark_themes,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
+                  ),
                 ),
                 _ThemeSelector(AppTheme.darkValues),
               ]),
