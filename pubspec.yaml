@@ -60,7 +60,7 @@ dev_dependencies:
     sdk: flutter
 
   # Lints
-  sizzle_lints: 2.0.1
+  sizzle_lints: 2.0.2
 
   # Utils
   flutter_gen_runner: 5.3.1

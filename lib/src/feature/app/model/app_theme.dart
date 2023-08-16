@@ -27,8 +27,8 @@ enum AppColorSchemeType {
   String toString() => switch (this) {
         AppColorSchemeType.light => 'light',
         AppColorSchemeType.dark => 'dark',
-        AppColorSchemeType.custom => 'custom',
         AppColorSchemeType.system => 'system',
+        AppColorSchemeType.custom => 'custom',
       };
 
   /// Creates a [AppColorSchemeType] from a [String].

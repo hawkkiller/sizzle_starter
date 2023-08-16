@@ -145,7 +145,7 @@ abstract base mixin class _ThemeState {
 /// It communicates with provided repository to persist the theme.
 ///
 /// Should not be used directly, instead use [ThemeScope].
-/// It uses ThemeBloc under the hood.
+/// It operates ThemeBloc under the hood.
 /// {@endtemplate}
 final class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   final ThemeRepository _themeRepository;
