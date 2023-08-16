@@ -4,5 +4,6 @@
       "description": "The title of the application"
     },
     "light_themes": "Light Themes",
-    "dark_themes": "Dark Themes"
+    "dark_themes": "Dark Themes",
+    "system_theme": "System Theme"
   }

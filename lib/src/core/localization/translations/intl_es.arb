@@ -4,5 +4,6 @@
         "description": "El título de la aplicación"
     },
     "light_themes": "Tema claro",
-    "dark_themes": "Tema oscuro"
+    "dark_themes": "Tema oscuro",
+    "system_theme": "Tema del sistema"
 }

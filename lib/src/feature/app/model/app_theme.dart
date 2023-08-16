@@ -93,7 +93,6 @@ final class AppTheme with Diagnosticable {
 
   /// All the light [AppTheme]s.
   static final lightValues = [
-    systemScheme,
     ...List.generate(
       Colors.primaries.length,
       (index) => AppTheme.fromSeed(
@@ -104,7 +103,6 @@ final class AppTheme with Diagnosticable {
 
   /// All the dark [AppTheme]s.
   static final darkValues = [
-    systemScheme,
     ...List.generate(
       Colors.primaries.length,
       (index) => AppTheme.fromSeed(

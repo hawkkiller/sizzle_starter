@@ -24,6 +24,7 @@ class MessageLookup extends MessageLookupByLibrary {
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "appTitle": MessageLookupByLibrary.simpleMessage("sizzle_starter"),
         "dark_themes": MessageLookupByLibrary.simpleMessage("Tema oscuro"),
-        "light_themes": MessageLookupByLibrary.simpleMessage("Tema claro")
+        "light_themes": MessageLookupByLibrary.simpleMessage("Tema claro"),
+        "system_theme": MessageLookupByLibrary.simpleMessage("Tema del sistema")
       };
 }

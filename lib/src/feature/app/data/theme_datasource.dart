@@ -5,6 +5,52 @@ import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/feature/app/model/app_theme.dart';
 
+/// {@template theme_datasource}
+/// [ThemeDataSource] is an entry point to the theme data layer.
+///
+/// This is used to set and get theme.
+/// {@endtemplate}
+abstract interface class ThemeDataSource {
+  /// Set theme
+  Future<void> setTheme(AppTheme theme);
+
+  /// Get current theme from cache
+  AppTheme? loadThemeFromCache();
+}
+
+/// {@macro theme_datasource}
+final class ThemeDataSourceImpl implements ThemeDataSource {
+  /// {@macro theme_datasource}
+  const ThemeDataSourceImpl({
+    required SharedPreferences sharedPreferences,
+  }) : _sharedPreferences = sharedPreferences;
+
+  final SharedPreferences _sharedPreferences;
+
+  static const _prefix = 'theme_';
+
+  @override
+  Future<void> setTheme(AppTheme theme) async {
+    await _sharedPreferences.setString(
+      '$_prefix.theme',
+      _themeCodec.encode(theme),
+    );
+
+    return;
+  }
+
+  @override
+  AppTheme? loadThemeFromCache() {
+    final theme = _sharedPreferences.getString('$_prefix.theme');
+
+    if (theme != null) {
+      return _themeCodec.decode(theme);
+    }
+
+    return null;
+  }
+}
+
 const _themeCodec = _AppThemeCodec();
 
 final class _AppThemeCodec extends Codec<AppTheme, String> {
@@ -123,51 +169,5 @@ final class _AppThemeEncoder extends Converter<AppTheme, String> {
     };
 
     return jsonEncode(json);
-  }
-}
-
-/// {@template theme_datasource}
-/// [ThemeDataSource] is an entry point to the theme data layer.
-///
-/// This is used to set and get theme.
-/// {@endtemplate}
-abstract interface class ThemeDataSource {
-  /// Set theme
-  Future<void> setTheme(AppTheme theme);
-
-  /// Get current theme from cache
-  AppTheme? loadThemeFromCache();
-}
-
-/// {@macro theme_datasource}
-final class ThemeDataSourceImpl implements ThemeDataSource {
-  /// {@macro theme_datasource}
-  const ThemeDataSourceImpl({
-    required SharedPreferences sharedPreferences,
-  }) : _sharedPreferences = sharedPreferences;
-
-  final SharedPreferences _sharedPreferences;
-
-  static const _prefix = 'theme_';
-
-  @override
-  Future<void> setTheme(AppTheme theme) async {
-    await _sharedPreferences.setString(
-      '$_prefix.theme',
-      _themeCodec.encode(theme),
-    );
-
-    return;
-  }
-
-  @override
-  AppTheme? loadThemeFromCache() {
-    final theme = _sharedPreferences.getString('$_prefix.theme');
-
-    if (theme != null) {
-      return _themeCodec.decode(theme);
-    }
-
-    return null;
   }
 }

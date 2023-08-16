@@ -26,6 +26,21 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverList(
               delegate: SliverChildListDelegate.fixed([
                 Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
+                    Localization.of(context).system_theme,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
+                  ),
+                ),
+                const _ThemeSelector([AppTheme.systemScheme]),
+              ]),
+            ),
+            SliverList(
+              delegate: SliverChildListDelegate.fixed([
+                Padding(
                   padding: const EdgeInsets.only(left: 8, top: 8),
                   child: Text(
                     Localization.of(context).light_themes,
@@ -52,6 +67,18 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
                 _ThemeSelector(AppTheme.darkValues),
               ]),
+            ),
+            SliverToBoxAdapter(
+              child: Center(
+                child: SizedBox(
+                  height: 100,
+                  width: 100,
+                  child: Card(
+                    color: Theme.of(context).colorScheme.primaryContainer,
+                    margin: const EdgeInsets.all(8),
+                  ),
+                ),
+              ),
             ),
           ],
         ),

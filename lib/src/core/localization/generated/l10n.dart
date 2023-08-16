@@ -80,6 +80,16 @@ class GeneratedLocalization {
       args: [],
     );
   }
+
+  /// `System Theme`
+  String get system_theme {
+    return Intl.message(
+      'System Theme',
+      name: 'system_theme',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate
