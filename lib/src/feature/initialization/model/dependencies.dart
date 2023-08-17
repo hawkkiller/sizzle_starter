@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizzle_starter/src/feature/app/data/theme_repository.dart';
 
 /// {@template dependencies}
 /// Dependencies container
@@ -11,6 +12,9 @@ abstract base class Dependencies with Diagnosticable {
   /// Shared preferences
   abstract final SharedPreferences sharedPreferences;
 
+  /// Theme repository
+  abstract final ThemeRepository themeRepository;
+
   /// Freeze dependencies, so they cannot be modified
   Dependencies freeze();
 
@@ -21,6 +25,12 @@ abstract base class Dependencies with Diagnosticable {
       DiagnosticsProperty<SharedPreferences>(
         'sharedPreferences',
         sharedPreferences,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<ThemeRepository>(
+        'themeRepository',
+        themeRepository,
       ),
     );
   }
@@ -39,8 +49,12 @@ final class DependenciesMutable extends Dependencies {
   late SharedPreferences sharedPreferences;
 
   @override
+  late ThemeRepository themeRepository;
+
+  @override
   Dependencies freeze() => _DependenciesImmutable(
         sharedPreferences: sharedPreferences,
+        themeRepository: themeRepository,
       );
 }
 
@@ -53,10 +67,14 @@ final class _DependenciesImmutable extends Dependencies {
   /// {@macro immutable_dependencies}
   const _DependenciesImmutable({
     required this.sharedPreferences,
+    required this.themeRepository,
   });
 
   @override
   final SharedPreferences sharedPreferences;
+
+  @override
+  final ThemeRepository themeRepository;
 
   @override
   Dependencies freeze() => this;
