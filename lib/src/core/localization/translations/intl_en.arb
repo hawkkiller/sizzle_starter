@@ -3,8 +3,7 @@
     "@appTitle": {
       "description": "The title of the application"
     },
-    "samplePlaceholder": "Sample placeholder {value}",
-    "@samplePlaceholder": {
-      "description": "Sample placeholder"
-    }
+    "light_themes": "Light Themes",
+    "dark_themes": "Dark Themes",
+    "system_theme": "System Theme"
   }

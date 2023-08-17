@@ -20,11 +20,11 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'en';
 
-  static String m0(value) => "Sample placeholder ${value}";
-
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "appTitle": MessageLookupByLibrary.simpleMessage("sizzle_starter"),
-        "samplePlaceholder": m0
+        "dark_themes": MessageLookupByLibrary.simpleMessage("Dark Themes"),
+        "light_themes": MessageLookupByLibrary.simpleMessage("Light Themes"),
+        "system_theme": MessageLookupByLibrary.simpleMessage("System Theme")
       };
 }

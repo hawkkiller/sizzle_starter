@@ -3,8 +3,7 @@
     "@appTitle": {
         "description": "El título de la aplicación"
     },
-    "samplePlaceholder": "Espacio reservado de muestra {value}",
-    "@samplePlaceholder": {
-        "description": "Espacio reservado de muestra"
-    }
+    "light_themes": "Tema claro",
+    "dark_themes": "Tema oscuro",
+    "system_theme": "Tema del sistema"
 }

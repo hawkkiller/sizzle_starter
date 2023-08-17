@@ -20,11 +20,11 @@ typedef String MessageIfAbsent(String messageStr, List<dynamic> args);
 class MessageLookup extends MessageLookupByLibrary {
   String get localeName => 'es';
 
-  static String m0(value) => "Espacio reservado de muestra ${value}";
-
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
         "appTitle": MessageLookupByLibrary.simpleMessage("sizzle_starter"),
-        "samplePlaceholder": m0
+        "dark_themes": MessageLookupByLibrary.simpleMessage("Tema oscuro"),
+        "light_themes": MessageLookupByLibrary.simpleMessage("Tema claro"),
+        "system_theme": MessageLookupByLibrary.simpleMessage("Tema del sistema")
       };
 }

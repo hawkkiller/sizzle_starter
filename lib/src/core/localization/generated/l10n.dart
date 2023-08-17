@@ -61,13 +61,33 @@ class GeneratedLocalization {
     );
   }
 
-  /// `Sample placeholder {value}`
-  String samplePlaceholder(Object value) {
+  /// `Light Themes`
+  String get light_themes {
     return Intl.message(
-      'Sample placeholder $value',
-      name: 'samplePlaceholder',
-      desc: 'Sample placeholder',
-      args: [value],
+      'Light Themes',
+      name: 'light_themes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Dark Themes`
+  String get dark_themes {
+    return Intl.message(
+      'Dark Themes',
+      name: 'dark_themes',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `System Theme`
+  String get system_theme {
+    return Intl.message(
+      'System Theme',
+      name: 'system_theme',
+      desc: '',
+      args: [],
     );
   }
 }
