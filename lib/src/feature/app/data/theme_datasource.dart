@@ -209,7 +209,7 @@ final class _AppThemeEncoder extends Converter<AppTheme, String> {
         'onInverseSurface': input.colorScheme?.onInverseSurface.value,
         'inversePrimary': input.colorScheme?.inversePrimary.value,
         'surfaceTint': input.colorScheme?.surfaceTint.value,
-      }
+      },
     };
 
     return jsonEncode(json);

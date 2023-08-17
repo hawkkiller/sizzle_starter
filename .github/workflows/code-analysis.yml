@@ -10,11 +10,40 @@ on:
   workflow_dispatch:
 
 jobs:
-  flutter_package:
-    uses: VeryGoodOpenSource/very_good_workflows/.github/workflows/flutter_package.yml@v1
-    with:
-      # TODO: Set min_coverage to your desired value.
-      min_coverage: 0
-#      TODO: if you have a `build_runner` script, uncomment the following lines.
-#      setup: |
-#        dart pub run build_runner build --delete-conflicting-outputs
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📚 Git Checkout
+        uses: actions/checkout@v3
+
+      - name: 🐦 Setup Flutter
+        uses: subosito/flutter-action@v2
+        with:
+          flutter-version: 3.13.0
+          channel: stable
+          cache: true
+          cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
+
+      - name: 📦 Install Dependencies
+        run: |
+          flutter pub global activate melos
+          flutter pub global activate very_good_cli
+          melos bootstrap
+
+      - name: ✨ Check Formatting
+        run: dart format --set-exit-if-changed .
+
+      - name: 🕵️ Analyze
+        run: flutter analyze .
+
+      - name: 🧪 Run Tests
+        run: very_good test -j 12 --recursive --optimization --coverage --test-randomize-ordering-seed random
+
+      - name: 📊 Check Code Coverage
+        uses: VeryGoodOpenSource/very_good_coverage@v2
+        with:
+          path: ./coverage/lcov.info
+          # TODO: Set minimum coverage
+          min_coverage: 0

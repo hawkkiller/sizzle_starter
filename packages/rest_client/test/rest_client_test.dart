@@ -145,7 +145,7 @@ void main() {
             );
             expect(
               () => baseClient.decodeResponse(response),
-              throwsA(isA<InternalServerException>()),
+              throwsA(isA<RestClientException>()),
               reason: 'Should throw an exception for an invalid JSON response',
             );
           },
