@@ -118,9 +118,6 @@ class _ThemeInherited extends InheritedWidget {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(
-      DiagnosticsProperty<ThemeController>('controller', controller),
-    );
-    properties.add(
       DiagnosticsProperty<ThemeState>('themeState', state),
     );
   }
