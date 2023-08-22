@@ -3,3 +3,4 @@ include: package:sizzle_lints/sizzle_lints.yaml
 analyzer:
   exclude: 
     - "lib/src/core/localization/generated/**"
+  

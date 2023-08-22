@@ -154,7 +154,7 @@ final class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   ThemeBloc(this._themeRepository)
       : super(
           ThemeState.idle(
-            _themeRepository.loadAppThemeFromCache(),
+            _themeRepository.loadAppThemeFromCache() ?? AppTheme.systemScheme,
           ),
         ) {
     on<ThemeEvent>(
@@ -168,10 +168,7 @@ final class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     _ThemeEventUpdate event,
     Emitter<ThemeState> emit,
   ) async {
-    final oldTheme = state.map(
-      idle: (state) => state.theme,
-      inProgress: (state) => state.theme,
-    );
+    final oldTheme = state.theme;
     try {
       emit(ThemeState.inProgress(event.theme));
       await _themeRepository.setTheme(event.theme);

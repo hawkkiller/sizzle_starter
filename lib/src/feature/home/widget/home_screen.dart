@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/core/localization/localization.dart';
 import 'package:sizzle_starter/src/feature/app/model/app_theme.dart';
+import 'package:sizzle_starter/src/feature/app/widget/locale_scope.dart';
 import 'package:sizzle_starter/src/feature/app/widget/theme_scope.dart';
 
 /// {@template sample_page}
@@ -28,6 +29,17 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
+                    Localization.of(context).locales,
+                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                          fontWeight: FontWeight.bold,
+                          color: Theme.of(context).colorScheme.onBackground,
+                        ),
+                  ),
+                ),
+                _LanguagesSelector(Localization.supportedLocales),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Text(
                     Localization.of(context).system_theme,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
@@ -36,10 +48,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 const _ThemeSelector([AppTheme.systemScheme]),
-              ]),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate.fixed([
                 Padding(
                   padding: const EdgeInsets.only(left: 8, top: 8),
                   child: Text(
@@ -51,10 +59,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
                 _ThemeSelector(AppTheme.lightValues),
-              ]),
-            ),
-            SliverList(
-              delegate: SliverChildListDelegate.fixed([
                 Padding(
                   padding: const EdgeInsets.only(left: 8),
                   child: Text(
@@ -81,6 +85,60 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
           ],
+        ),
+      );
+}
+
+class _LanguagesSelector extends StatelessWidget {
+  const _LanguagesSelector(this._languages);
+
+  final List<Locale> _languages;
+
+  @override
+  Widget build(BuildContext context) => SizedBox(
+        height: 100,
+        child: ListView.builder(
+          scrollDirection: Axis.horizontal,
+          itemCount: _languages.length,
+          itemBuilder: (context, index) {
+            final language = _languages[index];
+
+            return Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: _LanguageCard(language),
+            );
+          },
+        ),
+      );
+}
+
+class _LanguageCard extends StatelessWidget {
+  const _LanguageCard(this._language);
+
+  final Locale _language;
+
+  @override
+  Widget build(BuildContext context) => Card(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: Theme.of(context).colorScheme.primary,
+            borderRadius: BorderRadius.circular(4),
+          ),
+          child: InkWell(
+            onTap: () => LocaleScope.of(context).setLocale(_language),
+            borderRadius: BorderRadius.circular(4),
+            child: SizedBox(
+              width: 64,
+              child: Center(
+                child: Text(
+                  _language.languageCode,
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).colorScheme.onPrimary,
+                      ),
+                ),
+              ),
+            ),
+          ),
         ),
       );
 }

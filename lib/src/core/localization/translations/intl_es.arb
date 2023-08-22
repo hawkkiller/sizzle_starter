@@ -5,5 +5,6 @@
     },
     "light_themes": "Tema claro",
     "dark_themes": "Tema oscuro",
-    "system_theme": "Tema del sistema"
+    "system_theme": "Tema del sistema",
+    "locales": "Idioma"
 }

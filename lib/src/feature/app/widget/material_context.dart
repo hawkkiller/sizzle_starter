@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sizzle_starter/src/core/localization/localization.dart';
+import 'package:sizzle_starter/src/feature/app/widget/locale_scope.dart';
 import 'package:sizzle_starter/src/feature/app/widget/theme_scope.dart';
 import 'package:sizzle_starter/src/feature/home/widget/home_screen.dart';
 
@@ -32,7 +33,7 @@ class _MaterialContextState extends State<MaterialContext> {
       ],
       theme: theme.lightTheme,
       darkTheme: theme.darkTheme,
-      locale: const Locale('en'),
+      locale: LocaleScope.of(context).locale,
       home: const HomeScreen(),
     );
   }

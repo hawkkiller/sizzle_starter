@@ -11,7 +11,7 @@ abstract interface class ThemeRepository {
   Future<void> setTheme(AppTheme theme);
 
   /// Observe current theme changes
-  AppTheme loadAppThemeFromCache();
+  AppTheme? loadAppThemeFromCache();
 }
 
 /// {@macro theme_repository}
@@ -25,6 +25,5 @@ final class ThemeRepositoryImpl implements ThemeRepository {
   Future<void> setTheme(AppTheme theme) => _dataSource.setTheme(theme);
 
   @override
-  AppTheme loadAppThemeFromCache() =>
-      _dataSource.loadThemeFromCache() ?? AppTheme.systemScheme;
+  AppTheme? loadAppThemeFromCache() => _dataSource.loadThemeFromCache();
 }
