@@ -38,7 +38,7 @@ final class _LocaleStateIdle extends LocaleState {
   final Locale locale;
 
   @override
-  String toString() => 'LocaleState.idle()';
+  String toString() => 'LocaleState.idle(locale: $locale)';
 
   @override
   bool operator ==(Object other) =>

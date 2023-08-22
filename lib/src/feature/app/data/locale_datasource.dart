@@ -44,7 +44,7 @@ final class LocaleDataSourceImpl implements LocaleDataSource {
       final localeParts = locale.split('_');
       return Locale.fromSubtags(
         languageCode: localeParts[0],
-        countryCode: localeParts[1],
+        countryCode: localeParts.length > 1 ? localeParts[1] : null,
       );
     }
 
