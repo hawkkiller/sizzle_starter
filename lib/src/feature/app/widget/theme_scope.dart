@@ -67,7 +67,7 @@ class _ThemeScopeState extends State<ThemeScope> implements ThemeController {
   @override
   void initState() {
     _bloc = ThemeBloc(
-      DependenciesScope.of(context, listen: false).themeRepository,
+      DependenciesScope.of(context).themeRepository,
     );
 
     _state = _bloc.state;

@@ -19,8 +19,8 @@ class DependenciesScope extends InheritedWidget {
   final Dependencies dependencies;
 
   /// Get the dependencies from the [context].
-  static Dependencies of(BuildContext context, {bool listen = true}) =>
-      ScopeMixin.scopeOf<DependenciesScope>(context, listen: listen)
+  static Dependencies of(BuildContext context) =>
+      ScopeMixin.scopeOf<DependenciesScope>(context, listen: false)
           .dependencies;
 
   @override

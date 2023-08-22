@@ -1,6 +1,8 @@
 import 'dart:async';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizzle_starter/src/feature/app/data/locale_datasource.dart';
+import 'package:sizzle_starter/src/feature/app/data/locale_repository.dart';
 import 'package:sizzle_starter/src/feature/app/data/theme_datasource.dart';
 import 'package:sizzle_starter/src/feature/app/data/theme_repository.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dart';
@@ -28,6 +30,14 @@ mixin InitializationSteps {
       );
       final themeRepository = ThemeRepositoryImpl(themeDataSource);
       progress.dependencies.themeRepository = themeRepository;
+    },
+    'Locale Repository': (progress) async {
+      final sharedPreferences = progress.dependencies.sharedPreferences;
+      final localeDataSource = LocaleDataSourceImpl(
+        sharedPreferences: sharedPreferences,
+      );
+      final localeRepository = LocaleRepositoryImpl(localeDataSource);
+      progress.dependencies.localeRepository = localeRepository;
     },
   };
 }

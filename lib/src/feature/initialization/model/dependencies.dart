@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizzle_starter/src/feature/app/data/locale_repository.dart';
 import 'package:sizzle_starter/src/feature/app/data/theme_repository.dart';
 
 /// {@template dependencies}
@@ -14,6 +15,9 @@ abstract base class Dependencies with Diagnosticable {
 
   /// Theme repository
   abstract final ThemeRepository themeRepository;
+
+  /// Locale repository
+  abstract final LocaleRepository localeRepository;
 
   /// Freeze dependencies, so they cannot be modified
   Dependencies freeze();
@@ -31,6 +35,12 @@ abstract base class Dependencies with Diagnosticable {
       DiagnosticsProperty<ThemeRepository>(
         'themeRepository',
         themeRepository,
+      ),
+    );
+    properties.add(
+      DiagnosticsProperty<LocaleRepository>(
+        'localeRepository',
+        localeRepository,
       ),
     );
   }
@@ -52,9 +62,13 @@ final class DependenciesMutable extends Dependencies {
   late ThemeRepository themeRepository;
 
   @override
+  late LocaleRepository localeRepository;
+
+  @override
   Dependencies freeze() => _DependenciesImmutable(
         sharedPreferences: sharedPreferences,
         themeRepository: themeRepository,
+        localeRepository: localeRepository,
       );
 }
 
@@ -68,6 +82,7 @@ final class _DependenciesImmutable extends Dependencies {
   const _DependenciesImmutable({
     required this.sharedPreferences,
     required this.themeRepository,
+    required this.localeRepository,
   });
 
   @override
@@ -75,6 +90,9 @@ final class _DependenciesImmutable extends Dependencies {
 
   @override
   final ThemeRepository themeRepository;
+
+  @override
+  final LocaleRepository localeRepository;
 
   @override
   Dependencies freeze() => this;
