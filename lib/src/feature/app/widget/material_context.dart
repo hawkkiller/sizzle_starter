@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:sizzle_starter/src/core/localization/localization.dart';
+import 'package:sizzle_starter/src/feature/app/widget/locale_scope.dart';
 import 'package:sizzle_starter/src/feature/app/widget/theme_scope.dart';
 import 'package:sizzle_starter/src/feature/home/widget/home_screen.dart';
 
@@ -23,16 +23,11 @@ class _MaterialContextState extends State<MaterialContext> {
     final theme = ThemeScope.of(context).theme;
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      supportedLocales: Localization.supportedLocales,
-      localizationsDelegates: const [
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        Localization.localizationDelegate,
-      ],
       theme: theme.lightTheme,
       darkTheme: theme.darkTheme,
-      locale: const Locale('en'),
+      localizationsDelegates: Localization.localizationDelegates,
+      supportedLocales: Localization.supportedLocales,
+      locale: LocaleScope.of(context).locale,
       home: const HomeScreen(),
     );
   }

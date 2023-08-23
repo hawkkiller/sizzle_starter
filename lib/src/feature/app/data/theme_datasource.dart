@@ -20,12 +20,12 @@ abstract interface class ThemeDataSource {
 
 /// {@macro theme_datasource}
 final class ThemeDataSourceImpl implements ThemeDataSource {
+  final SharedPreferences _sharedPreferences;
+
   /// {@macro theme_datasource}
   const ThemeDataSourceImpl({
     required SharedPreferences sharedPreferences,
   }) : _sharedPreferences = sharedPreferences;
-
-  final SharedPreferences _sharedPreferences;
 
   static const _prefix = 'theme_';
 

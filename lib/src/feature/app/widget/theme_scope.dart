@@ -67,7 +67,7 @@ class _ThemeScopeState extends State<ThemeScope> implements ThemeController {
   @override
   void initState() {
     _bloc = ThemeBloc(
-      DependenciesScope.of(context, listen: false).themeRepository,
+      DependenciesScope.of(context).themeRepository,
     );
 
     _state = _bloc.state;
@@ -117,9 +117,6 @@ class _ThemeInherited extends InheritedWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-      DiagnosticsProperty<ThemeController>('controller', controller),
-    );
     properties.add(
       DiagnosticsProperty<ThemeState>('themeState', state),
     );
