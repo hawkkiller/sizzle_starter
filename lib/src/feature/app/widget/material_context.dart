@@ -21,6 +21,7 @@ class _MaterialContextState extends State<MaterialContext> {
   @override
   Widget build(BuildContext context) {
     final theme = ThemeScope.of(context).theme;
+
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: theme.lightTheme,
