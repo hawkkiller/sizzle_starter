@@ -44,9 +44,9 @@ jobs:
       - name: 🧪 Run Tests
         run: very_good test -j 12 --recursive --optimization --coverage --test-randomize-ordering-seed random
 
-      - name: 📊 Check Code Coverage
-        uses: VeryGoodOpenSource/very_good_coverage@v2
-        with:
-          path: ./coverage/lcov.info
-          # TODO: Set minimum coverage
-          min_coverage: 0
+      # - name: 📊 Check Code Coverage
+      #   uses: VeryGoodOpenSource/very_good_coverage@v2
+      #   with:
+      #     path: ./coverage/lcov.info
+      #     # TODO: Set minimum coverage
+      #     min_coverage: 0
