@@ -1,7 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:sizzle_starter/src/core/widget/scope_widgets.dart';
 import 'package:sizzle_starter/src/feature/app/widget/locale_scope.dart';
 import 'package:sizzle_starter/src/feature/app/widget/material_context.dart';
 import 'package:sizzle_starter/src/feature/app/widget/theme_scope.dart';
@@ -44,26 +43,13 @@ class App extends StatelessWidget {
   @override
   Widget build(BuildContext context) => DefaultAssetBundle(
         bundle: SentryAssetBundle(),
-        child: ScopesProvider(
-          providers: [
-            ScopeProvider(
-              buildScope: (child) => DependenciesScope(
-                dependencies: result.dependencies,
-                child: child,
-              ),
+        child: DependenciesScope(
+          dependencies: result.dependencies,
+          child: const ThemeScope(
+            child: LocaleScope(
+              child: MaterialContext(),
             ),
-            ScopeProvider(
-              buildScope: (child) => ThemeScope(
-                child: child,
-              ),
-            ),
-            ScopeProvider(
-              buildScope: (child) => LocaleScope(
-                child: child,
-              ),
-            ),
-          ],
-          child: const MaterialContext(),
+          ),
         ),
       );
 }
