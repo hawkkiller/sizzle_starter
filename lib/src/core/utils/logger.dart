@@ -94,7 +94,7 @@ base class LogMessage {
 }
 
 /// Logger interface
-abstract interface class Logger {
+abstract base class Logger {
   /// Logs the error to the console
   void error(Object message, {Object? error, StackTrace? stackTrace});
 
