@@ -4,99 +4,72 @@ import 'package:flutter/material.dart';
 /// {@template app_theme_type}
 /// The type of theme to use.
 /// {@endtemplate}
-enum AppColorSchemeType {
+enum AppThemeMode {
   /// Light theme.
   light,
 
   /// Dark theme.
   dark,
 
-  /// Custom theme.
-  custom,
-
   /// System theme.
   system;
 
   /// Whether this is a system theme.
   bool get isSystem => switch (this) {
-        AppColorSchemeType.system => true,
+        AppThemeMode.system => true,
         _ => false,
       };
 
   @override
   String toString() => switch (this) {
-        AppColorSchemeType.light => 'light',
-        AppColorSchemeType.dark => 'dark',
-        AppColorSchemeType.system => 'system',
-        AppColorSchemeType.custom => 'custom',
+        AppThemeMode.light => 'light',
+        AppThemeMode.dark => 'dark',
+        AppThemeMode.system => 'system',
       };
 
-  /// Creates a [AppColorSchemeType] from a [String].
-  static AppColorSchemeType fromString(String value) => switch (value) {
-        'light' => AppColorSchemeType.light,
-        'dark' => AppColorSchemeType.dark,
-        'custom' => AppColorSchemeType.custom,
-        'system' => AppColorSchemeType.system,
-        _ => throw Exception('Unknown AppColorSchemeType: $value'),
+  /// Creates a [AppThemeMode] from a [String].
+  static AppThemeMode fromString(String value) => switch (value) {
+        'light' => AppThemeMode.light,
+        'dark' => AppThemeMode.dark,
+        'system' => AppThemeMode.system,
+        _ => throw Exception('Unknown AppThemeMode: $value'),
       };
 }
 
 /// {@template app_theme}
-/// An immutable class that just holds the [ColorScheme].
+/// An immutable class that holds properties needed
+/// to build a [ThemeData] for the app.
 /// {@endtemplate}
 @immutable
 final class AppTheme with Diagnosticable {
-  /// The [ColorScheme] for this theme.
-  final ColorScheme? colorScheme;
-
   /// The type of theme to use.
-  final AppColorSchemeType type;
+  final AppThemeMode type;
+
+  /// The seed color to generate the [ColorScheme] from.
+  final Color? seed;
 
   /// {@macro app_theme}
-  const AppTheme.create({
+  const AppTheme({
     required this.type,
-    this.colorScheme,
+    this.seed,
   });
 
-  /// Creates a [AppTheme] from a [Color] seed.
-  factory AppTheme.fromSeed(
-    Color seed, [
-    Brightness brightness = Brightness.light,
-  ]) =>
-      AppTheme.create(
-        colorScheme: ColorScheme.fromSeed(
-          seedColor: seed,
-          brightness: brightness,
-        ),
-        type: AppColorSchemeType.custom,
-      );
+  /// Dark theme
+  static const dark = AppTheme(type: AppThemeMode.dark);
 
-  /// Light theme.
-  static final lightScheme = AppTheme.create(
-    colorScheme: ColorScheme.fromSeed(seedColor: Colors.pink),
-    type: AppColorSchemeType.light,
-  );
+  /// Light theme
+  static const light = AppTheme(type: AppThemeMode.light);
 
-  /// Dark theme.
-  static final darkScheme = AppTheme.create(
-    colorScheme: ColorScheme.fromSeed(
-      seedColor: Colors.pink,
-      brightness: Brightness.dark,
-    ),
-    type: AppColorSchemeType.dark,
-  );
-
-  /// System theme.
-  static const systemScheme = AppTheme.create(
-    type: AppColorSchemeType.system,
-  );
+  /// System theme
+  static const system = AppTheme(type: AppThemeMode.system);
 
   /// All the light [AppTheme]s.
   static final lightValues = [
     ...List.generate(
       Colors.primaries.length,
-      (index) => AppTheme.fromSeed(
-        Colors.primaries[index],
+      (index) => AppTheme(
+        seed: Colors.primaries[index],
+        type: AppThemeMode.light,
       ),
     ),
   ];
@@ -105,51 +78,65 @@ final class AppTheme with Diagnosticable {
   static final darkValues = [
     ...List.generate(
       Colors.primaries.length,
-      (index) => AppTheme.fromSeed(
-        Colors.primaries[index],
-        Brightness.dark,
+      (index) => AppTheme(
+        seed: Colors.primaries[index],
+        type: AppThemeMode.dark,
       ),
     ),
   ];
 
-  @pragma('vm:prefer-inline')
-  AppTheme _systemOr(AppTheme other) => type.isSystem ? other : this;
-
   /// Get the dark [ThemeData] for this [AppTheme].
   ThemeData get darkTheme {
-    final schema = _systemOr(darkScheme).colorScheme;
+    if (seed != null) {
+      return ThemeData(
+        colorSchemeSeed: seed,
+        brightness: Brightness.dark,
+        useMaterial3: true,
+      );
+    }
+
+    // Define there your default dark theme.
     return ThemeData(
-      colorScheme: schema,
-      brightness: schema?.brightness,
+      brightness: Brightness.dark,
+      useMaterial3: true,
+      colorSchemeSeed: Colors.pink,
     );
   }
 
   /// Get the light [ThemeData] for this [AppTheme].
   ThemeData get lightTheme {
-    final schema = _systemOr(lightScheme).colorScheme;
+    if (seed != null) {
+      return ThemeData(
+        colorSchemeSeed: seed,
+        brightness: Brightness.light,
+        useMaterial3: true,
+      );
+    }
+
+    // Define there your default light theme.
     return ThemeData(
-      colorScheme: schema,
-      brightness: schema?.brightness,
+      brightness: Brightness.light,
+      useMaterial3: true,
+      colorSchemeSeed: Colors.pink,
     );
   }
 
-  /// Copy this [AppTheme] with the given parameters.
-  AppTheme copyWith({
-    ColorScheme? colorScheme,
-    AppColorSchemeType? type,
-  }) =>
-      AppTheme.create(
-        colorScheme: colorScheme ?? this.colorScheme,
-        type: type ?? this.type,
-      );
+  /// Get the [ThemeMode] for this [AppTheme].
+  ThemeMode get themeMode {
+    if (type == AppThemeMode.system) {
+      return ThemeMode.system;
+    } else if (type == AppThemeMode.light) {
+      return ThemeMode.light;
+    } else {
+      return ThemeMode.dark;
+    }
+  }
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-      DiagnosticsProperty<ColorScheme?>('colorScheme', colorScheme),
-    );
-    properties.add(EnumProperty<AppColorSchemeType>('type', type));
+    properties.add(ColorProperty('seed', seed));
+    properties.add(EnumProperty<AppThemeMode>('type', type));
     properties.add(DiagnosticsProperty<ThemeData>('lightTheme', lightTheme));
     properties.add(DiagnosticsProperty<ThemeData>('darkTheme', darkTheme));
   }
@@ -159,9 +146,9 @@ final class AppTheme with Diagnosticable {
       identical(this, other) ||
       other is AppTheme &&
           runtimeType == other.runtimeType &&
-          colorScheme == other.colorScheme &&
+          seed == other.seed &&
           type == other.type;
 
   @override
-  int get hashCode => colorScheme.hashCode ^ type.hashCode;
+  int get hashCode => type.hashCode ^ seed.hashCode;
 }

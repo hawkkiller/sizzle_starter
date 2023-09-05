@@ -47,7 +47,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         ),
                   ),
                 ),
-                const _ThemeSelector([AppTheme.systemScheme]),
+                const _ThemeSelector([AppTheme.system]),
                 Padding(
                   padding: const EdgeInsets.only(left: 8, top: 8),
                   child: Text(
@@ -175,7 +175,7 @@ class _ThemeCard extends StatelessWidget {
   Widget build(BuildContext context) => Card(
         child: DecoratedBox(
           decoration: BoxDecoration(
-            color: _theme.colorScheme?.primary,
+            color: _theme.seed,
             borderRadius: BorderRadius.circular(4),
           ),
           child: InkWell(
@@ -186,9 +186,7 @@ class _ThemeCard extends StatelessWidget {
               child: Center(
                 child: Text(
                   _theme.type.name,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(
-                        color: _theme.colorScheme?.onPrimary,
-                      ),
+                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(),
                 ),
               ),
             ),

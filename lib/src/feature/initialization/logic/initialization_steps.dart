@@ -25,19 +25,19 @@ mixin InitializationSteps {
     },
     'Theme Repository': (progress) async {
       final sharedPreferences = progress.dependencies.sharedPreferences;
-      final themeDataSource = ThemeDataSourceImpl(
-        sharedPreferences: sharedPreferences,
+      final themeDataSource = ThemeDataSourceImpl(sharedPreferences);
+      progress.dependencies.themeRepository = ThemeRepositoryImpl(
+        themeDataSource,
       );
-      final themeRepository = ThemeRepositoryImpl(themeDataSource);
-      progress.dependencies.themeRepository = themeRepository;
     },
     'Locale Repository': (progress) async {
       final sharedPreferences = progress.dependencies.sharedPreferences;
       final localeDataSource = LocaleDataSourceImpl(
         sharedPreferences: sharedPreferences,
       );
-      final localeRepository = LocaleRepositoryImpl(localeDataSource);
-      progress.dependencies.localeRepository = localeRepository;
+      progress.dependencies.localeRepository = LocaleRepositoryImpl(
+        localeDataSource,
+      );
     },
   };
 }
