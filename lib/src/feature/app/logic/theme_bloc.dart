@@ -154,7 +154,7 @@ final class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   ThemeBloc(this._themeRepository)
       : super(
           ThemeState.idle(
-            _themeRepository.loadAppThemeFromCache() ?? AppTheme.systemScheme,
+            _themeRepository.loadAppThemeFromCache() ?? AppTheme.system,
           ),
         ) {
     on<ThemeEvent>(
