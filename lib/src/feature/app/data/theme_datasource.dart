@@ -1,6 +1,7 @@
 import 'dart:async';
-import 'dart:ui';
+import 'dart:convert';
 
+import 'package:flutter/material.dart' show ThemeMode, Color;
 import 'package:sizzle_starter/src/core/utils/preferences_dao.dart';
 import 'package:sizzle_starter/src/feature/app/model/app_theme.dart';
 
@@ -25,14 +26,14 @@ final class ThemeDataSourceImpl extends PreferencesDao
 
   PreferencesEntry<int> get _seedColor => intEntry('theme.seed_color');
 
-  PreferencesEntry<String> get _colorSchemeType => stringEntry(
-        'theme.color_scheme_type',
+  PreferencesEntry<String> get _themeMode => stringEntry(
+        'theme.mode',
       );
 
   @override
   Future<void> setTheme(AppTheme theme) async {
-    await _seedColor.setOrRemove(theme.seed?.value);
-    await _colorSchemeType.setOrRemove(theme.type.toString());
+    await _seedColor.setIfNullRemove(theme.seed?.value);
+    await _themeMode.setIfNullRemove(_themeModeCodec.encode(theme.mode));
 
     return;
   }
@@ -41,13 +42,63 @@ final class ThemeDataSourceImpl extends PreferencesDao
   AppTheme? loadThemeFromCache() {
     final seedColor = _seedColor.read();
 
-    final type = _colorSchemeType.read();
+    final type = _themeMode.read();
 
     if (type == null) return null;
 
     return AppTheme(
       seed: seedColor != null ? Color(seedColor) : null,
-      type: AppThemeMode.fromString(type),
+      mode: _themeModeCodec.decode(type),
     );
+  }
+}
+
+const _themeModeCodec = _ThemeModeCodec();
+
+final class _ThemeModeCodec extends Codec<ThemeMode, String> {
+  const _ThemeModeCodec();
+
+  @override
+  Converter<String, ThemeMode> get decoder => const _ThemeModeDecoder();
+
+  @override
+  Converter<ThemeMode, String> get encoder => const _ThemeModeEncoder();
+}
+
+final class _ThemeModeDecoder extends Converter<String, ThemeMode> {
+  const _ThemeModeDecoder();
+
+  @override
+  ThemeMode convert(String input) {
+    switch (input) {
+      case 'ThemeMode.dark':
+        return ThemeMode.dark;
+      case 'ThemeMode.light':
+        return ThemeMode.light;
+      case 'ThemeMode.system':
+        return ThemeMode.system;
+      default:
+        throw ArgumentError.value(
+          input,
+          'input',
+          'Cannot convert $input to ThemeMode',
+        );
+    }
+  }
+}
+
+final class _ThemeModeEncoder extends Converter<ThemeMode, String> {
+  const _ThemeModeEncoder();
+
+  @override
+  String convert(ThemeMode input) {
+    switch (input) {
+      case ThemeMode.dark:
+        return 'ThemeMode.dark';
+      case ThemeMode.light:
+        return 'ThemeMode.light';
+      case ThemeMode.system:
+        return 'ThemeMode.system';
+    }
   }
 }

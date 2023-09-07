@@ -64,7 +64,8 @@ abstract base class PreferencesEntry<T extends Object> {
   Future<void> remove();
 
   /// Set the value of the entry in the preferences if the value is not null.
-  Future<void> setOrRemove(T? value) => value == null ? remove() : set(value);
+  Future<void> setIfNullRemove(T? value) =>
+      value == null ? remove() : set(value);
 }
 
 final class _PreferencesEntry<T extends Object> extends PreferencesEntry<T> {
