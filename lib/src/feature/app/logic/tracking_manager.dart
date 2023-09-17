@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
 
@@ -15,21 +14,17 @@ abstract class ErrorTrackingDisabler {
 /// {@endtemplate}
 abstract class ErrorTrackingManager implements ErrorTrackingDisabler {
   /// Enables error tracking.
-  Future<void> enableReporting({required bool shouldSend});
+  void enableReporting();
 }
 
 /// {@template sentry_tracking_manager}
 /// A class that is responsible for managing Sentry error tracking.
 /// {@endtemplate}
-class SentryTrackingManager implements ErrorTrackingManager {
+abstract base class ErrorTrackingManagerBase implements ErrorTrackingManager {
   /// {@macro sentry_tracking_manager}
-  SentryTrackingManager({
-    required String sentryDsn,
-  }) : _sentryDsn = sentryDsn;
+  ErrorTrackingManagerBase();
 
-  final String _sentryDsn;
-
-  Completer<StreamSubscription<void>?>? _sentryCompleter;
+  StreamSubscription<LogMessage>? _subscription;
 
   /// Catch only warnings and errors
   static Stream<LogMessage> get _warningsAndErrors =>
@@ -41,56 +36,45 @@ class SentryTrackingManager implements ErrorTrackingManager {
         _ => false,
       };
 
-  static Future<SentryId> _captureException(
-    LogMessage log,
-  ) =>
-      Sentry.captureException(
-        log.message,
-        stackTrace: log.stackTrace,
-      );
-
-  Future<StreamSubscription<SentryId>?> _initSentry(
-    bool shouldSend,
-  ) async {
-    if (_sentryDsn.isNotEmpty && shouldSend) {
-      await SentryFlutter.init(
-        (options) => options
-          ..dsn = _sentryDsn
-          ..tracesSampleRate = 1,
-      );
-      return _warningsAndErrors.asyncMap(_captureException).listen(null);
-    } else {
-      return null;
-    }
-  }
-
-  @override
-  Future<void> enableReporting({required bool shouldSend}) async {
-    if (_sentryCompleter != null) {
-      logger.warning(
-        'Tried enabling error reporting when '
-        'it was already enabled.',
-      );
-      await _sentryCompleter?.future;
-      return SynchronousFuture(null);
-    }
-
-    _sentryCompleter = Completer<StreamSubscription<void>?>()
-      ..complete(_initSentry(shouldSend));
-
-    await _sentryCompleter?.future;
-  }
-
   @override
   Future<void> disableReporting() async {
-    if (_sentryCompleter == null) {
-      logger.warning(
-        'Tried disabling error reporting when '
-        'it was not enabled',
+    await _subscription?.cancel();
+    _subscription = null;
+  }
+
+  @override
+  void enableReporting() {
+    _subscription ??= _warningsAndErrors.listen(sendReportingData);
+  }
+
+  /// Handles the log message.
+  Future<void> sendReportingData(LogMessage log);
+}
+
+/// {@template sentry_tracking_manager}
+/// A class that is responsible for managing Sentry error tracking.
+/// {@endtemplate}
+final class SentryTrackingManager extends ErrorTrackingManagerBase {
+  /// {@macro sentry_tracking_manager}
+  SentryTrackingManager(this.sentryDsn)
+      : _sentry = Completer()
+          ..complete(
+            SentryFlutter.init(
+              (options) => options.dsn = sentryDsn,
+            ),
+          );
+
+  /// The Sentry DSN.
+  final String sentryDsn;
+
+  final Completer<void> _sentry;
+
+  @override
+  Future<void> sendReportingData(LogMessage log) async {
+    await _sentry.future;
+    await Sentry.captureException(
+        log.error,
+        stackTrace: log.stackTrace,
       );
-    } else {
-      await (await _sentryCompleter?.future)?.cancel();
-      _sentryCompleter = null;
-    }
   }
 }

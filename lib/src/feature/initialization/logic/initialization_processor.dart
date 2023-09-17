@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:sizzle_starter/src/feature/app/logic/tracking_manager.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/initialization_steps.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dart';
@@ -26,9 +25,7 @@ mixin InitializationProcessor {
       environmentStore: env,
     );
     final trackingManager = factory.createTrackingManager(env);
-    await trackingManager.enableReporting(
-      shouldSend: !kDebugMode && env.isProduction,
-    );
+    trackingManager.enableReporting();
     hook.onInit?.call();
     try {
       await for (final step in Stream.fromIterable(steps.entries)) {
