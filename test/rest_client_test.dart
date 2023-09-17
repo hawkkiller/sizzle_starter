@@ -97,7 +97,7 @@ void main() {
         setUp(
           () => restClient = RestClientDio(
             baseUrl: '',
-            dio: Dio()..httpClientAdapter = _MockHttpAdapter(),
+            dio: Dio()..httpClientAdapter = const _MockHttpAdapter(),
           ),
         );
 
