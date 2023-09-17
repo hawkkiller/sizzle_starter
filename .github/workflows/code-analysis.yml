@@ -31,6 +31,7 @@ jobs:
           flutter pub global activate melos
           flutter pub global activate very_good_cli
           flutter pub global activate intl_utils
+          flutter pub global activate coverage
           melos bootstrap
           flutter pub global run intl_utils:generate
           
@@ -42,11 +43,14 @@ jobs:
         run: flutter analyze .
 
       - name: 🧪 Run Tests
-        run: very_good test -j 12 --recursive --optimization --coverage --test-randomize-ordering-seed random
+        run: flutter test --coverage --coverage-path=coverage/lcov.info --test-randomize-ordering-seed=random --concurrency=10
 
-      # - name: 📊 Check Code Coverage
-      #   uses: VeryGoodOpenSource/very_good_coverage@v2
-      #   with:
-      #     path: ./coverage/lcov.info
-      #     # TODO: Set minimum coverage
-      #     min_coverage: 0
+      - name: 📈 Upload Coverage
+        uses: codecov/codecov-action@v1
+        with:
+          # not needed for public repos
+          token: ${{ secrets.CODECOV_TOKEN }}
+          file: ./coverage/lcov.info
+          flags: unittests
+          name: codecov-umbrella
+          fail_ci_if_error: true
