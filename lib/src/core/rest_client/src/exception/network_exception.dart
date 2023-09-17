@@ -9,8 +9,7 @@ abstract class NetworkException implements Exception {}
 /// {@template rest_client_exception}
 /// If something went wrong on the client side
 /// {@endtemplate}
-@immutable
-class RestClientException implements NetworkException {
+base class RestClientException implements NetworkException {
   /// {@macro rest_client_exception}
   const RestClientException({
     this.message,
@@ -30,11 +29,27 @@ class RestClientException implements NetworkException {
       ')';
 }
 
+/// {@template wrong_response_type_exception}
+/// If the response type is not supported
+/// {@endtemplate}
+final class WrongResponseTypeException extends RestClientException {
+  /// {@macro wrong_response_type_exception}
+  const WrongResponseTypeException({
+    super.message,
+    super.statusCode,
+  });
+
+  @override
+  String toString() => 'WrongResponseTypeException('
+      'message: $message,'
+      'statusCode: $statusCode'
+      ')';
+}
+
 /// {@template internal_server_exception}
 /// If something went wrong on the server side
 /// {@endtemplate}
-@immutable
-class InternalServerException implements NetworkException {
+base class InternalServerException implements NetworkException {
   /// {@macro internal_server_exception}
   const InternalServerException({
     this.message,
@@ -49,6 +64,22 @@ class InternalServerException implements NetworkException {
 
   @override
   String toString() => 'InternalServerErrorException('
+      'message: $message,'
+      'statusCode: $statusCode'
+      ')';
+}
+
+/// {@template unauthorized_exception}
+/// If the user is not authorized to make the request [401]
+/// {@endtemplate}
+final class UnauthorizedException extends RestClientException {
+  /// {@macro unauthorized_exception}
+  const UnauthorizedException({
+    super.message,
+  }) : super(statusCode: 401);
+
+  @override
+  String toString() => 'UnauthorizedException('
       'message: $message,'
       'statusCode: $statusCode'
       ')';

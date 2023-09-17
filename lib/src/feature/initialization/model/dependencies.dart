@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/feature/app/data/locale_repository.dart';
 import 'package:sizzle_starter/src/feature/app/data/theme_repository.dart';
@@ -6,7 +5,7 @@ import 'package:sizzle_starter/src/feature/app/data/theme_repository.dart';
 /// {@template dependencies}
 /// Dependencies container
 /// {@endtemplate}
-abstract base class Dependencies with Diagnosticable {
+abstract base class Dependencies {
   /// {@macro dependencies}
   const Dependencies();
 
@@ -21,29 +20,6 @@ abstract base class Dependencies with Diagnosticable {
 
   /// Freeze dependencies, so they cannot be modified
   Dependencies freeze();
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(
-      DiagnosticsProperty<SharedPreferences>(
-        'sharedPreferences',
-        sharedPreferences,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<ThemeRepository>(
-        'themeRepository',
-        themeRepository,
-      ),
-    );
-    properties.add(
-      DiagnosticsProperty<LocaleRepository>(
-        'localeRepository',
-        localeRepository,
-      ),
-    );
-  }
 }
 
 /// {@template mutable_dependencies}
