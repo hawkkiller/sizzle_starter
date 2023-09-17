@@ -57,6 +57,7 @@ abstract base class RestClientBase implements RestClient {
     Object? body, {
     int? statusCode,
   }) async {
+    if (body == null) return null;
     try {
       Map<String, Object?> result;
       if (body is String) {

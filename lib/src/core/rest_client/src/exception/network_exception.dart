@@ -46,6 +46,23 @@ final class WrongResponseTypeException extends RestClientException {
       ')';
 }
 
+/// {@template connection_exception}
+/// If there is no internet connection
+/// {@endtemplate}
+final class ConnectionException extends RestClientException {
+  /// {@macro connection_exception}
+  const ConnectionException({
+    super.message,
+    super.statusCode,
+  });
+
+  @override
+  String toString() => 'NoInternetException('
+      'message: $message,'
+      'statusCode: $statusCode'
+      ')';
+}
+
 /// {@template internal_server_exception}
 /// If something went wrong on the server side
 /// {@endtemplate}

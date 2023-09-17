@@ -17,81 +17,138 @@ final class RestClientDio extends RestClientBase {
   /// Send [Dio] request
   @protected
   @visibleForTesting
-  Future<Map<String, Object?>?> sendRequest({
+  Future<Map<String, Object?>?> sendRequest<T extends Object>({
     required String path,
     required String method,
     Map<String, Object?>? body,
     Map<String, Object?>? headers,
     Map<String, Object?>? queryParams,
   }) async {
-    final uri = buildUri(
-      path: path,
-      queryParams: queryParams,
-    );
-    final options = Options(
-      headers: headers,
-      method: method,
-      contentType: 'application/json',
-    );
+    try {
+      final uri = buildUri(
+        path: path,
+        queryParams: queryParams,
+      );
+      final options = Options(
+        headers: headers,
+        method: method,
+        contentType: 'application/json',
+        responseType: ResponseType.json,
+      );
 
-    final response = await _dio.request<List<int>>(
-      uri.toString(),
-      data: body,
-      options: options,
-    );
+      final response = await _dio.request<T>(
+        uri.toString(),
+        data: body,
+        options: options,
+      );
 
-    return decodeResponse(response, statusCode: response.statusCode);
+      return decodeResponse(response.data, statusCode: response.statusCode);
+    } on NetworkException {
+      rethrow;
+    } on DioException catch (e) {
+      if (e.type == DioExceptionType.connectionError ||
+          e.type == DioExceptionType.sendTimeout ||
+          e.type == DioExceptionType.receiveTimeout) {
+        Error.throwWithStackTrace(
+          ConnectionException(
+            message: 'ConnectionException: $e',
+            statusCode: e.response?.statusCode,
+          ),
+          e.stackTrace,
+        );
+      }
+      if (e.response != null) {
+        final result = await decodeResponse(
+          e.response?.data,
+          statusCode: e.response?.statusCode,
+        );
+
+        return result;
+      }
+      Error.throwWithStackTrace(
+        RestClientException(
+          message: e.toString(),
+        ),
+        e.stackTrace,
+      );
+    } on Object catch (e, stack) {
+      Error.throwWithStackTrace(
+        RestClientException(
+          message: e.toString(),
+        ),
+        stack,
+      );
+    }
   }
 
   @override
-  Future<Map<String, Object?>> delete(
+  Future<Map<String, Object?>?> delete(
     String path, {
     Map<String, Object?>? headers,
     Map<String, Object?>? queryParams,
-  }) async {
-    throw UnimplementedError();
-  }
+  }) =>
+      sendRequest(
+        path: path,
+        method: 'DELETE',
+        headers: headers,
+        queryParams: queryParams,
+      );
 
   @override
-  Future<Map<String, Object?>> get(
+  Future<Map<String, Object?>?> get(
     String path, {
     Map<String, Object?>? headers,
     Map<String, Object?>? queryParams,
-  }) {
-    // TODO: implement get
-    throw UnimplementedError();
-  }
+  }) =>
+      sendRequest(
+        path: path,
+        method: 'GET',
+        headers: headers,
+        queryParams: queryParams,
+      );
 
   @override
-  Future<Map<String, Object?>> patch(
+  Future<Map<String, Object?>?> patch(
     String path, {
     required Map<String, Object?> body,
     Map<String, Object?>? headers,
     Map<String, Object?>? queryParams,
-  }) {
-    // TODO: implement patch
-    throw UnimplementedError();
-  }
+  }) =>
+      sendRequest(
+        path: path,
+        method: 'PATCH',
+        body: body,
+        headers: headers,
+        queryParams: queryParams,
+      );
 
   @override
-  Future<Map<String, Object?>> post(
+  Future<Map<String, Object?>?> post(
     String path, {
     required Map<String, Object?> body,
     Map<String, Object?>? headers,
     Map<String, Object?>? queryParams,
-  }) {
-    // TODO: implement post
-    throw UnimplementedError();
-  }
+  }) =>
+      sendRequest(
+        path: path,
+        method: 'POST',
+        body: body,
+        headers: headers,
+        queryParams: queryParams,
+      );
 
   @override
-  Future<Map<String, Object?>> put(
+  Future<Map<String, Object?>?> put(
     String path, {
     required Map<String, Object?> body,
     Map<String, Object?>? headers,
     Map<String, Object?>? queryParams,
-  }) {
-    // TODO: implement put
-    throw UnimplementedError();
-  }
+  }) =>
+      sendRequest(
+        path: path,
+        method: 'PUT',
+        body: body,
+        headers: headers,
+        queryParams: queryParams,
+      );
 }
