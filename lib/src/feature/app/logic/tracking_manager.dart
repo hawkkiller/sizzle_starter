@@ -1,34 +1,42 @@
 import 'dart:async';
 
+import 'package:meta/meta.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
 
 /// A class which is responsible for disabling error tracking.
-abstract class ErrorTrackingDisabler {
+abstract class ExceptionTrackingDisabler {
   /// Disables error tracking.
+  /// 
+  /// This method should be called when the user has opted out of error tracking.
   Future<void> disableReporting();
 }
 
 /// {@template error_tracking_manager}
 /// A class which is responsible for enabling error tracking.
 /// {@endtemplate}
-abstract class ErrorTrackingManager implements ErrorTrackingDisabler {
+abstract interface class ExceptionTrackingManager
+    implements ExceptionTrackingDisabler {
   /// Enables error tracking.
-  void enableReporting();
+  /// 
+  /// This method should be called when the user has opted in to error tracking.
+  Future<void> enableReporting();
 }
 
 /// {@template sentry_tracking_manager}
 /// A class that is responsible for managing Sentry error tracking.
 /// {@endtemplate}
-abstract base class ErrorTrackingManagerBase implements ErrorTrackingManager {
+abstract base class ExceptionTrackingManagerBase
+    implements ExceptionTrackingManager {
   /// {@macro sentry_tracking_manager}
-  ErrorTrackingManagerBase();
+  ExceptionTrackingManagerBase(this._logger);
 
+  final Logger _logger;
   StreamSubscription<LogMessage>? _subscription;
 
   /// Catch only warnings and errors
-  static Stream<LogMessage> get _warningsAndErrors =>
-      logger.logs.where(_isWarningOrError);
+  Stream<LogMessage> get _reportLogs =>
+      _logger.logs.where(_isWarningOrError);
 
   static bool _isWarningOrError(LogMessage log) => switch (log.logLevel) {
         LoggerLevel.error => true,
@@ -37,44 +45,66 @@ abstract base class ErrorTrackingManagerBase implements ErrorTrackingManager {
       };
 
   @override
+  @mustCallSuper
+  @mustBeOverridden
   Future<void> disableReporting() async {
     await _subscription?.cancel();
     _subscription = null;
   }
 
   @override
-  void enableReporting() {
-    _subscription ??= _warningsAndErrors.listen(sendReportingData);
+  @mustCallSuper
+  @mustBeOverridden
+  Future<void> enableReporting() async {
+    _subscription ??= _reportLogs.listen(_report);
   }
 
   /// Handles the log message.
-  Future<void> sendReportingData(LogMessage log);
+  ///
+  /// This method is called when a log message is received.
+  Future<void> _report(LogMessage log);
 }
 
 /// {@template sentry_tracking_manager}
 /// A class that is responsible for managing Sentry error tracking.
 /// {@endtemplate}
-final class SentryTrackingManager extends ErrorTrackingManagerBase {
+final class SentryTrackingManager extends ExceptionTrackingManagerBase {
   /// {@macro sentry_tracking_manager}
-  SentryTrackingManager(this.sentryDsn)
-      : _sentry = Completer()
-          ..complete(
-            SentryFlutter.init(
-              (options) => options.dsn = sentryDsn,
-            ),
-          );
+  SentryTrackingManager(this.sentryDsn, super._logger);
 
   /// The Sentry DSN.
   final String sentryDsn;
 
-  final Completer<void> _sentry;
+  @override
+  Future<void> _report(LogMessage log) async {
+    final buffer = StringBuffer();
+    buffer.write(log.message);
+    if (log.error != null) {
+      buffer.write('| ${log.error}');
+    }
+    await Sentry.captureException(
+      buffer.toString(),
+      stackTrace: log.stackTrace,
+    );
+
+    return;
+  }
 
   @override
-  Future<void> sendReportingData(LogMessage log) async {
-    await _sentry.future;
-    await Sentry.captureException(
-        log.error,
-        stackTrace: log.stackTrace,
-      );
+  Future<void> enableReporting() async {
+    await Sentry.init(
+      (options) => options.dsn = sentryDsn,
+    );
+    await super.enableReporting();
+
+    return;
+  }
+
+  @override
+  Future<void> disableReporting() async {
+    await Sentry.close();
+    await super.disableReporting();
+
+    return;
   }
 }
