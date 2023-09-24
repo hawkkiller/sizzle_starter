@@ -7,8 +7,8 @@ import 'package:sizzle_starter/src/core/utils/logger.dart';
 /// A class which is responsible for disabling error tracking.
 abstract class ExceptionTrackingDisabler {
   /// Disables error tracking.
-  /// 
-  /// This method should be called when the user has opted out of error tracking.
+  ///
+  /// This method should be called when the user has opted out of error tracking
   Future<void> disableReporting();
 }
 
@@ -18,7 +18,7 @@ abstract class ExceptionTrackingDisabler {
 abstract interface class ExceptionTrackingManager
     implements ExceptionTrackingDisabler {
   /// Enables error tracking.
-  /// 
+  ///
   /// This method should be called when the user has opted in to error tracking.
   Future<void> enableReporting();
 }
@@ -35,8 +35,7 @@ abstract base class ExceptionTrackingManagerBase
   StreamSubscription<LogMessage>? _subscription;
 
   /// Catch only warnings and errors
-  Stream<LogMessage> get _reportLogs =>
-      _logger.logs.where(_isWarningOrError);
+  Stream<LogMessage> get _reportLogs => _logger.logs.where(_isWarningOrError);
 
   static bool _isWarningOrError(LogMessage log) => switch (log.logLevel) {
         LoggerLevel.error => true,
