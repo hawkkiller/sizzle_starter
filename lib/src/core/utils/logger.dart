@@ -75,12 +75,16 @@ base class LogMessage {
   const LogMessage({
     required this.message,
     required this.logLevel,
+    this.error,
     this.stackTrace,
     this.time,
   });
 
   /// Log message
   final String message;
+
+  /// Log Error
+  final Object? error;
 
   /// Stack trace
   final StackTrace? stackTrace;
@@ -95,7 +99,7 @@ base class LogMessage {
 /// Logger interface
 abstract base class Logger {
   /// Logs the error to the console
-  void error(Object message, {Object? error, StackTrace? stackTrace});
+  void error(String message, {Object? error, StackTrace? stackTrace});
 
   /// Logs the warning to the console
   void warning(Object message);
@@ -120,7 +124,7 @@ abstract base class Logger {
 
   /// Handy method to log zoneError
   void logZoneError(Object error, StackTrace stackTrace) {
-    this.error('Top-level error', error: error, stackTrace: stackTrace);
+    this.error('Top-level error: $error', stackTrace: stackTrace);
   }
 
   /// Handy method to log [FlutterError]
@@ -130,7 +134,7 @@ abstract base class Logger {
 
   /// Handy method to log [PlatformDispatcher] error
   bool logPlatformDispatcherError(Object error, StackTrace stackTrace) {
-    this.error(error, stackTrace: stackTrace);
+    this.error('PlatformDispatcherError', error: error, stackTrace: stackTrace);
     return true;
   }
 }
@@ -144,7 +148,7 @@ final class AppLogger$Logging extends Logger {
 
   @override
   void error(
-    Object message, {
+    String message, {
     Object? error,
     StackTrace? stackTrace,
   }) =>
@@ -175,24 +179,17 @@ final class AppLogger$Logging extends Logger {
     _logger.onRecord
         .where((event) => event.loggerName == 'SizzleLogger')
         .listen((event) {
+      final logMessage = event.toLogMessage();
       final message = options.formatter?.call(
-            event.toLogMessage(),
+            logMessage,
             options,
           ) ??
           _formatLoggerMessage(
-            log: event.toLogMessage(),
+            log: logMessage,
             options: options,
           );
 
-      final logLevel = switch (event.level) {
-        logging.Level.SEVERE => LoggerLevel.error,
-        logging.Level.WARNING => LoggerLevel.warning,
-        logging.Level.INFO => LoggerLevel.info,
-        logging.Level.FINE || logging.Level.FINER => LoggerLevel.debug,
-        _ => LoggerLevel.verbose,
-      };
-
-      if (logLevel.compareTo(options.level) < 0) {
+      if (logMessage.logLevel.compareTo(options.level) < 0) {
         return;
       }
 
@@ -218,8 +215,15 @@ final class AppLogger$Logging extends Logger {
       buffer.write(log.time?.formatTime());
       buffer.write(' | ');
     }
-    buffer.writeln(log.message);
-    buffer.writeln(log.stackTrace);
+    buffer.write(log.message);
+    if (log.error != null) {
+      buffer.write(' | ');
+      buffer.write(log.error);
+    }
+    if (log.stackTrace != null) {
+      buffer.write(' | ');
+      buffer.writeln(log.stackTrace);
+    }
 
     return buffer.toString();
   }
@@ -241,6 +245,7 @@ extension on logging.LogRecord {
   /// Transforms [logging.LogRecord] to [LogMessage]
   LogMessage toLogMessage() => LogMessage(
         message: message,
+        error: error,
         stackTrace: stackTrace,
         time: time,
         logLevel: level.toLoggerLevel(),
