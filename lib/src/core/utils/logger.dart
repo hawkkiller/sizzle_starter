@@ -146,7 +146,6 @@ final class LoggerLogging extends Logger {
   @override
   void debug(String message) => _logger.fine(message);
 
-  @override
   void error(String message, {Object? error, StackTrace? stackTrace}) =>
       _logger.severe(message, error, stackTrace);
 
@@ -155,6 +154,17 @@ final class LoggerLogging extends Logger {
 
   @override
   void verbose(String message) => _logger.finest(message);
+
+  void error(
+    String message, {
+    Object? error,
+    StackTrace? stackTrace,
+  }) =>
+      _logger.severe(
+        message,
+        error,
+        stackTrace,
+      );
 
   @override
   void warning(String message) => _logger.warning(message);
@@ -198,9 +208,6 @@ final class LoggerLogging extends Logger {
   }
 }
 
-/// Formats the logger message
-///
-/// Combines emoji, time and message
 String _formatLoggerMessage({
   required LogMessage log,
   required LogOptions options,
