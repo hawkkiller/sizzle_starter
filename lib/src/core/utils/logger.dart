@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart' as logging;
 
 /// Logger instance
-final Logger logger = AppLogger$Logging();
+final Logger logger = LoggerLogging();
 
 /// Typedef for the log formatter
 typedef LogFormatter = String Function(LogMessage message, LogOptions options);
@@ -140,26 +140,24 @@ abstract base class Logger {
 }
 
 /// Default logger using logging package
-final class AppLogger$Logging extends Logger {
+final class LoggerLogging extends Logger {
   final _logger = logging.Logger('SizzleLogger');
 
   @override
   void debug(String message) => _logger.fine(message);
 
   @override
-  void error(
-    String message, {
-    Object? error,
-    StackTrace? stackTrace,
-  }) =>
-      _logger.severe(
-        message,
-        error,
-        stackTrace,
-      );
+  void error(String message, {Object? error, StackTrace? stackTrace}) =>
+      _logger.severe(message, error, stackTrace);
 
   @override
   void info(String message) => _logger.info(message);
+
+  @override
+  void verbose(String message) => _logger.finest(message);
+
+  @override
+  void warning(String message) => _logger.warning(message);
 
   @override
   Stream<LogMessage> get logs => _logger.onRecord.map(
@@ -198,41 +196,35 @@ final class AppLogger$Logging extends Logger {
 
     return fn();
   }
+}
 
-  /// Formats the logger message
-  ///
-  /// Combines emoji, time and message
-  static String _formatLoggerMessage({
-    required LogMessage log,
-    required LogOptions options,
-  }) {
-    final buffer = StringBuffer();
-    if (options.showEmoji) {
-      buffer.write(log.logLevel.emoji);
-      buffer.write(' ');
-    }
-    if (options.showTime) {
-      buffer.write(log.time?.formatTime());
-      buffer.write(' | ');
-    }
-    buffer.write(log.message);
-    if (log.error != null) {
-      buffer.write(' | ');
-      buffer.write(log.error);
-    }
-    if (log.stackTrace != null) {
-      buffer.write(' | ');
-      buffer.writeln(log.stackTrace);
-    }
-
-    return buffer.toString();
+/// Formats the logger message
+///
+/// Combines emoji, time and message
+String _formatLoggerMessage({
+  required LogMessage log,
+  required LogOptions options,
+}) {
+  final buffer = StringBuffer();
+  if (options.showEmoji) {
+    buffer.write(log.logLevel.emoji);
+    buffer.write(' ');
+  }
+  if (options.showTime) {
+    buffer.write(log.time?.formatTime());
+    buffer.write(' | ');
+  }
+  buffer.write(log.message);
+  if (log.error != null) {
+    buffer.write(' | ');
+    buffer.write(log.error);
+  }
+  if (log.stackTrace != null) {
+    buffer.write(' | ');
+    buffer.writeln(log.stackTrace);
   }
 
-  @override
-  void verbose(String message) => _logger.finest(message);
-
-  @override
-  void warning(String message) => _logger.warning(message);
+  return buffer.toString();
 }
 
 extension on DateTime {
