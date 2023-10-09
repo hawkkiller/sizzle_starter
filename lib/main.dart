@@ -37,7 +37,7 @@ void _onInitialized(InitializationResult result) {
 }
 
 void _onError(int step, Object error) {
-  logger.error('Initialization failed on step $step', error: error);
+  logger.error('Initialization failed on step $step with error: $error');
 }
 
 void _onInit() {

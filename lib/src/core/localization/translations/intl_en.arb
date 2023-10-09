@@ -3,8 +3,7 @@
     "@appTitle": {
       "description": "The title of the application"
     },
-    "light_themes": "Light Themes",
-    "dark_themes": "Dark Themes",
-    "system_theme": "System Theme",
+    "custom_colors": "Custom Colors",
+    "default_themes": "Default Themes",
     "locales": "Locales"
   }

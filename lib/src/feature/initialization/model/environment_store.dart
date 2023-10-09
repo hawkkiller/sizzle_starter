@@ -1,4 +1,4 @@
-import 'package:sizzle_starter/src/feature/initialization/model/enum/environment.dart';
+import 'package:sizzle_starter/src/feature/initialization/model/environment.dart';
 
 /// {@template environment_store}
 /// A class which is responsible for storing the environment.

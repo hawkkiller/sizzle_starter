@@ -40,36 +40,27 @@ class _HomeScreenState extends State<HomeScreen> {
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Text(
-                    Localization.of(context).system_theme,
+                    Localization.of(context).default_themes,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.onBackground,
                         ),
                   ),
                 ),
-                const _ThemeSelector([AppTheme.system]),
+                _ThemeSelector(
+                  [AppTheme.light, AppTheme.dark, AppTheme.system],
+                ),
                 Padding(
                   padding: const EdgeInsets.only(left: 8, top: 8),
                   child: Text(
-                    Localization.of(context).light_themes,
+                    Localization.of(context).custom_colors,
                     style: Theme.of(context).textTheme.titleMedium?.copyWith(
                           fontWeight: FontWeight.bold,
                           color: Theme.of(context).colorScheme.onBackground,
                         ),
                   ),
                 ),
-                _ThemeSelector(AppTheme.lightValues),
-                Padding(
-                  padding: const EdgeInsets.only(left: 8),
-                  child: Text(
-                    Localization.of(context).dark_themes,
-                    style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                          fontWeight: FontWeight.bold,
-                          color: Theme.of(context).colorScheme.onBackground,
-                        ),
-                  ),
-                ),
-                _ThemeSelector(AppTheme.darkValues),
+                _ThemeSelector(AppTheme.values),
               ]),
             ),
             SliverToBoxAdapter(
@@ -173,21 +164,19 @@ class _ThemeCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) => Card(
-        child: DecoratedBox(
-          decoration: BoxDecoration(
-            color: _theme.seed,
-            borderRadius: BorderRadius.circular(4),
-          ),
+        child: Material(
+          color:
+              _theme.seed ?? _theme.computeTheme(context).colorScheme.primary,
+          borderRadius: BorderRadius.circular(4),
           child: InkWell(
             onTap: () => ThemeScope.of(context).setTheme(_theme),
             borderRadius: BorderRadius.circular(4),
             child: SizedBox(
               width: 64,
-              child: Center(
-                child: Text(
-                  _theme.type.name,
-                  style: Theme.of(context).textTheme.bodyMedium?.copyWith(),
-                ),
+              height: 64,
+              child: Text(
+                _theme.mode.toString(),
+                style: Theme.of(context).textTheme.bodyMedium,
               ),
             ),
           ),

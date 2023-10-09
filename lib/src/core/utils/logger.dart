@@ -6,6 +6,9 @@ import 'package:logging/logging.dart' as logging;
 /// Logger instance
 final Logger logger = AppLogger$Logging();
 
+/// Typedef for the log formatter
+typedef LogFormatter = String Function(LogMessage message, LogOptions options);
+
 /// Possible levels of logging
 enum LoggerLevel implements Comparable<LoggerLevel> {
   /// Error level
@@ -61,11 +64,7 @@ base class LogOptions {
   final bool logInRelease;
 
   /// Formatter for the log message
-  final String Function({
-    required String message,
-    required StackTrace? stackTrace,
-    required DateTime? time,
-  })? formatter;
+  final LogFormatter? formatter;
 }
 
 /// {@template log_message}
@@ -76,12 +75,16 @@ base class LogMessage {
   const LogMessage({
     required this.message,
     required this.logLevel,
+    this.error,
     this.stackTrace,
     this.time,
   });
 
   /// Log message
   final String message;
+
+  /// Log Error
+  final Object? error;
 
   /// Stack trace
   final StackTrace? stackTrace;
@@ -96,7 +99,7 @@ base class LogMessage {
 /// Logger interface
 abstract base class Logger {
   /// Logs the error to the console
-  void error(Object message, {Object? error, StackTrace? stackTrace});
+  void error(String message, {Object? error, StackTrace? stackTrace});
 
   /// Logs the warning to the console
   void warning(Object message);
@@ -121,7 +124,7 @@ abstract base class Logger {
 
   /// Handy method to log zoneError
   void logZoneError(Object error, StackTrace stackTrace) {
-    this.error('Top-level error', error: error, stackTrace: stackTrace);
+    this.error('Top-level error: $error', stackTrace: stackTrace);
   }
 
   /// Handy method to log [FlutterError]
@@ -131,7 +134,7 @@ abstract base class Logger {
 
   /// Handy method to log [PlatformDispatcher] error
   bool logPlatformDispatcherError(Object error, StackTrace stackTrace) {
-    this.error(error, stackTrace: stackTrace);
+    this.error('PlatformDispatcherError', error: error, stackTrace: stackTrace);
     return true;
   }
 }
@@ -145,7 +148,7 @@ final class AppLogger$Logging extends Logger {
 
   @override
   void error(
-    Object message, {
+    String message, {
     Object? error,
     StackTrace? stackTrace,
   }) =>
@@ -160,18 +163,7 @@ final class AppLogger$Logging extends Logger {
 
   @override
   Stream<LogMessage> get logs => _logger.onRecord.map(
-        (record) => LogMessage(
-          message: record.message,
-          stackTrace: record.stackTrace,
-          time: record.time,
-          logLevel: switch (record.level) {
-            logging.Level.SEVERE => LoggerLevel.error,
-            logging.Level.WARNING => LoggerLevel.warning,
-            logging.Level.INFO => LoggerLevel.info,
-            logging.Level.FINE || logging.Level.FINER => LoggerLevel.debug,
-            _ => LoggerLevel.verbose,
-          },
-        ),
+        (record) => record.toLogMessage(),
       );
 
   @override
@@ -187,27 +179,17 @@ final class AppLogger$Logging extends Logger {
     _logger.onRecord
         .where((event) => event.loggerName == 'SizzleLogger')
         .listen((event) {
+      final logMessage = event.toLogMessage();
       final message = options.formatter?.call(
-            message: event.message,
-            stackTrace: event.stackTrace,
-            time: event.time,
+            logMessage,
+            options,
           ) ??
           _formatLoggerMessage(
-            message: event.message,
-            logLevel: event.level,
-            time: event.time,
-            error: event.error,
+            log: logMessage,
+            options: options,
           );
 
-      final logLevel = switch (event.level) {
-        logging.Level.SEVERE => LoggerLevel.error,
-        logging.Level.WARNING => LoggerLevel.warning,
-        logging.Level.INFO => LoggerLevel.info,
-        logging.Level.FINE || logging.Level.FINER => LoggerLevel.debug,
-        _ => LoggerLevel.verbose,
-      };
-
-      if (logLevel.compareTo(options.level) < 0) {
+      if (logMessage.logLevel.compareTo(options.level) < 0) {
         return;
       }
 
@@ -221,13 +203,30 @@ final class AppLogger$Logging extends Logger {
   ///
   /// Combines emoji, time and message
   static String _formatLoggerMessage({
-    required Object message,
-    required logging.Level logLevel,
-    required DateTime time,
-    Object? error,
-  }) =>
-      '${logLevel.emoji} ${time.formatTime()}'
-      ' | $message ${error != null ? '| $error' : ''}';
+    required LogMessage log,
+    required LogOptions options,
+  }) {
+    final buffer = StringBuffer();
+    if (options.showEmoji) {
+      buffer.write(log.logLevel.emoji);
+      buffer.write(' ');
+    }
+    if (options.showTime) {
+      buffer.write(log.time?.formatTime());
+      buffer.write(' | ');
+    }
+    buffer.write(log.message);
+    if (log.error != null) {
+      buffer.write(' | ');
+      buffer.write(log.error);
+    }
+    if (log.stackTrace != null) {
+      buffer.write(' | ');
+      buffer.writeln(log.stackTrace);
+    }
+
+    return buffer.toString();
+  }
 
   @override
   void verbose(Object message) => _logger.finest(message);
@@ -242,18 +241,35 @@ extension on DateTime {
       [hour, minute, second].map((i) => i.toString().padLeft(2, '0')).join(':');
 }
 
+extension on logging.LogRecord {
+  /// Transforms [logging.LogRecord] to [LogMessage]
+  LogMessage toLogMessage() => LogMessage(
+        message: message,
+        error: error,
+        stackTrace: stackTrace,
+        time: time,
+        logLevel: level.toLoggerLevel(),
+      );
+}
+
 extension on logging.Level {
-  /// Emoji for each log level
+  /// Transforms [logging.Level] to [LoggerLevel]
+  LoggerLevel toLoggerLevel() => switch (this) {
+        logging.Level.SEVERE => LoggerLevel.error,
+        logging.Level.WARNING => LoggerLevel.warning,
+        logging.Level.INFO => LoggerLevel.info,
+        logging.Level.FINE || logging.Level.FINER => LoggerLevel.debug,
+        _ => LoggerLevel.verbose,
+      };
+}
+
+extension on LoggerLevel {
+  /// Transforms [LoggerLevel] to emoji
   String get emoji => switch (this) {
-        logging.Level.SHOUT => '❗️',
-        logging.Level.SEVERE => '🚫',
-        logging.Level.WARNING => '⚠️',
-        logging.Level.INFO => '💡',
-        logging.Level.CONFIG => '🐞',
-        logging.Level.FINE => '📌',
-        logging.Level.FINER => '📌📌',
-        logging.Level.FINEST => '📌📌📌',
-        logging.Level.ALL => '',
-        _ => '',
+        LoggerLevel.error => '🔥',
+        LoggerLevel.warning => '⚠️',
+        LoggerLevel.info => '💡',
+        LoggerLevel.debug => '🐛',
+        LoggerLevel.verbose => '🔬',
       };
 }

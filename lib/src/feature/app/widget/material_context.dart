@@ -26,7 +26,7 @@ class _MaterialContextState extends State<MaterialContext> {
       debugShowCheckedModeBanner: false,
       theme: theme.lightTheme,
       darkTheme: theme.darkTheme,
-      themeMode: theme.themeMode,
+      themeMode: theme.mode,
       localizationsDelegates: Localization.localizationDelegates,
       supportedLocales: Localization.supportedLocales,
       locale: LocaleScope.of(context).locale,
