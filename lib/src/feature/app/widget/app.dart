@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizzle_starter/src/feature/app/widget/locale_scope.dart';
@@ -29,19 +28,6 @@ class App extends StatelessWidget {
 
   /// The initialization result from the [InitializationProcessor]
   final InitializationResult result;
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(
-      DiagnosticsProperty<InitializationResult>(
-        'result',
-        result,
-        description: 'The initialization result from the '
-            '[InitializationProcessor]',
-      ),
-    );
-  }
 
   @override
   Widget build(BuildContext context) => DefaultAssetBundle(

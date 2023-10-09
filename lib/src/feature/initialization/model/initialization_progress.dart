@@ -16,7 +16,4 @@ final class InitializationProgress {
 
   /// Environment store
   final IEnvironmentStore environmentStore;
-
-  /// Freeze dependencies, so they cannot be modified
-  Dependencies freeze() => dependencies.freeze();
 }

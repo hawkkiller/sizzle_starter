@@ -102,16 +102,16 @@ abstract base class Logger {
   void error(String message, {Object? error, StackTrace? stackTrace});
 
   /// Logs the warning to the console
-  void warning(Object message);
+  void warning(String message);
 
   /// Logs the info to the console
-  void info(Object message);
+  void info(String message);
 
   /// Logs the debug to the console
-  void debug(Object message);
+  void debug(String message);
 
   /// Logs the verbose to the console
-  void verbose(Object message);
+  void verbose(String message);
 
   /// Set up the logger
   L runLogging<L>(
@@ -144,7 +144,7 @@ final class AppLogger$Logging extends Logger {
   final _logger = logging.Logger('SizzleLogger');
 
   @override
-  void debug(Object message) => _logger.fine(message);
+  void debug(String message) => _logger.fine(message);
 
   @override
   void error(
@@ -159,7 +159,7 @@ final class AppLogger$Logging extends Logger {
       );
 
   @override
-  void info(Object message) => _logger.info(message);
+  void info(String message) => _logger.info(message);
 
   @override
   Stream<LogMessage> get logs => _logger.onRecord.map(
@@ -229,10 +229,10 @@ final class AppLogger$Logging extends Logger {
   }
 
   @override
-  void verbose(Object message) => _logger.finest(message);
+  void verbose(String message) => _logger.finest(message);
 
   @override
-  void warning(Object message) => _logger.warning(message);
+  void warning(String message) => _logger.warning(message);
 }
 
 extension on DateTime {

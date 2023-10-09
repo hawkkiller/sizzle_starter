@@ -51,7 +51,7 @@ mixin InitializationProcessor {
     }
     stopwatch.stop();
     final result = InitializationResult(
-      dependencies: progress.freeze(),
+      dependencies: progress.dependencies,
       stepCount: stepCount,
       msSpent: stopwatch.elapsedMilliseconds,
     );
