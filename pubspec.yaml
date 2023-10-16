@@ -36,7 +36,7 @@ dependencies:
   dio: 5.3.3
 
   # Persisting
-  shared_preferences: 2.2.1
+  shared_preferences: 2.2.2
 
   # Logging
   stack_trace: 1.11.0
