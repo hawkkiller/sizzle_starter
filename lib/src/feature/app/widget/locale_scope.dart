@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/core/utils/mixin/scope_mixin.dart';
+import 'package:sizzle_starter/src/core/utils/extensions/context_extension.dart';
 import 'package:sizzle_starter/src/feature/app/logic/locale_bloc.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/dependencies_scope.dart';
 
@@ -46,8 +46,11 @@ class LocaleScope extends StatefulWidget {
   /// rebuild the widget when the locale changes. If [listen] is false, the
   /// returned [LocaleController] will not rebuild the widget when the locale
   /// changes.
-  static LocaleController of(BuildContext context, {bool listen = true}) =>
-      ScopeMixin.scopeOf<_LocaleInherited>(context, listen: listen).controller;
+  static LocaleController of(
+    BuildContext context, {
+    bool listen = true,
+  }) =>
+      context.inhOf<_LocaleInherited>(listen: listen).controller;
 
   @override
   State<LocaleScope> createState() => _LocaleScopeState();
