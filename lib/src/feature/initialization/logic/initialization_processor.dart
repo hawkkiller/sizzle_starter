@@ -26,7 +26,7 @@ mixin InitializationProcessor {
       dependencies: DependenciesMutable(),
       environmentStore: env,
     );
-    if (env.isProduction && !kDebugMode) {
+    if (!kDebugMode) {
       final trackingManager = factory.createTrackingManager(env);
       await trackingManager.enableReporting();
     }
