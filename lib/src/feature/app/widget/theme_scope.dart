@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/core/utils/mixin/scope_mixin.dart';
+import 'package:sizzle_starter/src/core/utils/extensions/context_extension.dart';
 import 'package:sizzle_starter/src/feature/app/logic/theme_bloc.dart';
 import 'package:sizzle_starter/src/feature/app/model/app_theme.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/dependencies_scope.dart';
@@ -33,8 +33,11 @@ class ThemeScope extends StatefulWidget {
   final Widget child;
 
   /// Get the [ThemeController] of the closest [ThemeScope] ancestor.
-  static ThemeController of(BuildContext context, {bool listen = true}) =>
-      ScopeMixin.scopeOf<_ThemeInherited>(context, listen: listen).controller;
+  static ThemeController of(
+    BuildContext context, {
+    bool listen = true,
+  }) =>
+      context.inhOf<_ThemeInherited>(listen: listen).controller;
 
   @override
   State<ThemeScope> createState() => _ThemeScopeState();

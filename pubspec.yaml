@@ -36,11 +36,11 @@ dependencies:
   dio: 5.3.3
 
   # Persisting
-  shared_preferences: 2.2.1
+  shared_preferences: 2.2.2
 
   # Logging
   stack_trace: 1.11.0
-  sentry_flutter: 7.10.1
+  sentry_flutter: 7.11.0
   logging: 1.2.0
 
   # Utils
@@ -49,7 +49,7 @@ dependencies:
   bloc_concurrency: 0.2.2
   path: 1.8.3
   path_provider: 2.1.0
-  flutter_native_splash: 2.3.2
+  flutter_native_splash: 2.3.5
   
   # Packages
   database:
@@ -66,8 +66,8 @@ dev_dependencies:
   # Utils
   flutter_gen_runner: 5.3.2
   flutter_launcher_icons: 0.13.1
-  melos: 3.1.1
-  intl_utils: 2.8.4
+  melos: 3.2.0
+  intl_utils: 2.8.5
 
 flutter:
   uses-material-design: true
