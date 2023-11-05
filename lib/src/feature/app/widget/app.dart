@@ -14,10 +14,7 @@ import 'package:sizzle_starter/src/feature/initialization/widget/dependencies_sc
 /// {@endtemplate}
 class App extends StatelessWidget {
   /// {@macro app}
-  const App({
-    required this.result,
-    super.key,
-  });
+  const App({required this.result, super.key});
 
   /// Running this function will result in attaching
   /// corresponding [RenderObject] to the root of the tree.
@@ -35,9 +32,7 @@ class App extends StatelessWidget {
         child: DependenciesScope(
           dependencies: result.dependencies,
           child: const ThemeScope(
-            child: LocaleScope(
-              child: MaterialContext(),
-            ),
+            child: LocaleScope(child: MaterialContext()),
           ),
         ),
       );

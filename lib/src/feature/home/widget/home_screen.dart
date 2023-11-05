@@ -7,23 +7,16 @@ import 'package:sizzle_starter/src/feature/app/widget/theme_scope.dart';
 /// {@template sample_page}
 /// SamplePage widget
 /// {@endtemplate}
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   /// {@macro sample_page}
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         body: CustomScrollView(
           slivers: [
-            SliverAppBar(
-              title: Text(Localization.of(context).appTitle),
-            ),
+            SliverAppBar(title: Text(Localization.of(context).appTitle)),
             SliverList(
               delegate: SliverChildListDelegate.fixed([
                 Padding(
@@ -92,7 +85,7 @@ class _LanguagesSelector extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemCount: _languages.length,
           itemBuilder: (context, index) {
-            final language = _languages[index];
+            final language = _languages.elementAt(index);
 
             return Padding(
               padding: const EdgeInsets.all(8.0),
@@ -146,7 +139,7 @@ class _ThemeSelector extends StatelessWidget {
           scrollDirection: Axis.horizontal,
           itemCount: _themes.length,
           itemBuilder: (context, index) {
-            final theme = _themes[index];
+            final theme = _themes.elementAt(index);
 
             return Padding(
               padding: const EdgeInsets.all(8.0),

@@ -5,11 +5,11 @@ part of 'initialization_processor.dart';
 /// {@endtemplate}
 abstract class InitializationFactory {
   /// Get the environment store.
-  IEnvironmentStore getEnvironmentStore();
+  EnvironmentStore getEnvironmentStore();
 
   /// Create a tracking manager.
   SentryTrackingManager createTrackingManager(
-    IEnvironmentStore environmentStore,
+    EnvironmentStore environmentStore,
   );
 }
 
@@ -17,10 +17,10 @@ abstract class InitializationFactory {
 mixin InitializationFactoryImpl implements InitializationFactory {
   @override
   SentryTrackingManager createTrackingManager(
-    IEnvironmentStore environmentStore,
+    EnvironmentStore environmentStore,
   ) =>
       SentryTrackingManager(environmentStore.sentryDsn, logger);
 
   @override
-  IEnvironmentStore getEnvironmentStore() => EnvironmentStore();
+  EnvironmentStore getEnvironmentStore() => const EnvironmentStore();
 }

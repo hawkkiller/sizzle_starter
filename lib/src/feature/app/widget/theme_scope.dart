@@ -16,8 +16,8 @@ abstract interface class ThemeController {
   /// This is handy to be obtained in the [MaterialApp].
   AppTheme get theme;
 
-  /// Set the theme to [theme].
-  void setTheme(AppTheme theme);
+  /// Set the theme to [newTheme].
+  void setTheme(AppTheme newTheme);
 }
 
 /// {@template theme_scope}
@@ -27,10 +27,7 @@ abstract interface class ThemeController {
 /// {@endtemplate}
 class ThemeScope extends StatefulWidget {
   /// {@macro theme_scope}
-  const ThemeScope({
-    required this.child,
-    super.key,
-  });
+  const ThemeScope({required this.child, super.key});
 
   /// The child widget.
   final Widget child;
@@ -45,9 +42,7 @@ class ThemeScope extends StatefulWidget {
 
 class _ThemeScopeState extends State<ThemeScope> implements ThemeController {
   @override
-  void setTheme(AppTheme theme) => _bloc.add(
-        ThemeEvent.update(theme),
-      );
+  void setTheme(AppTheme newTheme) => _bloc.add(ThemeEvent.update(newTheme));
 
   @override
   AppTheme get theme => _state.theme;
@@ -66,14 +61,12 @@ class _ThemeScopeState extends State<ThemeScope> implements ThemeController {
 
   @override
   void initState() {
-    _bloc = ThemeBloc(
-      DependenciesScope.of(context).themeRepository,
-    );
+    super.initState();
+    _bloc = ThemeBloc(DependenciesScope.of(context).themeRepository);
 
     _state = _bloc.state;
 
     _subscription = _bloc.stream.listen(_listener);
-    super.initState();
   }
 
   @override
@@ -117,8 +110,6 @@ class _ThemeInherited extends InheritedWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-      DiagnosticsProperty<ThemeState>('themeState', state),
-    );
+    properties.add(DiagnosticsProperty<ThemeState>('themeState', state));
   }
 }

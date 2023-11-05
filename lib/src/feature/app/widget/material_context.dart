@@ -9,15 +9,10 @@ import 'package:sizzle_starter/src/feature/home/widget/home_screen.dart';
 ///
 /// This widget sets locales, themes and routing.
 /// {@endtemplate}
-class MaterialContext extends StatefulWidget {
+class MaterialContext extends StatelessWidget {
   /// {@macro material_context}
   const MaterialContext({super.key});
 
-  @override
-  State<MaterialContext> createState() => _MaterialContextState();
-}
-
-class _MaterialContextState extends State<MaterialContext> {
   @override
   Widget build(BuildContext context) {
     final theme = ThemeScope.of(context).theme;

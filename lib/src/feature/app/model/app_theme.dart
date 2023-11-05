@@ -14,10 +14,8 @@ final class AppTheme with Diagnosticable {
   final Color? seed;
 
   /// {@macro app_theme}
-  AppTheme({
-    required this.mode,
-    this.seed,
-  })  : darkTheme = ThemeData(
+  AppTheme({required this.mode, this.seed})
+      : darkTheme = ThemeData(
           colorSchemeSeed: seed ?? Colors.pink,
           brightness: Brightness.dark,
           useMaterial3: true,
@@ -42,7 +40,7 @@ final class AppTheme with Diagnosticable {
     ...List.generate(
       Colors.primaries.length,
       (index) => AppTheme(
-        seed: Colors.primaries[index],
+        seed: Colors.primaries.elementAtOrNull(index),
         mode: ThemeMode.system,
       ),
     ),

@@ -31,7 +31,7 @@ final class AppRunner
     PlatformDispatcher.instance.onError = logger.logPlatformDispatcherError;
 
     // Setup bloc observer and transformer
-    Bloc.observer = AppBlocObserver();
+    Bloc.observer = const AppBlocObserver();
     Bloc.transformer = bloc_concurrency.sequential();
 
     final result = await processInitialization(

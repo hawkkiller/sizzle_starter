@@ -40,9 +40,7 @@ final class _ThemeEventUpdate extends ThemeEvent {
 abstract base mixin class _ThemeEvent {
   const _ThemeEvent();
 
-  T map<T>({
-    required PatternMatch<T, _ThemeEventUpdate> update,
-  }) =>
+  T map<T>({required PatternMatch<T, _ThemeEventUpdate> update}) =>
       switch (this) {
         final _ThemeEventUpdate event => update(event),
         _ => throw AssertionError('Unknown event: $this'),
@@ -52,9 +50,7 @@ abstract base mixin class _ThemeEvent {
     required PatternMatch<T, _ThemeEventUpdate>? update,
     required T orElse,
   }) =>
-      map(
-        update: update ?? (_) => orElse,
-      );
+      map(update: update ?? (_) => orElse);
 }
 
 /// {@template theme_state}
@@ -158,9 +154,7 @@ final class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
           ),
         ) {
     on<ThemeEvent>(
-      (event, emit) => event.map(
-        update: (e) => _update(e, emit),
-      ),
+      (event, emit) => event.map(update: (e) => _update(e, emit)),
     );
   }
 
