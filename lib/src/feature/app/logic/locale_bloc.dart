@@ -44,7 +44,10 @@ class LocaleBloc extends Bloc<LocaleEvent, LocaleState> {
   LocaleBloc({required LocaleRepository localeRepository})
       : _localeRepository = localeRepository,
         super(
-          LocaleState.idle(locale: localeRepository.loadLocaleFromCache()),
+          LocaleState.idle(
+            locale:
+                localeRepository.loadLocaleFromCache() ?? const Locale('en'),
+          ),
         ) {
     on<LocaleEvent>(
       (event, emit) => event.map(update: (e) => _update(e, emit)),
