@@ -20,34 +20,32 @@ final class LocaleDataSourceImpl implements LocaleDataSource {
   final SharedPreferences _sharedPreferences;
 
   /// {@macro locale_datasource}
-  const LocaleDataSourceImpl({
-    required SharedPreferences sharedPreferences,
-  }) : _sharedPreferences = sharedPreferences;
+  const LocaleDataSourceImpl({required SharedPreferences sharedPreferences})
+      : _sharedPreferences = sharedPreferences;
 
   static const _prefix = 'locale';
 
   @override
   Future<void> setLocale(Locale locale) async {
-    await _sharedPreferences.setString(
-      '$_prefix.locale',
-      locale.toString(),
-    );
-
-    return;
+    await _sharedPreferences.setString('$_prefix.locale', locale.toString());
   }
 
   @override
   Locale? loadLocaleFromCache() {
     final locale = _sharedPreferences.getString('$_prefix.locale');
 
-    if (locale != null) {
-      final localeParts = locale.split('_');
-      return Locale.fromSubtags(
-        languageCode: localeParts[0],
-        countryCode: localeParts.length > 1 ? localeParts[1] : null,
-      );
-    }
+    if (locale == null) return null;
 
-    return null;
+    final localeParts = locale.split('_');
+    final languageCode = localeParts.elementAtOrNull(0);
+
+    if (languageCode == null) return null;
+
+    final countryCode = localeParts.elementAtOrNull(1);
+
+    return Locale.fromSubtags(
+      languageCode: languageCode,
+      countryCode: countryCode,
+    );
   }
 }

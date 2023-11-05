@@ -15,14 +15,11 @@ sealed class LocaleState extends _LocaleStateBase {
   const LocaleState();
 
   /// The state machine is idling (i.e. doing nothing)
-  const factory LocaleState.idle({
-    required Locale locale,
-  }) = _LocaleStateIdle;
+  const factory LocaleState.idle({required Locale locale}) = _LocaleStateIdle;
 
   /// The state machine is in progress (i.e. doing something)
-  const factory LocaleState.inProgress({
-    required Locale locale,
-  }) = _LocaleStateInProgress;
+  const factory LocaleState.inProgress({required Locale locale}) =
+      _LocaleStateInProgress;
 }
 
 /// {@macro locale_state}
@@ -30,9 +27,7 @@ sealed class LocaleState extends _LocaleStateBase {
 /// This state is used when the
 /// state machine is idling (i.e. doing nothing)
 final class _LocaleStateIdle extends LocaleState {
-  const _LocaleStateIdle({
-    required this.locale,
-  });
+  const _LocaleStateIdle({required this.locale});
 
   @override
   final Locale locale;
@@ -54,9 +49,7 @@ final class _LocaleStateIdle extends LocaleState {
 /// This state is used when the
 /// state machine is in progress (i.e. doing something)
 final class _LocaleStateInProgress extends LocaleState {
-  const _LocaleStateInProgress({
-    required this.locale,
-  });
+  const _LocaleStateInProgress({required this.locale});
 
   @override
   final Locale locale;
@@ -141,9 +134,7 @@ final class _LocaleEventUpdate extends LocaleEvent {
 abstract base class _LocaleEventBase {
   const _LocaleEventBase();
 
-  T map<T>({
-    required PatternMatch<T, _LocaleEventUpdate> update,
-  }) =>
+  T map<T>({required PatternMatch<T, _LocaleEventUpdate> update}) =>
       switch (this) {
         final _LocaleEventUpdate event => update(event),
         _ => throw AssertionError('Unknown event: $this'),
@@ -153,9 +144,7 @@ abstract base class _LocaleEventBase {
     required PatternMatch<T, _LocaleEventUpdate>? update,
     required T orElse,
   }) =>
-      map(
-        update: update ?? (_) => orElse,
-      );
+      map(update: update ?? (_) => orElse);
 }
 
 /// Business Logic Component (BLoC) for managing the app's locale.
@@ -173,9 +162,8 @@ class LocaleBloc extends Bloc<LocaleEvent, LocaleState> {
   ///
   /// Responds to [LocaleEvent.update] events by calling [_update] to update the
   /// locale state.
-  LocaleBloc({
-    required LocaleRepository localeRepository,
-  })  : _localeRepository = localeRepository,
+  LocaleBloc({required LocaleRepository localeRepository})
+      : _localeRepository = localeRepository,
         super(
           LocaleState.idle(
             locale:
@@ -183,9 +171,7 @@ class LocaleBloc extends Bloc<LocaleEvent, LocaleState> {
           ),
         ) {
     on<LocaleEvent>(
-      (event, emit) => event.map(
-        update: (e) => _update(e, emit),
-      ),
+      (event, emit) => event.map(update: (e) => _update(e, emit)),
     );
   }
 

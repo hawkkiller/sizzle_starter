@@ -15,5 +15,5 @@ final class InitializationProgress {
   final DependenciesMutable dependencies;
 
   /// Environment store
-  final IEnvironmentStore environmentStore;
+  final EnvironmentStore environmentStore;
 }

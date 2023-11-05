@@ -15,8 +15,8 @@ abstract interface class LocaleController {
   /// This is handy to be obtained in the [MaterialApp].
   Locale get locale;
 
-  /// Set the locale to [locale].
-  void setLocale(Locale locale);
+  /// Set the locale to [newLocale].
+  void setLocale(Locale newLocale);
 }
 
 /// [LocaleScope] is responsible for handling locale-related stuff.
@@ -32,10 +32,7 @@ abstract interface class LocaleController {
 /// [LocaleController] with the new locale when it changes.
 class LocaleScope extends StatefulWidget {
   /// Creates a new [LocaleScope] with the given child widget.
-  const LocaleScope({
-    required this.child,
-    super.key,
-  });
+  const LocaleScope({required this.child, super.key});
 
   /// The child widget.
   final Widget child;
@@ -78,6 +75,7 @@ class _LocaleScopeState extends State<LocaleScope> implements LocaleController {
 
   @override
   void initState() {
+    super.initState();
     _bloc = LocaleBloc(
       localeRepository: DependenciesScope.of(context).localeRepository,
     );
@@ -85,7 +83,6 @@ class _LocaleScopeState extends State<LocaleScope> implements LocaleController {
     _state = _bloc.state;
 
     _subscription = _bloc.stream.listen(_listener);
-    super.initState();
   }
 
   @override
@@ -102,9 +99,7 @@ class _LocaleScopeState extends State<LocaleScope> implements LocaleController {
   }
 
   @override
-  void setLocale(Locale locale) => _bloc.add(
-        LocaleEvent.update(locale),
-      );
+  void setLocale(Locale newLocale) => _bloc.add(LocaleEvent.update(newLocale));
 
   @override
   Locale get locale => _state.locale;

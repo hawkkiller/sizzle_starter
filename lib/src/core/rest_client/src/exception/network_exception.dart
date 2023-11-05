@@ -11,10 +11,7 @@ abstract class NetworkException implements Exception {}
 /// {@endtemplate}
 base class RestClientException implements NetworkException {
   /// {@macro rest_client_exception}
-  const RestClientException({
-    this.message,
-    this.statusCode,
-  });
+  const RestClientException({this.message, this.statusCode});
 
   /// Possible reason for the exception
   final String? message;
@@ -34,10 +31,7 @@ base class RestClientException implements NetworkException {
 /// {@endtemplate}
 final class WrongResponseTypeException extends RestClientException {
   /// {@macro wrong_response_type_exception}
-  const WrongResponseTypeException({
-    super.message,
-    super.statusCode,
-  });
+  const WrongResponseTypeException({super.message, super.statusCode});
 
   @override
   String toString() => 'WrongResponseTypeException('
@@ -51,10 +45,7 @@ final class WrongResponseTypeException extends RestClientException {
 /// {@endtemplate}
 final class ConnectionException extends RestClientException {
   /// {@macro connection_exception}
-  const ConnectionException({
-    super.message,
-    super.statusCode,
-  });
+  const ConnectionException({super.message, super.statusCode});
 
   @override
   String toString() => 'NoInternetException('
@@ -68,10 +59,7 @@ final class ConnectionException extends RestClientException {
 /// {@endtemplate}
 base class InternalServerException implements NetworkException {
   /// {@macro internal_server_exception}
-  const InternalServerException({
-    this.message,
-    this.statusCode,
-  });
+  const InternalServerException({this.message, this.statusCode});
 
   /// Possible reason for the exception
   final String? message;
@@ -91,9 +79,7 @@ base class InternalServerException implements NetworkException {
 /// {@endtemplate}
 final class UnauthorizedException extends RestClientException {
   /// {@macro unauthorized_exception}
-  const UnauthorizedException({
-    super.message,
-  }) : super(statusCode: 401);
+  const UnauthorizedException({super.message}) : super(statusCode: 401);
 
   @override
   String toString() => 'UnauthorizedException('

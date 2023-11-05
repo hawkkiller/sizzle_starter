@@ -26,16 +26,12 @@ final class ThemeDataSourceImpl extends PreferencesDao
 
   PreferencesEntry<int> get _seedColor => intEntry('theme.seed_color');
 
-  PreferencesEntry<String> get _themeMode => stringEntry(
-        'theme.mode',
-      );
+  PreferencesEntry<String> get _themeMode => stringEntry('theme.mode');
 
   @override
   Future<void> setTheme(AppTheme theme) async {
     await _seedColor.setIfNullRemove(theme.seed?.value);
     await _themeMode.setIfNullRemove(_themeModeCodec.encode(theme.mode));
-
-    return;
   }
 
   @override

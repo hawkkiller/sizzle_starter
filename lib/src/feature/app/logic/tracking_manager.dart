@@ -37,11 +37,8 @@ abstract base class ExceptionTrackingManagerBase
   /// Catch only warnings and errors
   Stream<LogMessage> get _reportLogs => _logger.logs.where(_isWarningOrError);
 
-  static bool _isWarningOrError(LogMessage log) => switch (log.logLevel) {
-        LoggerLevel.error => true,
-        LoggerLevel.warning => true,
-        _ => false,
-      };
+  static bool _isWarningOrError(LogMessage log) =>
+      log.logLevel.value >= LoggerLevel.warning.value;
 
   @override
   @mustCallSuper
@@ -85,25 +82,17 @@ final class SentryTrackingManager extends ExceptionTrackingManagerBase {
       buffer.toString(),
       stackTrace: log.stackTrace,
     );
-
-    return;
   }
 
   @override
   Future<void> enableReporting() async {
-    await Sentry.init(
-      (options) => options.dsn = sentryDsn,
-    );
+    await Sentry.init((options) => options.dsn = sentryDsn);
     await super.enableReporting();
-
-    return;
   }
 
   @override
   Future<void> disableReporting() async {
     await Sentry.close();
     await super.disableReporting();
-
-    return;
   }
 }

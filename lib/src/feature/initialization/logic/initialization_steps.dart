@@ -23,14 +23,14 @@ mixin InitializationSteps {
       final sharedPreferences = await SharedPreferences.getInstance();
       progress.dependencies.sharedPreferences = sharedPreferences;
     },
-    'Theme Repository': (progress) async {
+    'Theme Repository': (progress) {
       final sharedPreferences = progress.dependencies.sharedPreferences;
       final themeDataSource = ThemeDataSourceImpl(sharedPreferences);
       progress.dependencies.themeRepository = ThemeRepositoryImpl(
         themeDataSource,
       );
     },
-    'Locale Repository': (progress) async {
+    'Locale Repository': (progress) {
       final sharedPreferences = progress.dependencies.sharedPreferences;
       final localeDataSource = LocaleDataSourceImpl(
         sharedPreferences: sharedPreferences,

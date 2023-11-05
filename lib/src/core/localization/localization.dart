@@ -8,9 +8,7 @@ import 'package:sizzle_starter/src/core/localization/generated/l10n.dart';
 /// {@endtemplate}
 final class Localization extends GeneratedLocalization {
   /// {@macro localization}
-  Localization._({
-    required this.locale,
-  });
+  Localization._({required this.locale});
 
   /// {@macro localization}
   static const localizationDelegate = _LocalizationDelegate(

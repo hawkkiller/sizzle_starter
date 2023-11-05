@@ -18,9 +18,7 @@ abstract base class RestClientBase implements RestClient {
   /// Encodes [body] to JSON and then to UTF8
   @protected
   @visibleForTesting
-  List<int> encodeBody(
-    Map<String, Object?> body,
-  ) {
+  List<int> encodeBody(Map<String, Object?> body) {
     try {
       return json.fuse(utf8).encode(body);
     } on Object catch (e, stackTrace) {
@@ -34,13 +32,8 @@ abstract base class RestClientBase implements RestClient {
   /// Builds [Uri] from [path], [queryParams] and [baseUri]
   @protected
   @visibleForTesting
-  Uri buildUri({
-    required String path,
-    Map<String, Object?>? queryParams,
-  }) {
-    final finalPath = p.canonicalize(
-      p.join(baseUri.path, path),
-    );
+  Uri buildUri({required String path, Map<String, Object?>? queryParams}) {
+    final finalPath = p.canonicalize(p.join(baseUri.path, path));
     return baseUri.replace(
       path: finalPath,
       queryParameters: {

@@ -7,10 +7,7 @@ import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 /// {@endtemplate}
 final class RestClientDio extends RestClientBase {
   /// {@macro rest_client_dio}
-  RestClientDio({
-    required super.baseUrl,
-    required Dio dio,
-  }) : _dio = dio;
+  RestClientDio({required super.baseUrl, required Dio dio}) : _dio = dio;
 
   final Dio _dio;
 
@@ -25,10 +22,7 @@ final class RestClientDio extends RestClientBase {
     Map<String, Object?>? queryParams,
   }) async {
     try {
-      final uri = buildUri(
-        path: path,
-        queryParams: queryParams,
-      );
+      final uri = buildUri(path: path, queryParams: queryParams);
       final options = Options(
         headers: headers,
         method: method,
@@ -66,16 +60,12 @@ final class RestClientDio extends RestClientBase {
         return result;
       }
       Error.throwWithStackTrace(
-        RestClientException(
-          message: e.toString(),
-        ),
+        RestClientException(message: e.toString()),
         e.stackTrace,
       );
     } on Object catch (e, stack) {
       Error.throwWithStackTrace(
-        RestClientException(
-          message: e.toString(),
-        ),
+        RestClientException(message: e.toString()),
         stack,
       );
     }
