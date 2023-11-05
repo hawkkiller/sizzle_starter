@@ -33,10 +33,7 @@ class ThemeScope extends StatefulWidget {
   final Widget child;
 
   /// Get the [ThemeController] of the closest [ThemeScope] ancestor.
-  static ThemeController of(
-    BuildContext context, {
-    bool listen = true,
-  }) =>
+  static ThemeController of(BuildContext context, {bool listen = true}) =>
       context.inhOf<_ThemeInherited>(listen: listen).controller;
 
   @override

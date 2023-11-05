@@ -54,6 +54,7 @@ dependencies:
   # Packages
   database:
     path: packages/database
+  freezed_annotation: ^2.4.1
 
 dev_dependencies:
   # Testing
@@ -68,6 +69,8 @@ dev_dependencies:
   flutter_launcher_icons: 0.13.1
   melos: 3.2.0
   intl_utils: 2.8.5
+  freezed: ^2.4.5
+  build_runner: ^2.4.6
 
 flutter:
   uses-material-design: true
