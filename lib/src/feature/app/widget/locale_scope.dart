@@ -13,7 +13,7 @@ abstract interface class LocaleController {
   /// Get the current locale.
   ///
   /// This is handy to be obtained in the [MaterialApp].
-  Locale get locale;
+  Locale? get locale;
 
   /// Set the locale to [newLocale].
   void setLocale(Locale newLocale);
@@ -43,10 +43,7 @@ class LocaleScope extends StatefulWidget {
   /// rebuild the widget when the locale changes. If [listen] is false, the
   /// returned [LocaleController] will not rebuild the widget when the locale
   /// changes.
-  static LocaleController of(
-    BuildContext context, {
-    bool listen = true,
-  }) =>
+  static LocaleController of(BuildContext context, {bool listen = true}) =>
       context.inhOf<_LocaleInherited>(listen: listen).controller;
 
   @override
@@ -99,10 +96,12 @@ class _LocaleScopeState extends State<LocaleScope> implements LocaleController {
   }
 
   @override
-  void setLocale(Locale newLocale) => _bloc.add(LocaleEvent.update(newLocale));
+  void setLocale(Locale newLocale) => _bloc.add(
+        LocaleEvent.update(locale: newLocale),
+      );
 
   @override
-  Locale get locale => _state.locale;
+  Locale? get locale => _state.locale;
 
   @override
   Widget build(BuildContext context) => _LocaleInherited(

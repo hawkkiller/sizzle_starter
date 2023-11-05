@@ -8,12 +8,9 @@ extension ContextExtension on BuildContext {
   /// when that widget changes (or a new widget of that type is introduced,
   /// or the widget goes away), this build context is rebuilt so that it can
   /// obtain new values from that widget.
-  T? inhMaybeOf<T extends InheritedWidget>({
-    bool listen = true,
-  }) =>
-      listen
-          ? dependOnInheritedWidgetOfExactType<T>()
-          : getInheritedWidgetOfExactType<T>();
+  T? inhMaybeOf<T extends InheritedWidget>({bool listen = true}) => listen
+      ? dependOnInheritedWidgetOfExactType<T>()
+      : getInheritedWidgetOfExactType<T>();
 
   /// Obtain the nearest widget of the given type T,
   /// which must be the type of a concrete [InheritedWidget] subclass,
@@ -21,9 +18,7 @@ extension ContextExtension on BuildContext {
   /// when that widget changes (or a new widget of that type is introduced,
   /// or the widget goes away), this build context is rebuilt so that it can
   /// obtain new values from that widget.
-  T inhOf<T extends InheritedWidget>({
-    bool listen = true,
-  }) =>
+  T inhOf<T extends InheritedWidget>({bool listen = true}) =>
       inhMaybeOf<T>(listen: listen) ??
       (throw ArgumentError(
         'Out of scope, not found inherited widget '
