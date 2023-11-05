@@ -33,7 +33,11 @@ jobs:
           flutter pub global activate intl_utils
           flutter pub global activate coverage
           melos bootstrap
+
+      - name: 🦄 Generate Code
+        run: |
           flutter pub global run intl_utils:generate
+          dart run build_runner build --delete-conflicting-outputs
 
       - name: Install DCM
         uses: CQLabs/setup-dcm@v1
