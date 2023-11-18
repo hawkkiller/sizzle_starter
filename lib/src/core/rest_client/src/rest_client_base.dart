@@ -15,12 +15,14 @@ abstract base class RestClientBase implements RestClient {
   /// The base url for the client
   final Uri baseUri;
 
+  static final _jsonUTF8 = json.fuse(utf8);
+
   /// Encodes [body] to JSON and then to UTF8
   @protected
   @visibleForTesting
   List<int> encodeBody(Map<String, Object?> body) {
     try {
-      return json.fuse(utf8).encode(body);
+      return _jsonUTF8.encode(body);
     } on Object catch (e, stackTrace) {
       Error.throwWithStackTrace(
         RestClientException(message: 'Error occured during encoding $e'),

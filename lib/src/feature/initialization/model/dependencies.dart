@@ -1,41 +1,18 @@
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sizzle_starter/src/feature/app/data/locale_repository.dart';
-import 'package:sizzle_starter/src/feature/app/data/theme_repository.dart';
+import 'package:sizzle_starter/src/feature/settings/data/settings_repository.dart';
 
 /// {@template dependencies}
 /// Dependencies container
 /// {@endtemplate}
-abstract base class Dependencies {
+base class Dependencies {
   /// {@macro dependencies}
-  const Dependencies();
+  Dependencies();
 
   /// Shared preferences
-  abstract final SharedPreferences sharedPreferences;
+  late final SharedPreferences sharedPreferences;
 
   /// Theme repository
-  abstract final ThemeRepository themeRepository;
-
-  /// Locale repository
-  abstract final LocaleRepository localeRepository;
-}
-
-/// {@template mutable_dependencies}
-/// Mutable version of dependencies
-///
-/// Used to build dependencies
-/// {@endtemplate}
-final class DependenciesMutable extends Dependencies {
-  /// {@macro mutable_dependencies}
-  DependenciesMutable();
-
-  @override
-  late SharedPreferences sharedPreferences;
-
-  @override
-  late ThemeRepository themeRepository;
-
-  @override
-  late LocaleRepository localeRepository;
+  late final SettingsRepository settingsRepository;
 }
 
 /// {@template initialization_result}
