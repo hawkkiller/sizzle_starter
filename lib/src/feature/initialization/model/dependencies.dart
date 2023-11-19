@@ -36,7 +36,7 @@ final class InitializationResult {
   final int msSpent;
 
   @override
-  String toString() => 'InitializationResult('
+  String toString() => '$InitializationResult('
       'dependencies: $dependencies, '
       'stepCount: $stepCount, '
       'msSpent: $msSpent'

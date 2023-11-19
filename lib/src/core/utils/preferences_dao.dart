@@ -49,11 +49,11 @@ abstract base class PreferencesDao {
 /// This is used to get and set values in the preferences.
 /// {@endtemplate}
 abstract base class PreferencesEntry<T extends Object> {
-  /// The key of the entry in the preferences.
-  String get key;
-
   /// {@macro preferences_entry}
   const PreferencesEntry();
+
+  /// The key of the entry in the preferences.
+  String get key;
 
   /// Obtain the value of the entry from the preferences.
   T? read();
@@ -70,12 +70,15 @@ abstract base class PreferencesEntry<T extends Object> {
 }
 
 final class _PreferencesEntry<T extends Object> extends PreferencesEntry<T> {
-  final SharedPreferences _sharedPreferences;
-
   _PreferencesEntry({
     required SharedPreferences sharedPreferences,
     required this.key,
   }) : _sharedPreferences = sharedPreferences;
+
+  final SharedPreferences _sharedPreferences;
+
+  @override
+  final String key;
 
   @override
   T? read() {
@@ -89,9 +92,6 @@ final class _PreferencesEntry<T extends Object> extends PreferencesEntry<T> {
       'The value of $key is not of type ${T.runtimeType.toString()}',
     );
   }
-
-  @override
-  final String key;
 
   @override
   Future<void> set(T value) => switch (value) {

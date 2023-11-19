@@ -66,8 +66,7 @@ abstract base class RestClientBase implements RestClient {
       } else if (body is Map<String, Object?>) {
         result = body;
       } else if (body is List<int>) {
-        // if length is biggger than 25kb then use isolate
-        if (body.length > 25 * 1024) {
+        if (body.length > 10000) {
           result = await Isolate.run(
             () => json.decode(utf8.decode(body)) as Map<String, Object?>,
           );
