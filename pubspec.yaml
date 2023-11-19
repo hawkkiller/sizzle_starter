@@ -31,6 +31,11 @@ dependencies:
 
   # BLoC
   flutter_bloc: 8.1.3
+  bloc_concurrency: 0.2.2
+
+  # Codegen
+  freezed_annotation: ^2.4.1
+  json_annotation: ^4.8.1
 
   # Networking
   dio: 5.3.3
@@ -46,7 +51,6 @@ dependencies:
   # Utils
   pure: 0.2.0
   platform_info: 4.0.2
-  bloc_concurrency: 0.2.2
   path: 1.8.3
   path_provider: 2.1.0
   flutter_native_splash: 2.3.5
@@ -54,7 +58,6 @@ dependencies:
   # Packages
   database:
     path: packages/database
-  freezed_annotation: ^2.4.1
 
 dev_dependencies:
   # Testing
@@ -69,7 +72,10 @@ dev_dependencies:
   flutter_launcher_icons: 0.13.1
   melos: 3.2.0
   intl_utils: 2.8.5
+
+  # Codegen
   freezed: ^2.4.5
+  json_serializable: ^6.7.1
   build_runner: ^2.4.6
 
 flutter:
