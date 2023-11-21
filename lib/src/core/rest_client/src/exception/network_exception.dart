@@ -20,7 +20,7 @@ base class RestClientException implements ClientException {
   final int? statusCode;
 
   @override
-  String toString() => '$RestClientException('
+  String toString() => 'RestClientException('
       'message: $message,'
       'statusCode: $statusCode'
       ')';
@@ -34,7 +34,7 @@ final class WrongResponseTypeException extends RestClientException {
   const WrongResponseTypeException({super.message, super.statusCode});
 
   @override
-  String toString() => '$WrongResponseTypeException('
+  String toString() => 'WrongResponseTypeException('
       'message: $message,'
       'statusCode: $statusCode'
       ')';
@@ -48,7 +48,7 @@ final class ConnectionException extends RestClientException {
   const ConnectionException({super.message, super.statusCode});
 
   @override
-  String toString() => '$ConnectionException('
+  String toString() => 'ConnectionException('
       'message: $message,'
       'statusCode: $statusCode'
       ')';
@@ -68,7 +68,7 @@ base class InternalServerException implements ClientException {
   final int? statusCode;
 
   @override
-  String toString() => '$InternalServerException('
+  String toString() => 'InternalServerException('
       'message: $message,'
       'statusCode: $statusCode'
       ')';
@@ -82,7 +82,7 @@ final class UnauthorizedException extends RestClientException {
   const UnauthorizedException({super.message}) : super(statusCode: 401);
 
   @override
-  String toString() => '$UnauthorizedException('
+  String toString() => 'UnauthorizedException('
       'message: $message,'
       'statusCode: $statusCode'
       ')';
