@@ -92,7 +92,7 @@ abstract base class RestClientBase implements RestClient {
       }
 
       return null;
-    } on NetworkException {
+    } on ClientException {
       rethrow;
     } on Object catch (e, stackTrace) {
       Error.throwWithStackTrace(

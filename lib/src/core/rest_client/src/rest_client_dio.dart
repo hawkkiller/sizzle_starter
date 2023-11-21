@@ -37,7 +37,7 @@ final class RestClientDio extends RestClientBase {
       );
 
       return decodeResponse(response.data, statusCode: response.statusCode);
-    } on NetworkException {
+    } on ClientException {
       rethrow;
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionError ||
