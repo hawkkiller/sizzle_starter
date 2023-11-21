@@ -7,44 +7,24 @@ import 'package:flutter/material.dart';
 /// {@endtemplate}
 @immutable
 final class AppTheme with Diagnosticable {
-  /// The type of theme to use.
-  final ThemeMode mode;
-
-  /// The seed color to generate the [ColorScheme] from.
-  final Color? seed;
-
   /// {@macro app_theme}
-  AppTheme({required this.mode, this.seed})
+  AppTheme({required this.mode, required this.seed})
       : darkTheme = ThemeData(
-          colorSchemeSeed: seed ?? Colors.pink,
+          colorSchemeSeed: seed,
           brightness: Brightness.dark,
           useMaterial3: true,
         ),
         lightTheme = ThemeData(
-          colorSchemeSeed: seed ?? Colors.pink,
+          colorSchemeSeed: seed,
           brightness: Brightness.light,
           useMaterial3: true,
         );
 
-  /// Light mode [AppTheme].
-  static final light = AppTheme(mode: ThemeMode.light);
+  /// The type of theme to use.
+  final ThemeMode mode;
 
-  /// Dark mode [AppTheme].
-  static final dark = AppTheme(mode: ThemeMode.dark);
-
-  /// System mode [AppTheme].
-  static final system = AppTheme(mode: ThemeMode.system);
-
-  /// All the light [AppTheme]s.
-  static final values = [
-    ...List.generate(
-      Colors.primaries.length,
-      (index) => AppTheme(
-        seed: Colors.primaries.elementAtOrNull(index),
-        mode: ThemeMode.system,
-      ),
-    ),
-  ];
+  /// The seed color to generate the [ColorScheme] from.
+  final Color seed;
 
   /// The dark [ThemeData] for this [AppTheme].
   final ThemeData darkTheme;
@@ -52,18 +32,22 @@ final class AppTheme with Diagnosticable {
   /// The light [ThemeData] for this [AppTheme].
   final ThemeData lightTheme;
 
+  /// The default [AppTheme].
+  static final defaultTheme = AppTheme(
+    mode: ThemeMode.system,
+    seed: Colors.blue,
+  );
+
   /// The [ThemeData] for this [AppTheme].
   /// This is computed based on the [mode].
-  ///
-  /// Could be useful for theme showcase.
-  ThemeData computeTheme(BuildContext context) {
+  ThemeData computeTheme() {
     switch (mode) {
       case ThemeMode.light:
         return lightTheme;
       case ThemeMode.dark:
         return darkTheme;
       case ThemeMode.system:
-        return MediaQuery.platformBrightnessOf(context) == Brightness.dark
+        return PlatformDispatcher.instance.platformBrightness == Brightness.dark
             ? darkTheme
             : lightTheme;
     }

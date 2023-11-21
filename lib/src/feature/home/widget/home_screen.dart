@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/core/localization/localization.dart';
-import 'package:sizzle_starter/src/feature/app/model/app_theme.dart';
-import 'package:sizzle_starter/src/feature/app/widget/locale_scope.dart';
-import 'package:sizzle_starter/src/feature/app/widget/theme_scope.dart';
+import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 
 /// {@template sample_page}
 /// SamplePage widget
@@ -40,9 +38,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                   ),
                 ),
-                _ThemeSelector(
-                  [AppTheme.light, AppTheme.dark, AppTheme.system],
-                ),
+                const _ThemeSelector(Colors.primaries),
                 Padding(
                   padding: const EdgeInsets.only(left: 8, top: 8),
                   child: Text(
@@ -53,7 +49,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                   ),
                 ),
-                _ThemeSelector(AppTheme.values),
+                const _ThemeSelector(Colors.accents),
               ]),
             ),
             SliverToBoxAdapter(
@@ -109,7 +105,7 @@ class _LanguageCard extends StatelessWidget {
             borderRadius: BorderRadius.circular(4),
           ),
           child: InkWell(
-            onTap: () => LocaleScope.of(context).setLocale(_language),
+            onTap: () => SettingsScope.localeOf(context).setLocale(_language),
             borderRadius: BorderRadius.circular(4),
             child: SizedBox(
               width: 64,
@@ -128,22 +124,22 @@ class _LanguageCard extends StatelessWidget {
 }
 
 class _ThemeSelector extends StatelessWidget {
-  const _ThemeSelector(this._themes);
+  const _ThemeSelector(this._colors);
 
-  final List<AppTheme> _themes;
+  final List<Color> _colors;
 
   @override
   Widget build(BuildContext context) => SizedBox(
         height: 100,
         child: ListView.builder(
           scrollDirection: Axis.horizontal,
-          itemCount: _themes.length,
+          itemCount: _colors.length,
           itemBuilder: (context, index) {
-            final theme = _themes.elementAt(index);
+            final color = _colors.elementAt(index);
 
             return Padding(
               padding: const EdgeInsets.all(8.0),
-              child: _ThemeCard(theme),
+              child: _ThemeCard(color),
             );
           },
         ),
@@ -151,27 +147,21 @@ class _ThemeSelector extends StatelessWidget {
 }
 
 class _ThemeCard extends StatelessWidget {
-  const _ThemeCard(this._theme);
+  const _ThemeCard(this._color);
 
-  final AppTheme _theme;
+  final Color _color;
 
   @override
   Widget build(BuildContext context) => Card(
         child: Material(
-          color:
-              _theme.seed ?? _theme.computeTheme(context).colorScheme.primary,
+          color: _color,
           borderRadius: BorderRadius.circular(4),
           child: InkWell(
-            onTap: () => ThemeScope.of(context).setTheme(_theme),
+            onTap: () {
+              SettingsScope.themeOf(context).setThemeSeedColor(_color);
+            },
             borderRadius: BorderRadius.circular(4),
-            child: SizedBox(
-              width: 64,
-              height: 64,
-              child: Text(
-                _theme.mode.toString(),
-                style: Theme.of(context).textTheme.bodyMedium,
-              ),
-            ),
+            child: const SizedBox.square(dimension: 64),
           ),
         ),
       );

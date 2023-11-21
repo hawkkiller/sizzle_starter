@@ -15,12 +15,14 @@ abstract base class RestClientBase implements RestClient {
   /// The base url for the client
   final Uri baseUri;
 
+  static final _jsonUTF8 = json.fuse(utf8);
+
   /// Encodes [body] to JSON and then to UTF8
   @protected
   @visibleForTesting
   List<int> encodeBody(Map<String, Object?> body) {
     try {
-      return json.fuse(utf8).encode(body);
+      return _jsonUTF8.encode(body);
     } on Object catch (e, stackTrace) {
       Error.throwWithStackTrace(
         RestClientException(message: 'Error occured during encoding $e'),
@@ -64,8 +66,7 @@ abstract base class RestClientBase implements RestClient {
       } else if (body is Map<String, Object?>) {
         result = body;
       } else if (body is List<int>) {
-        // if length is biggger than 25kb then use isolate
-        if (body.length > 25 * 1024) {
+        if (body.length > 10000) {
           result = await Isolate.run(
             () => json.decode(utf8.decode(body)) as Map<String, Object?>,
           );
@@ -91,7 +92,7 @@ abstract base class RestClientBase implements RestClient {
       }
 
       return null;
-    } on NetworkException {
+    } on ClientException {
       rethrow;
     } on Object catch (e, stackTrace) {
       Error.throwWithStackTrace(

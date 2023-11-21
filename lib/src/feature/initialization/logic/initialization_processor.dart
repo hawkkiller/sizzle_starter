@@ -23,7 +23,7 @@ mixin InitializationProcessor {
     var stepCount = 0;
     final env = factory.getEnvironmentStore();
     final progress = InitializationProgress(
-      dependencies: DependenciesMutable(),
+      dependencies: Dependencies(),
       environmentStore: env,
     );
     if (!kDebugMode) {

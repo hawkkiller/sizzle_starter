@@ -1,5 +1,6 @@
 // ignore_for_file: no-empty-block
 
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
@@ -7,25 +8,70 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 import 'package:sizzle_starter/src/core/rest_client/src/rest_client_dio.dart';
 
+Map<String, Object?> _generateJsonData(int length) => {
+      'data': {
+        'list': List.generate(length, (index) => {'test': 'test'}),
+      },
+    };
+
 void main() {
   group('RestClient >', () {
-    group('decodeResponse >', () {
-      late RestClientBase restClient;
+    group('encodeBody >', () {
+      test('Should encode body', () {
+        final restClient = _RestClientBase();
+        final result = restClient.encodeBody({'test': 'test'});
+        expect(
+          result,
+          equals([
+            123,
+            34,
+            116,
+            101,
+            115,
+            116,
+            34,
+            58,
+            34,
+            116,
+            101,
+            115,
+            116,
+            34,
+            125,
+          ]),
+        );
+      });
+      test('Should encode empty body', () {
+        final restClient = _RestClientBase();
+        final result = restClient.encodeBody({});
+        expect(result, equals([123, 125]));
+      });
 
-      setUp(() => restClient = _RestClientBase());
+      test('Should throw error on wrong body', () {
+        final restClient = _RestClientBase();
+        expect(
+          () => restClient.encodeBody({'wrong': Object()}),
+          throwsA(isA<RestClientException>()),
+        );
+      });
+    });
+    group('decodeResponse >', () {
       test('Should decode String', () {
+        final restClient = _RestClientBase();
         const response = '{"data": {"test": "test"}}';
         final result = restClient.decodeResponse(response);
         expect(result, completion(equals({'test': 'test'})));
       });
 
       test('Should decode List<int>', () {
+        final restClient = _RestClientBase();
         const response = [123, 34, 100, 97, 116, 97, 34, 58, 123, 125, 125];
         final result = restClient.decodeResponse(response);
         expectLater(result, completion(equals({})));
       });
 
       test('Should decode Map<String, Object?>', () {
+        final restClient = _RestClientBase();
         const response = {
           'data': {'test': 'test'},
         };
@@ -34,23 +80,27 @@ void main() {
       });
 
       test('Should throw WrongResponseTypeException', () {
+        final restClient = _RestClientBase();
         const response = 123;
         final result = restClient.decodeResponse(response);
         expect(result, throwsA(isA<WrongResponseTypeException>()));
       });
 
       test('Return null when no data', () {
+        final restClient = _RestClientBase();
         const response = {'test': 'test'};
         final result = restClient.decodeResponse(response);
         expect(result, completion(isNull));
       });
 
       test('Return null when null response', () {
+        final restClient = _RestClientBase();
         final result = restClient.decodeResponse(null);
         expect(result, completion(isNull));
       });
 
       test('Throw if error field in JSON', () {
+        final restClient = _RestClientBase();
         const response = '{"error": {"message": "test"}}';
         final result = restClient.decodeResponse(response);
         expect(
@@ -60,23 +110,33 @@ void main() {
           ),
         );
       });
+
+      test('If length is > 10000, compute in Isolate', () {
+        final data = _generateJsonData(10000);
+        final bytes = utf8.encode(jsonEncode(data));
+
+        final restClient = _RestClientBase();
+
+        final result = restClient.decodeResponse(bytes);
+
+        expect(result, completion(data['data']));
+      });
     });
 
     group('RestClientDio >', () {
-      late RestClientDio restClient;
-
-      setUp(() {
-        restClient = RestClientDio(
+      test('Decodes and returns response for GET', () {
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()..httpClientAdapter = const _MockHttpAdapter(),
         );
-      });
-
-      test('Decodes and returns response for GET', () {
         expect(restClient.get(''), completion(equals({'test': 'test'})));
       });
 
       test('Decodes and returns response for POST', () {
+        final restClient = RestClientDio(
+          baseUrl: '',
+          dio: Dio()..httpClientAdapter = const _MockHttpAdapter(),
+        );
         expect(
           restClient.post('', body: {}),
           completion(equals({'test': 'test'})),
@@ -84,10 +144,18 @@ void main() {
       });
 
       test('Decodes and returns response for DELETE', () {
+        final restClient = RestClientDio(
+          baseUrl: '',
+          dio: Dio()..httpClientAdapter = const _MockHttpAdapter(),
+        );
         expect(restClient.delete(''), completion(equals({'test': 'test'})));
       });
 
       test('Decodes and returns response for PATCH', () {
+        final restClient = RestClientDio(
+          baseUrl: '',
+          dio: Dio()..httpClientAdapter = const _MockHttpAdapter(),
+        );
         expect(
           restClient.patch('', body: {}),
           completion(equals({'test': 'test'})),
@@ -95,6 +163,10 @@ void main() {
       });
 
       test('Decodes and returns response for PUT', () {
+        final restClient = RestClientDio(
+          baseUrl: '',
+          dio: Dio()..httpClientAdapter = const _MockHttpAdapter(),
+        );
         expect(
           restClient.put('', body: {}),
           completion(equals({'test': 'test'})),
@@ -102,7 +174,7 @@ void main() {
       });
 
       test('Throws RestClientException for GET', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = const _MockHttpAdapter(returnError: true),
@@ -116,7 +188,7 @@ void main() {
       });
 
       test('Throws RestClientException for POST', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = const _MockHttpAdapter(returnError: true),
@@ -130,7 +202,7 @@ void main() {
       });
 
       test('Throws RestClientException for DELETE', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = const _MockHttpAdapter(returnError: true),
@@ -144,7 +216,7 @@ void main() {
       });
 
       test('Throws RestClientException for PATCH', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = const _MockHttpAdapter(returnError: true),
@@ -158,7 +230,7 @@ void main() {
       });
 
       test('Throws RestClientException for PUT', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = const _MockHttpAdapter(returnError: true),
@@ -172,7 +244,7 @@ void main() {
       });
 
       test('Throws ConnectionException for GET', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -188,7 +260,7 @@ void main() {
       });
 
       test('Throws ConnectionException for POST', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -207,7 +279,7 @@ void main() {
       });
 
       test('Throws ConnectionException for DELETE', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -223,7 +295,7 @@ void main() {
       });
 
       test('Throws ConnectionException for PATCH', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -242,7 +314,7 @@ void main() {
       });
 
       test('Throws ConnectionException for PUT', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -261,7 +333,7 @@ void main() {
       });
 
       test('Throws error when parsing wrong response on error for GET', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -285,7 +357,7 @@ void main() {
       });
 
       test('Throws error when parsing wrong response on error for POST', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -309,7 +381,7 @@ void main() {
       });
 
       test('Throws error when parsing wrong response on error for DELETE', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -333,7 +405,7 @@ void main() {
       });
 
       test('Throws error when parsing wrong response on error for PATCH', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -357,7 +429,7 @@ void main() {
       });
 
       test('Throws error when parsing wrong response on error for PUT', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -381,7 +453,7 @@ void main() {
       });
 
       test('Decodes error properly for GET', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -409,7 +481,7 @@ void main() {
       });
 
       test('Decodes error properly for POST', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -437,7 +509,7 @@ void main() {
       });
 
       test('Decodes error properly for DELETE', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -465,7 +537,7 @@ void main() {
       });
 
       test('Decodes error properly for PATCH', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(
@@ -493,7 +565,7 @@ void main() {
       });
 
       test('Decodes error properly for PUT', () {
-        restClient = RestClientDio(
+        final restClient = RestClientDio(
           baseUrl: '',
           dio: Dio()
             ..httpClientAdapter = _MockHttpAdapter(

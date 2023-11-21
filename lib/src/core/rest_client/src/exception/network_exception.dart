@@ -4,12 +4,12 @@ import 'package:meta/meta.dart';
 /// Base class for all network exceptions
 /// {@endtemplate}
 @immutable
-abstract class NetworkException implements Exception {}
+abstract class ClientException implements Exception {}
 
 /// {@template rest_client_exception}
 /// If something went wrong on the client side
 /// {@endtemplate}
-base class RestClientException implements NetworkException {
+base class RestClientException implements ClientException {
   /// {@macro rest_client_exception}
   const RestClientException({this.message, this.statusCode});
 
@@ -48,7 +48,7 @@ final class ConnectionException extends RestClientException {
   const ConnectionException({super.message, super.statusCode});
 
   @override
-  String toString() => 'NoInternetException('
+  String toString() => 'ConnectionException('
       'message: $message,'
       'statusCode: $statusCode'
       ')';
@@ -57,7 +57,7 @@ final class ConnectionException extends RestClientException {
 /// {@template internal_server_exception}
 /// If something went wrong on the server side
 /// {@endtemplate}
-base class InternalServerException implements NetworkException {
+base class InternalServerException implements ClientException {
   /// {@macro internal_server_exception}
   const InternalServerException({this.message, this.statusCode});
 
@@ -68,7 +68,7 @@ base class InternalServerException implements NetworkException {
   final int? statusCode;
 
   @override
-  String toString() => 'InternalServerErrorException('
+  String toString() => 'InternalServerException('
       'message: $message,'
       'statusCode: $statusCode'
       ')';

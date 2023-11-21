@@ -1,11 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:sizzle_starter/src/feature/app/widget/locale_scope.dart';
 import 'package:sizzle_starter/src/feature/app/widget/material_context.dart';
-import 'package:sizzle_starter/src/feature/app/widget/theme_scope.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/initialization_processor.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/dependencies_scope.dart';
+import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 
 /// {@template app}
 /// [App] is an entry point to the application.
@@ -31,9 +30,7 @@ class App extends StatelessWidget {
         bundle: SentryAssetBundle(),
         child: DependenciesScope(
           dependencies: result.dependencies,
-          child: const ThemeScope(
-            child: LocaleScope(child: MaterialContext()),
-          ),
+          child: const SettingsScope(child: MaterialContext()),
         ),
       );
 }

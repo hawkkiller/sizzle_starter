@@ -3,7 +3,7 @@ import 'package:meta/meta.dart';
 import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 
 /// {@template rest_client_dio}
-/// Rest client that uses [Dio] to send requests
+/// Rest client that uses [Dio] as HTTP library.
 /// {@endtemplate}
 final class RestClientDio extends RestClientBase {
   /// {@macro rest_client_dio}
@@ -37,7 +37,7 @@ final class RestClientDio extends RestClientBase {
       );
 
       return decodeResponse(response.data, statusCode: response.statusCode);
-    } on NetworkException {
+    } on ClientException {
       rethrow;
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionError ||

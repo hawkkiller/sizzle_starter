@@ -3,7 +3,12 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:logging/logging.dart' as logging;
 
-/// Logger instance
+/// Logger instance declared as global variable
+///
+/// Usage:
+/// ```dart
+/// logger.info('Hello World!');
+/// ```
 final Logger logger = LoggerLogging();
 
 /// Typedef for the log formatter
@@ -201,11 +206,11 @@ String _formatLoggerMessage({
   }
   buffer.write(log.message);
   if (log.error != null) {
-    buffer.write(' | ');
+    buffer.writeln();
     buffer.write(log.error);
   }
   if (log.stackTrace != null) {
-    buffer.write(' | ');
+    buffer.writeln();
     buffer.writeln(log.stackTrace);
   }
 
