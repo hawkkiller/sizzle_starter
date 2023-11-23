@@ -32,11 +32,9 @@ jobs:
 
       - name: 📦 Install Dependencies
         run: |
-          flutter pub global activate melos
           flutter pub global activate very_good_cli
           flutter pub global activate intl_utils
           flutter pub global activate coverage
-          melos bootstrap
 
       - name: 🦄 Generate Code
         run: |
