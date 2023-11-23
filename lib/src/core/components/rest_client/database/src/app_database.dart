@@ -1,14 +1,16 @@
 import 'package:drift/drift.dart';
+import 'package:sizzle_starter/src/core/components/rest_client/database/database.dart';
+import 'package:sizzle_starter/src/core/components/rest_client/database/src/tables/todos_table.dart';
 
 part 'app_database.g.dart';
 
 /// {@template app_database}
 /// The drift-managed database configuration
 /// {@endtemplate}
-@DriftDatabase()
+@DriftDatabase(tables: [TodosTable])
 class AppDatabase extends _$AppDatabase {
   /// {@macro app_database}
-  AppDatabase(super.openConnection);
+  AppDatabase() : super(createExecutor());
 
   @override
   int get schemaVersion => 1;

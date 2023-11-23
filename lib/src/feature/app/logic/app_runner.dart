@@ -5,7 +5,7 @@ import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:sizzle_starter/src/core/bloc/app_bloc_observer.dart';
+import 'package:sizzle_starter/src/core/utils/app_bloc_observer.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
 import 'package:sizzle_starter/src/feature/app/widget/app.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/initialization_processor.dart';

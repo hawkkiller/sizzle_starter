@@ -42,6 +42,8 @@ dependencies:
 
   # Persisting
   shared_preferences: ^2.2.2
+  drift: ^2.13.1
+  sqlite3_flutter_libs: ^0.5.18
 
   # Logging
   stack_trace: ^1.11.0
@@ -55,10 +57,6 @@ dependencies:
   path_provider: ^2.1.0
   flutter_native_splash: ^2.3.5
   
-  # Packages
-  database:
-    path: packages/database
-
 dev_dependencies:
   # Testing
   flutter_test:
@@ -70,12 +68,12 @@ dev_dependencies:
   # Utils
   flutter_gen_runner: ^5.3.2
   flutter_launcher_icons: ^0.13.1
-  melos: ^3.2.0
   intl_utils: ^2.8.5
 
   # Codegen
   freezed: ^2.4.5
   json_serializable: ^6.7.1
+  drift_dev: ^2.13.1
   build_runner: ^2.4.6
 
 flutter:

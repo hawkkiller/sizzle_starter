@@ -5,8 +5,8 @@ import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
-import 'package:sizzle_starter/src/core/rest_client/src/rest_client_dio.dart';
+import 'package:sizzle_starter/src/core/components/rest_client/rest_client.dart';
+import 'package:sizzle_starter/src/core/components/rest_client/src/rest_client_dio.dart';
 
 Map<String, Object?> _generateJsonData(int length) => {
       'data': {
