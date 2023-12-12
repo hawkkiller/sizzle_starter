@@ -7,6 +7,7 @@ import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sizzle_starter/src/core/components/rest_client/rest_client.dart';
 import 'package:sizzle_starter/src/core/components/rest_client/src/rest_client_dio.dart';
+import 'oauth_interceptor_test.dart' as oauth_interceptor_test;
 
 Map<String, Object?> _generateJsonData(int length) => {
       'data': {
@@ -16,6 +17,8 @@ Map<String, Object?> _generateJsonData(int length) => {
 
 void main() {
   group('RestClient >', () {
+    oauth_interceptor_test.main();
+
     group('encodeBody >', () {
       test('Should encode body', () {
         final restClient = _RestClientBase();
