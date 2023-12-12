@@ -127,468 +127,195 @@ void main() {
     });
 
     group('RestClientDio >', () {
-      test('Decodes and returns response for GET', () {
+      test('Decodes and returns response for methods', () {
+        final mockAdapter = MockHttpAdapter()
+          ..registerResponse(
+            '/test',
+            (req) => ResponseBody.fromString('{"data": {"test": "test"}}', 200),
+          );
         final restClient = RestClientDio(
           baseUrl: '',
-          dio: Dio()..httpClientAdapter = const _MockHttpAdapter(),
+          dio: Dio()..httpClientAdapter = mockAdapter,
         );
-        expect(restClient.get(''), completion(equals({'test': 'test'})));
-      });
-
-      test('Decodes and returns response for POST', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()..httpClientAdapter = const _MockHttpAdapter(),
+        expectLater(
+            restClient.get('/test'), completion(equals({'test': 'test'})));
+        expectLater(
+          restClient.post('/test', body: {}),
+          completion(equals({'test': 'test'})),
         );
-        expect(
-          restClient.post('', body: {}),
+        expectLater(
+            restClient.delete('/test'), completion(equals({'test': 'test'})));
+        expectLater(
+          restClient.patch('/test', body: {}),
+          completion(equals({'test': 'test'})),
+        );
+        expectLater(
+          restClient.put('/test', body: {}),
           completion(equals({'test': 'test'})),
         );
       });
 
-      test('Decodes and returns response for DELETE', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()..httpClientAdapter = const _MockHttpAdapter(),
-        );
-        expect(restClient.delete(''), completion(equals({'test': 'test'})));
-      });
-
-      test('Decodes and returns response for PATCH', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()..httpClientAdapter = const _MockHttpAdapter(),
-        );
-        expect(
-          restClient.patch('', body: {}),
-          completion(equals({'test': 'test'})),
-        );
-      });
-
-      test('Decodes and returns response for PUT', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()..httpClientAdapter = const _MockHttpAdapter(),
-        );
-        expect(
-          restClient.put('', body: {}),
-          completion(equals({'test': 'test'})),
-        );
-      });
-
-      test('Throws RestClientException for GET', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = const _MockHttpAdapter(returnError: true),
-        );
-        expect(
-          restClient.get(''),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
-        );
-      });
-
-      test('Throws RestClientException for POST', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = const _MockHttpAdapter(returnError: true),
-        );
-        expect(
-          restClient.post('', body: {}),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
-        );
-      });
-
-      test('Throws RestClientException for DELETE', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = const _MockHttpAdapter(returnError: true),
-        );
-        expect(
-          restClient.delete(''),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
-        );
-      });
-
-      test('Throws RestClientException for PATCH', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = const _MockHttpAdapter(returnError: true),
-        );
-        expect(
-          restClient.patch('', body: {}),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
-        );
-      });
-
-      test('Throws RestClientException for PUT', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = const _MockHttpAdapter(returnError: true),
-        );
-        expect(
-          restClient.put('', body: {}),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
-        );
-      });
-
-      test('Throws ConnectionException for GET', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.connectionError(
-                  requestOptions: req,
-                  reason: 'No Internet!',
-                );
-              },
+      test('Throws RestClientException for methods', () {
+        final mockAdapter = MockHttpAdapter()
+          ..registerResponse(
+            '/test',
+            (req) => ResponseBody.fromString(
+              '{"error": {"message": "test"}}',
+              400,
             ),
-        );
-        expect(restClient.get(''), throwsA(isA<ConnectionException>()));
-      });
+          );
 
-      test('Throws ConnectionException for POST', () {
         final restClient = RestClientDio(
           baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.connectionError(
-                  requestOptions: req,
-                  reason: 'No Internet!',
-                );
-              },
+          dio: Dio()..httpClientAdapter = mockAdapter,
+        );
+        expectLater(
+          restClient.get('/test'),
+          throwsA(
+            predicate<RestClientException>((p) => p.message == 'test'),
+          ),
+        );
+        expectLater(
+          restClient.post('/test', body: {}),
+          throwsA(
+            predicate<RestClientException>((p) => p.message == 'test'),
+          ),
+        );
+        expectLater(
+          restClient.delete('/test'),
+          throwsA(
+            predicate<RestClientException>((p) => p.message == 'test'),
+          ),
+        );
+        expectLater(
+          restClient.patch('/test', body: {}),
+          throwsA(
+            predicate<RestClientException>((p) => p.message == 'test'),
+          ),
+        );
+        expectLater(
+          restClient.put('/test', body: {}),
+          throwsA(
+            predicate<RestClientException>((p) => p.message == 'test'),
+          ),
+        );
+      });
+
+      test('Throws ConnectionException for methods', () {
+        final mockAdapter = MockHttpAdapter()
+          ..registerResponse(
+            '/test',
+            (req) => throw DioException.connectionError(
+              requestOptions: req,
+              reason: 'No Internet!',
             ),
+          );
+        final restClient = RestClientDio(
+          baseUrl: '',
+          dio: Dio()..httpClientAdapter = mockAdapter,
+        );
+        expect(restClient.get('/test'), throwsA(isA<ConnectionException>()));
+        expect(
+          restClient.post('/test', body: {}),
+          throwsA(isA<ConnectionException>()),
+        );
+        expect(restClient.delete('/test'), throwsA(isA<ConnectionException>()));
+        expect(
+          restClient.patch('/test', body: {}),
+          throwsA(isA<ConnectionException>()),
         );
         expect(
-          restClient.post('', body: {}),
+          restClient.put('/test', body: {}),
           throwsA(isA<ConnectionException>()),
         );
       });
 
-      test('Throws ConnectionException for DELETE', () {
+      test('Throws error when parsing wrong response on error for methods', () {
+        final adapter = MockHttpAdapter()
+          ..registerResponse(
+            '/test',
+            (req) => throw DioException.badResponse(
+              requestOptions: req,
+              statusCode: 400,
+              response: Response(
+                requestOptions: req,
+                statusCode: 400,
+                data: 123,
+              ),
+            ),
+          );
         final restClient = RestClientDio(
           baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.connectionError(
-                  requestOptions: req,
-                  reason: 'No Internet!',
-                );
-              },
-            ),
-        );
-        expect(restClient.delete(''), throwsA(isA<ConnectionException>()));
-      });
-
-      test('Throws ConnectionException for PATCH', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.connectionError(
-                  requestOptions: req,
-                  reason: 'No Internet!',
-                );
-              },
-            ),
+          dio: Dio()..httpClientAdapter = adapter,
         );
         expect(
-          restClient.patch('', body: {}),
-          throwsA(isA<ConnectionException>()),
-        );
-      });
-
-      test('Throws ConnectionException for PUT', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.connectionError(
-                  requestOptions: req,
-                  reason: 'No Internet!',
-                );
-              },
-            ),
+          restClient.get('/test'),
+          throwsA(isA<WrongResponseTypeException>()),
         );
         expect(
-          restClient.put('', body: {}),
-          throwsA(isA<ConnectionException>()),
-        );
-      });
-
-      test('Throws error when parsing wrong response on error for GET', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.badResponse(
-                  requestOptions: req,
-                  statusCode: 400,
-                  response: Response(
-                    requestOptions: req,
-                    statusCode: 400,
-                    data: 123,
-                  ),
-                );
-              },
-            ),
+          restClient.post('/test', body: {}),
+          throwsA(isA<WrongResponseTypeException>()),
         );
         expect(
-          restClient.get(''),
+          restClient.delete('/test'),
+          throwsA(isA<WrongResponseTypeException>()),
+        );
+        expect(
+          restClient.patch('/test', body: {}),
+          throwsA(isA<WrongResponseTypeException>()),
+        );
+        expect(
+          restClient.put('/test', body: {}),
           throwsA(isA<WrongResponseTypeException>()),
         );
       });
 
-      test('Throws error when parsing wrong response on error for POST', () {
+      test('Decodes error properly for methods', () {
+        final adapter = MockHttpAdapter()
+          ..registerResponse(
+            '/test',
+            (req) => throw DioException.badResponse(
+              requestOptions: req,
+              statusCode: 400,
+              response: Response(
+                requestOptions: req,
+                statusCode: 400,
+                data: {
+                  'error': {'message': 'test'},
+                },
+              ),
+            ),
+          );
         final restClient = RestClientDio(
           baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.badResponse(
-                  requestOptions: req,
-                  statusCode: 400,
-                  response: Response(
-                    requestOptions: req,
-                    statusCode: 400,
-                    data: 123,
-                  ),
-                );
-              },
-            ),
+          dio: Dio()..httpClientAdapter = adapter,
         );
         expect(
-          restClient.post('', body: {}),
-          throwsA(isA<WrongResponseTypeException>()),
-        );
-      });
-
-      test('Throws error when parsing wrong response on error for DELETE', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.badResponse(
-                  requestOptions: req,
-                  statusCode: 400,
-                  response: Response(
-                    requestOptions: req,
-                    statusCode: 400,
-                    data: 123,
-                  ),
-                );
-              },
-            ),
-        );
-        expect(
-          restClient.delete(''),
-          throwsA(isA<WrongResponseTypeException>()),
-        );
-      });
-
-      test('Throws error when parsing wrong response on error for PATCH', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.badResponse(
-                  requestOptions: req,
-                  statusCode: 400,
-                  response: Response(
-                    requestOptions: req,
-                    statusCode: 400,
-                    data: 123,
-                  ),
-                );
-              },
-            ),
-        );
-        expect(
-          restClient.patch('', body: {}),
-          throwsA(isA<WrongResponseTypeException>()),
-        );
-      });
-
-      test('Throws error when parsing wrong response on error for PUT', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.badResponse(
-                  requestOptions: req,
-                  statusCode: 400,
-                  response: Response(
-                    requestOptions: req,
-                    statusCode: 400,
-                    data: 123,
-                  ),
-                );
-              },
-            ),
-        );
-        expect(
-          restClient.put('', body: {}),
-          throwsA(isA<WrongResponseTypeException>()),
-        );
-      });
-
-      test('Decodes error properly for GET', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.badResponse(
-                  requestOptions: req,
-                  statusCode: 400,
-                  response: Response(
-                    requestOptions: req,
-                    statusCode: 400,
-                    data: {
-                      'error': {'message': 'test'},
-                    },
-                  ),
-                );
-              },
-            ),
-        );
-        expect(
-          restClient.get(''),
+          restClient.get('/test'),
           throwsA(
             predicate<RestClientException>((p) => p.message == 'test'),
           ),
         );
-      });
-
-      test('Decodes error properly for POST', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.badResponse(
-                  requestOptions: req,
-                  statusCode: 400,
-                  response: Response(
-                    requestOptions: req,
-                    statusCode: 400,
-                    data: {
-                      'error': {'message': 'test'},
-                    },
-                  ),
-                );
-              },
-            ),
-        );
         expect(
-          restClient.post('', body: {}),
+          restClient.post('/test', body: {}),
           throwsA(
             predicate<RestClientException>((p) => p.message == 'test'),
           ),
         );
-      });
-
-      test('Decodes error properly for DELETE', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.badResponse(
-                  requestOptions: req,
-                  statusCode: 400,
-                  response: Response(
-                    requestOptions: req,
-                    statusCode: 400,
-                    data: {
-                      'error': {'message': 'test'},
-                    },
-                  ),
-                );
-              },
-            ),
-        );
         expect(
-          restClient.delete(''),
+          restClient.delete('/test'),
           throwsA(
             predicate<RestClientException>((p) => p.message == 'test'),
           ),
         );
-      });
-
-      test('Decodes error properly for PATCH', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.badResponse(
-                  requestOptions: req,
-                  statusCode: 400,
-                  response: Response(
-                    requestOptions: req,
-                    statusCode: 400,
-                    data: {
-                      'error': {'message': 'test'},
-                    },
-                  ),
-                );
-              },
-            ),
-        );
         expect(
-          restClient.patch('', body: {}),
+          restClient.patch('/test', body: {}),
           throwsA(
             predicate<RestClientException>((p) => p.message == 'test'),
           ),
         );
-      });
-
-      test('Decodes error properly for PUT', () {
-        final restClient = RestClientDio(
-          baseUrl: '',
-          dio: Dio()
-            ..httpClientAdapter = _MockHttpAdapter(
-              runBeforeFetch: (req) {
-                throw DioException.badResponse(
-                  requestOptions: req,
-                  statusCode: 400,
-                  response: Response(
-                    requestOptions: req,
-                    statusCode: 400,
-                    data: {
-                      'error': {'message': 'test'},
-                    },
-                  ),
-                );
-              },
-            ),
-        );
         expect(
-          restClient.put('', body: {}),
+          restClient.put('/test', body: {}),
           throwsA(
             predicate<RestClientException>((p) => p.message == 'test'),
           ),
@@ -598,11 +325,17 @@ void main() {
   });
 }
 
-final class _MockHttpAdapter implements HttpClientAdapter {
-  const _MockHttpAdapter({this.returnError = false, this.runBeforeFetch});
+final class MockHttpAdapter implements HttpClientAdapter {
+  MockHttpAdapter();
 
-  final bool returnError;
-  final void Function(RequestOptions)? runBeforeFetch;
+  final _responses = <String, ResponseBody Function(RequestOptions options)>{};
+
+  void registerResponse(
+    String path,
+    ResponseBody Function(RequestOptions options) response,
+  ) {
+    _responses[path] = response;
+  }
 
   @override
   Future<ResponseBody> fetch(
@@ -610,11 +343,15 @@ final class _MockHttpAdapter implements HttpClientAdapter {
     Stream<Uint8List>? requestStream,
     Future<void>? cancelFuture,
   ) async {
-    runBeforeFetch?.call(options);
-    if (returnError) {
-      return ResponseBody.fromString('{"error": {"message": "test"}}', 400);
+    final req = options.path.replaceAll("?", "");
+
+    if (_responses.containsKey(req)) {
+      final response = _responses[req]!;
+
+      return response(options);
     }
-    return ResponseBody.fromString('{"data": {"test": "test"}}', 200);
+
+    throw Exception('No key was specified');
   }
 
   @override

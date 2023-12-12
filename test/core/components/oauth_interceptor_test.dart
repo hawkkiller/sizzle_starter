@@ -4,6 +4,8 @@ import 'package:mocktail/mocktail.dart';
 import 'package:sizzle_starter/src/core/components/rest_client/rest_client.dart';
 import 'package:sizzle_starter/src/core/components/rest_client/src/oauth/refresh_client.dart';
 
+import 'rest_client_test.dart';
+
 const TokenPair mockTokenPair = (
   accessToken: 'Access Token',
   refreshToken: 'RefreshToken',
@@ -21,6 +23,16 @@ class MockTokenStorage extends Mock implements TokenStorage {}
 
 void main() {
   group('OAuth Interceptor', () {
+    setUpAll(() {
+      registerFallbackValue(RequestOptions(path: '/test'));
+      registerFallbackValue(
+        Response(
+          requestOptions: RequestOptions(path: '/test'),
+          statusCode: 200,
+          data: const <String, String>{},
+        ),
+      );
+    });
     group('On Request >', () {
       test('should add the access token to the request header', () async {
         // Arrange
@@ -48,7 +60,7 @@ void main() {
         );
       });
 
-      test('Should not fail if no tokens', () {
+      test('Should not fail if no tokens', () async {
         // Arrange
         final storage = InMemoryTokenStorage();
         final refreshClient = MockRefreshClient();
@@ -61,13 +73,13 @@ void main() {
         final handler = MockRequestInterceptorHandler();
 
         // Act
-        expectLater(
-          () => interceptor.onRequest(options, handler),
-          throwsA(isA<Exception>()),
+        await expectLater(
+          interceptor.onRequest(options, handler),
+          completes,
         );
 
         // Assert
-        verifyNever(() => handler.next(options));
+        verify(() => handler.next(options));
       });
 
       test('Should rethrow on storage exception', () async {
@@ -96,38 +108,6 @@ void main() {
               'Exception: Test Error',
             ),
           ),
-        );
-
-        // Assert
-        verifyNever(() => handler.next(options));
-      });
-
-      test('Should rethrow on clear exception', () async {
-        // Arrange
-        final storage = MockTokenStorage();
-        final refreshClient = MockRefreshClient();
-        final interceptor = OAuthInterceptor(
-          storage: storage,
-          refreshClient: refreshClient,
-        );
-        final options = RequestOptions(path: '/test');
-
-        final handler = MockRequestInterceptorHandler();
-
-        when(() => storage.loadTokenPair()).thenThrow(Exception('Test Error'));
-
-        when(() => storage.clearTokenPair()).thenThrow(
-          Exception('Test Error 2'),
-        );
-
-        // Act
-        await expectLater(
-          () => interceptor.onRequest(options, handler),
-          throwsA(isA<Exception>().having(
-            (e) => e.toString(),
-            'toString()',
-            'Exception: Test Error 2',
-          )),
         );
 
         // Assert
@@ -233,6 +213,40 @@ void main() {
 
         // Assert
         verifyNever(() => handler.next(response));
+      });
+      test('Refreshes normally', () async {
+        // Arrange
+        final storage = InMemoryTokenStorage(
+          accessToken: mockTokenPair.accessToken,
+          refreshToken: mockTokenPair.refreshToken,
+        );
+        final refreshClient = MockRefreshClient();
+        final mockBody = ResponseBody.fromString('{"test": "test"}', 200);
+        final mockAdapter = MockHttpAdapter()
+          ..registerResponse('/test', (options) => mockBody);
+        final baseClient = Dio()..httpClientAdapter = mockAdapter;
+        final interceptor = OAuthInterceptor(
+          storage: storage,
+          refreshClient: refreshClient,
+          baseClient: baseClient,
+        );
+        final response = Response(
+          requestOptions: RequestOptions(path: '/test'),
+          statusCode: 401,
+          data: const <String, String>{},
+        );
+
+        final handler = MockResponseInterceptorHandler();
+
+        when(() => refreshClient.refresh(any())).thenAnswer(
+          (_) => Future.value(mockTokenPair),
+        );
+
+        // Act
+        await expectLater(interceptor.onResponse(response, handler), completes);
+
+        // Assert
+        verify(() => handler.resolve(any())).called(1);
       });
     });
   });
