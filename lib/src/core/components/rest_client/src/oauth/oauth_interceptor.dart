@@ -1,5 +1,9 @@
+import 'dart:async';
+
+import 'package:async/async.dart';
 import 'package:dio/dio.dart';
 import 'package:meta/meta.dart';
+import 'package:rxdart/subjects.dart';
 import 'package:sizzle_starter/src/core/components/rest_client/rest_client.dart';
 import 'package:sizzle_starter/src/core/components/rest_client/src/oauth/refresh_client.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
@@ -16,11 +20,42 @@ class RevokeTokenException implements Exception {
 /// Build headers for the request
 typedef HeaderBuilder = Map<String, String> Function(TokenPair pair);
 
+/// [AuthenticationStatus] is used to determine the authentication state
+/// of the user.
+///
+/// This should be consumed by the business logic.
+enum AuthenticationStatus {
+  /// The initial state of the authentication status
+  initial,
+
+  /// The user is authenticated
+  authenticated,
+
+  /// The user is unauthenticated
+  unauthenticated;
+}
+
+/// AuthSource provides valuable information about the authentication state
+abstract interface class AuthSource {
+  /// Get the token pair
+  ///
+  /// Returns the cached token pair if it exists,
+  /// otherwise loads from the storage.
+  Future<TokenPair?> getTokenPair();
+
+  /// Stream of token pairs
+  ///
+  /// This stream should be listened from repository and bloc,
+  /// if it emits null, it means the token pair is revoked
+  /// and the user should be logged out.
+  Stream<AuthenticationStatus> getAuthenticationStatusStream();
+}
+
 /// Interceptor for OAuth
 ///
 /// This interceptor adds the OAuth token to the request header
 /// and clears the token if the request fails with a 401
-class OAuthInterceptor extends QueuedInterceptor {
+class OAuthInterceptor extends QueuedInterceptor implements AuthSource {
   /// Create an OAuth interceptor
   OAuthInterceptor({
     required this.storage,
@@ -41,6 +76,16 @@ class OAuthInterceptor extends QueuedInterceptor {
   /// pair when the request fails with a 401.
   final RefreshClient refreshClient;
 
+  final AsyncCache<TokenPair?> _tokenCache = AsyncCache.ephemeral();
+
+  TokenPair? _tokenPair;
+
+  /// The current authentication status
+  var _authenticationStatus = AuthenticationStatus.initial;
+
+  // ignore: close_sinks
+  final _authController = BehaviorSubject.seeded(AuthenticationStatus.initial);
+
   /// Build the headers
   ///
   /// This is used to build the headers for the request.
@@ -52,8 +97,57 @@ class OAuthInterceptor extends QueuedInterceptor {
   /// Check if the token pair should be refreshed
   @visibleForTesting
   @pragma('vm:prefer-inline')
-  bool shouldRefreshTokenPair<T>(Response<T> response) =>
-      response.statusCode == 401;
+  bool shouldRefresh<T>(Response<T> response) => response.statusCode == 401;
+
+  @override
+  Future<TokenPair?> getTokenPair() {
+    if (_tokenPair != null) {
+      return Future.value(_tokenPair);
+    }
+
+    return _tokenCache.fetch(() async {
+      final tokenPair = await storage.loadTokenPair();
+      _tokenPair = tokenPair;
+      return tokenPair;
+    });
+  }
+
+  @override
+  Stream<AuthenticationStatus> getAuthenticationStatusStream() async* {
+    yield _authenticationStatus;
+    yield* _authController.stream;
+  }
+
+  /// Clear the token pair
+  /// Invalidates cache and clears storage
+  @visibleForTesting
+  Future<void> clearTokenPair() async {
+    await storage.clearTokenPair();
+    _updateAuthenticationStatus(null);
+  }
+
+  /// Save the token pair
+  /// Invalidates cache and saves to storage
+  @visibleForTesting
+  Future<void> saveTokenPair(TokenPair pair) async {
+    await storage.saveTokenPair(pair);
+    _updateAuthenticationStatus(pair);
+  }
+
+  void _updateAuthenticationStatus(TokenPair? token) {
+    final oldStatus = _authenticationStatus;
+    if (token == null) {
+      _authenticationStatus = AuthenticationStatus.unauthenticated;
+    } else {
+      _authenticationStatus = AuthenticationStatus.authenticated;
+    }
+
+    _tokenPair = token;
+    if (oldStatus != _authenticationStatus) {
+      _tokenCache.invalidate();
+      _authController.add(_authenticationStatus);
+    }
+  }
 
   @override
   Future<void> onRequest(
@@ -62,7 +156,7 @@ class OAuthInterceptor extends QueuedInterceptor {
   ) async {
     try {
       // Load the token pair
-      final tokenPair = await storage.loadTokenPair();
+      final tokenPair = await getTokenPair();
 
       // Build the headers based on the token pair
       final headers = tokenPair != null
@@ -87,39 +181,62 @@ class OAuthInterceptor extends QueuedInterceptor {
     Response<Object?> response,
     ResponseInterceptorHandler handler,
   ) async {
-    final tokenPair = await storage.loadTokenPair();
+    final tokenPair = await getTokenPair();
 
-    if (tokenPair == null || !shouldRefreshTokenPair(response)) {
+    if (tokenPair == null || !shouldRefresh(response)) {
       return handler.next(response);
     }
 
+    final newResponse = await _refresh(response, tokenPair.refreshToken);
+    handler.resolve(newResponse);
+  }
+
+  @override
+  Future<void> onError(
+    DioException err,
+    ErrorInterceptorHandler handler,
+  ) async {
+    final response = err.response;
+    final token = await getTokenPair();
+    if (response == null ||
+        token == null ||
+        err.error is RevokeTokenException ||
+        !shouldRefresh(response)) {
+      return handler.next(err);
+    }
+
     try {
-      final TokenPair newTokenPair;
+      final refreshResponse = await _refresh(response, token.refreshToken);
+      handler.resolve(refreshResponse);
+    } on DioException catch (error) {
+      handler.next(error);
+    }
+  }
 
-      try {
-        // Refresh the token pair
-        newTokenPair = await refreshClient.refresh(tokenPair.refreshToken);
-      } on RevokeTokenException {
-        // Clear the token pair
-        logger.info('Revoking token pair');
-        await storage.clearTokenPair();
-        rethrow;
-      } on Object catch (_) {
-        rethrow;
-      }
+  Future<Response<T>> _refresh<T>(Response<T> response, String refresh) async {
+    final TokenPair newTokenPair;
 
-      // Save the new token pair
-      await storage.saveTokenPair(newTokenPair);
-      final headers = buildHeaders(newTokenPair);
-
-      // Retry the request
-      final newResponse = await retryRequest(response, headers);
-      handler.resolve(newResponse);
-    } on Object catch (e) {
-      logger.warning('Clearing token pair due to error: $e');
-      await storage.clearTokenPair();
+    try {
+      // Refresh the token pair
+      newTokenPair = await refreshClient.refresh(refresh);
+    } on RevokeTokenException {
+      // Clear the token pair
+      logger.info('Revoking token pair');
+      await clearTokenPair();
+      rethrow;
+    } on Object catch (_) {
       rethrow;
     }
+
+    // Save the new token pair
+    await saveTokenPair(newTokenPair);
+
+    final headers = buildHeaders(newTokenPair);
+
+    // Retry the request
+    final newResponse = await retryRequest<T>(response, headers);
+
+    return newResponse;
   }
 
   /// Retry the request
