@@ -138,13 +138,17 @@ void main() {
           dio: Dio()..httpClientAdapter = mockAdapter,
         );
         expectLater(
-            restClient.get('/test'), completion(equals({'test': 'test'})));
+          restClient.get('/test'),
+          completion(equals({'test': 'test'})),
+        );
         expectLater(
           restClient.post('/test', body: {}),
           completion(equals({'test': 'test'})),
         );
         expectLater(
-            restClient.delete('/test'), completion(equals({'test': 'test'})));
+          restClient.delete('/test'),
+          completion(equals({'test': 'test'})),
+        );
         expectLater(
           restClient.patch('/test', body: {}),
           completion(equals({'test': 'test'})),

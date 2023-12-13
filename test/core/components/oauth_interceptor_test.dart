@@ -221,9 +221,11 @@ void main() {
           refreshToken: mockTokenPair.refreshToken,
         );
         final refreshClient = MockRefreshClient();
-        final mockBody = ResponseBody.fromString('{"test": "test"}', 200);
         final mockAdapter = MockHttpAdapter()
-          ..registerResponse('/test', (options) => mockBody);
+          ..registerResponse(
+            '/test',
+            (options) => ResponseBody.fromString('{"test": "test"}', 200),
+          );
         final baseClient = Dio()..httpClientAdapter = mockAdapter;
         final interceptor = OAuthInterceptor(
           storage: storage,
@@ -248,6 +250,7 @@ void main() {
         // Assert
         verify(() => handler.resolve(any())).called(1);
       });
+      
     });
   });
 }
