@@ -153,7 +153,6 @@ void main() {
 
         final handler = MockResponseInterceptorHandler();
 
-
         expectLater(
           () => interceptor.onResponse(response, handler),
           throwsA(
