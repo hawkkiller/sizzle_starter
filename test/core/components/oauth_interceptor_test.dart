@@ -36,7 +36,7 @@ void main() {
       );
     });
     group('On Request >', () {
-      test('should add the access token to the request header', () async {
+      test('Adds AccessToken to Request Headers if Available', () async {
         final storage = InMemoryTokenStorage(
           accessToken: mockTokenPair.accessToken,
           refreshToken: mockTokenPair.refreshToken,
@@ -59,7 +59,7 @@ void main() {
         );
       });
 
-      test('Should not fail if no tokens', () async {
+      test('Proceeds Without Error When No Tokens Are Present', () async {
         final storage = InMemoryTokenStorage();
         final refreshClient = MockRefreshClient();
         final interceptor = OAuthInterceptor(
@@ -78,7 +78,7 @@ void main() {
         verify(() => handler.next(options));
       });
 
-      test('Should rethrow on storage exception', () async {
+      test('Rethrows Exception When Token Storage Access Fails', () async {
         final storage = MockTokenStorage();
         final refreshClient = MockRefreshClient();
         when(() => storage.getTokenPairStream())
@@ -110,7 +110,7 @@ void main() {
       });
     });
     group('On Response >', () {
-      test('Calls next on successful response', () async {
+      test('Calls Next Handler on Successful API Response', () async {
         final storage = InMemoryTokenStorage(
           accessToken: mockTokenPair.accessToken,
           refreshToken: mockTokenPair.refreshToken,
@@ -135,74 +135,43 @@ void main() {
 
         verify(() => handler.next(response)).called(1);
       });
-      test('Throws on storage exception', () {
-        final storage = MockTokenStorage();
-        when(() => storage.getTokenPairStream())
-            .thenAnswer((invocation) => const Stream.empty());
-        when(() => storage.loadTokenPair()).thenThrow(Exception('Test Error'));
-        final refreshClient = MockRefreshClient();
-        final interceptor = OAuthInterceptor(
-          storage: storage,
-          refreshClient: refreshClient,
-        );
-        final response = Response(
-          requestOptions: RequestOptions(path: '/test'),
-          statusCode: 200,
-          data: const <String, String>{},
-        );
-
-        final handler = MockResponseInterceptorHandler();
-
-        expectLater(
-          () => interceptor.onResponse(response, handler),
-          throwsA(
-            isA<Exception>().having(
-              (e) => e.toString(),
-              'toString()',
-              'Exception: Test Error',
-            ),
-          ),
-        );
-
-        verifyNever(() => handler.next(response));
-      });
-      test('Throws on refresh exception', () {
-        final storage = InMemoryTokenStorage(
-          accessToken: mockTokenPair.accessToken,
-          refreshToken: mockTokenPair.refreshToken,
-        );
-        final refreshClient = MockRefreshClient();
-        final interceptor = OAuthInterceptor(
-          storage: storage,
-          refreshClient: refreshClient,
-        );
-        final response = Response(
-          requestOptions: RequestOptions(path: '/test'),
-          statusCode: 401,
-          data: const <String, String>{},
-        );
-
-        final handler = MockResponseInterceptorHandler();
-
-        when(() => refreshClient.refreshToken(any())).thenThrow(
-          Exception('Test Error'),
-        );
-
-        expectLater(
-          () => interceptor.onResponse(response, handler),
-          throwsA(
-            isA<Exception>().having(
-              (e) => e.toString(),
-              'toString()',
-              'Exception: Test Error',
-            ),
-          ),
-        );
-
-        verifyNever(() => handler.next(response));
-      });
       test(
-        'Preloads initial tokenPair from database',
+        'Throws Exception When Error Occurs in Token Storage During Response',
+        () {
+          final storage = MockTokenStorage();
+          when(() => storage.getTokenPairStream())
+              .thenAnswer((invocation) => const Stream.empty());
+          when(() => storage.loadTokenPair())
+              .thenThrow(Exception('Test Error'));
+          final refreshClient = MockRefreshClient();
+          final interceptor = OAuthInterceptor(
+            storage: storage,
+            refreshClient: refreshClient,
+          );
+          final response = Response(
+            requestOptions: RequestOptions(path: '/test'),
+            statusCode: 200,
+            data: const <String, String>{},
+          );
+
+          final handler = MockResponseInterceptorHandler();
+
+          expectLater(
+            () => interceptor.onResponse(response, handler),
+            throwsA(
+              isA<Exception>().having(
+                (e) => e.toString(),
+                'toString()',
+                'Exception: Test Error',
+              ),
+            ),
+          );
+
+          verifyNever(() => handler.next(response));
+        },
+      );
+      test(
+        'Preloads TokenPair from Storage on Initial Setup',
         () async {
           final storage = InMemoryTokenStorage(
             accessToken: mockTokenPair.accessToken,
@@ -225,7 +194,7 @@ void main() {
         timeout: const Timeout(Duration(seconds: 1)),
       );
       test(
-        'Emits unauthenticated when tokenPair is empty',
+        'Emits Unauthenticated Status When TokenPair is Empty',
         () async {
           final storage = InMemoryTokenStorage();
           final refreshClient = MockRefreshClient();
@@ -245,7 +214,7 @@ void main() {
         timeout: const Timeout(Duration(seconds: 1)),
       );
 
-      test('Two consequtive calls to storage are cached', () {
+      test('Caches Token Storage Access on Consecutive Calls', () {
         final storage = MockTokenStorage();
         when(() => storage.getTokenPairStream())
             .thenAnswer((invocation) => const Stream.empty());
@@ -269,7 +238,7 @@ void main() {
         verify(() => storage.loadTokenPair()).called(1);
       });
 
-      test('Tokens should be cached in interceptor', () async {
+      test('Caches tokens', () async {
         final storage = MockTokenStorage();
         when(() => storage.getTokenPairStream())
             .thenAnswer((invocation) => const Stream.empty());
@@ -302,7 +271,7 @@ void main() {
         await streamController.close();
       });
 
-      test('After clearing token pair, unauthenticated emits', () async {
+      test('Emits Unauthenticated Status After Clearing TokenPair', () async {
         final storage = InMemoryTokenStorage(
           accessToken: mockTokenPair.accessToken,
           refreshToken: mockTokenPair.refreshToken,
@@ -331,40 +300,46 @@ void main() {
           ]),
         );
       });
-      test('Refreshes normally', () async {
-        final storage = InMemoryTokenStorage(
-          accessToken: mockTokenPair.accessToken,
-          refreshToken: mockTokenPair.refreshToken,
-        );
-        final refreshClient = MockRefreshClient();
-        final mockAdapter = MockHttpAdapter()
-          ..registerResponse(
-            '/test',
-            (options) => ResponseBody.fromString('{"test": "test"}', 200),
+      test(
+        'Successfully Refreshes Token Upon Receiving 401 Status Code',
+        () async {
+          final storage = InMemoryTokenStorage(
+            accessToken: mockTokenPair.accessToken,
+            refreshToken: mockTokenPair.refreshToken,
           );
-        final baseClient = Dio()..httpClientAdapter = mockAdapter;
-        final interceptor = OAuthInterceptor(
-          storage: storage,
-          refreshClient: refreshClient,
-          baseClient: baseClient,
-        );
-        final response = Response(
-          requestOptions: RequestOptions(path: '/test'),
-          statusCode: 401,
-          data: const <String, String>{},
-        );
+          final refreshClient = MockRefreshClient();
+          final mockAdapter = MockHttpAdapter()
+            ..registerResponse(
+              '/test',
+              (options) => ResponseBody.fromString('{"test": "test"}', 200),
+            );
+          final baseClient = Dio()..httpClientAdapter = mockAdapter;
+          final interceptor = OAuthInterceptor(
+            storage: storage,
+            refreshClient: refreshClient,
+            baseClient: baseClient,
+          );
+          final response = Response(
+            requestOptions: RequestOptions(path: '/test'),
+            statusCode: 401,
+            data: const <String, String>{},
+          );
 
-        final handler = MockResponseInterceptorHandler();
+          final handler = MockResponseInterceptorHandler();
 
-        when(() => refreshClient.refreshToken(any())).thenAnswer(
-          (_) => Future.value(mockTokenPair),
-        );
+          when(() => refreshClient.refreshToken(any())).thenAnswer(
+            (_) => Future.value(mockTokenPair),
+          );
 
-        await expectLater(interceptor.onResponse(response, handler), completes);
+          await expectLater(
+            interceptor.onResponse(response, handler),
+            completes,
+          );
 
-        verify(() => handler.resolve(any())).called(1);
-      });
-      test('RevokeTokenException clears token', () async {
+          verify(() => handler.resolve(any())).called(1);
+        },
+      );
+      test('Clears Tokens and Emits Status on RevokeTokenException', () async {
         final storage = InMemoryTokenStorage(
           accessToken: mockTokenPair.accessToken,
           refreshToken: mockTokenPair.refreshToken,
@@ -402,6 +377,41 @@ void main() {
           interceptor.getAuthenticationStatusStream(),
           emits(AuthenticationStatus.unauthenticated),
         );
+      });
+      test('Throws Exception on Token Refresh Failure During Response', () {
+        final storage = InMemoryTokenStorage(
+          accessToken: mockTokenPair.accessToken,
+          refreshToken: mockTokenPair.refreshToken,
+        );
+        final refreshClient = MockRefreshClient();
+        final interceptor = OAuthInterceptor(
+          storage: storage,
+          refreshClient: refreshClient,
+        );
+        final response = Response(
+          requestOptions: RequestOptions(path: '/test'),
+          statusCode: 401,
+          data: const <String, String>{},
+        );
+
+        final handler = MockResponseInterceptorHandler();
+
+        when(() => refreshClient.refreshToken(any())).thenThrow(
+          Exception('Test Error'),
+        );
+
+        expectLater(
+          () => interceptor.onResponse(response, handler),
+          throwsA(
+            isA<Exception>().having(
+              (e) => e.toString(),
+              'toString()',
+              'Exception: Test Error',
+            ),
+          ),
+        );
+
+        verifyNever(() => handler.next(response));
       });
     });
   });
