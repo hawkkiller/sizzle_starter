@@ -81,6 +81,12 @@ void main() {
       test('Should rethrow on storage exception', () async {
         final storage = MockTokenStorage();
         final refreshClient = MockRefreshClient();
+        when(() => storage.getTokenPairStream())
+            .thenAnswer((invocation) => const Stream.empty());
+
+        when(() => storage.loadTokenPair()).thenThrow(Exception('Test Error'));
+        when(() => storage.clearTokenPair()).thenAnswer((_) => Future.value());
+
         final interceptor = OAuthInterceptor(
           storage: storage,
           refreshClient: refreshClient,
@@ -88,10 +94,6 @@ void main() {
         final options = RequestOptions(path: '/test');
 
         final handler = MockRequestInterceptorHandler();
-
-        when(() => storage.loadTokenPair()).thenThrow(Exception('Test Error'));
-
-        when(() => storage.clearTokenPair()).thenAnswer((_) => Future.value());
 
         await expectLater(
           () => interceptor.onRequest(options, handler),
@@ -135,6 +137,9 @@ void main() {
       });
       test('Throws on storage exception', () {
         final storage = MockTokenStorage();
+        when(() => storage.getTokenPairStream())
+            .thenAnswer((invocation) => const Stream.empty());
+        when(() => storage.loadTokenPair()).thenThrow(Exception('Test Error'));
         final refreshClient = MockRefreshClient();
         final interceptor = OAuthInterceptor(
           storage: storage,
@@ -148,7 +153,6 @@ void main() {
 
         final handler = MockResponseInterceptorHandler();
 
-        when(() => storage.loadTokenPair()).thenThrow(Exception('Test Error'));
 
         expectLater(
           () => interceptor.onResponse(response, handler),
@@ -244,6 +248,8 @@ void main() {
 
       test('Two consequtive calls to storage are cached', () {
         final storage = MockTokenStorage();
+        when(() => storage.getTokenPairStream())
+            .thenAnswer((invocation) => const Stream.empty());
         final refreshClient = MockRefreshClient();
         when(() => storage.loadTokenPair()).thenAnswer(
           (_) => Future.value(mockTokenPair),
@@ -266,6 +272,8 @@ void main() {
 
       test('Tokens should be cached in interceptor', () async {
         final storage = MockTokenStorage();
+        when(() => storage.getTokenPairStream())
+            .thenAnswer((invocation) => const Stream.empty());
         final refreshClient = MockRefreshClient();
 
         final streamController = StreamController<TokenPair?>.broadcast();
