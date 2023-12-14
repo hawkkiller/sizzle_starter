@@ -61,7 +61,14 @@ class OAuthInterceptor extends QueuedInterceptor implements AuthSource {
     required this.storage,
     required this.refreshClient,
     Dio? baseClient,
-  }) : _dio = baseClient ?? Dio();
+  }) : _dio = baseClient ?? Dio() {
+    _subscription =
+        storage.getTokenPairStream().listen(_updateAuthenticationStatus);
+    // Preload the token pair
+    getTokenPair().then(_updateAuthenticationStatus).ignore();
+  }
+
+  StreamSubscription<TokenPair?>? _subscription;
 
   final Dio _dio;
 
@@ -83,7 +90,6 @@ class OAuthInterceptor extends QueuedInterceptor implements AuthSource {
   /// The current authentication status
   var _authenticationStatus = AuthenticationStatus.initial;
 
-  // ignore: close_sinks
   final _authController = BehaviorSubject.seeded(AuthenticationStatus.initial);
 
   /// Build the headers
@@ -99,6 +105,12 @@ class OAuthInterceptor extends QueuedInterceptor implements AuthSource {
   @pragma('vm:prefer-inline')
   bool shouldRefresh<T>(Response<T> response) => response.statusCode == 401;
 
+  /// Close the controller
+  Future<void> close() async {
+    await _authController.close();
+    await _subscription?.cancel();
+  }
+
   @override
   Future<TokenPair?> getTokenPair() {
     if (_tokenPair != null) {
@@ -113,26 +125,18 @@ class OAuthInterceptor extends QueuedInterceptor implements AuthSource {
   }
 
   @override
-  Stream<AuthenticationStatus> getAuthenticationStatusStream() async* {
-    yield _authenticationStatus;
-    yield* _authController.stream;
-  }
+  Stream<AuthenticationStatus> getAuthenticationStatusStream() =>
+      _authController.stream;
 
   /// Clear the token pair
   /// Invalidates cache and clears storage
   @visibleForTesting
-  Future<void> clearTokenPair() async {
-    await storage.clearTokenPair();
-    _updateAuthenticationStatus(null);
-  }
+  Future<void> clearTokenPair() => storage.clearTokenPair();
 
   /// Save the token pair
   /// Invalidates cache and saves to storage
   @visibleForTesting
-  Future<void> saveTokenPair(TokenPair pair) async {
-    await storage.saveTokenPair(pair);
-    _updateAuthenticationStatus(pair);
-  }
+  Future<void> saveTokenPair(TokenPair pair) => storage.saveTokenPair(pair);
 
   void _updateAuthenticationStatus(TokenPair? token) {
     final oldStatus = _authenticationStatus;

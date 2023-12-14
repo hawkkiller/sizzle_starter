@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sizzle_starter/src/core/components/rest_client/src/oauth/oauth_interceptor.dart';
 
 /// A pair of OAuth tokens.
@@ -24,6 +26,9 @@ abstract interface class TokenStorage {
   ///
   /// This is used to clear the token pair when the request fails with a 401.
   Future<void> clearTokenPair();
+
+  /// A stream of token pairs.
+  Stream<TokenPair?> getTokenPairStream();
 }
 
 /// InMemoryTokenStorage is an in-memory implementation of [TokenStorage].
@@ -40,11 +45,13 @@ class InMemoryTokenStorage implements TokenStorage {
   }
 
   final _storage = <String, String>{};
+  final _controller = StreamController<TokenPair?>.broadcast();
 
   @override
   Future<void> saveTokenPair(TokenPair tokenPair) async {
     _storage['accessToken'] = tokenPair.accessToken;
     _storage['refreshToken'] = tokenPair.refreshToken;
+    _controller.add(tokenPair);
   }
 
   @override
@@ -61,5 +68,9 @@ class InMemoryTokenStorage implements TokenStorage {
   Future<void> clearTokenPair() async {
     _storage.remove('accessToken');
     _storage.remove('refreshToken');
+    _controller.add(null);
   }
+
+  @override
+  Stream<TokenPair?> getTokenPairStream() => _controller.stream;
 }
