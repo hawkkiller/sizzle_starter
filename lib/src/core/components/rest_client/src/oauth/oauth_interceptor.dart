@@ -222,7 +222,7 @@ class OAuthInterceptor extends QueuedInterceptor implements AuthSource {
 
     try {
       // Refresh the token pair
-      newTokenPair = await refreshClient.refresh(refresh);
+      newTokenPair = await refreshClient.refreshToken(refresh);
     } on RevokeTokenException {
       // Clear the token pair
       logger.info('Revoking token pair');

@@ -181,7 +181,7 @@ void main() {
 
         final handler = MockResponseInterceptorHandler();
 
-        when(() => refreshClient.refresh(any())).thenThrow(
+        when(() => refreshClient.refreshToken(any())).thenThrow(
           Exception('Test Error'),
         );
 
@@ -197,39 +197,6 @@ void main() {
         );
 
         verifyNever(() => handler.next(response));
-      });
-      test('Refreshes normally', () async {
-        final storage = InMemoryTokenStorage(
-          accessToken: mockTokenPair.accessToken,
-          refreshToken: mockTokenPair.refreshToken,
-        );
-        final refreshClient = MockRefreshClient();
-        final mockAdapter = MockHttpAdapter()
-          ..registerResponse(
-            '/test',
-            (options) => ResponseBody.fromString('{"test": "test"}', 200),
-          );
-        final baseClient = Dio()..httpClientAdapter = mockAdapter;
-        final interceptor = OAuthInterceptor(
-          storage: storage,
-          refreshClient: refreshClient,
-          baseClient: baseClient,
-        );
-        final response = Response(
-          requestOptions: RequestOptions(path: '/test'),
-          statusCode: 401,
-          data: const <String, String>{},
-        );
-
-        final handler = MockResponseInterceptorHandler();
-
-        when(() => refreshClient.refresh(any())).thenAnswer(
-          (_) => Future.value(mockTokenPair),
-        );
-
-        await expectLater(interceptor.onResponse(response, handler), completes);
-
-        verify(() => handler.resolve(any())).called(1);
       });
       test(
         'Preloads initial tokenPair from database',
@@ -355,6 +322,78 @@ void main() {
             AuthenticationStatus.authenticated,
             AuthenticationStatus.unauthenticated,
           ]),
+        );
+      });
+      test('Refreshes normally', () async {
+        final storage = InMemoryTokenStorage(
+          accessToken: mockTokenPair.accessToken,
+          refreshToken: mockTokenPair.refreshToken,
+        );
+        final refreshClient = MockRefreshClient();
+        final mockAdapter = MockHttpAdapter()
+          ..registerResponse(
+            '/test',
+            (options) => ResponseBody.fromString('{"test": "test"}', 200),
+          );
+        final baseClient = Dio()..httpClientAdapter = mockAdapter;
+        final interceptor = OAuthInterceptor(
+          storage: storage,
+          refreshClient: refreshClient,
+          baseClient: baseClient,
+        );
+        final response = Response(
+          requestOptions: RequestOptions(path: '/test'),
+          statusCode: 401,
+          data: const <String, String>{},
+        );
+
+        final handler = MockResponseInterceptorHandler();
+
+        when(() => refreshClient.refreshToken(any())).thenAnswer(
+          (_) => Future.value(mockTokenPair),
+        );
+
+        await expectLater(interceptor.onResponse(response, handler), completes);
+
+        verify(() => handler.resolve(any())).called(1);
+      });
+      test('RevokeTokenException clears token', () async {
+        final storage = InMemoryTokenStorage(
+          accessToken: mockTokenPair.accessToken,
+          refreshToken: mockTokenPair.refreshToken,
+        );
+        final refreshClient = MockRefreshClient();
+        final mockAdapter = MockHttpAdapter()
+          ..registerResponse(
+            '/test',
+            (options) => ResponseBody.fromString('{"test": "test"}', 200),
+          );
+        final baseClient = Dio()..httpClientAdapter = mockAdapter;
+        final interceptor = OAuthInterceptor(
+          storage: storage,
+          refreshClient: refreshClient,
+          baseClient: baseClient,
+        );
+        final response = Response(
+          requestOptions: RequestOptions(path: '/test'),
+          statusCode: 401,
+          data: const <String, String>{},
+        );
+
+        final handler = MockResponseInterceptorHandler();
+
+        when(() => refreshClient.refreshToken(any())).thenThrow(
+          const RevokeTokenException(),
+        );
+
+        await expectLater(
+          interceptor.onResponse(response, handler),
+          throwsA(isA<RevokeTokenException>()),
+        );
+
+        await expectLater(
+          interceptor.getAuthenticationStatusStream(),
+          emits(AuthenticationStatus.unauthenticated),
         );
       });
     });

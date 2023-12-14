@@ -8,5 +8,5 @@ abstract interface class RefreshClient {
   ///
   /// This method is called by the [OAuthInterceptor]
   /// when the request fails with a 401.
-  Future<TokenPair> refresh(String refreshToken);
+  Future<TokenPair> refreshToken(String refreshToken);
 }
