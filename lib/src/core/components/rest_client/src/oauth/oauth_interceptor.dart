@@ -8,6 +8,7 @@ import 'package:sizzle_starter/src/core/components/rest_client/rest_client.dart'
 import 'package:sizzle_starter/src/core/components/rest_client/src/oauth/refresh_client.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
 
+// coverage:ignore-start
 /// Throw this exception when refresh token fails
 class RevokeTokenException implements Exception {
   /// Create a [RevokeTokenException]
@@ -16,6 +17,7 @@ class RevokeTokenException implements Exception {
   @override
   String toString() => 'RevokedTokenException';
 }
+// coverage:ignore-end
 
 /// Build headers for the request
 typedef HeaderBuilder = Map<String, String> Function(TokenPair pair);
@@ -36,7 +38,7 @@ enum AuthenticationStatus {
 }
 
 /// AuthSource provides valuable information about the authentication state
-abstract interface class AuthSource {
+abstract interface class AuthStatusDataSource {
   /// Get the token pair
   ///
   /// Returns the cached token pair if it exists,
@@ -55,22 +57,24 @@ abstract interface class AuthSource {
 ///
 /// This interceptor adds the OAuth token to the request header
 /// and clears the token if the request fails with a 401
-class OAuthInterceptor extends QueuedInterceptor implements AuthSource {
+class OAuthInterceptor extends QueuedInterceptor
+    implements AuthStatusDataSource {
   /// Create an OAuth interceptor
   OAuthInterceptor({
     required this.storage,
     required this.refreshClient,
-    Dio? baseClient,
-  }) : _dio = baseClient ?? Dio() {
-    _subscription =
-        storage.getTokenPairStream().listen(_updateAuthenticationStatus);
+    @visibleForTesting Dio? retryClient,
+  }) : retryClient = retryClient ?? Dio() {
+    _storageSubscription = storage.getTokenPairStream().listen(
+          _updateAuthenticationStatus,
+        );
+
     // Preload the token pair
     getTokenPair().then(_updateAuthenticationStatus).ignore();
   }
 
-  StreamSubscription<TokenPair?>? _subscription;
-
-  final Dio _dio;
+  /// [Dio] client used to retry the request.
+  final Dio retryClient;
 
   /// The token storage
   ///
@@ -83,33 +87,20 @@ class OAuthInterceptor extends QueuedInterceptor implements AuthSource {
   /// pair when the request fails with a 401.
   final RefreshClient refreshClient;
 
+  /// Async cache that ensures that only one request is made to the storage
+  /// simultaneously.
   final AsyncCache<TokenPair?> _tokenCache = AsyncCache.ephemeral();
 
+  StreamSubscription<TokenPair?>? _storageSubscription;
+
+  /// The current token pair
   TokenPair? _tokenPair;
 
   /// The current authentication status
   var _authenticationStatus = AuthenticationStatus.initial;
 
+  /// The authentication status controller
   final _authController = BehaviorSubject.seeded(AuthenticationStatus.initial);
-
-  /// Build the headers
-  ///
-  /// This is used to build the headers for the request.
-  @visibleForTesting
-  @pragma('vm:prefer-inline')
-  Map<String, String> buildHeaders(TokenPair pair) =>
-      {'Authorization': 'Bearer ${pair.accessToken}'};
-
-  /// Check if the token pair should be refreshed
-  @visibleForTesting
-  @pragma('vm:prefer-inline')
-  bool shouldRefresh<T>(Response<T> response) => response.statusCode == 401;
-
-  /// Close the controller
-  Future<void> close() async {
-    await _authController.close();
-    await _subscription?.cancel();
-  }
 
   @override
   Future<TokenPair?> getTokenPair() {
@@ -117,11 +108,9 @@ class OAuthInterceptor extends QueuedInterceptor implements AuthSource {
       return Future.value(_tokenPair);
     }
 
-    return _tokenCache.fetch(() async {
-      final tokenPair = await storage.loadTokenPair();
-      _tokenPair = tokenPair;
-      return tokenPair;
-    });
+    return _tokenCache.fetch(
+      () async => _tokenPair = await storage.loadTokenPair(),
+    );
   }
 
   @override
@@ -137,21 +126,6 @@ class OAuthInterceptor extends QueuedInterceptor implements AuthSource {
   /// Invalidates cache and saves to storage
   @visibleForTesting
   Future<void> saveTokenPair(TokenPair pair) => storage.saveTokenPair(pair);
-
-  void _updateAuthenticationStatus(TokenPair? token) {
-    final oldStatus = _authenticationStatus;
-    if (token == null) {
-      _authenticationStatus = AuthenticationStatus.unauthenticated;
-    } else {
-      _authenticationStatus = AuthenticationStatus.authenticated;
-    }
-
-    _tokenPair = token;
-    if (oldStatus != _authenticationStatus) {
-      _tokenCache.invalidate();
-      _authController.add(_authenticationStatus);
-    }
-  }
 
   @override
   Future<void> onRequest(
@@ -217,6 +191,43 @@ class OAuthInterceptor extends QueuedInterceptor implements AuthSource {
     }
   }
 
+  // coverage:ignore-start
+  /// Close the interceptor
+  Future<void> close() async {
+    await _storageSubscription?.cancel();
+    await _authController.close();
+  }
+  // coverage:ignore-end
+
+  /// Build the headers
+  ///
+  /// This is used to build the headers for the request.
+  @visibleForTesting
+  @pragma('vm:prefer-inline')
+  Map<String, String> buildHeaders(TokenPair pair) => {
+        'Authorization': 'Bearer ${pair.accessToken}',
+      };
+
+  /// Check if the token pair should be refreshed
+  @visibleForTesting
+  @pragma('vm:prefer-inline')
+  bool shouldRefresh<T>(Response<T> response) => response.statusCode == 401;
+
+  /// Update the authentication status based on the token pair
+  void _updateAuthenticationStatus(TokenPair? token) {
+    final oldStatus = _authenticationStatus;
+    if (token == null) {
+      _authenticationStatus = AuthenticationStatus.unauthenticated;
+    } else {
+      _authenticationStatus = AuthenticationStatus.authenticated;
+    }
+
+    _tokenPair = token;
+    if (oldStatus != _authenticationStatus) {
+      _authController.add(_authenticationStatus);
+    }
+  }
+
   Future<Response<T>> _refresh<T>(Response<T> response, String refresh) async {
     final TokenPair newTokenPair;
 
@@ -249,7 +260,7 @@ class OAuthInterceptor extends QueuedInterceptor implements AuthSource {
     Response<T> response,
     Map<String, String> headers,
   ) =>
-      _dio.request<T>(
+      retryClient.request<T>(
         response.requestOptions.path,
         cancelToken: response.requestOptions.cancelToken,
         data: response.requestOptions.data,

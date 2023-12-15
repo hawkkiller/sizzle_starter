@@ -21,6 +21,9 @@ class MockRequestInterceptorHandler extends Mock
 class MockResponseInterceptorHandler extends Mock
     implements ResponseInterceptorHandler {}
 
+class MockErrorInterceptorHandler extends Mock
+    implements ErrorInterceptorHandler {}
+
 class MockTokenStorage extends Mock implements TokenStorage {}
 
 void main() {
@@ -317,7 +320,7 @@ void main() {
           final interceptor = OAuthInterceptor(
             storage: storage,
             refreshClient: refreshClient,
-            baseClient: baseClient,
+            retryClient: baseClient,
           );
           final response = Response(
             requestOptions: RequestOptions(path: '/test'),
@@ -354,7 +357,7 @@ void main() {
         final interceptor = OAuthInterceptor(
           storage: storage,
           refreshClient: refreshClient,
-          baseClient: baseClient,
+          retryClient: baseClient,
         );
         final response = Response(
           requestOptions: RequestOptions(path: '/test'),
@@ -412,6 +415,45 @@ void main() {
         );
 
         verifyNever(() => handler.next(response));
+      });
+    });
+    group('On Error', () {
+      test('Should refresh on error', () async {
+        final storage = InMemoryTokenStorage(
+          accessToken: mockTokenPair.accessToken,
+          refreshToken: mockTokenPair.refreshToken,
+        );
+        final refreshClient = MockRefreshClient();
+        final mockAdapter = MockHttpAdapter()
+          ..registerResponse(
+            '/test',
+            (options) => ResponseBody.fromString('{"test": "test"}', 200),
+          );
+        final baseClient = Dio()..httpClientAdapter = mockAdapter;
+        final interceptor = OAuthInterceptor(
+          storage: storage,
+          refreshClient: refreshClient,
+          retryClient: baseClient,
+        );
+        final error = DioException(
+          requestOptions: RequestOptions(path: '/test'),
+          error: 'Test Error',
+          response: Response(
+            requestOptions: RequestOptions(path: '/test'),
+            statusCode: 401,
+            data: const <String, String>{},
+          ),
+        );
+
+        final handler = MockErrorInterceptorHandler();
+
+        when(() => refreshClient.refreshToken(any())).thenAnswer(
+          (_) => Future.value(mockTokenPair),
+        );
+
+        await expectLater(interceptor.onError(error, handler), completes);
+
+        verify(() => handler.resolve(any())).called(1);
       });
     });
   });
