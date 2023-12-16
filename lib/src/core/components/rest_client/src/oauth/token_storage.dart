@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:sizzle_starter/src/core/components/rest_client/src/oauth/auth_interceptor.dart';
 
-/// A pair of OAuth tokens.
+/// A pair of Auth tokens.
 ///
 /// The **accessToken** is used to authenticate the request.
 ///
@@ -14,15 +14,15 @@ typedef TokenPair = ({String accessToken, String refreshToken});
 /// The interface for token storage.
 ///
 /// This interface is used by the [AuthInterceptor]
-/// to store and retrieve the OAuth token pair.
+/// to store and retrieve the Auth token pair.
 abstract interface class TokenStorage {
-  /// Load the OAuth token pair.
+  /// Load the Auth token pair.
   Future<TokenPair?> loadTokenPair();
 
-  /// Save the OAuth token pair.
+  /// Save the Auth token pair.
   Future<void> saveTokenPair(TokenPair tokenPair);
 
-  /// Clear the OAuth token pair.
+  /// Clear the Auth token pair.
   ///
   /// This is used to clear the token pair when the request fails with a 401.
   Future<void> clearTokenPair();

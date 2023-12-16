@@ -55,11 +55,11 @@ abstract interface class AuthStatusDataSource {
 
 /// Interceptor for Auth
 ///
-/// This interceptor adds the OAuth token to the request header
+/// This interceptor adds the Auth token to the request header
 /// and clears the token if the request fails with a 401
 class AuthInterceptor extends QueuedInterceptor
     implements AuthStatusDataSource {
-  /// Create an OAuth interceptor
+  /// Create an Auth interceptor
   AuthInterceptor({
     required this.storage,
     required this.refreshClient,
@@ -78,12 +78,12 @@ class AuthInterceptor extends QueuedInterceptor
 
   /// The token storage
   ///
-  /// This is used to store and retrieve the OAuth token.
+  /// This is used to store and retrieve the Auth token.
   final TokenStorage storage;
 
-  /// Refresh client that refreshes the OAuth token pair
+  /// Refresh client that refreshes the Auth token pair
   ///
-  /// This is used to refresh the OAuth token
+  /// This is used to refresh the Auth token
   /// pair when the request fails with a 401.
   final RefreshClient refreshClient;
 

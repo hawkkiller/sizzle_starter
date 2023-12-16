@@ -27,7 +27,7 @@ class MockErrorInterceptorHandler extends Mock
 class MockTokenStorage extends Mock implements TokenStorage {}
 
 void main() {
-  group('OAuth Interceptor', () {
+  group('Auth Interceptor', () {
     late InMemoryTokenStorage memStorageWithToken;
     late InMemoryTokenStorage memStorageWithoutToken;
     late MockRefreshClient refreshClientSuccess;
