@@ -67,7 +67,7 @@ void main() {
     });
     group('On Request >', () {
       test('Adds AccessToken to Request Headers if Available', () async {
-        final interceptor = OAuthInterceptor(
+        final interceptor = AuthInterceptor(
           storage: memStorageWithToken,
           refreshClient: refreshClientSuccess,
         );
@@ -85,7 +85,7 @@ void main() {
       });
 
       test('Proceeds Without Error When No Tokens Are Present', () async {
-        final interceptor = OAuthInterceptor(
+        final interceptor = AuthInterceptor(
           storage: memStorageWithoutToken,
           refreshClient: refreshClientSuccess,
         );
@@ -110,7 +110,7 @@ void main() {
         when(() => storage.loadTokenPair()).thenThrow(Exception('Test Error'));
         when(() => storage.clearTokenPair()).thenAnswer((_) => Future.value());
 
-        final interceptor = OAuthInterceptor(
+        final interceptor = AuthInterceptor(
           storage: storage,
           refreshClient: refreshClientSuccess,
         );
@@ -134,7 +134,7 @@ void main() {
     });
     group('On Response >', () {
       test('Calls Next Handler on Successful API Response', () async {
-        final interceptor = OAuthInterceptor(
+        final interceptor = AuthInterceptor(
           storage: memStorageWithToken,
           refreshClient: refreshClientSuccess,
         );
@@ -156,7 +156,7 @@ void main() {
       test(
         'Preloads TokenPair from Storage on Initial Setup',
         () async {
-          final interceptor = OAuthInterceptor(
+          final interceptor = AuthInterceptor(
             storage: memStorageWithToken,
             refreshClient: refreshClientSuccess,
           );
@@ -174,7 +174,7 @@ void main() {
       test(
         'Emits Unauthenticated Status When TokenPair is Empty',
         () async {
-          final interceptor = OAuthInterceptor(
+          final interceptor = AuthInterceptor(
             storage: memStorageWithoutToken,
             refreshClient: refreshClientSuccess,
           );
@@ -203,7 +203,7 @@ void main() {
           (_) => Stream.value(mockTokenPair),
         );
 
-        final interceptor = OAuthInterceptor(
+        final interceptor = AuthInterceptor(
           storage: storage,
           refreshClient: refreshClient,
         );
@@ -228,7 +228,7 @@ void main() {
           (_) => Future.value(),
         );
 
-        final interceptor = OAuthInterceptor(
+        final interceptor = AuthInterceptor(
           storage: storage,
           refreshClient: refreshClientSuccess,
         );
@@ -241,7 +241,7 @@ void main() {
       });
 
       test('Emits Unauthenticated Status After Clearing TokenPair', () async {
-        final interceptor = OAuthInterceptor(
+        final interceptor = AuthInterceptor(
           storage: memStorageWithToken,
           refreshClient: refreshClientSuccess,
         );
@@ -271,7 +271,7 @@ void main() {
             (options) => ResponseBody.fromString('{"test": "test"}', 200),
           );
         final retryClient = Dio()..httpClientAdapter = mockAdapter;
-        final interceptor = OAuthInterceptor(
+        final interceptor = AuthInterceptor(
           storage: memStorageWithToken,
           refreshClient: refreshClientSuccess,
           retryClient: retryClient,
@@ -298,7 +298,7 @@ void main() {
             (options) => ResponseBody.fromString('{"test": "test"}', 200),
           );
         final baseClient = Dio()..httpClientAdapter = mockAdapter;
-        final interceptor = OAuthInterceptor(
+        final interceptor = AuthInterceptor(
           storage: memStorageWithToken,
           refreshClient: refreshClientError,
           retryClient: baseClient,
@@ -323,7 +323,7 @@ void main() {
       });
       test('Throws Exception on Token Refresh Failure During Response', () {
         final refreshClient = MockRefreshClient();
-        final interceptor = OAuthInterceptor(
+        final interceptor = AuthInterceptor(
           storage: memStorageWithToken,
           refreshClient: refreshClient,
         );
@@ -361,7 +361,7 @@ void main() {
             (options) => ResponseBody.fromString('{"test": "test"}', 200),
           );
         final baseClient = Dio()..httpClientAdapter = mockAdapter;
-        final interceptor = OAuthInterceptor(
+        final interceptor = AuthInterceptor(
           storage: memStorageWithToken,
           refreshClient: refreshClientSuccess,
           retryClient: baseClient,
@@ -391,7 +391,7 @@ void main() {
             (options) => ResponseBody.fromString('{"test": "test"}', 200),
           );
         final baseClient = Dio()..httpClientAdapter = mockAdapter;
-        final interceptor = OAuthInterceptor(
+        final interceptor = AuthInterceptor(
           storage: memStorageWithToken,
           refreshClient: refreshClient,
           retryClient: baseClient,
@@ -424,7 +424,7 @@ void main() {
             (options) => ResponseBody.fromString('{"test": "test"}', 200),
           );
         final baseClient = Dio()..httpClientAdapter = mockAdapter;
-        final interceptor = OAuthInterceptor(
+        final interceptor = AuthInterceptor(
           storage: memStorageWithToken,
           refreshClient: refreshClientSuccess,
           retryClient: baseClient,

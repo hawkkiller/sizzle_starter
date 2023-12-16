@@ -53,14 +53,14 @@ abstract interface class AuthStatusDataSource {
   Stream<AuthenticationStatus> getAuthenticationStatusStream();
 }
 
-/// Interceptor for OAuth
+/// Interceptor for Auth
 ///
 /// This interceptor adds the OAuth token to the request header
 /// and clears the token if the request fails with a 401
-class OAuthInterceptor extends QueuedInterceptor
+class AuthInterceptor extends QueuedInterceptor
     implements AuthStatusDataSource {
   /// Create an OAuth interceptor
-  OAuthInterceptor({
+  AuthInterceptor({
     required this.storage,
     required this.refreshClient,
     @visibleForTesting Dio? retryClient,
