@@ -29,6 +29,9 @@ abstract interface class TokenStorage {
 
   /// A stream of token pairs.
   Stream<TokenPair?> getTokenPairStream();
+
+  /// Close the token storage.
+  Future<void> close();
 }
 
 /// InMemoryTokenStorage is an in-memory implementation of [TokenStorage].
@@ -73,4 +76,7 @@ class InMemoryTokenStorage implements TokenStorage {
 
   @override
   Stream<TokenPair?> getTokenPairStream() => _controller.stream;
+  
+  @override
+  Future<void> close() => _controller.close();
 }
