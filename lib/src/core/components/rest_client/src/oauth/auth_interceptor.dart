@@ -19,9 +19,6 @@ class RevokeTokenException implements Exception {
 }
 // coverage:ignore-end
 
-/// Build headers for the request
-typedef HeaderBuilder = Map<String, String> Function(TokenPair pair);
-
 /// [AuthenticationStatus] is used to determine the authentication state
 /// of the user.
 ///
@@ -39,12 +36,6 @@ enum AuthenticationStatus {
 
 /// AuthSource provides valuable information about the authentication state
 abstract interface class AuthStatusDataSource {
-  /// Get the token pair
-  ///
-  /// Returns the cached token pair if it exists,
-  /// otherwise loads from the storage.
-  Future<TokenPair?> getTokenPair();
-
   /// Stream of token pairs
   ///
   /// This stream should be listened from repository and bloc,
@@ -57,12 +48,13 @@ abstract interface class AuthStatusDataSource {
 ///
 /// This interceptor adds the Auth token to the request header
 /// and clears the token if the request fails with a 401
-class AuthInterceptor extends QueuedInterceptor
+class AuthInterceptor<T> extends QueuedInterceptor
     implements AuthStatusDataSource {
   /// Create an Auth interceptor
   AuthInterceptor({
     required this.storage,
     required this.refreshClient,
+    required this.buildHeaders,
     @visibleForTesting Dio? retryClient,
   }) : retryClient = retryClient ?? Dio() {
     _storageSubscription = storage.getTokenPairStream().listen(
@@ -79,22 +71,22 @@ class AuthInterceptor extends QueuedInterceptor
   /// The token storage
   ///
   /// This is used to store and retrieve the Auth token.
-  final TokenStorage storage;
+  final TokenStorage<T> storage;
 
   /// Refresh client that refreshes the Auth token pair
   ///
   /// This is used to refresh the Auth token
   /// pair when the request fails with a 401.
-  final RefreshClient refreshClient;
+  final RefreshClient<T> refreshClient;
 
   /// Async cache that ensures that only one request is made to the storage
   /// simultaneously.
-  final AsyncCache<TokenPair?> _tokenCache = AsyncCache.ephemeral();
+  final AsyncCache<T?> _tokenCache = AsyncCache.ephemeral();
 
-  StreamSubscription<TokenPair?>? _storageSubscription;
+  StreamSubscription<T?>? _storageSubscription;
 
-  /// The current token pair
-  TokenPair? _tokenPair;
+  /// The current token model
+  T? _token;
 
   /// The current authentication status
   var _authenticationStatus = AuthenticationStatus.initial;
@@ -102,14 +94,17 @@ class AuthInterceptor extends QueuedInterceptor
   /// The authentication status controller
   final _authController = BehaviorSubject.seeded(AuthenticationStatus.initial);
 
-  @override
-  Future<TokenPair?> getTokenPair() {
-    if (_tokenPair != null) {
-      return Future.value(_tokenPair);
+  /// Get the token pair
+  ///
+  /// Returns the cached token pair if it exists,
+  /// otherwise loads from the storage.
+  Future<T?> getTokenPair() {
+    if (_token != null) {
+      return Future.value(_token);
     }
 
     return _tokenCache.fetch(
-      () async => _tokenPair = await storage.loadTokenPair(),
+      () async => _token = await storage.loadTokenPair(),
     );
   }
 
@@ -125,7 +120,7 @@ class AuthInterceptor extends QueuedInterceptor
   /// Save the token pair
   /// Invalidates cache and saves to storage
   @visibleForTesting
-  Future<void> saveTokenPair(TokenPair pair) => storage.saveTokenPair(pair);
+  Future<void> saveTokenPair(T pair) => storage.saveTokenPair(pair);
 
   @override
   Future<void> onRequest(
@@ -159,13 +154,13 @@ class AuthInterceptor extends QueuedInterceptor
     Response<Object?> response,
     ResponseInterceptorHandler handler,
   ) async {
-    final tokenPair = await getTokenPair();
+    final token = await getTokenPair();
 
-    if (tokenPair == null || !shouldRefresh(response)) {
+    if (token == null || !shouldRefresh(response)) {
       return handler.next(response);
     }
 
-    final newResponse = await _refresh(response, tokenPair.refreshToken);
+    final newResponse = await _refresh(response, token);
     handler.resolve(newResponse);
   }
 
@@ -184,7 +179,7 @@ class AuthInterceptor extends QueuedInterceptor
     }
 
     try {
-      final refreshResponse = await _refresh(response, token.refreshToken);
+      final refreshResponse = await _refresh(response, token);
       handler.resolve(refreshResponse);
     } on DioException catch (error) {
       handler.next(error);
@@ -204,17 +199,15 @@ class AuthInterceptor extends QueuedInterceptor
   /// This is used to build the headers for the request.
   @visibleForTesting
   @pragma('vm:prefer-inline')
-  Map<String, String> buildHeaders(TokenPair pair) => {
-        'Authorization': 'Bearer ${pair.accessToken}',
-      };
+  final Map<String, String> Function(T token) buildHeaders;
 
   /// Check if the token pair should be refreshed
   @visibleForTesting
   @pragma('vm:prefer-inline')
-  bool shouldRefresh<T>(Response<T> response) => response.statusCode == 401;
+  bool shouldRefresh<R>(Response<R> response) => response.statusCode == 401;
 
   /// Update the authentication status based on the token pair
-  void _updateAuthenticationStatus(TokenPair? token) {
+  void _updateAuthenticationStatus(T? token) {
     final oldStatus = _authenticationStatus;
     if (token == null) {
       _authenticationStatus = AuthenticationStatus.unauthenticated;
@@ -222,18 +215,18 @@ class AuthInterceptor extends QueuedInterceptor
       _authenticationStatus = AuthenticationStatus.authenticated;
     }
 
-    _tokenPair = token;
+    _token = token;
     if (oldStatus != _authenticationStatus) {
       _authController.add(_authenticationStatus);
     }
   }
 
-  Future<Response<T>> _refresh<T>(Response<T> response, String refresh) async {
-    final TokenPair newTokenPair;
+  Future<Response<R>> _refresh<R>(Response<R> response, T token) async {
+    final T newTokenPair;
 
     try {
       // Refresh the token pair
-      newTokenPair = await refreshClient.refreshToken(refresh);
+      newTokenPair = await refreshClient.refreshToken(token);
     } on RevokeTokenException {
       // Clear the token pair
       logger.info('Revoking token pair');
@@ -249,18 +242,18 @@ class AuthInterceptor extends QueuedInterceptor
     final headers = buildHeaders(newTokenPair);
 
     // Retry the request
-    final newResponse = await retryRequest<T>(response, headers);
+    final newResponse = await retryRequest<R>(response, headers);
 
     return newResponse;
   }
 
   /// Retry the request
   @visibleForTesting
-  Future<Response<T>> retryRequest<T>(
-    Response<T> response,
+  Future<Response<R>> retryRequest<R>(
+    Response<R> response,
     Map<String, String> headers,
   ) =>
-      retryClient.request<T>(
+      retryClient.request<R>(
         response.requestOptions.path,
         cancelToken: response.requestOptions.cancelToken,
         data: response.requestOptions.data,

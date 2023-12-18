@@ -8,12 +8,66 @@ import 'package:sizzle_starter/src/core/components/rest_client/src/oauth/refresh
 
 import 'rest_client_test.dart';
 
+/// A pair of Auth tokens.
+///
+/// The **accessToken** is used to authenticate the request.
+///
+/// The **refreshToken** is used to refresh the accessToken.
+typedef TokenPair = ({String accessToken, String refreshToken});
+
+/// InMemoryTokenStorage is an in-memory implementation of [TokenStorage].
+/// Generally, this should only be used for testing.
+class InMemoryTokenStorage implements TokenStorage<TokenPair> {
+  /// Create an in-memory token storage.
+  InMemoryTokenStorage({String? accessToken, String? refreshToken}) {
+    if (accessToken != null) {
+      _storage['accessToken'] = accessToken;
+    }
+    if (refreshToken != null) {
+      _storage['refreshToken'] = refreshToken;
+    }
+  }
+
+  final _storage = <String, String>{};
+  final _controller = StreamController<TokenPair?>.broadcast();
+
+  @override
+  Future<void> saveTokenPair(TokenPair tokenPair) async {
+    _storage['accessToken'] = tokenPair.accessToken;
+    _storage['refreshToken'] = tokenPair.refreshToken;
+    _controller.add(tokenPair);
+  }
+
+  @override
+  Future<TokenPair?> loadTokenPair() async {
+    final accessToken = _storage['accessToken'];
+    final refreshToken = _storage['refreshToken'];
+    if (accessToken != null && refreshToken != null) {
+      return (accessToken: accessToken, refreshToken: refreshToken);
+    }
+    return null;
+  }
+
+  @override
+  Future<void> clearTokenPair() async {
+    _storage.remove('accessToken');
+    _storage.remove('refreshToken');
+    _controller.add(null);
+  }
+
+  @override
+  Stream<TokenPair?> getTokenPairStream() => _controller.stream;
+
+  @override
+  Future<void> close() => _controller.close();
+}
+
 const TokenPair mockTokenPair = (
   accessToken: 'Access Token',
   refreshToken: 'RefreshToken',
 );
 
-class MockRefreshClient extends Mock implements RefreshClient {}
+class MockRefreshClient extends Mock implements RefreshClient<TokenPair> {}
 
 class MockRequestInterceptorHandler extends Mock
     implements RequestInterceptorHandler {}
@@ -24,7 +78,10 @@ class MockResponseInterceptorHandler extends Mock
 class MockErrorInterceptorHandler extends Mock
     implements ErrorInterceptorHandler {}
 
-class MockTokenStorage extends Mock implements TokenStorage {}
+class MockTokenStorage extends Mock implements TokenStorage<TokenPair> {}
+
+Map<String, String> buildHeaders(TokenPair pair) =>
+    {'Authorization': 'Bearer ${pair.accessToken}'};
 
 void main() {
   group('Auth Interceptor', () {
@@ -64,12 +121,14 @@ void main() {
           data: const <String, String>{},
         ),
       );
+      registerFallbackValue(mockTokenPair);
     });
     group('On Request >', () {
       test('Adds AccessToken to Request Headers if Available', () async {
         final interceptor = AuthInterceptor(
           storage: memStorageWithToken,
           refreshClient: refreshClientSuccess,
+          buildHeaders: buildHeaders,
         );
         final options = RequestOptions(path: '/test');
 
@@ -88,6 +147,7 @@ void main() {
         final interceptor = AuthInterceptor(
           storage: memStorageWithoutToken,
           refreshClient: refreshClientSuccess,
+          buildHeaders: buildHeaders,
         );
         final options = RequestOptions(path: '/test');
 
@@ -113,6 +173,7 @@ void main() {
         final interceptor = AuthInterceptor(
           storage: storage,
           refreshClient: refreshClientSuccess,
+          buildHeaders: buildHeaders,
         );
         final options = RequestOptions(path: '/test');
 
@@ -137,6 +198,7 @@ void main() {
         final interceptor = AuthInterceptor(
           storage: memStorageWithToken,
           refreshClient: refreshClientSuccess,
+          buildHeaders: buildHeaders,
         );
         final response = Response(
           requestOptions: RequestOptions(),
@@ -159,6 +221,7 @@ void main() {
           final interceptor = AuthInterceptor(
             storage: memStorageWithToken,
             refreshClient: refreshClientSuccess,
+            buildHeaders: buildHeaders,
           );
 
           await expectLater(
@@ -177,6 +240,7 @@ void main() {
           final interceptor = AuthInterceptor(
             storage: memStorageWithoutToken,
             refreshClient: refreshClientSuccess,
+            buildHeaders: buildHeaders,
           );
 
           await expectLater(
@@ -206,6 +270,7 @@ void main() {
         final interceptor = AuthInterceptor(
           storage: storage,
           refreshClient: refreshClient,
+          buildHeaders: buildHeaders,
         );
 
         interceptor.getTokenPair();
@@ -231,6 +296,7 @@ void main() {
         final interceptor = AuthInterceptor(
           storage: storage,
           refreshClient: refreshClientSuccess,
+          buildHeaders: buildHeaders,
         );
 
         await interceptor.getTokenPair();
@@ -244,6 +310,7 @@ void main() {
         final interceptor = AuthInterceptor(
           storage: memStorageWithToken,
           refreshClient: refreshClientSuccess,
+          buildHeaders: buildHeaders,
         );
 
         await expectLater(
@@ -275,6 +342,7 @@ void main() {
           storage: memStorageWithToken,
           refreshClient: refreshClientSuccess,
           retryClient: retryClient,
+          buildHeaders: buildHeaders,
         );
         final response = Response(
           requestOptions: RequestOptions(path: '/test'),
@@ -302,6 +370,7 @@ void main() {
           storage: memStorageWithToken,
           refreshClient: refreshClientError,
           retryClient: baseClient,
+          buildHeaders: buildHeaders,
         );
         final response = Response(
           requestOptions: RequestOptions(path: '/test'),
@@ -325,6 +394,7 @@ void main() {
         final refreshClient = MockRefreshClient();
         final interceptor = AuthInterceptor(
           storage: memStorageWithToken,
+          buildHeaders: buildHeaders,
           refreshClient: refreshClient,
         );
         final response = Response(
@@ -365,6 +435,7 @@ void main() {
           storage: memStorageWithToken,
           refreshClient: refreshClientSuccess,
           retryClient: baseClient,
+          buildHeaders: buildHeaders,
         );
         final error = DioException(
           requestOptions: RequestOptions(path: '/test'),
@@ -395,6 +466,7 @@ void main() {
           storage: memStorageWithToken,
           refreshClient: refreshClient,
           retryClient: baseClient,
+          buildHeaders: buildHeaders,
         );
         final error = DioException(
           requestOptions: RequestOptions(path: '/test'),
@@ -428,6 +500,7 @@ void main() {
           storage: memStorageWithToken,
           refreshClient: refreshClientSuccess,
           retryClient: baseClient,
+          buildHeaders: buildHeaders,
         );
         final error = DioException(
           requestOptions: RequestOptions(path: '/test'),

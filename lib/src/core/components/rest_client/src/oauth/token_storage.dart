@@ -2,25 +2,16 @@ import 'dart:async';
 
 import 'package:sizzle_starter/src/core/components/rest_client/src/oauth/auth_interceptor.dart';
 
-/// A pair of Auth tokens.
-///
-/// The **accessToken** is used to authenticate the request.
-///
-/// The **refreshToken** is used to refresh the accessToken.
-///
-/// See [AuthInterceptor] for more details.
-typedef TokenPair = ({String accessToken, String refreshToken});
-
 /// The interface for token storage.
 ///
 /// This interface is used by the [AuthInterceptor]
 /// to store and retrieve the Auth token pair.
-abstract interface class TokenStorage {
+abstract interface class TokenStorage<T> {
   /// Load the Auth token pair.
-  Future<TokenPair?> loadTokenPair();
+  Future<T?> loadTokenPair();
 
   /// Save the Auth token pair.
-  Future<void> saveTokenPair(TokenPair tokenPair);
+  Future<void> saveTokenPair(T tokenPair);
 
   /// Clear the Auth token pair.
   ///
@@ -28,55 +19,8 @@ abstract interface class TokenStorage {
   Future<void> clearTokenPair();
 
   /// A stream of token pairs.
-  Stream<TokenPair?> getTokenPairStream();
+  Stream<T?> getTokenPairStream();
 
   /// Close the token storage.
   Future<void> close();
-}
-
-/// InMemoryTokenStorage is an in-memory implementation of [TokenStorage].
-/// Generally, this should only be used for testing.
-class InMemoryTokenStorage implements TokenStorage {
-  /// Create an in-memory token storage.
-  InMemoryTokenStorage({String? accessToken, String? refreshToken}) {
-    if (accessToken != null) {
-      _storage['accessToken'] = accessToken;
-    }
-    if (refreshToken != null) {
-      _storage['refreshToken'] = refreshToken;
-    }
-  }
-
-  final _storage = <String, String>{};
-  final _controller = StreamController<TokenPair?>.broadcast();
-
-  @override
-  Future<void> saveTokenPair(TokenPair tokenPair) async {
-    _storage['accessToken'] = tokenPair.accessToken;
-    _storage['refreshToken'] = tokenPair.refreshToken;
-    _controller.add(tokenPair);
-  }
-
-  @override
-  Future<TokenPair?> loadTokenPair() async {
-    final accessToken = _storage['accessToken'];
-    final refreshToken = _storage['refreshToken'];
-    if (accessToken != null && refreshToken != null) {
-      return (accessToken: accessToken, refreshToken: refreshToken);
-    }
-    return null;
-  }
-
-  @override
-  Future<void> clearTokenPair() async {
-    _storage.remove('accessToken');
-    _storage.remove('refreshToken');
-    _controller.add(null);
-  }
-
-  @override
-  Stream<TokenPair?> getTokenPairStream() => _controller.stream;
-  
-  @override
-  Future<void> close() => _controller.close();
 }
