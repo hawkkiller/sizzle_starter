@@ -126,17 +126,35 @@ abstract base class Logger {
 
   /// Handy method to log zoneError
   void logZoneError(Object error, StackTrace stackTrace) {
-    this.error('Top-level error: $error', stackTrace: stackTrace);
+    this.error(
+      'Top-level error: $error',
+      error: error,
+      stackTrace: stackTrace,
+    );
   }
 
   /// Handy method to log [FlutterError]
   void logFlutterError(FlutterErrorDetails details) {
-    error(details.exceptionAsString(), stackTrace: details.stack);
+    if (details.silent) {
+      return;
+    }
+
+    final description = details.exceptionAsString();
+
+    error(
+      'Flutter Error: $description',
+      error: details.exception,
+      stackTrace: details.stack,
+    );
   }
 
   /// Handy method to log [PlatformDispatcher] error
   bool logPlatformDispatcherError(Object error, StackTrace stackTrace) {
-    this.error('PlatformDispatcherError', error: error, stackTrace: stackTrace);
+    this.error(
+      'PlatformDispatcherError: $error',
+      error: error,
+      stackTrace: stackTrace,
+    );
     return true;
   }
 }
@@ -211,7 +229,7 @@ String _formatLoggerMessage({
   }
   if (log.stackTrace != null) {
     buffer.writeln();
-    buffer.writeln(log.stackTrace);
+    buffer.write(log.stackTrace);
   }
 
   return buffer.toString();

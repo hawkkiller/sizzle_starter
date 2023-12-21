@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
@@ -38,22 +39,30 @@ abstract base class ExceptionTrackingManagerBase
   Stream<LogMessage> get _reportLogs => _logger.logs.where(_isWarningOrError);
 
   static bool _isWarningOrError(LogMessage log) =>
-      log.logLevel.value >= LoggerLevel.warning.value;
+      log.logLevel.compareTo(LoggerLevel.warning) >= 0;
 
-  @override
   @mustCallSuper
   @mustBeOverridden
+  @override
   Future<void> disableReporting() async {
     await _subscription?.cancel();
     _subscription = null;
   }
 
-  @override
   @mustCallSuper
   @mustBeOverridden
+  @override
   Future<void> enableReporting() async {
-    _subscription ??= _reportLogs.listen(_report);
+    _subscription ??= _reportLogs.listen((log) async {
+      if (shouldReport(log.error)) {
+        await _report(log);
+      }
+    });
   }
+
+  /// Returns `true` if the error should be reported.
+  @pragma('vm:prefer-inline')
+  bool shouldReport(Object? error) => true;
 
   /// Handles the log message.
   ///
@@ -66,27 +75,41 @@ abstract base class ExceptionTrackingManagerBase
 /// {@endtemplate}
 final class SentryTrackingManager extends ExceptionTrackingManagerBase {
   /// {@macro sentry_tracking_manager}
-  SentryTrackingManager(this.sentryDsn, super._logger);
+  SentryTrackingManager(
+    super._logger, {
+    required this.sentryDsn,
+    required this.environment,
+  });
 
   /// The Sentry DSN.
   final String sentryDsn;
 
+  /// The Sentry environment.
+  final String environment;
+
   @override
   Future<void> _report(LogMessage log) async {
-    final buffer = StringBuffer();
-    buffer.write(log.message);
-    if (log.error != null) {
-      buffer.write('| ${log.error}');
+    final error = log.error;
+    final stackTrace = log.stackTrace;
+
+    if (error == null && stackTrace == null) {
+      await Sentry.captureMessage(log.message);
+      return;
     }
-    await Sentry.captureException(
-      buffer.toString(),
-      stackTrace: log.stackTrace,
-    );
+
+    await Sentry.captureException(error ?? log.message, stackTrace: stackTrace);
   }
 
   @override
   Future<void> enableReporting() async {
-    await SentryFlutter.init((options) => options.dsn = sentryDsn);
+    await SentryFlutter.init((options) {
+      options.dsn = sentryDsn;
+
+      // Set the sample rate to 20% of events.
+      options.tracesSampleRate = 0.20;
+      options.debug = kDebugMode;
+      options.environment = environment;
+    });
     await super.enableReporting();
   }
 
