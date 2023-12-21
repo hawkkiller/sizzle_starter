@@ -86,7 +86,7 @@ final class SentryTrackingManager extends ExceptionTrackingManagerBase {
 
   @override
   Future<void> enableReporting() async {
-    await Sentry.init((options) => options.dsn = sentryDsn);
+    await SentryFlutter.init((options) => options.dsn = sentryDsn);
     await super.enableReporting();
   }
 
