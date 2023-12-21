@@ -1,4 +1,3 @@
-import 'package:flutter/foundation.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
 import 'package:sizzle_starter/src/feature/app/logic/tracking_manager.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/initialization_steps.dart';
@@ -26,7 +25,7 @@ mixin InitializationProcessor {
       dependencies: Dependencies(),
       environmentStore: env,
     );
-    if (!kDebugMode) {
+    if (env.enableSentry) {
       final trackingManager = factory.createTrackingManager(env);
       await trackingManager.enableReporting();
     }

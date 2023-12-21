@@ -1,5 +1,4 @@
 import 'dart:async';
-import 'dart:ui';
 
 import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 import 'package:flutter/material.dart';
@@ -28,7 +27,8 @@ final class AppRunner
 
     // Override logging
     FlutterError.onError = logger.logFlutterError;
-    PlatformDispatcher.instance.onError = logger.logPlatformDispatcherError;
+    WidgetsBinding.instance.platformDispatcher.onError =
+        logger.logPlatformDispatcherError;
 
     // Setup bloc observer and transformer
     Bloc.observer = const AppBlocObserver();
