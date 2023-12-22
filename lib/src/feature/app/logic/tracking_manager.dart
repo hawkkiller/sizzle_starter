@@ -54,7 +54,7 @@ abstract base class ExceptionTrackingManagerBase
   @override
   Future<void> enableReporting() async {
     _subscription ??= _reportLogs.listen((log) async {
-      if (shouldReport(log.error)) {
+      if (_shouldReport(log.error)) {
         await _report(log);
       }
     });
@@ -62,7 +62,7 @@ abstract base class ExceptionTrackingManagerBase
 
   /// Returns `true` if the error should be reported.
   @pragma('vm:prefer-inline')
-  bool shouldReport(Object? error) => true;
+  bool _shouldReport(Object? error) => true;
 
   /// Handles the log message.
   ///
