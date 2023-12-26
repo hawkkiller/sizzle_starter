@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:sizzle_starter/src/core/utils/logger.dart';
 import 'package:sizzle_starter/src/feature/app/logic/app_runner.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/initialization_processor.dart';
@@ -12,7 +14,10 @@ void main() {
     onInit: _onInit,
   );
   logger.runLogging(
-    () => AppRunner().initializeAndRun(hook),
+    () => runZonedGuarded(
+      () => AppRunner().initializeAndRun(hook),
+      logger.logZoneError,
+    ),
     const LogOptions(),
   );
 }
