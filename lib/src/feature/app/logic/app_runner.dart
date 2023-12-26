@@ -19,8 +19,7 @@ final class AppRunner
         InitializationFactoryImpl {
   /// Start the initialization and in case of success run application
   Future<void> initializeAndRun(InitializationHook hook) async {
-    final bindings = WidgetsFlutterBinding.ensureInitialized()
-      ..deferFirstFrame();
+    final bindings = WidgetsFlutterBinding.ensureInitialized();
 
     // Preserve splash screen
     FlutterNativeSplash.preserve(widgetsBinding: bindings);
@@ -40,9 +39,10 @@ final class AppRunner
       factory: this,
     );
 
-    bindings.allowFirstFrame();
+    // Allow rendering
+    FlutterNativeSplash.remove();
 
     // Attach this widget to the root of the tree.
-    App(result: result).attach(FlutterNativeSplash.remove);
+    App(result: result).attach();
   }
 }
