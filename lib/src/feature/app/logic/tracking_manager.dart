@@ -93,7 +93,7 @@ final class SentryTrackingManager extends ExceptionTrackingManagerBase {
     final stackTrace = log.stackTrace;
 
     if (error == null && stackTrace == null) {
-      await Sentry.captureMessage(log.message);
+      await Sentry.captureMessage(log.message.toString());
       return;
     }
 

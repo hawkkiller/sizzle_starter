@@ -8,7 +8,7 @@ abstract class InitializationFactory {
   EnvironmentStore getEnvironmentStore();
 
   /// Create a tracking manager.
-  SentryTrackingManager createTrackingManager(
+  ExceptionTrackingManager createTrackingManager(
     EnvironmentStore environmentStore,
   );
 }
