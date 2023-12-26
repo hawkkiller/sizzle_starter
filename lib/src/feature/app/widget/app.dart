@@ -17,10 +17,7 @@ class App extends StatelessWidget {
 
   /// Running this function will result in attaching
   /// corresponding [RenderObject] to the root of the tree.
-  void attach([VoidCallback? callback]) {
-    callback?.call();
-    runApp(this);
-  }
+  void attach() => runApp(this);
 
   /// The initialization result from the [InitializationProcessor]
   final InitializationResult result;
