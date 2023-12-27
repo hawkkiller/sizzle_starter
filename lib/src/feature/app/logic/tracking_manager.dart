@@ -5,23 +5,19 @@ import 'package:meta/meta.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
 
-/// A class which is responsible for disabling error tracking.
-abstract class ExceptionTrackingDisabler {
-  /// Disables error tracking.
-  ///
-  /// This method should be called when the user has opted out of error tracking
-  Future<void> disableReporting();
-}
-
 /// {@template error_tracking_manager}
 /// A class which is responsible for enabling error tracking.
 /// {@endtemplate}
-abstract interface class ExceptionTrackingManager
-    implements ExceptionTrackingDisabler {
+abstract interface class ExceptionTrackingManager {
   /// Enables error tracking.
   ///
   /// This method should be called when the user has opted in to error tracking.
   Future<void> enableReporting();
+
+  /// Disables error tracking.
+  ///
+  /// This method should be called when the user has opted out of error tracking
+  Future<void> disableReporting();
 }
 
 /// {@template sentry_tracking_manager}
