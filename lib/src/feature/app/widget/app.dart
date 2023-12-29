@@ -9,17 +9,15 @@ import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 /// {@template app}
 /// [App] is an entry point to the application.
 ///
-/// All the global scopes should be defined there.
+/// Scopes that don't depend on widgets returned by [MaterialApp]
+/// ([Directionality], [MediaQuery], [Localizations]) should be placed here.
 /// {@endtemplate}
 class App extends StatelessWidget {
   /// {@macro app}
   const App({required this.result, super.key});
 
-  /// Running this function will result in attaching
-  /// corresponding [RenderObject] to the root of the tree.
-  void attach() => runApp(this);
-
   /// The initialization result from the [InitializationProcessor]
+  /// which contains initialized dependencies.
   final InitializationResult result;
 
   @override
