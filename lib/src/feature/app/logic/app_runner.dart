@@ -19,10 +19,10 @@ final class AppRunner
         InitializationFactoryImpl {
   /// Start the initialization and in case of success run application
   Future<void> initializeAndRun(InitializationHook hook) async {
-    final bindings = WidgetsFlutterBinding.ensureInitialized();
+    final binding = WidgetsFlutterBinding.ensureInitialized();
 
     // Preserve splash screen
-    FlutterNativeSplash.preserve(widgetsBinding: bindings);
+    FlutterNativeSplash.preserve(widgetsBinding: binding);
 
     // Override logging
     FlutterError.onError = logger.logFlutterError;
@@ -43,6 +43,6 @@ final class AppRunner
     FlutterNativeSplash.remove();
 
     // Attach this widget to the root of the tree.
-    App(result: result).attach();
+    runApp(App(result: result));
   }
 }
