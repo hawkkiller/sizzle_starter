@@ -12,14 +12,14 @@ abstract interface class LocaleDataSource {
   Future<void> setLocale(Locale locale);
 
   /// Get current locale from cache
-  Locale? loadLocaleFromCache();
+  Future<Locale?> getLocale();
 }
 
 /// {@macro locale_datasource}
-final class LocaleDataSourceImpl extends PreferencesDao
+final class LocaleDataSourceLocal extends PreferencesDao
     implements LocaleDataSource {
   /// {@macro locale_datasource}
-  const LocaleDataSourceImpl({required super.sharedPreferences});
+  const LocaleDataSourceLocal({required super.sharedPreferences});
 
   PreferencesEntry<String> get _locale => stringEntry('settings.locale');
 
@@ -29,7 +29,7 @@ final class LocaleDataSourceImpl extends PreferencesDao
   }
 
   @override
-  Locale? loadLocaleFromCache() {
+  Future<Locale?> getLocale() async {
     final languageCode = _locale.read();
 
     if (languageCode == null) return null;

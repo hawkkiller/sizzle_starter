@@ -12,10 +12,10 @@ abstract interface class SettingsRepository {
   Future<void> setLocale(Locale locale);
 
   /// Observe theme mode changes
-  AppTheme? fetchThemeFromCache();
+  Future<AppTheme?> getTheme();
 
   /// Observe locale changes
-  Locale? fetchLocaleFromCache();
+  Future<Locale?> getLocale();
 }
 
 /// {@template settings_repository_impl}
@@ -33,10 +33,10 @@ final class SettingsRepositoryImpl implements SettingsRepository {
   final LocaleDataSource _localeDataSource;
 
   @override
-  Locale? fetchLocaleFromCache() => _localeDataSource.loadLocaleFromCache();
+  Future<Locale?> getLocale() => _localeDataSource.getLocale();
 
   @override
-  AppTheme? fetchThemeFromCache() => _themeDataSource.loadThemeFromCache();
+  Future<AppTheme?> getTheme() => _themeDataSource.getTheme();
 
   @override
   Future<void> setLocale(Locale locale) => _localeDataSource.setLocale(locale);

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/initialization_progress.dart';
+import 'package:sizzle_starter/src/feature/settings/bloc/settings_bloc.dart';
 import 'package:sizzle_starter/src/feature/settings/data/locale_datasource.dart';
 import 'package:sizzle_starter/src/feature/settings/data/settings_repository.dart';
 import 'package:sizzle_starter/src/feature/settings/data/theme_datasource.dart';
@@ -25,16 +26,33 @@ mixin InitializationSteps {
     },
     'Settings Repository': (progress) {
       final sharedPreferences = progress.dependencies.sharedPreferences;
-      final themeDataSource = ThemeDataSourceImpl(
+      final themeDataSource = ThemeDataSourceLocal(
         sharedPreferences: sharedPreferences,
         codec: const ThemeModeCodec(),
       );
-      final localeDataSource = LocaleDataSourceImpl(
+      final localeDataSource = LocaleDataSourceLocal(
         sharedPreferences: sharedPreferences,
       );
       progress.dependencies.settingsRepository = SettingsRepositoryImpl(
         themeDataSource: themeDataSource,
         localeDataSource: localeDataSource,
+      );
+    },
+    'SettingsBloc': (progress) async {
+      final repository = progress.dependencies.settingsRepository;
+
+      final localeFuture = repository.getLocale();
+      final theme = await repository.getTheme();
+      final locale = await localeFuture;
+
+      final initialState = SettingsState.idle(
+        appTheme: theme,
+        locale: locale,
+      );
+
+      progress.dependencies.settingsBloc = SettingsBloc(
+        initialState: initialState,
+        settingsRepository: repository,
       );
     },
   };
