@@ -1,0 +1,54 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Get dependencies",
+            "type": "shell",
+            "command": [
+                "flutter pub get"
+            ],
+            "group": {
+                "kind": "none",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run codegen",
+            "type": "shell",
+            "command": [
+                "dart run build_runner build --delete-conflicting-outputs"
+            ],
+            "group": {
+                "kind": "none",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Format",
+            "type": "shell",
+            "command": [
+                // do not include codegen files
+                "find lib test -name '*.dart' ! -name '*.g.dart' | xargs dart format --fix -l 80"
+            ],
+            "group": {
+                "kind": "none",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        },
+        {
+            "label": "Run tests",
+            "type": "shell",
+            "command": [
+                "flutter test ."
+            ],
+            "group": {
+                "kind": "none",
+                "isDefault": true
+            },
+            "problemMatcher": []
+        }
+    ]
+}
