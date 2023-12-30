@@ -6,7 +6,7 @@ import 'package:sizzle_starter/src/core/utils/preferences_dao.dart';
 import 'package:sizzle_starter/src/feature/app/model/app_theme.dart';
 
 /// {@template theme_datasource}
-/// [ThemeDataSource] is an entry point to the theme data layer.
+/// [ThemeDataSource] is a data source that provides theme data.
 ///
 /// This is used to set and get theme.
 /// {@endtemplate}
@@ -15,14 +15,14 @@ abstract interface class ThemeDataSource {
   Future<void> setTheme(AppTheme theme);
 
   /// Get current theme from cache
-  AppTheme? loadThemeFromCache();
+  Future<AppTheme?> getTheme();
 }
 
 /// {@macro theme_datasource}
-final class ThemeDataSourceImpl extends PreferencesDao
+final class ThemeDataSourceLocal extends PreferencesDao
     implements ThemeDataSource {
   /// {@macro theme_datasource}
-  const ThemeDataSourceImpl({
+  const ThemeDataSourceLocal({
     required super.sharedPreferences,
     required this.codec,
   });
@@ -41,7 +41,7 @@ final class ThemeDataSourceImpl extends PreferencesDao
   }
 
   @override
-  AppTheme? loadThemeFromCache() {
+  Future<AppTheme?> getTheme() async {
     final seedColor = _seedColor.read();
 
     final type = _themeMode.read();

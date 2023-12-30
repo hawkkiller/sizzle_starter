@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart' show Locale;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
-import 'package:sizzle_starter/src/core/localization/localization.dart';
 import 'package:sizzle_starter/src/feature/app/model/app_theme.dart';
 import 'package:sizzle_starter/src/feature/settings/data/settings_repository.dart';
 
@@ -15,31 +14,31 @@ sealed class SettingsState with _$SettingsState {
   /// Idle state for the [SettingsBloc].
   const factory SettingsState.idle({
     /// The current locale.
-    required Locale locale,
+    Locale? locale,
 
     /// The current theme mode.
-    required AppTheme appTheme,
+    AppTheme? appTheme,
   }) = _IdleSettingsState;
 
   /// Processing state for the [SettingsBloc].
   const factory SettingsState.processing({
     /// The current locale.
-    required Locale locale,
+    Locale? locale,
 
     /// The current theme mode.
-    required AppTheme appTheme,
+    AppTheme? appTheme,
   }) = _ProcessingSettingsState;
 
   /// Error state for the [SettingsBloc].
   const factory SettingsState.error({
+    /// The error message.
+    required Object cause,
+
     /// The current locale.
-    required Locale locale,
+    Locale? locale,
 
     /// The current theme mode.
-    required AppTheme appTheme,
-
-    /// The error message.
-    required String message,
+    AppTheme? appTheme,
   }) = _ErrorSettingsState;
 }
 
@@ -66,15 +65,11 @@ sealed class SettingsEvent with _$SettingsEvent {
 /// {@endtemplate}
 final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   /// {@macro settings_bloc}
-  SettingsBloc(this._settingsRepository)
-      : super(
-          SettingsState.idle(
-            appTheme: _settingsRepository.fetchThemeFromCache() ??
-                AppTheme.defaultTheme,
-            locale: _settingsRepository.fetchLocaleFromCache() ??
-                Localization.computeDefaultLocale(),
-          ),
-        ) {
+  SettingsBloc({
+    required SettingsRepository settingsRepository,
+    required SettingsState initialState,
+  })  : _settingsRepository = settingsRepository,
+        super(initialState) {
     on<SettingsEvent>(
       (event, emit) => event.map(
         updateTheme: (event) => _updateTheme(event, emit),
@@ -90,7 +85,7 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     Emitter<SettingsState> emitter,
   ) async {
     emitter(
-      _ProcessingSettingsState(
+      SettingsState.processing(
         appTheme: state.appTheme,
         locale: state.locale,
       ),
@@ -107,7 +102,7 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         SettingsState.error(
           appTheme: state.appTheme,
           locale: state.locale,
-          message: e.toString(),
+          cause: e,
         ),
       );
       rethrow;
@@ -119,7 +114,7 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     Emitter<SettingsState> emitter,
   ) async {
     emitter(
-      _ProcessingSettingsState(
+      SettingsState.processing(
         appTheme: state.appTheme,
         locale: state.locale,
       ),
@@ -136,7 +131,7 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
         SettingsState.error(
           appTheme: state.appTheme,
           locale: state.locale,
-          message: e.toString(),
+          cause: e,
         ),
       );
       rethrow;

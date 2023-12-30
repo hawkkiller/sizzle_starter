@@ -17,7 +17,7 @@
             "label": "Run codegen",
             "type": "shell",
             "command": [
-                "dart run build_runner build --delete-conflicting-outputs"
+                "fvm dart run build_runner build --delete-conflicting-outputs"
             ],
             "group": {
                 "kind": "none",

@@ -1,4 +1,5 @@
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizzle_starter/src/feature/settings/bloc/settings_bloc.dart';
 import 'package:sizzle_starter/src/feature/settings/data/settings_repository.dart';
 
 /// {@template dependencies}
@@ -8,11 +9,14 @@ base class Dependencies {
   /// {@macro dependencies}
   Dependencies();
 
-  /// Shared preferences
+  /// [SharedPreferences] instance, used to store Key-Value pairs.
   late final SharedPreferences sharedPreferences;
 
-  /// Theme repository
+  /// [SettingsRepository] instance, used to manage theme and locale.
   late final SettingsRepository settingsRepository;
+
+  /// [SettingsBloc] instance, used to manage theme and locale.
+  late final SettingsBloc settingsBloc;
 }
 
 /// {@template initialization_result}

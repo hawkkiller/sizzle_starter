@@ -25,7 +25,10 @@ class App extends StatelessWidget {
         bundle: SentryAssetBundle(),
         child: DependenciesScope(
           dependencies: result.dependencies,
-          child: const SettingsScope(child: MaterialContext()),
+          child: SettingsScope(
+            settingsBloc: result.dependencies.settingsBloc,
+            child: const MaterialContext(),
+          ),
         ),
       );
 }
