@@ -8,17 +8,16 @@ import 'package:sizzle_starter/src/core/utils/app_bloc_observer.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
 import 'package:sizzle_starter/src/feature/app/widget/app.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/initialization_processor.dart';
-import 'package:sizzle_starter/src/feature/initialization/logic/initialization_steps.dart';
-import 'package:sizzle_starter/src/feature/initialization/model/initialization_hook.dart';
 
+/// {@template app_runner}
 /// A class which is responsible for initialization and running the app.
-final class AppRunner
-    with
-        InitializationSteps,
-        InitializationProcessor,
-        InitializationFactoryImpl {
+/// {@endtemplate}
+final class AppRunner with InitializationFactoryImpl {
+  /// {@macro app_runner}
+  const AppRunner();
+
   /// Start the initialization and in case of success run application
-  Future<void> initializeAndRun(InitializationHook hook) async {
+  Future<void> initializeAndRun() async {
     final binding = WidgetsFlutterBinding.ensureInitialized();
 
     // Preserve splash screen
@@ -33,11 +32,14 @@ final class AppRunner
     Bloc.observer = const AppBlocObserver();
     Bloc.transformer = bloc_concurrency.sequential();
 
-    final result = await processInitialization(
-      steps: initializationSteps,
-      hook: hook,
-      factory: this,
+    final environmentStore = getEnvironmentStore();
+
+    final initializationProcessor = InitializationProcessor(
+      trackingManager: createTrackingManager(environmentStore),
+      environmentStore: environmentStore,
     );
+
+    final result = await initializationProcessor.initialize();
 
     // Allow rendering
     FlutterNativeSplash.remove();
