@@ -11,12 +11,17 @@ class EnvironmentStore {
   String get sentryDsn => const String.fromEnvironment('SENTRY_DSN');
 
   /// The environment.
-  Environment get environment => Environment.from(
-        String.fromEnvironment(
-          'ENVIRONMENT',
-          defaultValue: Environment.dev.value,
-        ),
-      );
+  Environment get environment {
+    var environment = const String.fromEnvironment('ENVIRONMENT');
+
+    if (environment.isNotEmpty) {
+      return Environment.from(environment);
+    }
+
+    environment = const String.fromEnvironment('FLUTTER_APP_FLAVOR');
+
+    return Environment.from(environment);
+  }
 
   /// Whether Sentry is enabled.
   bool get enableTrackingManager => sentryDsn.isNotEmpty;
