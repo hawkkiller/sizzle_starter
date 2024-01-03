@@ -55,7 +55,6 @@ dependencies:
   platform_info: ^4.0.2
   path: ^1.8.3
   path_provider: ^2.1.0
-  flutter_native_splash: ^2.3.5
   mocktail: ^1.0.1
   
 dev_dependencies:
@@ -70,6 +69,7 @@ dev_dependencies:
   flutter_gen_runner: ^5.3.2
   flutter_launcher_icons: ^0.13.1
   intl_utils: ^2.8.5
+  flutter_native_splash: ^2.3.5
 
   # Codegen
   freezed: ^2.4.5
