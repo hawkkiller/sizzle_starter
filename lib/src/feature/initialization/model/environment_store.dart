@@ -19,5 +19,5 @@ class EnvironmentStore {
       );
 
   /// Whether Sentry is enabled.
-  bool get enableSentry => sentryDsn.isNotEmpty;
+  bool get enableTrackingManager => sentryDsn.isNotEmpty;
 }
