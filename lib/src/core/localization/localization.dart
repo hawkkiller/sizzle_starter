@@ -1,30 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:sizzle_starter/src/core/localization/generated/l10n.dart';
 
 /// {@template localization}
 /// Localization class which is used to localize app.
 /// This class provides handy methods and tools.
 /// {@endtemplate}
-final class Localization extends GeneratedLocalization {
+final class Localization {
   /// {@macro localization}
-  Localization._({required this.locale});
-
-  /// {@macro localization}
-  static const localizationDelegate = _LocalizationDelegate(
-    AppLocalizationDelegate(),
-  );
+  const Localization._({required this.locale});
 
   /// List of supported locales.
-  static List<Locale> get supportedLocales =>
-      const AppLocalizationDelegate().supportedLocales;
+  static List<Locale> get supportedLocales => AppLocalizations.supportedLocales;
+
+  static const _delegate = AppLocalizations.delegate;
 
   /// List of localization delegates.
   static List<LocalizationsDelegate<void>> get localizationDelegates => [
         GlobalMaterialLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
-        Localization.localizationDelegate,
+        _delegate,
       ];
 
   /// {@macro localization}
@@ -42,31 +38,13 @@ final class Localization extends GeneratedLocalization {
   static Locale computeDefaultLocale() {
     final locale = WidgetsBinding.instance.platformDispatcher.locale;
 
-    if (const AppLocalizationDelegate().isSupported(locale)) return locale;
+    if (_delegate.isSupported(locale)) return locale;
 
     return const Locale('en');
   }
 
-  /// Obtain [Localization] instance from [BuildContext].
-  static Localization of(BuildContext context) =>
-      Localizations.of<Localization>(context, Localization) ??
+  /// Obtain [AppLocalizations] instance from [BuildContext].
+  static AppLocalizations of(BuildContext context) =>
+      AppLocalizations.of(context) ??
       (throw ArgumentError('No Localization found in context'));
-}
-
-final class _LocalizationDelegate extends LocalizationsDelegate<Localization> {
-  const _LocalizationDelegate(this._delegate);
-
-  final AppLocalizationDelegate _delegate;
-
-  @override
-  bool isSupported(Locale locale) => _delegate.isSupported(locale);
-
-  @override
-  Future<Localization> load(Locale locale) =>
-      GeneratedLocalization.load(locale).then(
-        (value) => Localization._current = Localization._(locale: locale),
-      );
-
-  @override
-  bool shouldReload(_LocalizationDelegate old) => false;
 }
