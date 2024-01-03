@@ -25,7 +25,7 @@ mixin InitializationProcessor {
       dependencies: Dependencies(),
       environmentStore: env,
     );
-    if (env.enableSentry) {
+    if (env.enableTrackingManager) {
       final trackingManager = factory.createTrackingManager(env);
       await trackingManager.enableReporting();
     }
