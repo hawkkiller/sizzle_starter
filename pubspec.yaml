@@ -19,9 +19,7 @@ dependencies:
   collection: any
   async: any
   meta: any
-
-  # Localization
-  intl: 0.18.1
+  intl: any
   flutter_localizations:
     sdk: flutter
 
@@ -68,7 +66,6 @@ dev_dependencies:
   # Utils
   flutter_gen_runner: ^5.3.2
   flutter_launcher_icons: ^0.13.1
-  intl_utils: ^2.8.5
   flutter_native_splash: ^2.3.5
 
   # Codegen
@@ -80,7 +77,7 @@ dev_dependencies:
 flutter:
   uses-material-design: true
 
-  generate: false
+  generate: true
 
   assets:
     # Add assets from the images directory to the application.
