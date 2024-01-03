@@ -126,11 +126,7 @@ abstract base class Logger {
 
   /// Handy method to log zoneError
   void logZoneError(Object error, StackTrace stackTrace) {
-    this.error(
-      'Zone(${Zone.current.hashCode}) error: $error',
-      error: error,
-      stackTrace: stackTrace,
-    );
+    this.error('Zone error: $error', error: error, stackTrace: stackTrace);
   }
 
   /// Handy method to log [FlutterError]

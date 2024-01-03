@@ -35,7 +35,7 @@ final class InitializationProcessor {
       settingsBloc: settingsBloc,
     );
   }
-  
+
   Future<SettingsBloc> _initSettingsBloc(SharedPreferences prefs) async {
     final settingsRepository = SettingsRepositoryImpl(
       localeDataSource: LocaleDataSourceLocal(sharedPreferences: prefs),
@@ -65,13 +65,15 @@ final class InitializationProcessor {
   /// before the application starts
   /// (for example, caching or enabling tracking manager)
   Future<InitializationResult> initialize() async {
-    final stopwatch = Stopwatch()..start();
     if (_environmentStore.enableTrackingManager) {
       await _trackingManager.enableReporting();
     }
+    final stopwatch = Stopwatch()..start();
 
+    logger.info('Initializing dependencies...');
     // initialize dependencies
     final dependencies = await _initDependencies();
+    logger.info('Dependencies initialized');
 
     stopwatch.stop();
     final result = InitializationResult(

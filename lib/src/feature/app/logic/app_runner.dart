@@ -3,11 +3,11 @@ import 'dart:async';
 import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:sizzle_starter/src/core/utils/app_bloc_observer.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
 import 'package:sizzle_starter/src/feature/app/widget/app.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/initialization_processor.dart';
+import 'package:sizzle_starter/src/feature/initialization/widget/initialization_failed_app.dart';
 
 /// {@template app_runner}
 /// A class which is responsible for initialization and running the app.
@@ -21,7 +21,7 @@ final class AppRunner with InitializationFactoryImpl {
     final binding = WidgetsFlutterBinding.ensureInitialized();
 
     // Preserve splash screen
-    FlutterNativeSplash.preserve(widgetsBinding: binding);
+    binding.deferFirstFrame();
 
     // Override logging
     FlutterError.onError = logger.logFlutterError;
@@ -39,12 +39,27 @@ final class AppRunner with InitializationFactoryImpl {
       environmentStore: environmentStore,
     );
 
-    final result = await initializationProcessor.initialize();
+    Future<void> initializeAndRun() async {
+      try {
+        final result = await initializationProcessor.initialize();
+        // Attach this widget to the root of the tree.
+        runApp(App(result: result));
+      } catch (e, stackTrace) {
+        logger.error('Initialization failed', error: e, stackTrace: stackTrace);
+        runApp(
+          InitializationFailedApp(
+            error: e,
+            stackTrace: stackTrace,
+            retryInitialization: initializeAndRun,
+          ),
+        );
+      } finally {
+        // Allow rendering
+        binding.allowFirstFrame();
+      }
+    }
 
-    // Allow rendering
-    FlutterNativeSplash.remove();
-
-    // Attach this widget to the root of the tree.
-    runApp(App(result: result));
+    // Run the app
+    await initializeAndRun();
   }
 }
