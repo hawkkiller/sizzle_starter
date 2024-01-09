@@ -2,7 +2,8 @@ import 'package:flutter/material.dart' show Locale;
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:sizzle_starter/src/feature/app/model/app_theme.dart';
-import 'package:sizzle_starter/src/feature/settings/data/settings_repository.dart';
+import 'package:sizzle_starter/src/feature/settings/data/locale_repository.dart';
+import 'package:sizzle_starter/src/feature/settings/data/theme_repository.dart';
 
 part 'settings_bloc.freezed.dart';
 
@@ -66,9 +67,11 @@ sealed class SettingsEvent with _$SettingsEvent {
 final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
   /// {@macro settings_bloc}
   SettingsBloc({
-    required SettingsRepository settingsRepository,
+    required LocaleRepository localeRepository,
+    required ThemeRepository themeRepository,
     required SettingsState initialState,
-  })  : _settingsRepository = settingsRepository,
+  })  : _localeRepo = localeRepository,
+        _themeRepo = themeRepository,
         super(initialState) {
     on<SettingsEvent>(
       (event, emit) => event.map(
@@ -78,7 +81,8 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     );
   }
 
-  final SettingsRepository _settingsRepository;
+  final LocaleRepository _localeRepo;
+  final ThemeRepository _themeRepo;
 
   Future<void> _updateTheme(
     _UpdateThemeSettingsEvent event,
@@ -92,7 +96,7 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     );
 
     try {
-      await _settingsRepository.setTheme(event.appTheme);
+      await _themeRepo.setTheme(event.appTheme);
 
       emitter(
         SettingsState.idle(appTheme: event.appTheme, locale: state.locale),
@@ -121,7 +125,7 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     );
 
     try {
-      await _settingsRepository.setLocale(event.locale);
+      await _localeRepo.setLocale(event.locale);
 
       emitter(
         SettingsState.idle(appTheme: state.appTheme, locale: event.locale),
