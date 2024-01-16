@@ -37,7 +37,7 @@ final class RestClientDio extends RestClientBase {
       );
 
       return decodeResponse(response.data, statusCode: response.statusCode);
-    } on ClientException {
+    } on RestClientException {
       rethrow;
     } on DioException catch (e) {
       if (e.type == DioExceptionType.connectionError ||
@@ -60,12 +60,12 @@ final class RestClientDio extends RestClientBase {
         return result;
       }
       Error.throwWithStackTrace(
-        RestClientException(message: e.toString()),
+        ClientException(message: e.toString()),
         e.stackTrace,
       );
     } on Object catch (e, stack) {
       Error.throwWithStackTrace(
-        RestClientException(message: e.toString()),
+        ClientException(message: e.toString()),
         stack,
       );
     }

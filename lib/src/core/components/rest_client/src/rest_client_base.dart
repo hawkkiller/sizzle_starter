@@ -25,7 +25,7 @@ abstract base class RestClientBase implements RestClient {
       return _jsonUTF8.encode(body);
     } on Object catch (e, stackTrace) {
       Error.throwWithStackTrace(
-        RestClientException(message: 'Error occured during encoding $e'),
+        ClientException(message: 'Error occured during encoding $e'),
         stackTrace,
       );
     }
@@ -66,12 +66,12 @@ abstract base class RestClientBase implements RestClient {
       } else if (body is Map<String, Object?>) {
         result = body;
       } else if (body is List<int>) {
-        if (body.length > 10000) {
+        if (body.length > 1000) {
           result = await Isolate.run(
-            () => json.decode(utf8.decode(body)) as Map<String, Object?>,
+            () => _jsonUTF8.decode(body)! as Map<String, Object?>,
           );
         } else {
-          result = json.decode(utf8.decode(body)) as Map<String, Object?>;
+          result = _jsonUTF8.decode(body)! as Map<String, Object?>;
         }
       } else {
         throw WrongResponseTypeException(
@@ -81,8 +81,9 @@ abstract base class RestClientBase implements RestClient {
       }
 
       if (result case {'error': final Map<String, Object?> error}) {
-        throw RestClientException(
-          message: error['message'] as String?,
+        throw CustomBackendException(
+          message: 'Backend returned custom error',
+          error: error,
           statusCode: statusCode,
         );
       }
@@ -92,11 +93,15 @@ abstract base class RestClientBase implements RestClient {
       }
 
       return null;
-    } on ClientException {
+    } on RestClientException {
       rethrow;
     } on Object catch (e, stackTrace) {
       Error.throwWithStackTrace(
-        RestClientException(message: 'Error occured during decoding $e'),
+        ClientException(
+          message: 'Error occured during decoding',
+          statusCode: statusCode,
+          cause: e,
+        ),
         stackTrace,
       );
     }
