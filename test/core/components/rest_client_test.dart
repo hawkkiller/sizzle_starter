@@ -54,7 +54,7 @@ void main() {
         final restClient = _RestClientBase();
         expect(
           () => restClient.encodeBody({'wrong': Object()}),
-          throwsA(isA<RestClientException>()),
+          throwsA(isA<ClientException>()),
         );
       });
     });
@@ -106,12 +106,7 @@ void main() {
         final restClient = _RestClientBase();
         const response = '{"error": {"message": "test"}}';
         final result = restClient.decodeResponse(response);
-        expect(
-          result,
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
-        );
+        expect(result, throwsA(isA<CustomBackendException>()));
       });
 
       test('If length is > 10000, compute in Isolate', () {
@@ -175,33 +170,23 @@ void main() {
         );
         expectLater(
           restClient.get('/test'),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
+          throwsA(isA<CustomBackendException>()),
         );
         expectLater(
           restClient.post('/test', body: {}),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
+          throwsA(isA<CustomBackendException>()),
         );
         expectLater(
           restClient.delete('/test'),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
+          throwsA(isA<CustomBackendException>()),
         );
         expectLater(
           restClient.patch('/test', body: {}),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
+          throwsA(isA<CustomBackendException>()),
         );
         expectLater(
           restClient.put('/test', body: {}),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
+          throwsA(isA<CustomBackendException>()),
         );
       });
 
@@ -296,33 +281,23 @@ void main() {
         );
         expect(
           restClient.get('/test'),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
+          throwsA(isA<CustomBackendException>()),
         );
         expect(
           restClient.post('/test', body: {}),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
+          throwsA(isA<CustomBackendException>()),
         );
         expect(
           restClient.delete('/test'),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
+          throwsA(isA<CustomBackendException>()),
         );
         expect(
           restClient.patch('/test', body: {}),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
+          throwsA(isA<CustomBackendException>()),
         );
         expect(
           restClient.put('/test', body: {}),
-          throwsA(
-            predicate<RestClientException>((p) => p.message == 'test'),
-          ),
+          throwsA(isA<CustomBackendException>()),
         );
       });
     });

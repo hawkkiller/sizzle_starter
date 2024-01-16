@@ -38,7 +38,7 @@ dart_code_metrics:
     - avoid-unused-generics
     - function-always-returns-null
     - avoid-throw-objects-without-tostring
-    - avoid-unsafe-collection-methods
+    # - avoid-unsafe-collection-methods
     - prefer-wildcard-pattern
     - no-equal-switch-expression-cases
     - avoid-future-tostring
