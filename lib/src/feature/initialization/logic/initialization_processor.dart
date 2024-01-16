@@ -5,9 +5,10 @@ import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dar
 import 'package:sizzle_starter/src/feature/initialization/model/environment_store.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/settings_bloc.dart';
 import 'package:sizzle_starter/src/feature/settings/data/locale_datasource.dart';
-import 'package:sizzle_starter/src/feature/settings/data/settings_repository.dart';
+import 'package:sizzle_starter/src/feature/settings/data/locale_repository.dart';
 import 'package:sizzle_starter/src/feature/settings/data/theme_datasource.dart';
 import 'package:sizzle_starter/src/feature/settings/data/theme_mode_codec.dart';
+import 'package:sizzle_starter/src/feature/settings/data/theme_repository.dart';
 
 part 'initialization_factory.dart';
 
@@ -37,22 +38,26 @@ final class InitializationProcessor {
   }
 
   Future<SettingsBloc> _initSettingsBloc(SharedPreferences prefs) async {
-    final settingsRepository = SettingsRepositoryImpl(
+    final localeRepository = LocaleRepositoryImpl(
       localeDataSource: LocaleDataSourceLocal(sharedPreferences: prefs),
+    );
+
+    final themeRepository = ThemeRepositoryImpl(
       themeDataSource: ThemeDataSourceLocal(
         sharedPreferences: prefs,
         codec: const ThemeModeCodec(),
       ),
     );
 
-    final localeFuture = settingsRepository.getLocale();
-    final theme = await settingsRepository.getTheme();
+    final localeFuture = localeRepository.getLocale();
+    final theme = await themeRepository.getTheme();
     final locale = await localeFuture;
 
     final initialState = SettingsState.idle(appTheme: theme, locale: locale);
 
     final settingsBloc = SettingsBloc(
-      settingsRepository: settingsRepository,
+      localeRepository: localeRepository,
+      themeRepository: themeRepository,
       initialState: initialState,
     );
     return settingsBloc;
