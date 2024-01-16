@@ -36,7 +36,12 @@ final class RestClientDio extends RestClientBase {
         options: options,
       );
 
-      return decodeResponse(response.data, statusCode: response.statusCode);
+      final resp = await decodeResponse(
+        response.data,
+        statusCode: response.statusCode,
+      );
+
+      return resp;
     } on RestClientException {
       rethrow;
     } on DioException catch (e) {
@@ -45,8 +50,9 @@ final class RestClientDio extends RestClientBase {
           e.type == DioExceptionType.receiveTimeout) {
         Error.throwWithStackTrace(
           ConnectionException(
-            message: 'ConnectionException: $e',
+            message: 'ConnectionException',
             statusCode: e.response?.statusCode,
+            cause: e,
           ),
           e.stackTrace,
         );
@@ -60,12 +66,16 @@ final class RestClientDio extends RestClientBase {
         return result;
       }
       Error.throwWithStackTrace(
-        ClientException(message: e.toString()),
+        ClientException(
+          message: e.toString(),
+          statusCode: e.response?.statusCode,
+          cause: e,
+        ),
         e.stackTrace,
       );
     } on Object catch (e, stack) {
       Error.throwWithStackTrace(
-        ClientException(message: e.toString()),
+        ClientException(message: e.toString(), cause: e),
         stack,
       );
     }
