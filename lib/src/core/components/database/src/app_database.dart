@@ -10,7 +10,7 @@ part 'app_database.g.dart';
 @DriftDatabase(tables: [TodosTable])
 class AppDatabase extends _$AppDatabase {
   /// {@macro app_database}
-  AppDatabase() : super(createExecutor());
+  AppDatabase([QueryExecutor? executor]) : super(executor ?? createExecutor());
 
   @override
   int get schemaVersion => 1;
