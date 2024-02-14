@@ -37,18 +37,13 @@ abstract base class RestClientExceptionWithCause extends RestClientException {
 /// {@template client_exception}
 /// [ClientException] is thrown if something went wrong on client side
 /// {@endtemplate}
-final class ClientException extends RestClientException {
+final class ClientException extends RestClientExceptionWithCause {
   /// {@macro client_exception}
   const ClientException({
     required super.message,
     super.statusCode,
-    this.cause,
+    super.cause,
   });
-
-  /// The cause of the exception
-  ///
-  /// It is the inner exception that caused this exception to be thrown
-  final Object? cause;
 
   @override
   String toString() => 'ClientException('
