@@ -1,5 +1,4 @@
 import 'package:dio/dio.dart';
-import 'package:meta/meta.dart';
 import 'package:sizzle_starter/src/core/components/rest_client/rest_client.dart';
 
 /// {@template rest_client_dio}
@@ -12,9 +11,8 @@ final class RestClientDio extends RestClientBase {
   final Dio _dio;
 
   /// Send [Dio] request
-  @protected
-  @visibleForTesting
-  Future<Map<String, Object?>?> sendRequest<T extends Object>({
+  @override
+  Future<Map<String, Object?>?> send({
     required String path,
     required String method,
     Map<String, Object?>? body,
@@ -30,7 +28,7 @@ final class RestClientDio extends RestClientBase {
         responseType: ResponseType.json,
       );
 
-      final response = await _dio.request<T>(
+      final response = await _dio.request<Object>(
         uri.toString(),
         data: body,
         options: options,
@@ -80,75 +78,4 @@ final class RestClientDio extends RestClientBase {
       );
     }
   }
-
-  @override
-  Future<Map<String, Object?>?> delete(
-    String path, {
-    Map<String, Object?>? headers,
-    Map<String, Object?>? queryParams,
-  }) =>
-      sendRequest(
-        path: path,
-        method: 'DELETE',
-        headers: headers,
-        queryParams: queryParams,
-      );
-
-  @override
-  Future<Map<String, Object?>?> get(
-    String path, {
-    Map<String, Object?>? headers,
-    Map<String, Object?>? queryParams,
-  }) =>
-      sendRequest(
-        path: path,
-        method: 'GET',
-        headers: headers,
-        queryParams: queryParams,
-      );
-
-  @override
-  Future<Map<String, Object?>?> patch(
-    String path, {
-    required Map<String, Object?> body,
-    Map<String, Object?>? headers,
-    Map<String, Object?>? queryParams,
-  }) =>
-      sendRequest(
-        path: path,
-        method: 'PATCH',
-        body: body,
-        headers: headers,
-        queryParams: queryParams,
-      );
-
-  @override
-  Future<Map<String, Object?>?> post(
-    String path, {
-    required Map<String, Object?> body,
-    Map<String, Object?>? headers,
-    Map<String, Object?>? queryParams,
-  }) =>
-      sendRequest(
-        path: path,
-        method: 'POST',
-        body: body,
-        headers: headers,
-        queryParams: queryParams,
-      );
-
-  @override
-  Future<Map<String, Object?>?> put(
-    String path, {
-    required Map<String, Object?> body,
-    Map<String, Object?>? headers,
-    Map<String, Object?>? queryParams,
-  }) =>
-      sendRequest(
-        path: path,
-        method: 'PUT',
-        body: body,
-        headers: headers,
-        queryParams: queryParams,
-      );
 }

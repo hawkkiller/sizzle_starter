@@ -17,6 +17,86 @@ abstract base class RestClientBase implements RestClient {
 
   static final _jsonUTF8 = json.fuse(utf8);
 
+  /// Sends a request to the server
+  Future<Map<String, Object?>?> send({
+    required String path,
+    required String method,
+    Map<String, Object?>? body,
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
+  });
+
+  @override
+  Future<Map<String, Object?>?> delete(
+    String path, {
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
+  }) =>
+      send(
+        path: path,
+        method: 'DELETE',
+        headers: headers,
+        queryParams: queryParams,
+      );
+
+  @override
+  Future<Map<String, Object?>?> get(
+    String path, {
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
+  }) =>
+      send(
+        path: path,
+        method: 'GET',
+        headers: headers,
+        queryParams: queryParams,
+      );
+
+  @override
+  Future<Map<String, Object?>?> patch(
+    String path, {
+    required Map<String, Object?> body,
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
+  }) =>
+      send(
+        path: path,
+        method: 'PATCH',
+        body: body,
+        headers: headers,
+        queryParams: queryParams,
+      );
+
+  @override
+  Future<Map<String, Object?>?> post(
+    String path, {
+    required Map<String, Object?> body,
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
+  }) =>
+      send(
+        path: path,
+        method: 'POST',
+        body: body,
+        headers: headers,
+        queryParams: queryParams,
+      );
+
+  @override
+  Future<Map<String, Object?>?> put(
+    String path, {
+    required Map<String, Object?> body,
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
+  }) =>
+      send(
+        path: path,
+        method: 'PUT',
+        body: body,
+        headers: headers,
+        queryParams: queryParams,
+      );
+
   /// Encodes [body] to JSON and then to UTF8
   @protected
   @visibleForTesting

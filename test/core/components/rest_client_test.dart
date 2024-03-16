@@ -6,7 +6,6 @@ import 'dart:typed_data';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:sizzle_starter/src/core/components/rest_client/rest_client.dart';
-import 'package:sizzle_starter/src/core/components/rest_client/src/rest_client_dio.dart';
 import 'auth_interceptor_test.dart' as auth_interceptor_test;
 
 Map<String, Object?> _generateJsonData(int length) => {
@@ -388,6 +387,17 @@ final class _RestClientBase extends RestClientBase {
     Map<String, Object?>? headers,
     Map<String, Object?>? queryParams,
   }) async {
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<Map<String, Object?>?> send({
+    required String path,
+    required String method,
+    Map<String, Object?>? body,
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
+  }) {
     throw UnimplementedError();
   }
 }
