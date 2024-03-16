@@ -12,7 +12,7 @@ import 'package:sizzle_starter/src/feature/initialization/widget/initialization_
 /// {@template app_runner}
 /// A class which is responsible for initialization and running the app.
 /// {@endtemplate}
-final class AppRunner with InitializationFactoryImpl {
+final class AppRunner {
   /// {@macro app_runner}
   const AppRunner();
 
@@ -32,12 +32,7 @@ final class AppRunner with InitializationFactoryImpl {
     Bloc.observer = const AppBlocObserver();
     Bloc.transformer = bloc_concurrency.sequential();
 
-    final environmentStore = getEnvironmentStore();
-
-    final initializationProcessor = InitializationProcessor(
-      trackingManager: createTrackingManager(environmentStore),
-      environmentStore: environmentStore,
-    );
+    const initializationProcessor = InitializationProcessor();
 
     Future<void> initializeAndRun() async {
       try {

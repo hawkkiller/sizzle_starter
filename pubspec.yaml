@@ -84,15 +84,8 @@ flutter:
     - assets/images/
 
 flutter_gen:
-  output: lib/src/core/assets/generated
+  output: lib/src/core/constant/generated
   line_length: 80
-
-flutter_intl:
-  enabled: true
-  class_name: GeneratedLocalization
-  main_locale: en
-  arb_dir: lib/src/core/localization/translations
-  output_dir: lib/src/core/localization/generated
 
 flutter_launcher_icons:
   #  image_path: "assets/images/icon-128x128.png"
