@@ -5,7 +5,8 @@ import 'package:sizzle_starter/src/core/components/rest_client/rest_client.dart'
 Object? checkHttpException(http.ClientException e) {
   // TODO(mlazebny): validate this logic, verify that XMLHttpRequest
   // is raised only when there is a problem with connection cause
-  // I think that it can be raised in case of CORS as well as other situations
+  // I think that it can be raised in case of CORS or when the url is not
+  // reachable
   if (e.message.contains('XMLHttpRequest error')) {
     return ConnectionException(message: e.message, cause: e);
   }
