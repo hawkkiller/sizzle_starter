@@ -18,14 +18,10 @@ jobs:
       - name: 📚 Git Checkout
         uses: actions/checkout@v3
 
-      - name: Get Flutter Version From FVM config
-        id: get_flutter_version
-        run: echo "::set-output name=version::$(cat .fvm/fvm_config.json | jq -r '.flutterSdkVersion')"
-
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2.12.0
         with:
-          flutter-version: ${{ steps.get_flutter_version.outputs.version }}
+          flutter-version: 3.19.4
           channel: stable
           cache: true
           cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
