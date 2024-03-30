@@ -13,32 +13,32 @@ abstract base class PreferencesDao {
       : _sharedPreferences = sharedPreferences;
 
   /// Obtain [bool] entry from the preferences.
-  PreferencesEntry<bool> boolEntry(String key) => _PreferencesEntry<bool>(
+  PreferencesEntry<bool> boolEntry(String key) => TypedEntry<bool>(
         key: key,
         sharedPreferences: _sharedPreferences,
       );
 
   /// Obtain [double] entry from the preferences.
-  PreferencesEntry<double> doubleEntry(String key) => _PreferencesEntry<double>(
+  PreferencesEntry<double> doubleEntry(String key) => TypedEntry<double>(
         key: key,
         sharedPreferences: _sharedPreferences,
       );
 
   /// Obtain [int] entry from the preferences.
-  PreferencesEntry<int> intEntry(String key) => _PreferencesEntry<int>(
+  PreferencesEntry<int> intEntry(String key) => TypedEntry<int>(
         key: key,
         sharedPreferences: _sharedPreferences,
       );
 
   /// Obtain [String] entry from the preferences.
-  PreferencesEntry<String> stringEntry(String key) => _PreferencesEntry<String>(
+  PreferencesEntry<String> stringEntry(String key) => TypedEntry<String>(
         key: key,
         sharedPreferences: _sharedPreferences,
       );
 
   /// Obtain [Iterable<String>] entry from the preferences.
   PreferencesEntry<Iterable<String>> iterableStringEntry(String key) =>
-      _PreferencesEntry<Iterable<String>>(
+      TypedEntry<Iterable<String>>(
         key: key,
         sharedPreferences: _sharedPreferences,
       );
@@ -69,8 +69,12 @@ abstract base class PreferencesEntry<T extends Object> {
       value == null ? remove() : set(value);
 }
 
-final class _PreferencesEntry<T extends Object> extends PreferencesEntry<T> {
-  _PreferencesEntry({
+/// {@template typed_entry}
+/// A [PreferencesEntry] that is typed to a specific type [T].
+/// {@endtemplate}
+final class TypedEntry<T extends Object> extends PreferencesEntry<T> {
+  /// {@macro typed_entry}
+  TypedEntry({
     required SharedPreferences sharedPreferences,
     required this.key,
   }) : _sharedPreferences = sharedPreferences;

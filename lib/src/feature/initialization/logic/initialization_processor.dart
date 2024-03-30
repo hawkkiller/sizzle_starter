@@ -15,7 +15,10 @@ import 'package:sizzle_starter/src/feature/settings/data/theme_repository.dart';
 /// {@endtemplate}
 final class InitializationProcessor {
   /// {@macro initialization_processor}
-  const InitializationProcessor();
+  const InitializationProcessor(this.config);
+
+  /// Application configuration
+  final AppConfig config;
 
   Future<Dependencies> _initDependencies() async {
     final sharedPreferences = await SharedPreferences.getInstance();
@@ -32,11 +35,11 @@ final class InitializationProcessor {
   Future<ErrorTrackingManager> _initErrorTrackingManager() async {
     final errorTrackingManager = SentryTrackingManager(
       logger,
-      sentryDsn: Config.sentryDsn,
-      environment: Config.environment.value,
+      sentryDsn: config.sentryDsn,
+      environment: config.environment.value,
     );
 
-    if (Config.enableSentry) {
+    if (config.enableSentry) {
       await errorTrackingManager.enableReporting();
     }
 

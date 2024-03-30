@@ -1,3 +1,4 @@
+import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
 
 /// A breakpoint that is used to determine the layout of the application.
@@ -6,7 +7,7 @@ import 'package:flutter/widgets.dart';
 ///
 /// See more:
 /// - https://m3.material.io/foundations/layout/applying-layout
-enum MaterialBreakpoint {
+enum WindowSize {
   /// Layouts for compact window size classes
   /// are for screen widths smaller than 600dp.
   compact._(double.negativeInfinity, 600),
@@ -25,8 +26,7 @@ enum MaterialBreakpoint {
 
   /// Layouts for extra-large window size classes
   /// are for screen widths of 1600dp and larger.
-  extraLarge._(1600, double.infinity),
-  ;
+  extraLarge._(1600, double.infinity);
 
   /// The minimum width of the breakpoint.
   final double min;
@@ -39,52 +39,54 @@ enum MaterialBreakpoint {
 
   /// Returns whether the given width isless than
   /// the minimum width of the breakpoint.
-  bool operator <(MaterialBreakpoint other) => max < other.min;
+  bool operator <(WindowSize other) => max < other.min;
 
   /// Returns whether the given width is greater than
   /// the maximum width of the breakpoint.
-  bool operator >(MaterialBreakpoint other) => min > other.max;
+  bool operator >(WindowSize other) => min > other.max;
 
   /// Returns whether the given width is less than
   /// or equal to the maximum width of the breakpoint.
-  bool operator <=(MaterialBreakpoint other) => max <= other.max;
+  bool operator <=(WindowSize other) => max <= other.max;
 
   /// Returns whether the given width is greater than
   /// or equal to the minimum width of the breakpoint.
-  bool operator >=(MaterialBreakpoint other) => min >= other.min;
+  bool operator >=(WindowSize other) => min >= other.min;
 
   /// If the breakpoint is compact.
-  bool get isCompact => this == MaterialBreakpoint.compact;
+  bool get isCompact => this == WindowSize.compact;
 
   /// If the breakpoint is medium.
-  bool get isMedium => this == MaterialBreakpoint.medium;
+  bool get isMedium => this == WindowSize.medium;
 
   /// If the breakpoint is expanded.
-  bool get isExpanded => this == MaterialBreakpoint.expanded;
+  bool get isExpanded => this == WindowSize.expanded;
 
   /// If the breakpoint is large.
-  bool get isLarge => this == MaterialBreakpoint.large;
+  bool get isLarge => this == WindowSize.large;
 
   /// If the breakpoint is extra-large.
-  bool get isExtraLarge => this == MaterialBreakpoint.extraLarge;
+  bool get isExtraLarge => this == WindowSize.extraLarge;
 
-  const MaterialBreakpoint._(this.min, this.max);
+  const WindowSize._(this.min, this.max);
 }
 
-/// A set of extensions for [MaterialBreakpoint] on [BoxConstraints].
-extension MaterialBreakpointsConstrainsX on BoxConstraints {
-  /// Returns the [MaterialBreakpoint] for the given constraints.
-  MaterialBreakpoint get materialBreakpoint {
-    if (MaterialBreakpoint.compact.isInRange(maxWidth)) {
-      return MaterialBreakpoint.compact;
-    } else if (MaterialBreakpoint.medium.isInRange(maxWidth)) {
-      return MaterialBreakpoint.medium;
-    } else if (MaterialBreakpoint.expanded.isInRange(maxWidth)) {
-      return MaterialBreakpoint.expanded;
-    } else if (MaterialBreakpoint.large.isInRange(maxWidth)) {
-      return MaterialBreakpoint.large;
+/// A set of extensions for [WindowSize] on [BoxConstraints].
+extension WindowSizeConstrainsExtension on BoxConstraints {
+  /// Returns the [WindowSize] for the given constraints.
+  WindowSize get materialBreakpoint {
+    final side = biggest.shortestSide;
+
+    if (WindowSize.compact.isInRange(side)) {
+      return WindowSize.compact;
+    } else if (WindowSize.medium.isInRange(side)) {
+      return WindowSize.medium;
+    } else if (WindowSize.expanded.isInRange(side)) {
+      return WindowSize.expanded;
+    } else if (WindowSize.large.isInRange(side)) {
+      return WindowSize.large;
     }
 
-    return MaterialBreakpoint.extraLarge;
+    return WindowSize.extraLarge;
   }
 }
