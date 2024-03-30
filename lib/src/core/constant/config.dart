@@ -10,9 +10,6 @@ abstract interface class AppConfig {
 
   /// If [sentryDsn] is not empty, then Sentry should be enabled.
   bool get enableSentry;
-
-  /// Max screen layout width for screen with list view.
-  int get maxScreenLayoutWidth;
 }
 
 /// Application configuration
@@ -38,10 +35,4 @@ class Config implements AppConfig {
 
   @override
   bool get enableSentry => sentryDsn.isNotEmpty;
-
-  @override
-  int get maxScreenLayoutWidth => const int.fromEnvironment(
-        'MAX_SCREEN_LAYOUT_WIDTH',
-        defaultValue: 768,
-      );
 }

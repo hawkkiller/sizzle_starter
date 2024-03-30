@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
-import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/layout/layout.dart';
 
 /// {@template material_spacer}
@@ -34,7 +33,7 @@ class HorizontalSpacing extends EdgeInsets {
   const HorizontalSpacing.mediumUp() : this._(24);
 
   /// Spacing that is used to center
-  /// the element and keep at width of [Config.maxScreenLayoutWidth].
+  /// the element and keep at width of [maxWidth]
   ///
   /// [windowWidth] is the width of a window.
   factory HorizontalSpacing.centered(

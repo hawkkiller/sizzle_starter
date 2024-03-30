@@ -23,8 +23,7 @@ abstract interface class ErrorTrackingManager {
 /// {@template error_tracking_manager_base}
 /// A class that is responsible for managing Sentry error tracking.
 /// {@endtemplate}
-abstract base class ErrorTrackingManagerBase
-    implements ErrorTrackingManager {
+abstract base class ErrorTrackingManagerBase implements ErrorTrackingManager {
   /// {@macro error_tracking_manager_base}
   ErrorTrackingManagerBase(this._logger);
 
