@@ -10,7 +10,7 @@ import 'package:flutter/widgets.dart';
 enum WindowSize {
   /// Layouts for compact window size classes
   /// are for screen widths smaller than 600dp.
-  compact._(double.negativeInfinity, 600),
+  compact._(0, 600),
 
   /// Layouts for medium window size classes
   /// are for screen widths from 600dp to 839dp.
@@ -75,7 +75,7 @@ enum WindowSize {
 extension WindowSizeConstrainsExtension on BoxConstraints {
   /// Returns the [WindowSize] for the given constraints.
   WindowSize get materialBreakpoint {
-    final side = biggest.shortestSide;
+    final side = biggest.width;
 
     if (WindowSize.compact.isInRange(side)) {
       return WindowSize.compact;
