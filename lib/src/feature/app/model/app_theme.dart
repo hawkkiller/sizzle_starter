@@ -65,11 +65,8 @@ final class AppTheme with Diagnosticable {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is AppTheme &&
-          runtimeType == other.runtimeType &&
-          seed == other.seed &&
-          mode == other.mode;
+      other is AppTheme && seed == other.seed && mode == other.mode;
 
   @override
-  int get hashCode => mode.hashCode ^ seed.hashCode;
+  int get hashCode => Object.hash(seed, mode);
 }

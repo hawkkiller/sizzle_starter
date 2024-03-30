@@ -1,16 +1,11 @@
 import 'package:sizzle_starter/src/feature/initialization/model/environment.dart';
 
-/// {@template environment_store}
-/// Environment store
-/// {@endtemplate}
-class EnvironmentStore {
-  /// {@macro environment_store}
-  const EnvironmentStore();
+/// Application configuration
+class Config {
+  /// Creates a new [Config] instance.
+  const Config();
 
-  /// The Sentry DSN.
-  String get sentryDsn => const String.fromEnvironment('SENTRY_DSN');
-
-  /// The environment.
+  /// The current environment.
   Environment get environment {
     var environment = const String.fromEnvironment('ENVIRONMENT');
 
@@ -23,6 +18,9 @@ class EnvironmentStore {
     return Environment.from(environment);
   }
 
+  /// The Sentry DSN.
+  String get sentryDsn => const String.fromEnvironment('SENTRY_DSN');
+
   /// Whether Sentry is enabled.
-  bool get enableTrackingManager => sentryDsn.isNotEmpty;
+  bool get enableSentry => sentryDsn.isNotEmpty;
 }

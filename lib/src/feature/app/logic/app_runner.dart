@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/app_bloc_observer.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
 import 'package:sizzle_starter/src/feature/app/widget/app.dart';
@@ -12,7 +13,7 @@ import 'package:sizzle_starter/src/feature/initialization/widget/initialization_
 /// {@template app_runner}
 /// A class which is responsible for initialization and running the app.
 /// {@endtemplate}
-final class AppRunner with InitializationFactoryImpl {
+final class AppRunner {
   /// {@macro app_runner}
   const AppRunner();
 
@@ -31,13 +32,8 @@ final class AppRunner with InitializationFactoryImpl {
     // Setup bloc observer and transformer
     Bloc.observer = const AppBlocObserver();
     Bloc.transformer = bloc_concurrency.sequential();
-
-    final environmentStore = getEnvironmentStore();
-
-    final initializationProcessor = InitializationProcessor(
-      trackingManager: createTrackingManager(environmentStore),
-      environmentStore: environmentStore,
-    );
+    const config = Config();
+    const initializationProcessor = InitializationProcessor(config);
 
     Future<void> initializeAndRun() async {
       try {
