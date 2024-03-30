@@ -29,12 +29,10 @@ jobs:
       - name: 📦 Install Dependencies
         run: |
           flutter pub global activate very_good_cli
-          flutter pub global activate intl_utils
           flutter pub global activate coverage
 
       - name: 🦄 Generate Code
         run: |
-          flutter pub global run intl_utils:generate
           dart run build_runner build --delete-conflicting-outputs
 
       - name: Install DCM
