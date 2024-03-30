@@ -18,7 +18,7 @@ final class InitializationProcessor {
   const InitializationProcessor(this.config);
 
   /// Application configuration
-  final AppConfig config;
+  final Config config;
 
   Future<Dependencies> _initDependencies() async {
     final sharedPreferences = await SharedPreferences.getInstance();

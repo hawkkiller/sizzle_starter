@@ -1,23 +1,11 @@
 import 'package:sizzle_starter/src/feature/initialization/model/environment.dart';
 
 /// Application configuration
-abstract interface class AppConfig {
-  /// Application environment
-  Environment get environment;
-
-  /// Sentry dsn
-  String get sentryDsn;
-
-  /// If [sentryDsn] is not empty, then Sentry should be enabled.
-  bool get enableSentry;
-}
-
-/// Application configuration
-class Config implements AppConfig {
+class Config {
   /// Creates a new [Config] instance.
   const Config();
 
-  @override
+  /// The current environment.
   Environment get environment {
     var environment = const String.fromEnvironment('ENVIRONMENT');
 
@@ -30,9 +18,9 @@ class Config implements AppConfig {
     return Environment.from(environment);
   }
 
-  @override
+  /// The Sentry DSN.
   String get sentryDsn => const String.fromEnvironment('SENTRY_DSN');
 
-  @override
+  /// Whether Sentry is enabled.
   bool get enableSentry => sentryDsn.isNotEmpty;
 }
