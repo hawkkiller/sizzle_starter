@@ -1,4 +1,4 @@
-import 'package:sizzle_starter/src/core/components/rest_client/rest_client.dart';
+import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 
 /// The client that refreshes the Auth token using the refresh token.
 ///

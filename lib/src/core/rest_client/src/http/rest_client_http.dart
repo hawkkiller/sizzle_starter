@@ -1,13 +1,13 @@
 import 'package:http/http.dart' as http;
-import 'package:sizzle_starter/src/core/components/rest_client/rest_client.dart';
+import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 
-import 'package:sizzle_starter/src/core/components/rest_client/src/http/check_exception_io.dart'
+import 'package:sizzle_starter/src/core/rest_client/src/http/check_exception_io.dart'
     if (dart.library.html) 'package:sizzle_starter/src/core/components/rest_client/src/http/check_exception_browser.dart';
 
 /// {@template rest_client_http}
-/// Rest client that uses [http] as HTTP library.
+/// Rest client that uses [http] for making requests.
 /// {@endtemplate}
-final class RestClientHTTP extends RestClientBase {
+final class RestClientHttp extends RestClientBase {
   final http.Client _client;
 
   /// {@macro rest_client_http}
@@ -24,7 +24,7 @@ final class RestClientHTTP extends RestClientBase {
   ///  client: client,
   /// );
   /// ```
-  RestClientHTTP({required super.baseUrl, http.Client? client})
+  RestClientHttp({required super.baseUrl, http.Client? client})
       : _client = client ?? http.Client();
 
   @override
