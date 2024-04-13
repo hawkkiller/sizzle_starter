@@ -8,7 +8,7 @@ import 'package:sizzle_starter/src/core/utils/logger.dart';
 /// {@template error_tracking_manager}
 /// A class which is responsible for enabling error tracking.
 /// {@endtemplate}
-abstract interface class ExceptionTrackingManager {
+abstract interface class ErrorTrackingManager {
   /// Enables error tracking.
   ///
   /// This method should be called when the user has opted in to error tracking.
@@ -20,13 +20,12 @@ abstract interface class ExceptionTrackingManager {
   Future<void> disableReporting();
 }
 
-/// {@template sentry_tracking_manager}
+/// {@template error_tracking_manager_base}
 /// A class that is responsible for managing Sentry error tracking.
 /// {@endtemplate}
-abstract base class ExceptionTrackingManagerBase
-    implements ExceptionTrackingManager {
-  /// {@macro sentry_tracking_manager}
-  ExceptionTrackingManagerBase(this._logger);
+abstract base class ErrorTrackingManagerBase implements ErrorTrackingManager {
+  /// {@macro error_tracking_manager_base}
+  ErrorTrackingManagerBase(this._logger);
 
   final Logger _logger;
   StreamSubscription<LogMessage>? _subscription;
@@ -69,7 +68,7 @@ abstract base class ExceptionTrackingManagerBase
 /// {@template sentry_tracking_manager}
 /// A class that is responsible for managing Sentry error tracking.
 /// {@endtemplate}
-final class SentryTrackingManager extends ExceptionTrackingManagerBase {
+final class SentryTrackingManager extends ErrorTrackingManagerBase {
   /// {@macro sentry_tracking_manager}
   SentryTrackingManager(
     super._logger, {

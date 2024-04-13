@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/core/localization/localization.dart';
+import 'package:sizzle_starter/src/core/constant/localization/localization.dart';
 import 'package:sizzle_starter/src/feature/home/widget/home_screen.dart';
 import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 
@@ -22,7 +22,6 @@ class MaterialContext extends StatelessWidget {
     final locale = SettingsScope.localeOf(context).locale;
 
     return MaterialApp(
-      key: _globalKey,
       theme: theme.lightTheme,
       darkTheme: theme.darkTheme,
       themeMode: theme.mode,
@@ -32,6 +31,7 @@ class MaterialContext extends StatelessWidget {
       home: const HomeScreen(),
       // TODO: You may want to override the default text scaling behavior.
       builder: (context, child) => MediaQuery.withClampedTextScaling(
+        key: _globalKey,
         minScaleFactor: 1.0,
         maxScaleFactor: 2.0,
         child: child!,

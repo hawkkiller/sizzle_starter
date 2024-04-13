@@ -18,14 +18,10 @@ jobs:
       - name: 📚 Git Checkout
         uses: actions/checkout@v3
 
-      - name: Get Flutter Version From FVM config
-        id: get_flutter_version
-        run: echo "::set-output name=version::$(cat .fvm/fvm_config.json | jq -r '.flutterSdkVersion')"
-
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2.12.0
         with:
-          flutter-version: ${{ steps.get_flutter_version.outputs.version }}
+          flutter-version: 3.19.4
           channel: stable
           cache: true
           cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
@@ -33,12 +29,10 @@ jobs:
       - name: 📦 Install Dependencies
         run: |
           flutter pub global activate very_good_cli
-          flutter pub global activate intl_utils
           flutter pub global activate coverage
 
       - name: 🦄 Generate Code
         run: |
-          flutter pub global run intl_utils:generate
           dart run build_runner build --delete-conflicting-outputs
 
       - name: Install DCM
