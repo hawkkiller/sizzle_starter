@@ -23,14 +23,14 @@ abstract base class RestClientBase implements RestClient {
     required String method,
     Map<String, Object?>? body,
     Map<String, Object?>? headers,
-    Map<String, Object?>? queryParams,
+    Map<String, String?>? queryParams,
   });
 
   @override
   Future<Map<String, Object?>?> delete(
     String path, {
     Map<String, Object?>? headers,
-    Map<String, Object?>? queryParams,
+    Map<String, String?>? queryParams,
   }) =>
       send(
         path: path,
@@ -43,7 +43,7 @@ abstract base class RestClientBase implements RestClient {
   Future<Map<String, Object?>?> get(
     String path, {
     Map<String, Object?>? headers,
-    Map<String, Object?>? queryParams,
+    Map<String, String?>? queryParams,
   }) =>
       send(
         path: path,
@@ -57,7 +57,7 @@ abstract base class RestClientBase implements RestClient {
     String path, {
     required Map<String, Object?> body,
     Map<String, Object?>? headers,
-    Map<String, Object?>? queryParams,
+    Map<String, String?>? queryParams,
   }) =>
       send(
         path: path,
@@ -72,7 +72,7 @@ abstract base class RestClientBase implements RestClient {
     String path, {
     required Map<String, Object?> body,
     Map<String, Object?>? headers,
-    Map<String, Object?>? queryParams,
+    Map<String, String?>? queryParams,
   }) =>
       send(
         path: path,
@@ -87,7 +87,7 @@ abstract base class RestClientBase implements RestClient {
     String path, {
     required Map<String, Object?> body,
     Map<String, Object?>? headers,
-    Map<String, Object?>? queryParams,
+    Map<String, String?>? queryParams,
   }) =>
       send(
         path: path,
@@ -105,7 +105,7 @@ abstract base class RestClientBase implements RestClient {
       return _jsonUTF8.encode(body);
     } on Object catch (e, stackTrace) {
       Error.throwWithStackTrace(
-        ClientException(message: 'Error occured during encoding $e'),
+        ClientException(message: 'Error occured during encoding', cause: e),
         stackTrace,
       );
     }
@@ -114,8 +114,8 @@ abstract base class RestClientBase implements RestClient {
   /// Builds [Uri] from [path], [queryParams] and [baseUri]
   @protected
   @visibleForTesting
-  Uri buildUri({required String path, Map<String, Object?>? queryParams}) {
-    final finalPath = p.canonicalize(p.join(baseUri.path, path));
+  Uri buildUri({required String path, Map<String, String?>? queryParams}) {
+    final finalPath = p.join(baseUri.path, path);
     return baseUri.replace(
       path: finalPath,
       queryParameters: {
@@ -125,54 +125,55 @@ abstract base class RestClientBase implements RestClient {
     );
   }
 
-  /// Decodes [body] from JSON \ UTF8
+  /// Decodes the response [body]
+  ///
+  /// This method decodes the response body to a map and checks if the response
+  /// is an error or successful. If the response is an error, it throws a
+  /// [StructuredBackendException] with the error details.
+  ///
+  /// If the response is successful, it returns the data from the response.
+  ///
+  /// If the response is neither an error nor successful, it returns the decoded
+  /// body as is.
   @protected
   @visibleForTesting
-  FutureOr<Map<String, Object?>?> decodeResponse(
-    Object? body, {
+  Future<Map<String, Object?>?> decodeResponse(
+    /* String, Map<String, Object?>, List<int> */ Object? body, {
     int? statusCode,
   }) async {
     if (body == null) return null;
-    try {
-      Map<String, Object?> result;
-      if (body is String) {
-        if (body.length > 1000) {
-          result = await Isolate.run(
-            () => json.decode(body) as Map<String, Object?>,
-          );
-        } else {
-          result = json.decode(body) as Map<String, Object?>;
-        }
-      } else if (body is Map<String, Object?>) {
-        result = body;
-      } else if (body is List<int>) {
-        if (body.length > 1000) {
-          result = await Isolate.run(
-            () => _jsonUTF8.decode(body)! as Map<String, Object?>,
-          );
-        } else {
-          result = _jsonUTF8.decode(body)! as Map<String, Object?>;
-        }
-      } else {
-        throw WrongResponseTypeException(
-          message: 'Unexpected response body type: ${body.runtimeType}',
-          statusCode: statusCode,
-        );
-      }
 
-      if (result case {'error': final Map<String, Object?> error}) {
-        throw CustomBackendException(
-          message: 'Backend returned custom error',
+    assert(
+      body is String || body is Map<String, Object?> || body is List<int>,
+      'Unexpected response body type: ${body.runtimeType}',
+    );
+
+    try {
+      final Map<String, Object?>? decodedBody = switch (body) {
+        final Map<String, Object?> map => map,
+        final String str => await _decodeString(str),
+        final List<int> bytes => await _decodeBytes(bytes),
+        _ => throw WrongResponseTypeException(
+            message: 'Unexpected response body type: ${body.runtimeType}',
+            statusCode: statusCode,
+          ),
+      };
+
+      if (decodedBody case {'error': final Map<String, Object?> error}) {
+        throw StructuredBackendException(
           error: error,
           statusCode: statusCode,
         );
       }
 
-      if (result case {'data': final Map<String, Object?> data}) {
+      if (decodedBody case {'data': final Map<String, Object?> data}) {
         return data;
       }
 
-      return null;
+      // Simply return decoded body if it is not an error or data
+      // This is useful for responses that do not follow the structured response
+      // But generally, it is recommended to follow the structured response :)
+      return decodedBody;
     } on RestClientException {
       rethrow;
     } on Object catch (e, stackTrace) {
@@ -185,5 +186,29 @@ abstract base class RestClientBase implements RestClient {
         stackTrace,
       );
     }
+  }
+
+  /// Decodes a [String] to a [Map<String, Object?>]
+  Future<Map<String, Object?>?> _decodeString(String str) async {
+    if (str.isEmpty) return null;
+
+    if (str.length > 1000) {
+      return Isolate.run(() => json.decode(str) as Map<String, Object?>);
+    }
+
+    return json.decode(str) as Map<String, Object?>;
+  }
+
+  /// Decodes a [List<int>] to a [Map<String, Object?>]
+  Future<Map<String, Object?>?> _decodeBytes(List<int> bytes) async {
+    if (bytes.isEmpty) return null;
+
+    if (bytes.length > 1000) {
+      return Isolate.run(
+        () => _jsonUTF8.decode(bytes)! as Map<String, Object?>,
+      );
+    }
+
+    return _jsonUTF8.decode(bytes)! as Map<String, Object?>;
   }
 }

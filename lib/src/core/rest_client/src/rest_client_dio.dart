@@ -15,9 +15,9 @@ final class RestClientDio extends RestClientBase {
   Future<Map<String, Object?>?> send({
     required String path,
     required String method,
+    Map<String, String?>? queryParams,
     Map<String, Object?>? body,
     Map<String, Object?>? headers,
-    Map<String, Object?>? queryParams,
   }) async {
     try {
       final uri = buildUri(path: path, queryParams: queryParams);
