@@ -1,4 +1,3 @@
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/feature/app/logic/tracking_manager.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/settings_bloc.dart';
 
@@ -8,13 +7,9 @@ import 'package:sizzle_starter/src/feature/settings/bloc/settings_bloc.dart';
 base class Dependencies {
   /// {@macro dependencies}
   const Dependencies({
-    required this.sharedPreferences,
     required this.settingsBloc,
     required this.errorTrackingManager,
   });
-
-  /// [SharedPreferences] instance, used to store Key-Value pairs.
-  final SharedPreferences sharedPreferences;
 
   /// [SettingsBloc] instance, used to manage theme and locale.
   final SettingsBloc settingsBloc;

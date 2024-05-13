@@ -10,23 +10,39 @@ import 'package:sizzle_starter/src/feature/settings/data/theme_datasource.dart';
 import 'package:sizzle_starter/src/feature/settings/data/theme_mode_codec.dart';
 import 'package:sizzle_starter/src/feature/settings/data/theme_repository.dart';
 
-/// {@template initialization_processor}
-/// A class which is responsible for processing initialization steps.
+/// {@template composition_root}
+/// A place where all dependencies are initialized.
 /// {@endtemplate}
-final class InitializationProcessor {
-  /// {@macro initialization_processor}
-  const InitializationProcessor(this.config);
+final class CompositionRoot {
+  /// {@macro composition_root}
+  const CompositionRoot(this.config);
 
   /// Application configuration
   final Config config;
 
+  /// Composes dependencies and returns result of composition.
+  Future<InitializationResult> compose() async {
+    final stopwatch = Stopwatch()..start();
+
+    logger.info('Initializing dependencies...');
+    // initialize dependencies
+    final dependencies = await _initDependencies();
+    logger.info('Dependencies initialized');
+
+    stopwatch.stop();
+    final result = InitializationResult(
+      dependencies: dependencies,
+      msSpent: stopwatch.elapsedMilliseconds,
+    );
+    return result;
+  }
+
   Future<Dependencies> _initDependencies() async {
-    final sharedPreferences = await SharedPreferences.getInstance();
     final errorTrackingManager = await _initErrorTrackingManager();
+    final sharedPreferences = await SharedPreferences.getInstance();
     final settingsBloc = await _initSettingsBloc(sharedPreferences);
 
     return Dependencies(
-      sharedPreferences: sharedPreferences,
       settingsBloc: settingsBloc,
       errorTrackingManager: errorTrackingManager,
     );
@@ -70,26 +86,5 @@ final class InitializationProcessor {
       initialState: initialState,
     );
     return settingsBloc;
-  }
-
-  /// Initializes dependencies and returns the result of the initialization.
-  ///
-  /// This method may contain additional steps that need initialization
-  /// before the application starts
-  /// (for example, caching or enabling tracking manager)
-  Future<InitializationResult> initialize() async {
-    final stopwatch = Stopwatch()..start();
-
-    logger.info('Initializing dependencies...');
-    // initialize dependencies
-    final dependencies = await _initDependencies();
-    logger.info('Dependencies initialized');
-
-    stopwatch.stop();
-    final result = InitializationResult(
-      dependencies: dependencies,
-      msSpent: stopwatch.elapsedMilliseconds,
-    );
-    return result;
   }
 }

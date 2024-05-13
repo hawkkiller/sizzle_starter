@@ -7,7 +7,7 @@ import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/app_bloc_observer.dart';
 import 'package:sizzle_starter/src/core/utils/logger.dart';
 import 'package:sizzle_starter/src/feature/app/widget/app.dart';
-import 'package:sizzle_starter/src/feature/initialization/logic/initialization_processor.dart';
+import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/initialization_failed_app.dart';
 
 /// {@template app_runner}
@@ -33,11 +33,11 @@ final class AppRunner {
     Bloc.observer = const AppBlocObserver();
     Bloc.transformer = bloc_concurrency.sequential();
     const config = Config();
-    const initializationProcessor = InitializationProcessor(config);
+    const initializationProcessor = CompositionRoot(config);
 
     Future<void> initializeAndRun() async {
       try {
-        final result = await initializationProcessor.initialize();
+        final result = await initializationProcessor.compose();
         // Attach this widget to the root of the tree.
         runApp(App(result: result));
       } catch (e, stackTrace) {
