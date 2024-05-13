@@ -13,6 +13,14 @@ import 'package:sizzle_starter/src/feature/settings/data/theme_repository.dart';
 /// {@template composition_root}
 /// A place where all dependencies are initialized.
 /// {@endtemplate}
+/// 
+/// {@template composition_process}
+/// Composition of dependencies is a process of creating and configuring
+/// instances of classes that are required for the application to work.
+/// 
+/// It is a good practice to keep all dependencies in one place to make it
+/// easier to manage them and to ensure that they are initialized only once.
+/// {@endtemplate}
 final class CompositionRoot {
   /// {@macro composition_root}
   const CompositionRoot(this.config);
@@ -21,7 +29,7 @@ final class CompositionRoot {
   final Config config;
 
   /// Composes dependencies and returns result of composition.
-  Future<InitializationResult> compose() async {
+  Future<CompositionResult> compose() async {
     final stopwatch = Stopwatch()..start();
 
     logger.info('Initializing dependencies...');
@@ -30,7 +38,7 @@ final class CompositionRoot {
     logger.info('Dependencies initialized');
 
     stopwatch.stop();
-    final result = InitializationResult(
+    final result = CompositionResult(
       dependencies: dependencies,
       msSpent: stopwatch.elapsedMilliseconds,
     );

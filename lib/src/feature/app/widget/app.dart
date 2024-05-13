@@ -17,7 +17,7 @@ class App extends StatelessWidget {
   const App({required this.result, super.key});
 
   /// The result from the [CompositionRoot].
-  final InitializationResult result;
+  final CompositionResult result;
 
   @override
   Widget build(BuildContext context) => DefaultAssetBundle(
