@@ -21,7 +21,7 @@ jobs:
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2.12.0
         with:
-          flutter-version: 3.19.4
+          flutter-version: 3.22.0
           channel: stable
           cache: true
           cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
