@@ -7,8 +7,6 @@ import 'package:sizzle_starter/src/core/rest_client/src/http/check_exception_io.
 /// Rest client that uses [http] for making requests.
 /// {@endtemplate}
 final class RestClientHttp extends RestClientBase {
-  final http.Client _client;
-
   /// {@macro rest_client_http}
   ///
   /// The [client] is optional and defaults to [http.Client]
@@ -25,6 +23,8 @@ final class RestClientHttp extends RestClientBase {
   /// ```
   RestClientHttp({required super.baseUrl, http.Client? client})
       : _client = client ?? http.Client();
+
+  final http.Client _client;
 
   @override
   Future<Map<String, Object?>?> send({

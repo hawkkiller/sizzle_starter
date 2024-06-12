@@ -188,13 +188,15 @@ void main() {
       final client = _ReturningRestClientBase(baseUrl: 'http://localhost:8080');
       expectLater(
         client.get('/path'),
-        completion(equals({
-          'path': '/path',
-          'method': 'GET',
-          'body': null,
-          'headers': null,
-          'queryParams': null,
-        })),
+        completion(
+          equals({
+            'path': '/path',
+            'method': 'GET',
+            'body': null,
+            'headers': null,
+            'queryParams': null,
+          }),
+        ),
       );
     });
 
@@ -202,13 +204,15 @@ void main() {
       final client = _ReturningRestClientBase(baseUrl: 'http://localhost:8080');
       expectLater(
         client.post('/path', body: {}),
-        completion(equals({
-          'path': '/path',
-          'method': 'POST',
-          'body': <String, Object?>{},
-          'headers': null,
-          'queryParams': null,
-        })),
+        completion(
+          equals({
+            'path': '/path',
+            'method': 'POST',
+            'body': <String, Object?>{},
+            'headers': null,
+            'queryParams': null,
+          }),
+        ),
       );
     });
 
@@ -216,13 +220,15 @@ void main() {
       final client = _ReturningRestClientBase(baseUrl: 'http://localhost:8080');
       expectLater(
         client.put('/path', body: {}),
-        completion(equals({
-          'path': '/path',
-          'method': 'PUT',
-          'body': <String, Object?>{},
-          'headers': null,
-          'queryParams': null,
-        })),
+        completion(
+          equals({
+            'path': '/path',
+            'method': 'PUT',
+            'body': <String, Object?>{},
+            'headers': null,
+            'queryParams': null,
+          }),
+        ),
       );
     });
 
@@ -230,13 +236,15 @@ void main() {
       final client = _ReturningRestClientBase(baseUrl: 'http://localhost:8080');
       expectLater(
         client.delete('/path'),
-        completion(equals({
-          'path': '/path',
-          'method': 'DELETE',
-          'body': null,
-          'headers': null,
-          'queryParams': null,
-        })),
+        completion(
+          equals({
+            'path': '/path',
+            'method': 'DELETE',
+            'body': null,
+            'headers': null,
+            'queryParams': null,
+          }),
+        ),
       );
     });
 
@@ -244,30 +252,31 @@ void main() {
       final client = _ReturningRestClientBase(baseUrl: 'http://localhost:8080');
       expectLater(
         client.patch('/path', body: {}),
-        completion(equals({
-          'path': '/path',
-          'method': 'PATCH',
-          'body': <String, Object?>{},
-          'headers': null,
-          'queryParams': null,
-        })),
+        completion(
+          equals({
+            'path': '/path',
+            'method': 'PATCH',
+            'body': <String, Object?>{},
+            'headers': null,
+            'queryParams': null,
+          }),
+        ),
       );
     });
 
     test('sendReturns', () {
       final client = _ReturningRestClientBase(baseUrl: 'http://localhost:8080');
       expectLater(
-        client.send(
-          path: '/path',
-          method: 'GET',
+        client.send(path: '/path', method: 'GET'),
+        completion(
+          equals({
+            'path': '/path',
+            'method': 'GET',
+            'body': null,
+            'headers': null,
+            'queryParams': null,
+          }),
         ),
-        completion(equals({
-          'path': '/path',
-          'method': 'GET',
-          'body': null,
-          'headers': null,
-          'queryParams': null,
-        })),
       );
     });
   });
