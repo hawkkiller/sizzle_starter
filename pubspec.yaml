@@ -25,7 +25,7 @@ dependencies:
 
   # Stream
   stream_transform: ^2.1.0
-  rxdart: ^0.27.7
+  rxdart: ^0.28.0
 
   # BLoC
   flutter_bloc: ^8.1.3
