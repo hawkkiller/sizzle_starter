@@ -165,13 +165,14 @@ abstract base class Logger {
 
 /// Default logger using logging package
 final class LoggerLogging extends Logger {
-  final _logger = logging.Logger('CarapacikLogger');
+  final _logger = logging.Logger('SizzleLogger');
 
   @override
   void debug(Object message) => _logger.fine(message);
 
   @override
-  void error(Object message, {Object? error, StackTrace? stackTrace}) => _logger.severe(message, error, stackTrace);
+  void error(Object message, {Object? error, StackTrace? stackTrace}) =>
+      _logger.severe(message, error, stackTrace);
 
   @override
   void info(Object message) => _logger.info(message);
@@ -194,10 +195,12 @@ final class LoggerLogging extends Logger {
     }
     logging.hierarchicalLoggingEnabled = true;
 
-    _logger.onRecord.where((event) => event.loggerName == 'CarapacikLogger').listen((event) {
+    _logger.onRecord
+        .where((event) => event.loggerName == 'SizzleLogger')
+        .listen((event) {
       final logMessage = event.toLogMessage();
-      final message =
-          options.formatter?.call(logMessage, options) ?? _formatLoggerMessage(log: logMessage, options: options);
+      final message = options.formatter?.call(logMessage, options) ??
+          _formatLoggerMessage(log: logMessage, options: options);
 
       if (logMessage.logLevel.compareTo(options.level) < 0) {
         return;
@@ -216,7 +219,9 @@ final class LoggerLogging extends Logger {
   /// Logs the message in chunks if it exceeds the chunk size
   void _logWithChunks(String message, int chunkSize) {
     for (var start = 0; start < message.length; start += chunkSize) {
-      final end = (start + chunkSize) < message.length ? (start + chunkSize) : message.length;
+      final end = (start + chunkSize) < message.length
+          ? (start + chunkSize)
+          : message.length;
       final chunkMessage = message.substring(start, end);
       Zone.current.print(chunkMessage);
     }
@@ -251,7 +256,9 @@ String _formatLoggerMessage({
   }
 
   final logMessage = buffer.toString();
-  return options.coloredOutput ? _applyColor(logMessage, log.logLevel) : logMessage;
+  return options.coloredOutput
+      ? _applyColor(logMessage, log.logLevel)
+      : logMessage;
 }
 
 String _applyColor(String message, LoggerLevel level) {
@@ -268,7 +275,8 @@ String _applyColor(String message, LoggerLevel level) {
 
 extension on DateTime {
   /// Transforms DateTime to String with format: 00:00:00
-  String formatTime() => [hour, minute, second].map((i) => i.toString().padLeft(2, '0')).join(':');
+  String formatTime() =>
+      [hour, minute, second].map((i) => i.toString().padLeft(2, '0')).join(':');
 }
 
 extension on logging.LogRecord {
