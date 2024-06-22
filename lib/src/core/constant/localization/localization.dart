@@ -46,5 +46,5 @@ final class Localization {
   /// Obtain [AppLocalizations] instance from [BuildContext].
   static AppLocalizations of(BuildContext context) =>
       AppLocalizations.of(context) ??
-      (throw ArgumentError('No Localization found in context'));
+      (throw FlutterError('No Localization found in context'));
 }
