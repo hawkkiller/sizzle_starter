@@ -1,7 +1,7 @@
 import 'package:http/http.dart';
 
 /// A mixin that provides a method to retry a request.
-mixin RetryRequestMixin {
+mixin class RetryRequestMixin {
   /// Retries the request.
   Future<StreamedResponse> retryRequest(
     StreamedResponse response, [

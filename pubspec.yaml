@@ -50,7 +50,7 @@ dependencies:
   platform_info: ^4.0.2
   path: ^1.8.3
   path_provider: ^2.1.0
-  intercepted_client: ^0.0.1-dev.7
+  intercepted_client: ^0.0.1
   mockito: ^5.4.4
 
 dev_dependencies:
