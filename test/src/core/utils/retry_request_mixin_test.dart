@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sizzle_starter/src/core/utils/retry_request_mixin.dart';
-import 'package:http/testing.dart' as http_testing;
 import 'package:http/http.dart' as http;
+import 'package:http/testing.dart' as http_testing;
+import 'package:sizzle_starter/src/core/utils/retry_request_mixin.dart';
 
 void main() {
   group(
