@@ -37,7 +37,7 @@ abstract interface class AuthStatusSource {
 /// and refreshes or clears the token if the request fails with a 401
 class AuthInterceptor extends SequentialHttpInterceptor with RetryRequestMixin {
   /// Create an Auth interceptor
-  /// 
+  ///
   /// [token] may be preloaded and passed via constructor
   AuthInterceptor({
     required this.tokenStorage,
