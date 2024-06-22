@@ -1,36 +1,30 @@
-// ignore_for_file: overridden_fields
-
 import 'package:meta/meta.dart';
+import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 
+// coverage:ignore-start
 /// {@template rest_client_exception}
 /// Base class for all rest client exceptions
 /// {@endtemplate}
 @immutable
 abstract base class RestClientException implements Exception {
+  /// {@macro network_exception}
+  const RestClientException({
+    required this.message,
+    this.statusCode,
+    this.cause,
+  });
+
   /// Message of the exception
   final String message;
 
   /// The status code of the response (if any)
   final int? statusCode;
 
-  /// {@macro network_exception}
-  const RestClientException({required this.message, this.statusCode});
-}
-
-/// {@template rest_client_exception_with_cause}
-/// Base class for all rest client exceptions that have a cause
-/// {@endtemplate}
-abstract base class RestClientExceptionWithCause extends RestClientException {
-  /// {@macro rest_client_exception_with_cause}
-  const RestClientExceptionWithCause({
-    required super.message,
-    required this.cause,
-    super.statusCode,
-  });
-
   /// The cause of the exception
   ///
-  /// It is the inner exception that caused this exception to be thrown
+  /// It is the exception that caused this exception to be thrown.
+  ///
+  /// If the exception is not caused by another exception, this field is `null`.
   final Object? cause;
 }
 
@@ -42,13 +36,8 @@ final class ClientException extends RestClientException {
   const ClientException({
     required super.message,
     super.statusCode,
-    this.cause,
+    super.cause,
   });
-
-  /// The cause of the exception
-  ///
-  /// It is the inner exception that caused this exception to be thrown
-  final Object? cause;
 
   @override
   String toString() => 'ClientException('
@@ -58,22 +47,40 @@ final class ClientException extends RestClientException {
       ')';
 }
 
-/// {@template custom_backend_exception}
-/// [CustomBackendException] is thrown if the backend returns an error
+/// {@template structured_backend_exception}
+/// Exception that is used for structured backend errors
+///
+/// [error] is a map that contains the error details
+///
+/// This exception is raised by [RestClientBase] when the response contains
+/// 'error' field like the following:
+/// ```json
+/// {
+///  "error": {
+///   "message": "Some error message",
+///   "code": 123
+/// }
+/// ```
+///
+/// This class exists to make handling of structured errors easier.
+/// Basically, in data providers that use [RestClientBase], you can catch
+/// this exception and convert it to a system-wide error. For example,
+/// if backend returns an error with code 123 that means that the action
+/// is not allowed, you can convert this exception to a NotAllowedException
+/// and rethrow. This way, the rest of the application does not need to know
+/// about the structure of the error and should only handle system-wide
+/// exceptions.
 /// {@endtemplate}
-final class CustomBackendException extends RestClientException {
-  /// {@macro custom_backend_exception}
-  const CustomBackendException({
-    required super.message,
-    required this.error,
-    super.statusCode,
-  });
+final class StructuredBackendException extends RestClientException {
+  /// {@macro structured_backend_exception}
+  const StructuredBackendException({required this.error, super.statusCode})
+      : super(message: 'Backend returned structured error');
 
   /// The error returned by the backend
   final Map<String, Object?> error;
 
   @override
-  String toString() => 'CustomBackendException('
+  String toString() => 'StructuredBackendException('
       'message: $message,'
       'error: $error,'
       'statusCode: $statusCode,'
@@ -101,7 +108,7 @@ final class WrongResponseTypeException extends RestClientException {
 /// {@template connection_exception}
 /// [ConnectionException] is thrown if there are problems with the connection
 /// {@endtemplate}
-final class ConnectionException extends RestClientExceptionWithCause {
+final class ConnectionException extends RestClientException {
   /// {@macro connection_exception}
   const ConnectionException({
     required super.message,
@@ -120,7 +127,7 @@ final class ConnectionException extends RestClientExceptionWithCause {
 /// {@template internal_server_exception}
 /// If something went wrong on the server side
 /// {@endtemplate}
-final class InternalServerException extends RestClientExceptionWithCause {
+final class InternalServerException extends RestClientException {
   /// {@macro internal_server_exception}
   const InternalServerException({
     required super.message,
@@ -135,3 +142,4 @@ final class InternalServerException extends RestClientExceptionWithCause {
       'cause: $cause'
       ')';
 }
+// coverage:ignore-end

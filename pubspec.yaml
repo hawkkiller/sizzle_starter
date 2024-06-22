@@ -33,6 +33,7 @@ dependencies:
 
   # Networking
   dio: ^5.3.3
+  http: ^1.2.0
 
   # Persisting
   shared_preferences: ^2.2.2
@@ -49,8 +50,7 @@ dependencies:
   platform_info: ^4.0.2
   path: ^1.8.3
   path_provider: ^2.1.0
-  mocktail: ^1.0.1
-  
+
 dev_dependencies:
   # Testing
   flutter_test:
