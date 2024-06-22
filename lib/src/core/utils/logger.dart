@@ -53,6 +53,8 @@ base class LogOptions {
     this.showEmoji = true,
     this.logInRelease = false,
     this.level = LoggerLevel.info,
+    this.chunkSize = 1024,
+    this.coloredOutput = false,
     this.formatter,
   });
 
@@ -70,6 +72,12 @@ base class LogOptions {
 
   /// Formatter for the log message
   final LogFormatter? formatter;
+
+  /// Size of each chunk for long messages
+  final int chunkSize;
+
+  /// Whether to show colored output
+  final bool coloredOutput;
 }
 
 /// {@template log_message}
@@ -198,10 +206,25 @@ final class LoggerLogging extends Logger {
         return;
       }
 
-      Zone.current.print(message);
+      if (message.length > options.chunkSize) {
+        _logWithChunks(message, options.chunkSize);
+      } else {
+        Zone.current.print(message);
+      }
     });
 
     return fn();
+  }
+
+  /// Logs the message in chunks if it exceeds the chunk size
+  void _logWithChunks(String message, int chunkSize) {
+    for (var start = 0; start < message.length; start += chunkSize) {
+      final end = (start + chunkSize) < message.length
+          ? (start + chunkSize)
+          : message.length;
+      final chunkMessage = message.substring(start, end);
+      Zone.current.print(chunkMessage);
+    }
   }
 }
 
@@ -211,24 +234,43 @@ String _formatLoggerMessage({
 }) {
   final buffer = StringBuffer();
   if (options.showEmoji) {
-    buffer.write(log.logLevel.emoji);
-    buffer.write(' ');
+    buffer
+      ..write(log.logLevel.emoji)
+      ..write(' ');
   }
   if (options.showTime) {
-    buffer.write(log.time?.formatTime());
-    buffer.write(' | ');
+    buffer
+      ..write(log.time?.formatTime())
+      ..write(' | ');
   }
   buffer.write(log.message);
   if (log.error != null) {
-    buffer.writeln();
-    buffer.write(log.error);
+    buffer
+      ..writeln()
+      ..write(log.error);
   }
   if (log.stackTrace != null) {
-    buffer.writeln();
-    buffer.write(log.stackTrace);
+    buffer
+      ..writeln()
+      ..write(log.stackTrace);
   }
 
-  return buffer.toString();
+  final logMessage = buffer.toString();
+  return options.coloredOutput
+      ? _applyColor(logMessage, log.logLevel)
+      : logMessage;
+}
+
+String _applyColor(String message, LoggerLevel level) {
+  const levelColors = <LoggerLevel, String>{
+    LoggerLevel.error: '\x1B[31m', // Red
+    LoggerLevel.warning: '\x1B[33m', // Yellow
+    LoggerLevel.info: '\x1B[32m', // Green
+    LoggerLevel.debug: '\x1B[34m', // Blue
+    LoggerLevel.verbose: '\x1B[37m', // White
+  };
+  const resetColor = '\x1B[0m';
+  return '${levelColors[level]}$message$resetColor';
 }
 
 extension on DateTime {
