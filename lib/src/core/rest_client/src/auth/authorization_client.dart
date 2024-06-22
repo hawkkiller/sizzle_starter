@@ -15,7 +15,7 @@ abstract interface class AuthorizationClient<T> {
   Future<T> refresh(T token);
 }
 
-// ignore-coverage:start
+// coverage-ignore:start
 /// {@template revoke_token_exception}
 /// Revoke token exception
 ///
@@ -31,4 +31,4 @@ class RevokeTokenException implements Exception {
   @override
   String toString() => 'RevokeTokenException: $message';
 }
-// ignore-coverage:end
+// coverage-ignore:end

@@ -70,6 +70,67 @@ void main() {
     });
 
     test(
+      'should clear token and reject response on RevokeTokenException',
+      () async {
+        final authInterceptor = AuthInterceptor(
+          tokenStorage: mockTokenStorage,
+          authorizationClient: mockAuthorizationClient,
+          token: const Token('access token', 'refresh token'),
+        );
+
+        final response = http.StreamedResponse(
+          Stream.value([]),
+          401,
+          request: http.Request('GET', Uri.parse('https://example.com'))
+            ..headers.addAll(
+              {'Authorization': 'Bearer access token'},
+            ),
+        );
+
+        when(mockAuthorizationClient.isAccessTokenValid(any))
+            .thenAnswer((_) => Future.value(false));
+        when(mockAuthorizationClient.isRefreshTokenValid(any))
+            .thenAnswer((_) => Future.value(true));
+        when(mockAuthorizationClient.refresh(any)).thenThrow(
+          const RevokeTokenException(
+            'Token is not valid and cannot be refreshed',
+          ),
+        );
+        when(mockTokenStorage.clear()).thenAnswer((_) => Future.value());
+
+        await authInterceptor.interceptResponse(response, mockResponseHandler);
+
+        verify(mockTokenStorage.clear());
+        verify(mockResponseHandler.rejectResponse(any));
+        verifyNever(mockResponseHandler.resolveResponse(any));
+      },
+    );
+
+    test(
+      'should reject request if error happens during refresh',
+      () async {
+        final authInterceptor = AuthInterceptor(
+          tokenStorage: mockTokenStorage,
+          authorizationClient: mockAuthorizationClient,
+          token: const Token('access token', 'refresh token'),
+        );
+
+        final request = http.Request('GET', Uri.parse('https://example.com'));
+
+        when(mockAuthorizationClient.isAccessTokenValid(any))
+            .thenAnswer((_) => Future.value(false));
+        when(mockAuthorizationClient.isRefreshTokenValid(any))
+            .thenAnswer((_) => Future.value(true));
+        when(mockAuthorizationClient.refresh(any)).thenThrow(Exception());
+
+        await authInterceptor.interceptRequest(request, mockRequestHandler);
+
+        verify(mockRequestHandler.rejectRequest(any));
+        verifyNever(mockRequestHandler.resolveResponse(any));
+      },
+    );
+
+    test(
       'should refresh token if access token '
       'is invalid but refresh token is valid',
       () async {
@@ -147,6 +208,97 @@ void main() {
         await authInterceptor.interceptResponse(response, mockResponseHandler);
 
         mockResponseHandler.resolveResponse(response);
+      },
+    );
+
+    test(
+      "if response doesnt have token in request, resolve response",
+      () async {
+        final authInterceptor = AuthInterceptor(
+          tokenStorage: mockTokenStorage,
+          authorizationClient: mockAuthorizationClient,
+          token: const Token('access token', 'refresh token'),
+        );
+
+        final response = http.StreamedResponse(
+          Stream.value([]),
+          401,
+          request: http.Request('GET', Uri.parse('https://example.com')),
+        );
+
+        await authInterceptor.interceptResponse(response, mockResponseHandler);
+
+        verify(mockResponseHandler.resolveResponse(response));
+        verifyNever(mockResponseHandler.rejectResponse(any));
+      },
+    );
+
+    test(
+      'should clear tokens and reject response '
+      'on RevokeTokenException in interceptResponse',
+      () async {
+        final authInterceptor = AuthInterceptor(
+          tokenStorage: mockTokenStorage,
+          authorizationClient: mockAuthorizationClient,
+          token: const Token('access token', 'refresh token'),
+        );
+
+        final response = http.StreamedResponse(
+          Stream.value([]),
+          401,
+          request: http.Request('GET', Uri.parse('https://example.com'))
+            ..headers.addAll(
+              {'Authorization': 'Bearer access token'},
+            ),
+        );
+
+        when(mockAuthorizationClient.isAccessTokenValid(any))
+            .thenAnswer((_) => Future.value(false));
+        when(mockAuthorizationClient.isRefreshTokenValid(any))
+            .thenAnswer((_) => Future.value(true));
+        when(mockAuthorizationClient.refresh(any)).thenThrow(
+          const RevokeTokenException(
+            'Token is not valid and cannot be refreshed',
+          ),
+        );
+        when(mockTokenStorage.clear()).thenAnswer((_) => Future.value());
+
+        await authInterceptor.interceptResponse(response, mockResponseHandler);
+
+        verify(mockTokenStorage.clear());
+        verify(mockResponseHandler.rejectResponse(any));
+        verifyNever(mockResponseHandler.resolveResponse(any));
+      },
+    );
+
+    test(
+      'should reject response if error happens during refresh',
+      () async {
+        final authInterceptor = AuthInterceptor(
+          tokenStorage: mockTokenStorage,
+          authorizationClient: mockAuthorizationClient,
+          token: const Token('access token', 'refresh token'),
+        );
+
+        final response = http.StreamedResponse(
+          Stream.value([]),
+          401,
+          request: http.Request('GET', Uri.parse('https://example.com'))
+            ..headers.addAll(
+              {'Authorization': 'Bearer access token'},
+            ),
+        );
+
+        when(mockAuthorizationClient.isAccessTokenValid(any))
+            .thenAnswer((_) => Future.value(false));
+        when(mockAuthorizationClient.isRefreshTokenValid(any))
+            .thenAnswer((_) => Future.value(true));
+        when(mockAuthorizationClient.refresh(any)).thenThrow(Exception());
+
+        await authInterceptor.interceptResponse(response, mockResponseHandler);
+
+        verify(mockResponseHandler.rejectResponse(any));
+        verifyNever(mockResponseHandler.resolveResponse(any));
       },
     );
 
