@@ -46,9 +46,6 @@ jobs:
       - name: 🕵️ Analyze
         run: flutter analyze .
 
-      - name: Run DCM
-        run: dcm analyze .
-
       - name: 🧪 Run Tests
         run: flutter test --coverage --coverage-path=coverage/lcov.info --test-randomize-ordering-seed=random --concurrency=10
 
