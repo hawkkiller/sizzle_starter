@@ -50,7 +50,6 @@ dependencies:
   platform_info: ^4.0.2
   path: ^1.8.3
   path_provider: ^2.1.0
-  mocktail: ^1.0.1
 
 dev_dependencies:
   # Testing

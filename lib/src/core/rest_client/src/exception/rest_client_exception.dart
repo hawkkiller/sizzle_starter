@@ -1,6 +1,7 @@
 import 'package:meta/meta.dart';
 import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 
+// coverage:ignore-start
 /// {@template rest_client_exception}
 /// Base class for all rest client exceptions
 /// {@endtemplate}
@@ -141,3 +142,4 @@ final class InternalServerException extends RestClientException {
       'cause: $cause'
       ')';
 }
+// coverage:ignore-end
