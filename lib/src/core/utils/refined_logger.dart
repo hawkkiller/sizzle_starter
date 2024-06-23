@@ -6,8 +6,8 @@ import 'package:flutter/foundation.dart';
 /// Logger global instance.
 ///
 /// This is the default logger used by the application.
-/// Prefer to pass the logger instance as a parameter to the classes
-/// that need it, instead of using this global instance.
+/// Prefer to pass this logger instance as a parameter to the classes
+/// that need it, instead of using it directly.
 ///
 /// This is a zone-scoped logger, which means that it can be overridden
 /// in nested zones or during tests.
