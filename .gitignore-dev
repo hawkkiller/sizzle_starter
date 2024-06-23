@@ -1,4 +1,6 @@
-# used only for development purposes
+# used only for development purposes to ignore the build folders
+# to make git recognize this gitignore file, run the following command:
+# git config --local core.excludesFile .gitignore-dev
 android/
 ios/
 macos/

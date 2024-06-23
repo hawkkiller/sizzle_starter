@@ -1,17 +1,17 @@
 import 'dart:async';
 
+import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
-import 'package:logging/logging.dart' as logging;
 
 /// A logger used to log errors in the root zone.
-final logger = LoggingLogger();
+final logger = DefaultLogger();
 
 /// Defines the format of a log message.
 ///
 /// This is a function type that takes a [LogMessage] and
 /// [LoggingOptions] and returns a formatted string.
 typedef LogFormatter = String Function(
-  LogMessage message,
+  LogWrapper wrappedMessage,
   LoggingOptions options,
 );
 
@@ -35,12 +35,11 @@ class LoggingOptions {
   /// - [formatter]: An optional custom formatter for log messages.
   ///   If not provided, a default formatter is used.
   const LoggingOptions({
+    this.level = LogLevel.info,
     this.showTime = true,
     this.showEmoji = true,
     this.logInRelease = false,
-    this.level = LogLevel.info,
-    this.chunkSize = 1024,
-    this.coloredOutput = false,
+    this.useDebugPrint = false,
     this.formatter,
   });
 
@@ -56,11 +55,14 @@ class LoggingOptions {
   /// The minimum log level that will be displayed.
   final LogLevel level;
 
-  /// The maximum size of a log message chunk, in bytes.
-  final int chunkSize;
-
-  /// Whether to use colored text for the console output.
-  final bool coloredOutput;
+  /// Whether or not to chunk the log message.
+  ///
+  /// This is useful when the log message is too long.
+  /// Use it with caution, as it affects the performance.
+  /// Recommended for debugging purposes only.
+  ///
+  /// Uses [debugPrint] under the hood.
+  final bool useDebugPrint;
 
   /// An optional custom formatter for log messages.
   ///
@@ -68,90 +70,52 @@ class LoggingOptions {
   final LogFormatter? formatter;
 }
 
-/// Logger that uses the `logging` package to log messages
-class LoggingLogger extends RefinedLogger {
-  /// Constructs an instance of [LoggingLogger].
-  LoggingLogger({
-    LogLevel level = LogLevel.debug,
-    String name = 'LoggingLogger',
-    LoggingOptions options = const LoggingOptions(),
-  }) : _logger = logging.Logger(name) {
-    logging.hierarchicalLoggingEnabled = true;
-    _logger.level = _recordLevelFromLogLevel(level);
-    logs.listen((l) => _printLogMessage(l, options));
+/// Internal class used by [DefaultLogger] to wrap the log messages.
+class LogWrapper {
+  /// Constructs an instance of [LogWrapper].
+  LogWrapper({
+    required this.message,
+    required this.printStackTrace,
+    required this.printError,
+  });
+
+  /// The log message to be wrapped.
+  LogMessage message;
+
+  /// Whether to print the stack trace.
+  bool printStackTrace;
+
+  /// Whether to print the error.
+  bool printError;
+}
+
+/// Logger class, that manages the logging of messages
+class DefaultLogger extends RefinedLogger {
+  /// Constructs an instance of [DefaultLogger].
+  DefaultLogger([LoggingOptions options = const LoggingOptions()]) {
+    _init(options);
   }
 
-  final logging.Logger _logger;
+  final _controller = StreamController<LogWrapper>();
+  late final _logWrapStream = _controller.stream.asBroadcastStream();
+  late final _logStream = _logWrapStream.map((wrapper) => wrapper.message);
+  bool _destroyed = false;
 
-  void _printLogMessage(LogMessage message, LoggingOptions options) {
-    final formattedMessage = options.formatter != null
-        ? options.formatter!(message, options)
-        : _defaultFormatter(message, options);
-
-    Zone.current.print(formattedMessage);
-  }
-
-  String _defaultFormatter(LogMessage message, LoggingOptions options) {
-    final time = options.showTime ? message.timestamp.toIso8601String() : '';
-    final emoji = options.showEmoji ? message.level.emoji : '';
-    final level = message.level;
-    final colorCode = message.level.colorCode;
-    final content = message.message;
-
-    final buffer = StringBuffer();
-
-    if (options.coloredOutput) {
-      buffer.write('\x1B[$colorCode');
+  void _init(LoggingOptions options) {
+    if (kReleaseMode && !options.logInRelease) {
+      return;
     }
 
-    buffer.write('$emoji $time [$level] $content');
-
-    if (message.error != null) {
-      buffer.writeln();
-      buffer.write(message.error);
-    }
-
-    if (message.stackTrace != null) {
-      buffer.writeln();
-      buffer.write(message.stackTrace);
-    }
-
-    if (buffer.length > options.chunkSize) {
-      _logWithChunks(buffer.toString(), options.chunkSize);
-    } else {
-      _log(buffer.toString());
-    }
-
-    if (options.coloredOutput) {
-      buffer.write('\x1B[0m');
-    }
-
-    return buffer.toString();
-  }
-
-  void _logWithChunks(String message, int chunkSize) {
-    for (var start = 0; start < message.length; start += chunkSize) {
-      final end = (start + chunkSize) < message.length
-          ? (start + chunkSize)
-          : message.length;
-      final chunkMessage = message.substring(start, end);
-      _log(chunkMessage);
-    }
-  }
-
-  /// Logs a chunk of message
-  void _log(String message) {
-    Zone.current.print(message);
+    _logWrapStream.listen((l) => _printLogMessage(l, options));
   }
 
   @override
-  Stream<LogMessage> get logs => _logger.onRecord.map(
-        _recordToLogMessage,
-      );
+  Stream<LogMessage> get logs => _logStream;
 
   @override
   void destroy() {
-    _logger.clearListeners();
+    _controller.close();
+    _destroyed = true;
   }
 
   @override
@@ -161,63 +125,73 @@ class LoggingLogger extends RefinedLogger {
     Object? error,
     StackTrace? stackTrace,
     Map<String, Object?>? context,
+    bool printStackTrace = true,
+    bool printError = true,
   }) {
-    final recordLevel = _recordLevelFromLogLevel(level);
-    _logger.log(
-      recordLevel,
-      message,
-      error,
-      stackTrace,
-    );
-  }
-
-  LogMessage _recordToLogMessage(logging.LogRecord record) => LogMessage(
-        message: record.message,
-        level: _logLevelFromRecordLevel(record.level),
-        timestamp: record.time,
-        error: record.error,
-        stackTrace: record.stackTrace,
-      );
-
-  logging.Level _recordLevelFromLogLevel(LogLevel level) {
-    if (level == LogLevel.trace) {
-      return logging.Level.FINEST;
-    } else if (level == LogLevel.debug) {
-      return logging.Level.FINE;
-    } else if (level == LogLevel.info) {
-      return logging.Level.INFO;
-    } else if (level == LogLevel.warn) {
-      return logging.Level.WARNING;
-    } else if (level == LogLevel.error) {
-      return logging.Level.SEVERE;
-    } else if (level == LogLevel.fatal) {
-      return logging.Level.SHOUT;
-    } else {
-      return logging.Level.FINE;
+    if (_destroyed) {
+      _log('Logger has been destroyed. It cannot be used anymore.');
+      return;
     }
+
+    final logMessage = LogWrapper(
+      message: LogMessage(
+        message: message,
+        level: level,
+        timestamp: clock.now(),
+        error: error,
+        stackTrace: stackTrace,
+        context: context,
+      ),
+      printStackTrace: printStackTrace,
+      printError: printError,
+    );
+
+    _controller.add(logMessage);
   }
 
-  LogLevel _logLevelFromRecordLevel(logging.Level level) {
-    if (level == logging.Level.ALL) {
-      return LogLevel.trace;
-    } else if (level == logging.Level.FINEST) {
-      return LogLevel.trace;
-    } else if (level == logging.Level.FINER) {
-      return LogLevel.debug;
-    } else if (level == logging.Level.FINE) {
-      return LogLevel.debug;
-    } else if (level == logging.Level.CONFIG) {
-      return LogLevel.info;
-    } else if (level == logging.Level.INFO) {
-      return LogLevel.info;
-    } else if (level == logging.Level.WARNING) {
-      return LogLevel.warn;
-    } else if (level == logging.Level.SEVERE) {
-      return LogLevel.error;
-    } else if (level == logging.Level.SHOUT) {
-      return LogLevel.fatal;
+  void _printLogMessage(LogWrapper wrappedMessage, LoggingOptions options) {
+    if (_destroyed) {
+      _log('Logger has been destroyed. It cannot be used anymore.');
+      return;
+    }
+
+    final formattedMessage = options.formatter != null
+        ? options.formatter!(wrappedMessage, options)
+        : _defaultFormatter(wrappedMessage, options);
+
+    _log(formattedMessage);
+  }
+
+  String _defaultFormatter(LogWrapper wrappedMessage, LoggingOptions options) {
+    final message = wrappedMessage.message;
+    final time = options.showTime ? message.timestamp.toIso8601String() : '';
+    final emoji = options.showEmoji ? message.level.emoji : '';
+    final level = message.level;
+    final content = message.message;
+
+    final buffer = StringBuffer();
+
+    buffer.write('$emoji $time [${level.name.toUpperCase()}] $content');
+
+    if (message.error != null && wrappedMessage.printError) {
+      buffer.writeln();
+      buffer.write(message.error);
+    }
+
+    if (message.stackTrace != null && wrappedMessage.printStackTrace) {
+      buffer.writeln();
+      buffer.write(message.stackTrace);
+    }
+
+    return buffer.toString();
+  }
+
+  /// Logs a chunk of message
+  void _log(String message, {bool useDebugPrint = false}) {
+    if (useDebugPrint) {
+      debugPrint(message);
     } else {
-      return LogLevel.debug;
+      Zone.current.print(message);
     }
   }
 }
@@ -236,6 +210,9 @@ abstract class RefinedLogger {
     required LogLevel level,
     Object? error,
     StackTrace? stackTrace,
+    Map<String, Object?>? context,
+    bool printStackTrace = true,
+    bool printError = true,
   });
 
   /// Logs a zone error with [LogLevel.error].
@@ -252,6 +229,8 @@ abstract class RefinedLogger {
         level: LogLevel.error,
         error: details.exception,
         stackTrace: details.stack,
+        printStackTrace: false,
+        printError: false,
       );
 
   /// Logs a platform dispatcher error with [LogLevel.error].
@@ -270,12 +249,18 @@ abstract class RefinedLogger {
     String message, {
     Object? error,
     StackTrace? stackTrace,
+    Map<String, Object?>? context,
+    bool printStackTrace = true,
+    bool printError = true,
   }) =>
       log(
         message,
         level: LogLevel.trace,
         error: error,
         stackTrace: stackTrace,
+        context: context,
+        printStackTrace: printStackTrace,
+        printError: printError,
       );
 
   /// Logs a message with [LogLevel.debug].
@@ -283,12 +268,18 @@ abstract class RefinedLogger {
     String message, {
     Object? error,
     StackTrace? stackTrace,
+    Map<String, Object?>? context,
+    bool printStackTrace = true,
+    bool printError = true,
   }) =>
       log(
         message,
         level: LogLevel.debug,
         error: error,
         stackTrace: stackTrace,
+        context: context,
+        printStackTrace: printStackTrace,
+        printError: printError,
       );
 
   /// Logs a message with [LogLevel.info].
@@ -296,12 +287,18 @@ abstract class RefinedLogger {
     String message, {
     Object? error,
     StackTrace? stackTrace,
+    Map<String, Object?>? context,
+    bool printStackTrace = true,
+    bool printError = true,
   }) =>
       log(
         message,
         level: LogLevel.info,
         error: error,
         stackTrace: stackTrace,
+        context: context,
+        printStackTrace: printStackTrace,
+        printError: printError,
       );
 
   /// Logs a message with [LogLevel.warn].
@@ -309,12 +306,18 @@ abstract class RefinedLogger {
     String message, {
     Object? error,
     StackTrace? stackTrace,
+    Map<String, Object?>? context,
+    bool printStackTrace = true,
+    bool printError = true,
   }) =>
       log(
         message,
         level: LogLevel.warn,
         error: error,
         stackTrace: stackTrace,
+        context: context,
+        printStackTrace: printStackTrace,
+        printError: printError,
       );
 
   /// Logs a message with [LogLevel.error].
@@ -322,12 +325,18 @@ abstract class RefinedLogger {
     String message, {
     Object? error,
     StackTrace? stackTrace,
+    Map<String, Object?>? context,
+    bool printStackTrace = true,
+    bool printError = true,
   }) =>
       log(
         message,
         level: LogLevel.error,
         error: error,
         stackTrace: stackTrace,
+        context: context,
+        printStackTrace: printStackTrace,
+        printError: printError,
       );
 
   /// Logs a message with [LogLevel.fatal].
@@ -335,12 +344,18 @@ abstract class RefinedLogger {
     String message, {
     Object? error,
     StackTrace? stackTrace,
+    Map<String, Object?>? context,
+    bool printStackTrace = true,
+    bool printError = true,
   }) =>
       log(
         message,
         level: LogLevel.fatal,
         error: error,
         stackTrace: stackTrace,
+        context: context,
+        printStackTrace: printStackTrace,
+        printError: printError,
       );
 }
 
@@ -364,6 +379,7 @@ class LogMessage {
     required this.timestamp,
     this.error,
     this.stackTrace,
+    this.context,
   });
 
   /// The main content of the log message.
@@ -386,6 +402,9 @@ class LogMessage {
   /// This provides detailed information about the call stack leading
   /// up to the log message, which is particularly useful when logging errors.
   final StackTrace? stackTrace;
+
+  /// Additional contextual information provided as a map.
+  final Map<String, Object?>? context;
 }
 
 /// Log level, that describes the severity of the log message
@@ -434,15 +453,5 @@ extension on LogLevel {
         LogLevel.warn: '⚠️',
         LogLevel.error: '❌',
         LogLevel.fatal: '💥',
-      }[this]!;
-
-  /// Get color code from the log level
-  String get colorCode => const {
-        LogLevel.trace: '0;37m', // white
-        LogLevel.debug: '0;36m', // cyan
-        LogLevel.info: '0;32m', // green
-        LogLevel.warn: '0;33m', // yellow
-        LogLevel.error: '0;31m', // red
-        LogLevel.fatal: '0;35m', // magenta
       }[this]!;
 }
