@@ -32,7 +32,6 @@ dependencies:
   bloc_concurrency: ^0.2.2
 
   # Networking
-  dio: ^5.3.3
   http: ^1.2.0
 
   # Persisting
@@ -46,7 +45,6 @@ dependencies:
   logging: ^1.2.0
 
   # Utils
-  pure: ^0.2.0
   platform_info: ^4.0.2
   path: ^1.8.3
   path_provider: ^2.1.0
