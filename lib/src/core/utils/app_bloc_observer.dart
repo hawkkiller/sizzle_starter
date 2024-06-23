@@ -1,11 +1,14 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizzle_starter/src/core/utils/extensions/string_extension.dart';
-import 'package:sizzle_starter/src/core/utils/logger.dart';
+import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
 
 /// [BlocObserver] which logs all bloc state changes, errors and events.
 class AppBlocObserver extends BlocObserver {
   /// [BlocObserver] which logs all bloc state changes, errors and events.
-  const AppBlocObserver();
+  const AppBlocObserver(this.logger);
+
+  /// Logger used to log information during bloc transitions.
+  final RefinedLogger logger;
 
   @override
   void onTransition(

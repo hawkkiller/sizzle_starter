@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/app_bloc_observer.dart';
-import 'package:sizzle_starter/src/core/utils/logger.dart';
+import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
 import 'package:sizzle_starter/src/feature/app/widget/app.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/initialization_failed_app.dart';
@@ -30,10 +30,10 @@ final class AppRunner {
         logger.logPlatformDispatcherError;
 
     // Setup bloc observer and transformer
-    Bloc.observer = const AppBlocObserver();
+    Bloc.observer = AppBlocObserver(logger);
     Bloc.transformer = bloc_concurrency.sequential();
     const config = Config();
-    const initializationProcessor = CompositionRoot(config);
+    final initializationProcessor = CompositionRoot(config, logger);
 
     Future<void> initializeAndRun() async {
       try {

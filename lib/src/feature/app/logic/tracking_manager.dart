@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:meta/meta.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:sizzle_starter/src/core/utils/logger.dart';
+import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
 
 /// {@template error_tracking_manager}
 /// A class which is responsible for enabling error tracking.
@@ -27,14 +27,14 @@ abstract base class ErrorTrackingManagerBase implements ErrorTrackingManager {
   /// {@macro error_tracking_manager_base}
   ErrorTrackingManagerBase(this._logger);
 
-  final Logger _logger;
+  final RefinedLogger _logger;
   StreamSubscription<LogMessage>? _subscription;
 
   /// Catch only warnings and errors
-  Stream<LogMessage> get _reportLogs => _logger.logs.where(_isWarningOrError);
+  Stream<LogMessage> get _reportLogs => _logger.logs.where(_warnOrUp);
 
-  static bool _isWarningOrError(LogMessage log) =>
-      log.logLevel.compareTo(LoggerLevel.warning) >= 0;
+  static bool _warnOrUp(LogMessage log) =>
+      log.level.severity >= LogLevel.warn.severity;
 
   @mustCallSuper
   @mustBeOverridden
@@ -86,13 +86,22 @@ final class SentryTrackingManager extends ErrorTrackingManagerBase {
   Future<void> _report(LogMessage log) async {
     final error = log.error;
     final stackTrace = log.stackTrace;
+    final hint = log.context != null ? Hint.withMap(log.context!) : null;
 
     if (error == null && stackTrace == null) {
-      await Sentry.captureMessage(log.message.toString());
+      await Sentry.captureMessage(
+        log.message.toString(),
+        level: _logLevel(log.level),
+        hint: hint,
+      );
       return;
     }
 
-    await Sentry.captureException(error ?? log.message, stackTrace: stackTrace);
+    await Sentry.captureException(
+      error ?? log.message,
+      stackTrace: stackTrace,
+      hint: hint,
+    );
   }
 
   @override
@@ -113,4 +122,13 @@ final class SentryTrackingManager extends ErrorTrackingManagerBase {
     await Sentry.close();
     await super.disableReporting();
   }
+
+  SentryLevel _logLevel(LogLevel level) => switch (level) {
+        LogLevel.trace => SentryLevel.debug,
+        LogLevel.debug => SentryLevel.debug,
+        LogLevel.info => SentryLevel.info,
+        LogLevel.warn => SentryLevel.warning,
+        LogLevel.error => SentryLevel.error,
+        LogLevel.fatal => SentryLevel.fatal,
+      };
 }

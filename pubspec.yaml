@@ -42,7 +42,6 @@ dependencies:
   # Logging
   stack_trace: ^1.11.0
   sentry_flutter: ^8.1.0
-  logging: ^1.2.0
 
   # Utils
   platform_info: ^4.0.2
@@ -50,6 +49,7 @@ dependencies:
   path_provider: ^2.1.0
   intercepted_client: ^0.0.1
   mockito: ^5.4.4
+  clock: ^1.1.1
 
 dev_dependencies:
   # Testing
