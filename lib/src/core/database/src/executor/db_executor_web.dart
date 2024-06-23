@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:drift/drift.dart';
 import 'package:drift/wasm.dart';
-import 'package:sizzle_starter/src/core/utils/logger.dart';
+import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
 
 /// {@macro db_executor}
 QueryExecutor createExecutor() => DatabaseConnection.delayed(
@@ -14,7 +14,7 @@ QueryExecutor createExecutor() => DatabaseConnection.delayed(
         );
 
         if (result.missingFeatures.isNotEmpty) {
-          logger.warning(
+          logger.warn(
             'Using ${result.chosenImplementation} due to missing browser '
             'features: ${result.missingFeatures}',
           );

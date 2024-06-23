@@ -1,6 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/core/constant/config.dart';
-import 'package:sizzle_starter/src/core/utils/logger.dart';
+import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
 import 'package:sizzle_starter/src/feature/app/logic/tracking_manager.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/settings_bloc.dart';
@@ -23,10 +23,13 @@ import 'package:sizzle_starter/src/feature/settings/data/theme_repository.dart';
 /// {@endtemplate}
 final class CompositionRoot {
   /// {@macro composition_root}
-  const CompositionRoot(this.config);
+  const CompositionRoot(this.config, this.logger);
 
   /// Application configuration
   final Config config;
+
+  /// Logger used to log information during composition process.
+  final RefinedLogger logger;
 
   /// Composes dependencies and returns result of composition.
   Future<CompositionResult> compose() async {
