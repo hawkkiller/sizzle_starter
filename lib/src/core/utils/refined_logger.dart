@@ -3,8 +3,38 @@ import 'dart:async';
 import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
 
+/// Logger global instance.
+///
+/// This is the default logger used by the application.
+/// Prefer to pass the logger instance as a parameter to the classes
+/// that need it, instead of using this global instance.
+///
+/// This is a zone-scoped logger, which means that it can be overridden
+/// in nested zones or during tests.
+RefinedLogger get logger =>
+    Zone.current[_loggerKey] as RefinedLogger? ?? _logger;
+
+/// Runs [callback] with the given [logger] instance.
+///
+/// This is [Zone]-scoped, so asynchronous callbacks spawned within [callback]
+/// will also use the new value for [logger].
+///
+/// This is useful for testing purposes, where you can pass a mock logger
+/// to the callback.
+void runWithLogger<T>(
+  RefinedLogger logger,
+  T Function() callback,
+) {
+  runZoned(
+    callback,
+    zoneValues: {_loggerKey: logger},
+  );
+}
+
+const _loggerKey = 'logger';
+
 /// A logger used to log errors in the root zone.
-final logger = DefaultLogger();
+final _logger = DefaultLogger();
 
 /// Defines the format of a log message.
 ///
