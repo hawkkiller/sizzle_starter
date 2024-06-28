@@ -6,6 +6,7 @@ import 'package:http/http.dart' as http;
 import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 import 'package:sizzle_starter/src/core/rest_client/src/http/check_exception_io.dart'
     if (dart.library.js_interop) 'package:sizzle_starter/src/core/rest_client/src/http/check_exception_browser.dart';
+import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
 
 // coverage:ignore-start
 /// Creates an [http.Client] based on the current platform.
@@ -14,17 +15,25 @@ import 'package:sizzle_starter/src/core/rest_client/src/http/check_exception_io.
 /// For iOS and macOS, it returns a [CupertinoClient]
 /// with the default session configuration.
 http.Client createDefaultHttpClient() {
+  http.Client? client;
   final platform = defaultTargetPlatform;
 
-  if (platform == TargetPlatform.android) {
-    return CronetClient.defaultCronetEngine();
+  try {
+    if (platform == TargetPlatform.android) {
+      client = CronetClient.defaultCronetEngine();
+    }
+    if (platform == TargetPlatform.iOS || platform == TargetPlatform.macOS) {
+      client = CupertinoClient.defaultSessionConfiguration();
+    }
+  } on Object catch (e, stackTrace) {
+    logger.warn(
+      'Failed to create a default http client for platform $platform',
+      error: e,
+      stackTrace: stackTrace,
+    );
   }
 
-  if (platform == TargetPlatform.iOS || platform == TargetPlatform.macOS) {
-    return CupertinoClient.defaultSessionConfiguration();
-  }
-
-  return http.Client();
+  return client ?? http.Client();
 }
 // coverage:ignore-end
 
