@@ -33,6 +33,8 @@ dependencies:
 
   # Networking
   http: ^1.2.0
+  cronet_http: ^1.3.1
+  cupertino_http: ^1.5.0
 
   # Persisting
   shared_preferences: ^2.2.2

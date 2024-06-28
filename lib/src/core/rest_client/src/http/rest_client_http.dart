@@ -1,7 +1,32 @@
+import 'package:cronet_http/cronet_http.dart' show CronetClient;
+import 'package:cupertino_http/cupertino_http.dart' show CupertinoClient;
+import 'package:flutter/foundation.dart'
+    show TargetPlatform, defaultTargetPlatform;
 import 'package:http/http.dart' as http;
 import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 import 'package:sizzle_starter/src/core/rest_client/src/http/check_exception_io.dart'
-    if (dart.library.html) 'package:sizzle_starter/src/core/rest_client/src/http/check_exception_browser.dart';
+    if (dart.library.js_interop) 'package:sizzle_starter/src/core/rest_client/src/http/check_exception_browser.dart';
+
+// coverage:ignore-start
+/// Creates an [http.Client] based on the current platform.
+///
+/// For Android, it returns a [CronetClient] with the default Cronet engine.
+/// For iOS and macOS, it returns a [CupertinoClient]
+/// with the default session configuration.
+http.Client createDefaultHttpClient() {
+  final platform = defaultTargetPlatform;
+
+  if (platform == TargetPlatform.android) {
+    return CronetClient.defaultCronetEngine();
+  }
+
+  if (platform == TargetPlatform.iOS || platform == TargetPlatform.macOS) {
+    return CupertinoClient.defaultSessionConfiguration();
+  }
+
+  return http.Client();
+}
+// coverage:ignore-end
 
 /// {@template rest_client_http}
 /// Rest client that uses [http] for making requests.
