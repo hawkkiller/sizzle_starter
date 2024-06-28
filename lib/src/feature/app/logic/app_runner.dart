@@ -23,7 +23,7 @@ final class AppRunner {
 
     // Preserve splash screen
     binding.deferFirstFrame();
-
+    
     // Override logging
     FlutterError.onError = logger.logFlutterError;
     WidgetsBinding.instance.platformDispatcher.onError =
