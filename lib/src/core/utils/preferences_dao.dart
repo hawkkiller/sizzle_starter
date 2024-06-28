@@ -71,8 +71,35 @@ abstract base class PreferencesEntry<T extends Object> {
 
 /// {@template typed_entry}
 /// A [PreferencesEntry] that is typed to a specific type [T].
+///
+/// You can also create subclasses of this class to create adapters for custom
+/// types.
+///
+/// ```dart
+/// class CustomTypeEntry extends TypedEntry<CustomType> {
+///  CustomTypeEntry({
+///   required SharedPreferences sharedPreferences,
+///   required String key,
+///  }) : super(sharedPreferences: sharedPreferences, key: key);
+///
+///  @override
+///  CustomType? read() {
+///   final value = _sharedPreferences.get(key);
+///
+///   if (value == null) return null;
+///
+///   return CustomType.fromJson(value);
+///  }
+///
+///  @override
+///  Future<void> set(CustomType value) => _sharedPreferences.setString(
+///   key,
+///   value.toJson(),
+///  );
+/// }
+/// ```
 /// {@endtemplate}
-final class TypedEntry<T extends Object> extends PreferencesEntry<T> {
+base class TypedEntry<T extends Object> extends PreferencesEntry<T> {
   /// {@macro typed_entry}
   TypedEntry({
     required SharedPreferences sharedPreferences,
@@ -92,7 +119,7 @@ final class TypedEntry<T extends Object> extends PreferencesEntry<T> {
 
     if (value is T) return value;
 
-    throw Exception(
+    throw StateError(
       'The value of $key is not of type ${T.runtimeType.toString()}',
     );
   }
@@ -107,7 +134,7 @@ final class TypedEntry<T extends Object> extends PreferencesEntry<T> {
             key,
             value.toList(),
           ),
-        _ => throw Exception(
+        _ => throw StateError(
             '$T is not a valid type for a preferences entry value.',
           ),
       };

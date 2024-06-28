@@ -49,20 +49,20 @@ abstract base class ErrorTrackingManagerBase implements ErrorTrackingManager {
   @override
   Future<void> enableReporting() async {
     _subscription ??= _reportLogs.listen((log) async {
-      if (_shouldReport(log.error)) {
-        await _report(log);
+      if (shouldReport(log.error)) {
+        await report(log);
       }
     });
   }
 
   /// Returns `true` if the error should be reported.
   @pragma('vm:prefer-inline')
-  bool _shouldReport(Object? error) => true;
+  bool shouldReport(Object? error) => true;
 
   /// Handles the log message.
   ///
   /// This method is called when a log message is received.
-  Future<void> _report(LogMessage log);
+  Future<void> report(LogMessage log);
 }
 
 /// {@template sentry_tracking_manager}
@@ -83,7 +83,7 @@ final class SentryTrackingManager extends ErrorTrackingManagerBase {
   final String environment;
 
   @override
-  Future<void> _report(LogMessage log) async {
+  Future<void> report(LogMessage log) async {
     final error = log.error;
     final stackTrace = log.stackTrace;
     final hint = log.context != null ? Hint.withMap(log.context!) : null;
@@ -109,10 +109,12 @@ final class SentryTrackingManager extends ErrorTrackingManagerBase {
     await SentryFlutter.init((options) {
       options.dsn = sentryDsn;
 
-      // Set the sample rate to 20% of events.
-      options.tracesSampleRate = 0.20;
+      // Set the sample rate to 10% of events.
+      options.tracesSampleRate = 0.10;
       options.debug = kDebugMode;
       options.environment = environment;
+      options.anrEnabled = true;
+      options.sendDefaultPii = true;
     });
     await super.enableReporting();
   }

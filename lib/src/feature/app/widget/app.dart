@@ -9,8 +9,10 @@ import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 /// {@template app}
 /// [App] is an entry point to the application.
 ///
-/// Scopes that don't depend on widgets returned by [MaterialApp]
-/// ([Directionality], [MediaQuery], [Localizations]) should be placed here.
+/// If a scope doesn't depend on any inherited widget returned by
+/// [MaterialApp] or [WidgetsApp], like [Directionality] or [Theme],
+/// and it should be available in the whole application, it can be
+/// placed here.
 /// {@endtemplate}
 class App extends StatelessWidget {
   /// {@macro app}

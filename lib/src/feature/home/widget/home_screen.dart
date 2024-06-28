@@ -1,12 +1,24 @@
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/core/utils/layout/layout.dart';
+import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 
 /// {@template home_screen}
 /// HomeScreen is a simple screen that displays a grid of items.
 /// {@endtemplate}
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   /// {@macro home_screen}
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    SettingsScope.of(context, listen: false).setLocale(const Locale('ru'));
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
