@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
+import 'package:stack_trace/stack_trace.dart';
 
 /// Logger global instance.
 ///
@@ -198,19 +199,21 @@ class DefaultLogger extends RefinedLogger {
     final emoji = options.showEmoji ? message.level.emoji : '';
     final level = message.level;
     final content = message.message;
+    final stackTrace = message.stackTrace;
+    final error = message.error;
 
     final buffer = StringBuffer();
 
     buffer.write('$emoji $time [${level.name.toUpperCase()}] $content');
 
-    if (message.error != null && wrappedMessage.printError) {
+    if (error != null && wrappedMessage.printError) {
       buffer.writeln();
-      buffer.write(message.error);
+      buffer.write(error);
     }
 
-    if (message.stackTrace != null && wrappedMessage.printStackTrace) {
+    if (stackTrace != null && wrappedMessage.printStackTrace) {
       buffer.writeln();
-      buffer.write(message.stackTrace);
+      buffer.write(Trace.from(stackTrace).terse);
     }
 
     return buffer.toString();

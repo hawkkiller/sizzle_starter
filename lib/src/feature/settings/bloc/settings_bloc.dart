@@ -32,20 +32,19 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     _UpdateThemeSettingsEvent event,
     Emitter<SettingsState> emitter,
   ) async {
-    emitter(
-      SettingsState.processing(
-        appTheme: state.appTheme,
-        locale: state.locale,
-      ),
-    );
-
     try {
+      emitter(
+        SettingsState.processing(
+          appTheme: state.appTheme,
+          locale: state.locale,
+        ),
+      );
       await _themeRepo.setTheme(event.appTheme);
 
       emitter(
         SettingsState.idle(appTheme: event.appTheme, locale: state.locale),
       );
-    } on Object catch (e) {
+    } on Object catch (e, stackTrace) {
       emitter(
         SettingsState.error(
           appTheme: state.appTheme,
@@ -53,7 +52,7 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
           cause: e,
         ),
       );
-      rethrow;
+      onError(e, stackTrace);
     }
   }
 
@@ -61,20 +60,19 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     _UpdateLocaleSettingsEvent event,
     Emitter<SettingsState> emitter,
   ) async {
-    emitter(
-      SettingsState.processing(
-        appTheme: state.appTheme,
-        locale: state.locale,
-      ),
-    );
-
     try {
+      emitter(
+        SettingsState.processing(
+          appTheme: state.appTheme,
+          locale: state.locale,
+        ),
+      );
       await _localeRepo.setLocale(event.locale);
 
       emitter(
         SettingsState.idle(appTheme: state.appTheme, locale: event.locale),
       );
-    } on Object catch (e) {
+    } on Object catch (e, stackTrace) {
       emitter(
         SettingsState.error(
           appTheme: state.appTheme,
@@ -82,7 +80,7 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
           cause: e,
         ),
       );
-      rethrow;
+      onError(e, stackTrace);
     }
   }
 }

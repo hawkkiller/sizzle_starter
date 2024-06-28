@@ -27,14 +27,14 @@ extension ContextExtension on BuildContext {
       ));
 
   /// Maybe inherit specific aspect from [InheritedModel].
-  T? maybeInheritFrom<A extends Object, T extends InheritedModel<A>>(
+  T? maybeInheritFrom<A extends Object, T extends InheritedModel<A>>({
     A? aspect,
-  ) =>
+  }) =>
       InheritedModel.inheritFrom<T>(this, aspect: aspect);
 
   /// Inherit specific aspect from [InheritedModel].
   T inheritFrom<A extends Object, T extends InheritedModel<A>>({A? aspect}) =>
-      InheritedModel.inheritFrom<T>(this, aspect: aspect) ??
+      maybeInheritFrom(aspect: aspect) ??
       (throw ArgumentError(
         'Out of scope, not found inherited model '
             'a $T of the exact type',

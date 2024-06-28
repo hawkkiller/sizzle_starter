@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 /// {@template initialization_failed_screen}
-/// InitializationFailedScreen widget
+/// Screen that is shown when the initialization of the app fails.
 /// {@endtemplate}
 class InitializationFailedApp extends StatefulWidget {
   /// The error that caused the initialization to fail.
@@ -40,7 +40,7 @@ class _InitializationFailedAppState extends State<InitializationFailedApp> {
 
   Future<void> _retryInitialization() async {
     _inProgress.value = true;
-    await widget.retryInitialization!();
+    await widget.retryInitialization?.call();
     _inProgress.value = false;
   }
 
