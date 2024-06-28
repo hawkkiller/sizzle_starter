@@ -81,16 +81,16 @@ abstract base class PreferencesEntry<T extends Object> {
 ///   required SharedPreferences sharedPreferences,
 ///   required String key,
 ///  }) : super(sharedPreferences: sharedPreferences, key: key);
-/// 
+///
 ///  @override
 ///  CustomType? read() {
 ///   final value = _sharedPreferences.get(key);
-/// 
+///
 ///   if (value == null) return null;
-/// 
+///
 ///   return CustomType.fromJson(value);
 ///  }
-/// 
+///
 ///  @override
 ///  Future<void> set(CustomType value) => _sharedPreferences.setString(
 ///   key,

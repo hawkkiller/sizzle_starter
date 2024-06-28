@@ -14,10 +14,9 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-
   @override
   void initState() {
-    SettingsScope.of(context,listen: false).setLocale(const Locale('ru'));
+    SettingsScope.of(context, listen: false).setLocale(const Locale('ru'));
     super.initState();
   }
 

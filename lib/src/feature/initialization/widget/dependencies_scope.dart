@@ -6,9 +6,9 @@ import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dar
 
 /// {@template dependencies_scope}
 /// A scope that provides application dependencies.
-/// 
+///
 /// In order to use this in widget tests, you need to wrap your widget with
-/// this widget and provide the dependencies. However, you should not 
+/// this widget and provide the dependencies. However, you should not
 /// always provide the full pack of dependencies, only the ones that are
 /// needed for the test. It is possible by creating a new class that extends
 /// [Dependencies] and overrides the dependencies that are needed for the test.
