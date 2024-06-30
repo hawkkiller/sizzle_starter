@@ -6,6 +6,8 @@ import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dar
 import 'package:sizzle_starter/src/feature/settings/bloc/settings_bloc.dart';
 import 'package:sizzle_starter/src/feature/settings/data/locale_datasource.dart';
 import 'package:sizzle_starter/src/feature/settings/data/locale_repository.dart';
+import 'package:sizzle_starter/src/feature/settings/data/text_scale_datasource.dart';
+import 'package:sizzle_starter/src/feature/settings/data/text_scale_repository.dart';
 import 'package:sizzle_starter/src/feature/settings/data/theme_datasource.dart';
 import 'package:sizzle_starter/src/feature/settings/data/theme_mode_codec.dart';
 import 'package:sizzle_starter/src/feature/settings/data/theme_repository.dart';
@@ -85,15 +87,22 @@ final class CompositionRoot {
       ),
     );
 
+    final textScaleRepository = TextScaleRepositoryImpl(
+        textScaleDataSource:
+            TextScaleDatasourceLocal(sharedPreferences: prefs));
+
     final localeFuture = localeRepository.getLocale();
     final theme = await themeRepository.getTheme();
     final locale = await localeFuture;
+    final textScale = await textScaleRepository.getScale();
 
-    final initialState = SettingsState.idle(appTheme: theme, locale: locale);
+    final initialState = SettingsState.idle(
+        appTheme: theme, locale: locale, textScale: textScale);
 
     final settingsBloc = SettingsBloc(
       localeRepository: localeRepository,
       themeRepository: themeRepository,
+      textScaleRepository: textScaleRepository,
       initialState: initialState,
     );
     return settingsBloc;

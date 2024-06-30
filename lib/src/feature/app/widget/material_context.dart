@@ -20,6 +20,9 @@ class MaterialContext extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = SettingsScope.themeOf(context).theme;
     final locale = SettingsScope.localeOf(context).locale;
+    final textScale = SettingsScope.textScaleOf(context).textScale;
+
+    final mediaQueryData = MediaQuery.of(context);
 
     return MaterialApp(
       theme: theme.lightTheme,
@@ -29,10 +32,13 @@ class MaterialContext extends StatelessWidget {
       supportedLocales: Localization.supportedLocales,
       locale: locale,
       home: const HomeScreen(),
-      builder: (context, child) => MediaQuery.withClampedTextScaling(
+      builder: (context, child) => MediaQuery(
         key: _globalKey,
-        minScaleFactor: 1.0,
-        maxScaleFactor: 2.0,
+        data: mediaQueryData.copyWith(
+          textScaler: TextScaler.linear(
+            mediaQueryData.textScaler.scale(textScale).clamp(0.5, 2),
+          ),
+        ),
         child: child!,
       ),
     );
