@@ -31,6 +31,22 @@ class _HomeScreenState extends State<HomeScreen> {
           final windowSize = constraints.materialBreakpoint;
           return CustomScrollView(
             slivers: [
+              SliverToBoxAdapter(
+                child: Column(
+                  children: [
+                    const Text('Text scale'),
+                    Slider(
+                      divisions: 8,
+                      min: 0.5,
+                      max: 2,
+                      value: SettingsScope.textScaleOf(context).textScale,
+                      onChanged: (value) {
+                        SettingsScope.textScaleOf(context).setTextScale(value);
+                      },
+                    ),
+                  ],
+                ),
+              ),
               SliverPadding(
                 padding: HorizontalSpacing.centered(windowWidth),
                 sliver: SliverGrid.builder(
