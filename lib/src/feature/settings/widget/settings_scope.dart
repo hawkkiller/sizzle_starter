@@ -30,18 +30,35 @@ abstract interface class LocaleScopeController {
   void setLocale(Locale locale);
 }
 
+/// {@template text_scale_scope_controller}
+/// A controller that holds and operates the app text scale.
+/// {@endtemplate}
+abstract interface class TextScaleScopeController {
+  /// Get the current [textScale]
+  double get textScale;
+
+  /// Set text scale to [textScale].
+  void setTextScale(double textScale);
+}
+
 /// {@template settings_scope_controller}
 /// A controller that holds and operates the app settings.
 /// {@endtemplate}
 abstract interface class SettingsScopeController
-    implements ThemeScopeController, LocaleScopeController {}
+    implements
+        ThemeScopeController,
+        LocaleScopeController,
+        TextScaleScopeController {}
 
 enum _SettingsScopeAspect {
   /// The theme aspect.
   theme,
 
   /// The locale aspect.
-  locale;
+  locale,
+
+  /// The textScale aspect.
+  textScale;
 }
 
 /// {@template settings_scope}
@@ -87,6 +104,14 @@ class SettingsScope extends StatefulWidget {
       )
       .controller;
 
+  /// Get the [TextScaleScopeController] ofthe closest [SettingsScope]
+  /// ancestor.
+  static TextScaleScopeController textScaleOf(BuildContext context) => context
+      .inheritFrom<_SettingsScopeAspect, _InheritedSettingsScope>(
+        aspect: _SettingsScopeAspect.textScale,
+      )
+      .controller;
+
   @override
   State<SettingsScope> createState() => _SettingsScopeState();
 }
@@ -114,12 +139,21 @@ class _SettingsScopeState extends State<SettingsScope>
       );
 
   @override
+  void setTextScale(double textScale) {
+    widget.settingsBloc
+        .add(SettingsEvent.updateTextScale(textScale: textScale));
+  }
+
+  @override
   Locale get locale =>
       widget.settingsBloc.state.locale ?? Localization.computeDefaultLocale();
 
   @override
   AppTheme get theme =>
       widget.settingsBloc.state.appTheme ?? AppTheme.defaultTheme;
+
+  @override
+  double get textScale => widget.settingsBloc.state.textScale ?? 1;
 
   @override
   Widget build(BuildContext context) =>
@@ -163,6 +197,11 @@ class _InheritedSettingsScope extends InheritedModel<_SettingsScopeAspect> {
       final oldLocale = oldWidget.state.locale?.languageCode;
 
       shouldNotify = shouldNotify || locale != oldLocale;
+    }
+
+    if (dependencies.contains(_SettingsScopeAspect.textScale)) {
+      shouldNotify =
+          shouldNotify || state.textScale != oldWidget.state.textScale;
     }
 
     return shouldNotify;
