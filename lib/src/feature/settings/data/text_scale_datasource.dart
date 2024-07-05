@@ -19,17 +19,11 @@ final class TextScaleDatasourceLocal extends PreferencesDao
   /// {@macro text_scale_datasource}
   const TextScaleDatasourceLocal({required super.sharedPreferences});
 
-  PreferencesEntry<double> get _textScale => doubleEntry(
-        'settings.textScale',
-      );
+  PreferencesEntry<double> get _textScale => doubleEntry('settings.textScale');
 
   @override
-  Future<void> setScale(double scale) async {
-    await _textScale.set(scale);
-  }
+  Future<void> setScale(double scale) async => _textScale.set(scale);
 
   @override
-  Future<double?> getScale() async {
-    return _textScale.read();
-  }
+  Future<double?> getScale() async => _textScale.read();
 }

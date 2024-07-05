@@ -88,8 +88,8 @@ final class CompositionRoot {
     );
 
     final textScaleRepository = TextScaleRepositoryImpl(
-        textScaleDataSource:
-            TextScaleDatasourceLocal(sharedPreferences: prefs));
+      textScaleDataSource: TextScaleDatasourceLocal(sharedPreferences: prefs),
+    );
 
     final localeFuture = localeRepository.getLocale();
     final theme = await themeRepository.getTheme();
@@ -97,7 +97,10 @@ final class CompositionRoot {
     final textScale = await textScaleRepository.getScale();
 
     final initialState = SettingsState.idle(
-        appTheme: theme, locale: locale, textScale: textScale);
+      appTheme: theme,
+      locale: locale,
+      textScale: textScale,
+    );
 
     final settingsBloc = SettingsBloc(
       localeRepository: localeRepository,

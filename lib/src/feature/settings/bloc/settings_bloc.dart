@@ -1,6 +1,5 @@
 import 'dart:ui' show Locale;
 
-import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizzle_starter/src/feature/app/model/app_theme.dart';
 import 'package:sizzle_starter/src/feature/settings/data/locale_repository.dart';
@@ -41,17 +40,19 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     try {
       emitter(
         SettingsState.processing(
-            appTheme: state.appTheme,
-            locale: state.locale,
-            textScale: state.textScale),
+          appTheme: state.appTheme,
+          locale: state.locale,
+          textScale: state.textScale,
+        ),
       );
       await _themeRepo.setTheme(event.appTheme);
 
       emitter(
         SettingsState.idle(
-            appTheme: event.appTheme,
-            locale: state.locale,
-            textScale: state.textScale),
+          appTheme: event.appTheme,
+          locale: state.locale,
+          textScale: state.textScale,
+        ),
       );
     } on Object catch (e, stackTrace) {
       emitter(
@@ -73,17 +74,19 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     try {
       emitter(
         SettingsState.processing(
-            appTheme: state.appTheme,
-            locale: state.locale,
-            textScale: state.textScale),
+          appTheme: state.appTheme,
+          locale: state.locale,
+          textScale: state.textScale,
+        ),
       );
       await _localeRepo.setLocale(event.locale);
 
       emitter(
         SettingsState.idle(
-            appTheme: state.appTheme,
-            locale: event.locale,
-            textScale: state.textScale),
+          appTheme: state.appTheme,
+          locale: event.locale,
+          textScale: state.textScale,
+        ),
       );
     } on Object catch (e, stackTrace) {
       emitter(
@@ -114,9 +117,10 @@ final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
 
       emitter(
         SettingsState.idle(
-            appTheme: state.appTheme,
-            locale: state.locale,
-            textScale: event.textScale),
+          appTheme: state.appTheme,
+          locale: state.locale,
+          textScale: event.textScale,
+        ),
       );
     } on Object catch (e, stackTrace) {
       emitter(
@@ -146,16 +150,18 @@ sealed class SettingsState {
   final double? textScale;
 
   /// Idle state for the [SettingsBloc].
-  const factory SettingsState.idle(
-      {Locale? locale,
-      AppTheme? appTheme,
-      double? textScale}) = _IdleSettingsState;
+  const factory SettingsState.idle({
+    Locale? locale,
+    AppTheme? appTheme,
+    double? textScale,
+  }) = _IdleSettingsState;
 
   /// Processing state for the [SettingsBloc].
-  const factory SettingsState.processing(
-      {Locale? locale,
-      AppTheme? appTheme,
-      double? textScale}) = _ProcessingSettingsState;
+  const factory SettingsState.processing({
+    Locale? locale,
+    AppTheme? appTheme,
+    double? textScale,
+  }) = _ProcessingSettingsState;
 
   /// Error state for the [SettingsBloc].
   const factory SettingsState.error({
@@ -183,8 +189,11 @@ final class _IdleSettingsState extends SettingsState {
   int get hashCode => Object.hash(locale, appTheme, textScale);
 
   @override
-  String toString() =>
-      'SettingsState.idle(locale: $locale, appTheme: $appTheme, textScale: $textScale)';
+  String toString() => 'SettingsState.idle('
+      'locale: $locale,'
+      'appTheme: $appTheme,'
+      'textScale: $textScale'
+      ')';
 }
 
 final class _ProcessingSettingsState extends SettingsState {
@@ -208,13 +217,20 @@ final class _ProcessingSettingsState extends SettingsState {
   int get hashCode => Object.hash(locale, appTheme, textScale);
 
   @override
-  String toString() =>
-      'SettingsState.processing(locale: $locale, appTheme: $appTheme, textScale: $textScale)';
+  String toString() => 'SettingsState.processing('
+      'locale: $locale,'
+      'appTheme: $appTheme,'
+      'textScale: $textScale'
+      ')';
 }
 
 final class _ErrorSettingsState extends SettingsState {
-  const _ErrorSettingsState(
-      {required this.cause, super.locale, super.appTheme, super.textScale});
+  const _ErrorSettingsState({
+    required this.cause,
+    super.locale,
+    super.appTheme,
+    super.textScale,
+  });
 
   /// The cause of the error.
   final Object cause;
@@ -234,8 +250,12 @@ final class _ErrorSettingsState extends SettingsState {
   int get hashCode => Object.hash(cause, locale, appTheme, textScale);
 
   @override
-  String toString() => 'SettingsState.error(cause: $cause, '
-      'locale: $locale, appTheme: $appTheme, textScale: $textScale)';
+  String toString() => 'SettingsState.error('
+      'cause: $cause,'
+      'locale: $locale,'
+      'appTheme: $appTheme,'
+      'textScale: $textScale'
+      ')';
 }
 
 /// Events for the [SettingsBloc].
@@ -250,6 +270,7 @@ sealed class SettingsEvent {
   const factory SettingsEvent.updateLocale({required Locale locale}) =
       _UpdateLocaleSettingsEvent;
 
+  /// Event to update the text scale.
   const factory SettingsEvent.updateTextScale({required double textScale}) =
       _UpdateTextScaleSettingsEvent;
 }

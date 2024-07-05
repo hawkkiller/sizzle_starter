@@ -104,7 +104,8 @@ class SettingsScope extends StatefulWidget {
       )
       .controller;
 
-  /// Get the [TextScaleScopeController] of the closest [SettingsScope] ancestor.
+  /// Get the [TextScaleScopeController] ofthe closest [SettingsScope]
+  /// ancestor.
   static TextScaleScopeController textScaleOf(BuildContext context) => context
       .inheritFrom<_SettingsScopeAspect, _InheritedSettingsScope>(
         aspect: _SettingsScopeAspect.textScale,
