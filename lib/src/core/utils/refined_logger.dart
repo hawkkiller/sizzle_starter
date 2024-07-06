@@ -12,8 +12,7 @@ import 'package:stack_trace/stack_trace.dart';
 ///
 /// This is a zone-scoped logger, which means that it can be overridden
 /// in nested zones or during tests.
-RefinedLogger get logger =>
-    Zone.current[_loggerKey] as RefinedLogger? ?? _logger;
+RefinedLogger get logger => Zone.current[_loggerKey] as RefinedLogger? ?? _logger;
 
 /// Runs [callback] with the given [logger] instance.
 ///

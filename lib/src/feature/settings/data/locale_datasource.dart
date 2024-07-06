@@ -16,8 +16,7 @@ abstract interface class LocaleDataSource {
 }
 
 /// {@macro locale_datasource}
-final class LocaleDataSourceLocal extends PreferencesDao
-    implements LocaleDataSource {
+final class LocaleDataSourceLocal extends PreferencesDao implements LocaleDataSource {
   /// {@macro locale_datasource}
   const LocaleDataSourceLocal({required super.sharedPreferences});
 

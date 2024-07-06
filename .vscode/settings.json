@@ -2,6 +2,6 @@
   "dart.additionalAnalyzerFileExtensions": [
     "drift"
   ],
-  "dart.lineLength": 80,
+  "dart.lineLength": 100,
   "dart.flutterSdkPath": ".fvm/versions/3.22.0"
 }

@@ -45,10 +45,7 @@ abstract interface class TextScaleScopeController {
 /// A controller that holds and operates the app settings.
 /// {@endtemplate}
 abstract interface class SettingsScopeController
-    implements
-        ThemeScopeController,
-        LocaleScopeController,
-        TextScaleScopeController {}
+    implements ThemeScopeController, LocaleScopeController, TextScaleScopeController {}
 
 enum _SettingsScopeAspect {
   /// The theme aspect.
@@ -117,8 +114,7 @@ class SettingsScope extends StatefulWidget {
 }
 
 /// State for widget SettingsScope
-class _SettingsScopeState extends State<SettingsScope>
-    implements SettingsScopeController {
+class _SettingsScopeState extends State<SettingsScope> implements SettingsScopeController {
   @override
   void setLocale(Locale locale) {
     widget.settingsBloc.add(SettingsEvent.updateLocale(locale: locale));
@@ -140,24 +136,20 @@ class _SettingsScopeState extends State<SettingsScope>
 
   @override
   void setTextScale(double textScale) {
-    widget.settingsBloc
-        .add(SettingsEvent.updateTextScale(textScale: textScale));
+    widget.settingsBloc.add(SettingsEvent.updateTextScale(textScale: textScale));
   }
 
   @override
-  Locale get locale =>
-      widget.settingsBloc.state.locale ?? Localization.computeDefaultLocale();
+  Locale get locale => widget.settingsBloc.state.locale ?? Localization.computeDefaultLocale();
 
   @override
-  AppTheme get theme =>
-      widget.settingsBloc.state.appTheme ?? AppTheme.defaultTheme;
+  AppTheme get theme => widget.settingsBloc.state.appTheme ?? AppTheme.defaultTheme;
 
   @override
   double get textScale => widget.settingsBloc.state.textScale ?? 1;
 
   @override
-  Widget build(BuildContext context) =>
-      BlocBuilder<SettingsBloc, SettingsState>(
+  Widget build(BuildContext context) => BlocBuilder<SettingsBloc, SettingsState>(
         bloc: widget.settingsBloc,
         builder: (context, state) => _InheritedSettingsScope(
           controller: this,
@@ -178,8 +170,7 @@ class _InheritedSettingsScope extends InheritedModel<_SettingsScopeAspect> {
   final SettingsState state;
 
   @override
-  bool updateShouldNotify(_InheritedSettingsScope oldWidget) =>
-      state != oldWidget.state;
+  bool updateShouldNotify(_InheritedSettingsScope oldWidget) => state != oldWidget.state;
 
   @override
   bool updateShouldNotifyDependent(
@@ -200,8 +191,7 @@ class _InheritedSettingsScope extends InheritedModel<_SettingsScopeAspect> {
     }
 
     if (dependencies.contains(_SettingsScopeAspect.textScale)) {
-      shouldNotify =
-          shouldNotify || state.textScale != oldWidget.state.textScale;
+      shouldNotify = shouldNotify || state.textScale != oldWidget.state.textScale;
     }
 
     return shouldNotify;

@@ -1,4 +1,5 @@
-library rest_client;
+/// Rest client
+library;
 
 export 'src/exception/rest_client_exception.dart';
 export 'src/http/rest_client_http.dart';

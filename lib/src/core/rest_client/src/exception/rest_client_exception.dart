@@ -41,8 +41,8 @@ final class ClientException extends RestClientException {
 
   @override
   String toString() => 'ClientException('
-      'message: $message,'
-      'statusCode: $statusCode,'
+      'message: $message, '
+      'statusCode: $statusCode, '
       'cause: $cause'
       ')';
 }
@@ -81,9 +81,9 @@ final class StructuredBackendException extends RestClientException {
 
   @override
   String toString() => 'StructuredBackendException('
-      'message: $message,'
-      'error: $error,'
-      'statusCode: $statusCode,'
+      'message: $message, '
+      'error: $error, '
+      'statusCode: $statusCode, '
       ')';
 }
 
@@ -100,8 +100,8 @@ final class WrongResponseTypeException extends RestClientException {
 
   @override
   String toString() => 'WrongResponseTypeException('
-      'message: $message,'
-      'statusCode: $statusCode,'
+      'message: $message, '
+      'statusCode: $statusCode, '
       ')';
 }
 
@@ -118,8 +118,8 @@ final class ConnectionException extends RestClientException {
 
   @override
   String toString() => 'ConnectionException('
-      'message: $message,'
-      'statusCode: $statusCode,'
+      'message: $message, '
+      'statusCode: $statusCode, '
       'cause: $cause'
       ')';
 }
@@ -137,8 +137,8 @@ final class InternalServerException extends RestClientException {
 
   @override
   String toString() => 'InternalServerException('
-      'message: $message,'
-      'statusCode: $statusCode,'
+      'message: $message, '
+      'statusCode: $statusCode, '
       'cause: $cause'
       ')';
 }

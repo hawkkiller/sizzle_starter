@@ -56,8 +56,7 @@ void main() {
         token: const Token('access_token', 'refresh_token'),
       );
 
-      when(mockAuthorizationClient.isAccessTokenValid(any))
-          .thenAnswer((_) => Future.value(true));
+      when(mockAuthorizationClient.isAccessTokenValid(any)).thenAnswer((_) => Future.value(true));
 
       final request = http.Request('GET', Uri.parse('https://example.com'));
 
@@ -212,7 +211,7 @@ void main() {
     );
 
     test(
-      "if response doesnt have token in request, resolve response",
+      'if response doesnt have token in request, resolve response',
       () async {
         final authInterceptor = AuthInterceptor(
           tokenStorage: mockTokenStorage,

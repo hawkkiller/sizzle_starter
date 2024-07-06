@@ -190,8 +190,8 @@ final class _IdleSettingsState extends SettingsState {
 
   @override
   String toString() => 'SettingsState.idle('
-      'locale: $locale,'
-      'appTheme: $appTheme,'
+      'locale: $locale, '
+      'appTheme: $appTheme, '
       'textScale: $textScale'
       ')';
 }
@@ -218,8 +218,8 @@ final class _ProcessingSettingsState extends SettingsState {
 
   @override
   String toString() => 'SettingsState.processing('
-      'locale: $locale,'
-      'appTheme: $appTheme,'
+      'locale: $locale, '
+      'appTheme: $appTheme, '
       'textScale: $textScale'
       ')';
 }
@@ -251,9 +251,9 @@ final class _ErrorSettingsState extends SettingsState {
 
   @override
   String toString() => 'SettingsState.error('
-      'cause: $cause,'
-      'locale: $locale,'
-      'appTheme: $appTheme,'
+      'cause: $cause, '
+      'locale: $locale, '
+      'appTheme: $appTheme, '
       'textScale: $textScale'
       ')';
 }
@@ -263,12 +263,10 @@ sealed class SettingsEvent {
   const SettingsEvent();
 
   /// Event to update theme.
-  const factory SettingsEvent.updateTheme({required AppTheme appTheme}) =
-      _UpdateThemeSettingsEvent;
+  const factory SettingsEvent.updateTheme({required AppTheme appTheme}) = _UpdateThemeSettingsEvent;
 
   /// Event to update the locale.
-  const factory SettingsEvent.updateLocale({required Locale locale}) =
-      _UpdateLocaleSettingsEvent;
+  const factory SettingsEvent.updateLocale({required Locale locale}) = _UpdateLocaleSettingsEvent;
 
   /// Event to update the text scale.
   const factory SettingsEvent.updateTextScale({required double textScale}) =
@@ -324,8 +322,7 @@ final class _UpdateTextScaleSettingsEvent extends SettingsEvent {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is _UpdateTextScaleSettingsEvent &&
-        other.textScale == textScale;
+    return other is _UpdateTextScaleSettingsEvent && other.textScale == textScale;
   }
 
   @override

@@ -26,8 +26,7 @@ final class AppRunner {
 
     // Override logging
     FlutterError.onError = logger.logFlutterError;
-    WidgetsBinding.instance.platformDispatcher.onError =
-        logger.logPlatformDispatcherError;
+    WidgetsBinding.instance.platformDispatcher.onError = logger.logPlatformDispatcherError;
 
     // Setup bloc observer and transformer
     Bloc.observer = AppBlocObserver(logger);

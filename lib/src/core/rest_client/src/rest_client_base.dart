@@ -149,7 +149,7 @@ abstract base class RestClientBase implements RestClient {
     );
 
     try {
-      final Map<String, Object?>? decodedBody = switch (body) {
+      final decodedBody = switch (body) {
         final Map<String, Object?> map => map,
         final String str => await _decodeString(str),
         final List<int> bytes => await _decodeBytes(bytes),
