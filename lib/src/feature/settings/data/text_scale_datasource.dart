@@ -14,8 +14,7 @@ abstract interface class TextScaleDatasource {
 }
 
 /// {@macro text_scale_datasource}
-final class TextScaleDatasourceLocal extends PreferencesDao
-    implements TextScaleDatasource {
+final class TextScaleDatasourceLocal extends PreferencesDao implements TextScaleDatasource {
   /// {@macro text_scale_datasource}
   const TextScaleDatasourceLocal({required super.sharedPreferences});
 

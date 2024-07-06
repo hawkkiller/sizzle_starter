@@ -65,8 +65,7 @@ abstract base class PreferencesEntry<T extends Object> {
   Future<void> remove();
 
   /// Set the value of the entry in the preferences if the value is not null.
-  Future<void> setIfNullRemove(T? value) =>
-      value == null ? remove() : set(value);
+  Future<void> setIfNullRemove(T? value) => value == null ? remove() : set(value);
 }
 
 /// {@template typed_entry}
@@ -120,7 +119,7 @@ base class TypedEntry<T extends Object> extends PreferencesEntry<T> {
     if (value is T) return value;
 
     throw StateError(
-      'The value of $key is not of type ${T.runtimeType.toString()}',
+      'The value of $key is not of type $T',
     );
   }
 

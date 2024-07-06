@@ -24,8 +24,7 @@ class InitializationFailedApp extends StatefulWidget {
   });
 
   @override
-  State<InitializationFailedApp> createState() =>
-      _InitializationFailedAppState();
+  State<InitializationFailedApp> createState() => _InitializationFailedAppState();
 }
 
 class _InitializationFailedAppState extends State<InitializationFailedApp> {

@@ -135,8 +135,7 @@ void main() {
       const path = '/path';
       final queryParams = {'key1': 'value1', 'key2': 'value2'};
       final uri = client.buildUri(path: path, queryParams: queryParams);
-      final expectedUri =
-          Uri.parse('http://localhost:8080$path?key1=value1&key2=value2');
+      final expectedUri = Uri.parse('http://localhost:8080$path?key1=value1&key2=value2');
       expect(uri, equals(expectedUri));
     });
 

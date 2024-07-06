@@ -1,7 +1,6 @@
 import 'package:cronet_http/cronet_http.dart' show CronetClient;
 import 'package:cupertino_http/cupertino_http.dart' show CupertinoClient;
-import 'package:flutter/foundation.dart'
-    show TargetPlatform, defaultTargetPlatform;
+import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform;
 import 'package:http/http.dart' as http;
 import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 import 'package:sizzle_starter/src/core/rest_client/src/http/check_exception_io.dart'
@@ -55,8 +54,7 @@ final class RestClientHttp extends RestClientBase {
   ///  client: client,
   /// );
   /// ```
-  RestClientHttp({required super.baseUrl, http.Client? client})
-      : _client = client ?? http.Client();
+  RestClientHttp({required super.baseUrl, http.Client? client}) : _client = client ?? http.Client();
 
   final http.Client _client;
 

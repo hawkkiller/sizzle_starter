@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:flutter/material.dart' show ThemeMode, Color;
+import 'package:flutter/material.dart' show Color, ThemeMode;
 import 'package:sizzle_starter/src/core/utils/preferences_dao.dart';
 import 'package:sizzle_starter/src/feature/app/model/app_theme.dart';
 
@@ -19,8 +19,7 @@ abstract interface class ThemeDataSource {
 }
 
 /// {@macro theme_datasource}
-final class ThemeDataSourceLocal extends PreferencesDao
-    implements ThemeDataSource {
+final class ThemeDataSourceLocal extends PreferencesDao implements ThemeDataSource {
   /// {@macro theme_datasource}
   const ThemeDataSourceLocal({
     required super.sharedPreferences,
