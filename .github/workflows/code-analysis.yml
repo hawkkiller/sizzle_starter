@@ -41,7 +41,7 @@ jobs:
            github_token: ${{ secrets.GITHUB_TOKEN }}
   
       - name: ✨ Check Formatting
-        run: find lib test -name "*.dart" ! -name "*.g.dart" ! -name "*.freezed.dart" -print0 | xargs -0 dart format --set-exit-if-changed --line-length 100 -o show
+        run: find lib test -name "*.dart" ! -name "*.*.dart" -print0 | xargs -0 dart format --set-exit-if-changed --line-length 100 -o show
 
       - name: 🕵️ Analyze
         run: flutter analyze .
