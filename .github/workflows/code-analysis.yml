@@ -41,7 +41,7 @@ jobs:
            github_token: ${{ secrets.GITHUB_TOKEN }}
   
       - name: ✨ Check Formatting
-        run: dart format --set-exit-if-changed .
+        run: dart format --set-exit-if-changed --line-length 100 .
 
       - name: 🕵️ Analyze
         run: flutter analyze .
