@@ -1,6 +1,3 @@
-import 'package:flutter/rendering.dart';
-import 'package:flutter/widgets.dart';
-
 /// A breakpoint that is used to determine the layout of the application.
 ///
 /// It follows the Material Design guidelines for breakpoints.
@@ -33,6 +30,25 @@ enum WindowSize {
 
   /// The maximum width of the breakpoint.
   final double max;
+
+  /// Returns the [WindowSize] for the given width.
+  static WindowSize fromWidth(double width) {
+    if (width < 0) {
+      throw ArgumentError.value(width, 'width', 'Width cannot be negative');
+    }
+
+    if (compact.isInRange(width)) {
+      return compact;
+    } else if (medium.isInRange(width)) {
+      return medium;
+    } else if (expanded.isInRange(width)) {
+      return expanded;
+    } else if (large.isInRange(width)) {
+      return large;
+    }
+
+    return extraLarge;
+  }
 
   /// Returns whether the given width is in the range of the breakpoint.
   bool isInRange(double width) => width >= min && width <= max;
@@ -69,24 +85,4 @@ enum WindowSize {
   bool get isExtraLarge => this == WindowSize.extraLarge;
 
   const WindowSize._(this.min, this.max);
-}
-
-/// A set of extensions for [WindowSize] on [BoxConstraints].
-extension WindowSizeConstrainsExtension on BoxConstraints {
-  /// Returns the [WindowSize] for the given constraints.
-  WindowSize get materialBreakpoint {
-    final side = biggest.width;
-
-    if (WindowSize.compact.isInRange(side)) {
-      return WindowSize.compact;
-    } else if (WindowSize.medium.isInRange(side)) {
-      return WindowSize.medium;
-    } else if (WindowSize.expanded.isInRange(side)) {
-      return WindowSize.expanded;
-    } else if (WindowSize.large.isInRange(side)) {
-      return WindowSize.large;
-    }
-
-    return WindowSize.extraLarge;
-  }
 }

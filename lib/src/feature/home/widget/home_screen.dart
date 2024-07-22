@@ -23,13 +23,12 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final windowWidth = MediaQuery.sizeOf(context).width;
+    final windowSize = WindowSize.fromWidth(windowWidth);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Home Screen')),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: LayoutBuilder(
-        builder: (context, constraints) {
-          final windowSize = constraints.materialBreakpoint;
-          return CustomScrollView(
+      body: CustomScrollView(
             slivers: [
               SliverToBoxAdapter(
                 child: Column(
@@ -73,9 +72,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 ),
               ),
             ],
-          );
-        },
-      ),
+          ),
     );
   }
 }
