@@ -457,7 +457,7 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
         overlayRect,
         displayFeatureBounds,
       );
-ds
+
       // TODO(mlazebny): figure out how to correctly treat allowedRect
       // ignore: unused_local_variable
       final allowedRect = _closestScreen(subScreens, leaderGlobalPosition);
