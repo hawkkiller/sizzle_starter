@@ -52,7 +52,7 @@ final class CompositionRoot {
 
   Future<Dependencies> _initDependencies() async {
     final errorTrackingManager = await _initErrorTrackingManager();
-    final sharedPreferences = await SharedPreferences.getInstance();
+    final sharedPreferences = SharedPreferencesAsync();
     final settingsBloc = await _initSettingsBloc(sharedPreferences);
 
     return Dependencies(
@@ -75,7 +75,7 @@ final class CompositionRoot {
     return errorTrackingManager;
   }
 
-  Future<SettingsBloc> _initSettingsBloc(SharedPreferences prefs) async {
+  Future<SettingsBloc> _initSettingsBloc(SharedPreferencesAsync prefs) async {
     final localeRepository = LocaleRepositoryImpl(
       localeDataSource: LocaleDataSourceLocal(sharedPreferences: prefs),
     );

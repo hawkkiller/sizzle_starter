@@ -6,10 +6,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Inspired by https://pub.dev/packages/typed_preferences
 /// {@endtemplate}
 abstract base class PreferencesDao {
-  final SharedPreferences _sharedPreferences;
+  final SharedPreferencesAsync _sharedPreferences;
 
   /// {@macro preferences_dao}
-  const PreferencesDao({required SharedPreferences sharedPreferences})
+  const PreferencesDao({required SharedPreferencesAsync sharedPreferences})
       : _sharedPreferences = sharedPreferences;
 
   /// Obtain [bool] entry from the preferences.
@@ -36,9 +36,8 @@ abstract base class PreferencesDao {
         sharedPreferences: _sharedPreferences,
       );
 
-  /// Obtain [Iterable<String>] entry from the preferences.
-  PreferencesEntry<Iterable<String>> iterableStringEntry(String key) =>
-      TypedEntry<Iterable<String>>(
+  /// Obtain `List<String>` entry from the preferences.
+  PreferencesEntry<List<String>> iterableStringEntry(String key) => TypedEntry<List<String>>(
         key: key,
         sharedPreferences: _sharedPreferences,
       );
@@ -56,7 +55,7 @@ abstract base class PreferencesEntry<T extends Object> {
   String get key;
 
   /// Obtain the value of the entry from the preferences.
-  T? read();
+  Future<T?> read();
 
   /// Set the value of the entry in the preferences.
   Future<void> set(T value);
@@ -99,29 +98,26 @@ abstract base class PreferencesEntry<T extends Object> {
 /// ```
 /// {@endtemplate}
 base class TypedEntry<T extends Object> extends PreferencesEntry<T> {
+  final SharedPreferencesAsync _sharedPreferences;
+
   /// {@macro typed_entry}
-  TypedEntry({
-    required SharedPreferences sharedPreferences,
+  const TypedEntry({
+    required SharedPreferencesAsync sharedPreferences,
     required this.key,
   }) : _sharedPreferences = sharedPreferences;
-
-  final SharedPreferences _sharedPreferences;
 
   @override
   final String key;
 
   @override
-  T? read() {
-    final value = _sharedPreferences.get(key);
-
-    if (value == null) return null;
-
-    if (value is T) return value;
-
-    throw StateError(
-      'The value of $key is not of type $T',
-    );
-  }
+  Future<T?> read() => switch (T) {
+        const (int) => _sharedPreferences.getInt(key) as Future<T?>,
+        const (double) => _sharedPreferences.getDouble(key) as Future<T?>,
+        const (String) => _sharedPreferences.getString(key) as Future<T?>,
+        const (bool) => _sharedPreferences.getBool(key) as Future<T?>,
+        const (List<String>) => _sharedPreferences.getStringList(key) as Future<T?>,
+        _ => throw StateError('The value of $key is not of type $T'),
+      };
 
   @override
   Future<void> set(T value) => switch (value) {
@@ -129,10 +125,7 @@ base class TypedEntry<T extends Object> extends PreferencesEntry<T> {
         final double value => _sharedPreferences.setDouble(key, value),
         final String value => _sharedPreferences.setString(key, value),
         final bool value => _sharedPreferences.setBool(key, value),
-        final Iterable<String> value => _sharedPreferences.setStringList(
-            key,
-            value.toList(),
-          ),
+        final List<String> value => _sharedPreferences.setStringList(key, value),
         _ => throw StateError(
             '$T is not a valid type for a preferences entry value.',
           ),
