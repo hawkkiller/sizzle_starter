@@ -1,6 +1,7 @@
 import 'dart:ui';
 
-import 'package:sizzle_starter/src/core/utils/preferences_dao.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizzle_starter/src/core/utils/persisted_entry.dart';
 
 /// {@template locale_datasource}
 /// [LocaleDataSource] is an entry point to the locale data layer.
@@ -16,21 +17,27 @@ abstract interface class LocaleDataSource {
 }
 
 /// {@macro locale_datasource}
-final class LocaleDataSourceLocal extends PreferencesDao implements LocaleDataSource {
+final class LocaleDataSourceLocal implements LocaleDataSource {
   /// {@macro locale_datasource}
-  const LocaleDataSourceLocal({required super.sharedPreferences});
+  LocaleDataSourceLocal({required this.sharedPreferences});
 
-  PreferencesEntry<String> get _languageCode => stringEntry(
-        'settings.locale.languageCode',
-      );
+  /// The instance of [SharedPreferences] used to read and write values.
+  final SharedPreferencesAsync sharedPreferences;
 
-  PreferencesEntry<String> get _scriptCode => stringEntry(
-        'settings.locale.scriptCode',
-      );
+  late final _languageCode = StringPreferencesEntry(
+    sharedPreferences: sharedPreferences,
+    key: 'settings.locale.languageCode',
+  );
 
-  PreferencesEntry<String> get _countryCode => stringEntry(
-        'settings.locale.countryCode',
-      );
+  late final _scriptCode = StringPreferencesEntry(
+    sharedPreferences: sharedPreferences,
+    key: 'settings.locale.scriptCode',
+  );
+
+  late final _countryCode = StringPreferencesEntry(
+    sharedPreferences: sharedPreferences,
+    key: 'settings.locale.countryCode',
+  );
 
   @override
   Future<void> setLocale(Locale locale) async {
