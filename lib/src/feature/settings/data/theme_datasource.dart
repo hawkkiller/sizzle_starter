@@ -2,7 +2,8 @@ import 'dart:async';
 import 'dart:convert';
 
 import 'package:flutter/material.dart' show Color, ThemeMode;
-import 'package:sizzle_starter/src/core/utils/preferences_dao.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizzle_starter/src/core/utils/persisted_entry.dart';
 import 'package:sizzle_starter/src/feature/app/model/app_theme.dart';
 
 /// {@template theme_datasource}
@@ -19,19 +20,28 @@ abstract interface class ThemeDataSource {
 }
 
 /// {@macro theme_datasource}
-final class ThemeDataSourceLocal extends PreferencesDao implements ThemeDataSource {
+final class ThemeDataSourceLocal implements ThemeDataSource {
   /// {@macro theme_datasource}
-  const ThemeDataSourceLocal({
-    required super.sharedPreferences,
+  ThemeDataSourceLocal({
+    required this.sharedPreferences,
     required this.codec,
   });
+
+  /// The instance of [SharedPreferences] used to read and write values.
+  final SharedPreferencesAsync sharedPreferences;
 
   /// Codec for [ThemeMode]
   final Codec<ThemeMode, String> codec;
 
-  PreferencesEntry<int> get _seedColor => intEntry('theme.seed_color');
+  late final _seedColor = IntPreferencesEntry(
+    sharedPreferences: sharedPreferences,
+    key: 'theme.seed',
+  );
 
-  PreferencesEntry<String> get _themeMode => stringEntry('theme.mode');
+  late final _themeMode = StringPreferencesEntry(
+    sharedPreferences: sharedPreferences,
+    key: 'theme.mode',
+  );
 
   @override
   Future<void> setTheme(AppTheme theme) async {
