@@ -9,7 +9,8 @@ abstract base class PreferencesDao {
   final SharedPreferencesAsync _sharedPreferences;
 
   /// {@macro preferences_dao}
-  const PreferencesDao({required SharedPreferencesAsync sharedPreferences}) : _sharedPreferences = sharedPreferences;
+  const PreferencesDao({required SharedPreferencesAsync sharedPreferences})
+      : _sharedPreferences = sharedPreferences;
 
   /// Obtain [bool] entry from the preferences.
   PreferencesEntry<bool> boolEntry(String key) => TypedEntry<bool>(
