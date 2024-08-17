@@ -35,8 +35,8 @@ abstract base class PreferencesDao {
         sharedPreferences: _sharedPreferences,
       );
 
-  /// Obtain `Iterable<String>` entry from the preferences.
-  PreferencesEntry<Iterable<String>> iterableStringEntry(String key) => TypedEntry<Iterable<String>>(
+  /// Obtain `List<String>` entry from the preferences.
+  PreferencesEntry<List<String>> iterableStringEntry(String key) => TypedEntry<List<String>>(
         key: key,
         sharedPreferences: _sharedPreferences,
       );
@@ -124,10 +124,7 @@ base class TypedEntry<T extends Object> extends PreferencesEntry<T> {
         final double value => _sharedPreferences.setDouble(key, value),
         final String value => _sharedPreferences.setString(key, value),
         final bool value => _sharedPreferences.setBool(key, value),
-        final List<String> value => _sharedPreferences.setStringList(
-            key,
-            value.toList(),
-          ),
+        final List<String> value => _sharedPreferences.setStringList(key, value),
         _ => throw StateError(
             '$T is not a valid type for a preferences entry value.',
           ),
