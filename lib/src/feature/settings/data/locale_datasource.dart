@@ -23,9 +23,11 @@ final class LocaleDataSourceLocal extends PreferencesDao implements LocaleDataSo
   PreferencesEntry<String> get _languageCode => stringEntry(
         'settings.locale.languageCode',
       );
+
   PreferencesEntry<String> get _scriptCode => stringEntry(
         'settings.locale.scriptCode',
       );
+
   PreferencesEntry<String> get _countryCode => stringEntry(
         'settings.locale.countryCode',
       );
@@ -46,9 +48,9 @@ final class LocaleDataSourceLocal extends PreferencesDao implements LocaleDataSo
 
   @override
   Future<Locale?> getLocale() async {
-    final languageCode = _languageCode.read();
-    final scriptCode = _scriptCode.read();
-    final countryCode = _countryCode.read();
+    final languageCode = await _languageCode.read();
+    final scriptCode = await _scriptCode.read();
+    final countryCode = await _countryCode.read();
 
     if (languageCode == null) return null;
 

@@ -41,9 +41,8 @@ final class ThemeDataSourceLocal extends PreferencesDao implements ThemeDataSour
 
   @override
   Future<AppTheme?> getTheme() async {
-    final seedColor = _seedColor.read();
-
-    final type = _themeMode.read();
+    final seedColor = await _seedColor.read();
+    final type = await _themeMode.read();
 
     if (type == null || seedColor == null) return null;
 
