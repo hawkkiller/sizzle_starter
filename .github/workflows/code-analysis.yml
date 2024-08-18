@@ -16,7 +16,7 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@4.1.7
+        uses: actions/checkout@v4.1.7
 
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2.16.0
@@ -36,7 +36,7 @@ jobs:
           dart run build_runner build -d
 
       - name: Install DCM
-        uses: CQLabs/setup-dcm@1.1.1
+        uses: CQLabs/setup-dcm@v1.1.1
         with:
            github_token: ${{ secrets.GITHUB_TOKEN }}
   
