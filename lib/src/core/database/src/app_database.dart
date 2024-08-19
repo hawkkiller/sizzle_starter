@@ -1,5 +1,5 @@
 import 'package:drift/drift.dart';
-import 'package:sizzle_starter/src/core/database/database.dart';
+import 'package:drift_flutter/drift_flutter.dart';
 
 part 'app_database.g.dart';
 
@@ -9,7 +9,25 @@ part 'app_database.g.dart';
 @DriftDatabase()
 class AppDatabase extends _$AppDatabase {
   /// {@macro app_database}
-  AppDatabase([QueryExecutor? executor]) : super(executor ?? createExecutor());
+  AppDatabase(super.e);
+
+  /// {@macro app_database}
+  AppDatabase.defaults()
+      : super(
+          driftDatabase(
+            name: 'sizzle',
+            native: const DriftNativeOptions(
+              shareAcrossIsolates: true,
+            ),
+            // TODO: Update the sqlite3Wasm and driftWorker paths
+            // to match the location of the files in your project if needed.
+            // https://drift.simonbinder.eu/web/#prerequisites
+            web: DriftWebOptions(
+              sqlite3Wasm: Uri.parse('sqlite3.wasm'),
+              driftWorker: Uri.parse('drift_worker.js'),
+            ),
+          ),
+        );
 
   @override
   int get schemaVersion => 1;
