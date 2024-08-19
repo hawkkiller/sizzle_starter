@@ -14,23 +14,3 @@ updates:
     target-branch: "main"
     reviewers:
       - "hawkkiller"
-
-  - package-ecosystem: "pub" # See documentation for possible values
-    directory: "/packages/database" # Location of package manifests
-    schedule:
-      interval: "weekly"
-    pull-request-branch-name:
-      separator: /
-    target-branch: "main"
-    reviewers:
-      - "hawkkiller"
-
-  - package-ecosystem: "pub" # See documentation for possible values
-    directory: "/packages/rest_client" # Location of package manifests
-    schedule:
-      interval: "weekly"
-    pull-request-branch-name:
-      separator: /
-    target-branch: "main"
-    reviewers:
-      - "hawkkiller"
