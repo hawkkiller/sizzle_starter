@@ -65,7 +65,7 @@ dev_dependencies:
   flutter_native_splash: ^2.4.1
 
   # Codegen
-  drift_dev: ^2.20.0
+  drift_dev: ^2.20.1
   build_runner: ^2.4.12
 
 flutter:
