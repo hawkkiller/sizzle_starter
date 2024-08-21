@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
-import 'package:sizzle_starter/src/core/utils/layout/layout.dart';
 
 /// {@template material_spacer}
 /// A spacer refers to the space between two panes in a layout.
@@ -25,10 +24,10 @@ class MaterialSpacer extends StatelessWidget {
 class HorizontalSpacing extends EdgeInsets {
   const HorizontalSpacing._(final double value) : super.symmetric(horizontal: value);
 
-  /// Horizontal spacing for [WindowSize.compact].
+  /// Horizontal spacing for WindowSize.compact
   const HorizontalSpacing.compact() : this._(16);
 
-  /// Horizontal spacing for [WindowSize.medium]+.
+  /// Horizontal spacing for WindowSize.medium+.
   const HorizontalSpacing.mediumUp() : this._(24);
 
   /// Spacing that is used to center

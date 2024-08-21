@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:sizzle_starter/src/core/utils/extensions/context_extension.dart';
 
 /// A breakpoint that is used to determine the layout of the application.
 ///
@@ -7,102 +8,66 @@ import 'package:flutter/material.dart';
 ///
 /// See more:
 /// - https://m3.material.io/foundations/layout/applying-layout
-enum WindowSize {
-  /// Layouts for compact window size classes
-  /// are for screen widths smaller than 600dp.
-  compact._(0, 600),
+extension type WindowSize(Size size) implements Size {
+  /// Compact breakpoint.
+  static const compactMin = 0;
 
-  /// Layouts for medium window size classes
-  /// are for screen widths from 600dp to 839dp.
-  medium._(600, 839),
+  /// Compact breakpoint.
+  static const compactMax = 599;
 
-  /// Layouts for expanded window size classes
-  /// are for screen widths 840dp to 1199dp.
-  expanded._(840, 1199),
+  /// Medium breakpoint.
+  static const mediumMin = 600;
 
-  /// Layouts for large window size classes
-  /// are for screen widths from 1200dp to 1599dp.
-  large._(1200, 1599),
+  /// Medium breakpoint.
+  static const mediumMax = 839;
 
-  /// Layouts for extra-large window size classes
-  /// are for screen widths of 1600dp and larger.
-  extraLarge._(1600, double.infinity);
+  /// Expanded breakpoint.
+  static const expandedMin = 840;
 
-  /// The minimum width of the breakpoint.
-  final double min;
+  /// Expanded breakpoint.
+  static const expandedMax = 1199;
 
-  /// The maximum width of the breakpoint.
-  final double max;
+  /// Large breakpoint.
+  static const largeMin = 1200;
 
-  /// Returns the [WindowSize] for the given width.
-  static WindowSize fromWidth(double width) {
-    if (width < 0) {
-      throw ArgumentError.value(width, 'width', 'Width cannot be negative');
-    }
+  /// Large breakpoint.
+  static const largeMax = 1599;
 
-    if (compact.isInRange(width)) {
-      return compact;
-    } else if (medium.isInRange(width)) {
-      return medium;
-    } else if (expanded.isInRange(width)) {
-      return expanded;
-    } else if (large.isInRange(width)) {
-      return large;
-    }
+  /// Extra large breakpoint.
+  static const extraLargeMin = 1600;
 
-    return extraLarge;
-  }
+  /// Extra large breakpoint.
+  static const extraLargeMax = double.infinity;
 
-  /// Returns whether the given width is in the range of the breakpoint.
-  bool isInRange(double width) => width >= min && width <= max;
+  /// Returns true if the window size is within the compact range.
+  bool get isCompact => compactMin <= width && width < compactMax;
 
-  /// Returns whether the given width isless than
-  /// the minimum width of the breakpoint.
-  bool operator <(WindowSize other) => min < other.min;
+  /// Returns true if the window size is within or bigger than the compact range.
+  bool get isCompactUp => compactMin >= width;
 
-  /// Returns whether the given width is greater than
-  /// the maximum width of the breakpoint.
-  bool operator >(WindowSize other) => min > other.min;
+  /// Returns true if the window size is within the medium range.
+  bool get isMedium => mediumMin <= width && width < mediumMax;
 
-  /// Returns whether the given width is less than
-  /// or equal to the maximum width of the breakpoint.
-  bool operator <=(WindowSize other) => min <= other.min;
+  /// Returns true if the window size is within or bigger than the medium range.
+  bool get isMediumUp => mediumMin >= width;
 
-  /// Returns whether the given width is greater than
-  /// or equal to the minimum width of the breakpoint.
-  bool operator >=(WindowSize other) => min >= other.min;
+  /// Returns true if the window size is within the expanded range.
+  bool get isExpanded => expandedMin <= width && width < expandedMax;
 
-  /// If the breakpoint is compact.
-  bool get isCompact => this == WindowSize.compact;
+  /// Returns true if the window size is within or bigger than the expanded range.
+  bool get isExpandedUp => expandedMin >= width;
 
-  /// If the breakpoint is compact or larger.
-  bool get isCompactUp => this >= WindowSize.compact;
+  /// Returns true if the window size is within the large range.
+  bool get isLarge => largeMin <= width && width < largeMax;
 
-  /// If the breakpoint is medium.
-  bool get isMedium => this == WindowSize.medium;
+  /// Returns true if the window size is within or bigger than the large range.
+  bool get isLargeUp => largeMin >= width;
 
-  /// If the breakpoint is medium or larger.
-  bool get isMediumUp => this >= WindowSize.medium;
+  /// Returns true if the window size is within the extra large range.
+  bool get isExtraLarge => extraLargeMin <= width && width < extraLargeMax;
 
-  /// If the breakpoint is expanded.
-  bool get isExpanded => this == WindowSize.expanded;
-
-  /// If the breakpoint is expanded or larger.
-  bool get isExpandedUp => this >= WindowSize.expanded;
-
-  /// If the breakpoint is large.
-  bool get isLarge => this == WindowSize.large;
-
-  /// If the breakpoint is large or larger.
-  bool get isLargeUp => this >= WindowSize.large;
-
-  /// If the breakpoint is extra-large.
-  bool get isExtraLarge => this == WindowSize.extraLarge;
-
-  /// If the breakpoint is extra-large or larger.
-  bool get isExtraLargeUp => this >= WindowSize.extraLarge;
-
-  const WindowSize._(this.min, this.max);
+  /// Returns true if the window size is within or bigger than the extra large range.
+  bool get isExtraLargeUp => extraLargeMax >= width;
 }
 
 /// Scope that provides [WindowSize] to its descendants.
@@ -117,14 +82,8 @@ class WindowSizeScope extends StatefulWidget {
   final Widget child;
 
   /// Returns the [WindowSize] of the nearest [WindowSizeScope] ancestor.
-  static WindowSize of(BuildContext context, {bool listen = true}) {
-    final inherited = listen
-        ? context.dependOnInheritedWidgetOfExactType<_InheritedWindowSize>()
-        : context.findAncestorWidgetOfExactType<_InheritedWindowSize>();
-
-    return inherited?.windowSize ??
-        (throw FlutterError('WindowSizeScope was not found in the widget tree'));
-  }
+  static WindowSize of(BuildContext context, {bool listen = true}) =>
+      context.inhOf<_InheritedWindowSize>(listen: listen).windowSize;
 
   @override
   State<WindowSizeScope> createState() => _WindowSizeScopeState();
@@ -133,21 +92,21 @@ class WindowSizeScope extends StatefulWidget {
 class _WindowSizeScopeState extends State<WindowSizeScope> with WidgetsBindingObserver {
   late WindowSize _windowSize;
 
-  Size _getScreenSize() {
+  WindowSize _getWindowSize() {
     final view = PlatformDispatcher.instance.views.first;
-    return view.physicalSize / view.devicePixelRatio;
+    return WindowSize(view.physicalSize / view.devicePixelRatio);
   }
 
   @override
   void initState() {
-    _windowSize = WindowSize.fromWidth(_getScreenSize().width);
+    _windowSize = _getWindowSize();
     WidgetsBinding.instance.addObserver(this);
     super.initState();
   }
 
   @override
   void didChangeMetrics() {
-    final windowSize = WindowSize.fromWidth(_getScreenSize().width);
+    final windowSize = _getWindowSize();
 
     if (_windowSize != windowSize) {
       setState(() => _windowSize = windowSize);
