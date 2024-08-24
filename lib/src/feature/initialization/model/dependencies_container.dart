@@ -4,7 +4,7 @@ import 'package:sizzle_starter/src/feature/settings/bloc/settings_bloc.dart';
 
 /// {@template dependencies_container}
 /// Composed dependencies from the [CompositionRoot].
-/// 
+///
 /// This class contains all the dependencies that are required for the application
 /// to work.
 ///
@@ -26,7 +26,7 @@ base class DependenciesContainer {
 
 /// {@template testing_dependencies_container}
 /// A special version of [DependenciesContainer] that is used in tests.
-/// 
+///
 /// In order to use [DependenciesContainer] in tests, it is needed to
 /// extend this class and provide the dependencies that are needed for the test.
 /// {@endtemplate}

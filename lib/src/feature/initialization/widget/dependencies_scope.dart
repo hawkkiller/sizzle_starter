@@ -8,11 +8,11 @@ import 'package:sizzle_starter/src/feature/initialization/model/dependencies_con
 /// A scope that provides composed [DependenciesContainer].
 ///
 /// **Testing**:
-/// 
+///
 /// To use [DependenciesScope] in tests, it is needed to wrap the widget with
 /// [DependenciesScope], extend [TestDependenciesContainer] and provide the
 /// dependencies that are needed for the test.
-/// 
+///
 /// ```dart
 /// class AuthDependenciesContainer extends TestDependenciesContainer {
 ///   // for example, use mocks created by mockito, or pass fake/real implementations
