@@ -8,66 +8,77 @@ import 'package:sizzle_starter/src/core/utils/extensions/context_extension.dart'
 ///
 /// See more:
 /// - https://m3.material.io/foundations/layout/applying-layout
-extension type WindowSize(Size size) implements Size {
-  /// Compact breakpoint.
-  static const compactMin = 0;
+sealed class WindowSize extends Size {
+  WindowSize({
+    required this.min,
+    required this.max,
+    required Size viewportSize,
+  })  : assert(min < max, 'min must be less than max'),
+        assert(
+          viewportSize.width >= min && viewportSize.width <= max,
+          'viewportSize must be between min and max',
+        ),
+        super.copy(viewportSize);
 
-  /// Compact breakpoint.
-  static const compactMax = 599;
+  factory WindowSize.fromSize(Size size) {
+    if (size.width < 600) {
+      return WindowSizeCompact(viewportSize: size);
+    } else if (size.width < 840) {
+      return WindowSizeMedium(viewportSize: size);
+    } else if (size.width < 1200) {
+      return WindowSizeExpanded(viewportSize: size);
+    } else if (size.width < 1600) {
+      return WindowSizeLarge(viewportSize: size);
+    } else {
+      return WindowSizeExtraLarge(viewportSize: size);
+    }
+  }
 
-  /// Medium breakpoint.
-  static const mediumMin = 600;
+  /// The minimum width of the viewport
+  final double min;
 
-  /// Medium breakpoint.
-  static const mediumMax = 839;
+  /// The maximum width of the viewport
+  final double max;
+}
 
-  /// Expanded breakpoint.
-  static const expandedMin = 840;
+/// Compact window size.
+class WindowSizeCompact extends WindowSize {
+  /// Creates a [WindowSizeCompact] with the given [viewportSize].
+  WindowSizeCompact({
+    required super.viewportSize,
+  }) : super(min: 0, max: 600);
+}
 
-  /// Expanded breakpoint.
-  static const expandedMax = 1199;
+/// Medium window size.
+class WindowSizeMedium extends WindowSize {
+  /// Creates a [WindowSizeMedium] with the given [viewportSize].
+  WindowSizeMedium({
+    required super.viewportSize,
+  }) : super(min: 600, max: 840);
+}
 
-  /// Large breakpoint.
-  static const largeMin = 1200;
+/// Expanded window size.
+class WindowSizeExpanded extends WindowSize {
+  /// Creates a [WindowSizeExpanded] with the given [viewportSize].
+  WindowSizeExpanded({
+    required super.viewportSize,
+  }) : super(min: 840, max: 1200);
+}
 
-  /// Large breakpoint.
-  static const largeMax = 1599;
+/// Large window size.
+class WindowSizeLarge extends WindowSize {
+  /// Creates a [WindowSizeLarge] with the given [viewportSize].
+  WindowSizeLarge({
+    required super.viewportSize,
+  }) : super(min: 1200, max: 1600);
+}
 
-  /// Extra large breakpoint.
-  static const extraLargeMin = 1600;
-
-  /// Extra large breakpoint.
-  static const extraLargeMax = double.infinity;
-
-  /// Returns true if the window size is within the compact range.
-  bool get isCompact => compactMin <= width && width < compactMax;
-
-  /// Returns true if the window size is within or bigger than the compact range.
-  bool get isCompactUp => compactMin >= width;
-
-  /// Returns true if the window size is within the medium range.
-  bool get isMedium => mediumMin <= width && width < mediumMax;
-
-  /// Returns true if the window size is within or bigger than the medium range.
-  bool get isMediumUp => mediumMin >= width;
-
-  /// Returns true if the window size is within the expanded range.
-  bool get isExpanded => expandedMin <= width && width < expandedMax;
-
-  /// Returns true if the window size is within or bigger than the expanded range.
-  bool get isExpandedUp => expandedMin >= width;
-
-  /// Returns true if the window size is within the large range.
-  bool get isLarge => largeMin <= width && width < largeMax;
-
-  /// Returns true if the window size is within or bigger than the large range.
-  bool get isLargeUp => largeMin >= width;
-
-  /// Returns true if the window size is within the extra large range.
-  bool get isExtraLarge => extraLargeMin <= width && width < extraLargeMax;
-
-  /// Returns true if the window size is within or bigger than the extra large range.
-  bool get isExtraLargeUp => extraLargeMax >= width;
+/// Extra large window size.
+class WindowSizeExtraLarge extends WindowSize {
+  /// Creates a [WindowSizeExtraLarge] with the given [viewportSize].
+  WindowSizeExtraLarge({
+    required super.viewportSize,
+  }) : super(min: 1600, max: double.infinity);
 }
 
 /// Scope that provides [WindowSize] to its descendants.
@@ -94,7 +105,7 @@ class _WindowSizeScopeState extends State<WindowSizeScope> with WidgetsBindingOb
 
   WindowSize _getWindowSize() {
     final view = PlatformDispatcher.instance.views.first;
-    return WindowSize(view.physicalSize / view.devicePixelRatio);
+    return WindowSize.fromSize(view.physicalSize / view.devicePixelRatio);
   }
 
   @override
