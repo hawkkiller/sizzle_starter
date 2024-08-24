@@ -51,13 +51,13 @@ class _HomeScreenState extends State<HomeScreen> {
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                crossAxisCount: switch (windowSize) {
-                  WindowSizeCompact _ => 1,
-                  WindowSizeMedium _ => 2,
-                  WindowSizeExpanded _ => 3,
-                  WindowSizeLarge _ => 4,
-                  WindowSizeExtraLarge _ => 5,
-                },
+                crossAxisCount: windowSize.maybeMap(
+                  medium: (_) => 2,
+                  expanded: (_) => 3,
+                  large: (_) => 4,
+                  extraLarge: (_) => 5,
+                  orElse: (_) => 1,
+                ),
               ),
               itemBuilder: (context, index) => ColoredBox(
                 color: Theme.of(context).colorScheme.primary,

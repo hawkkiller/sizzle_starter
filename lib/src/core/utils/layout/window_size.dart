@@ -8,77 +8,130 @@ import 'package:sizzle_starter/src/core/utils/extensions/context_extension.dart'
 ///
 /// See more:
 /// - https://m3.material.io/foundations/layout/applying-layout
-sealed class WindowSize extends Size {
-  WindowSize({
-    required this.min,
-    required this.max,
-    required Size viewportSize,
-  })  : assert(min < max, 'min must be less than max'),
-        assert(
-          viewportSize.width >= min && viewportSize.width <= max,
-          'viewportSize must be between min and max',
-        ),
-        super.copy(viewportSize);
+class WindowSize extends Size implements Comparable<WindowSize> {
+  /// Creates a [WindowSize] with the given [width] and [height].
+  WindowSize(super.width, super.height);
 
-  factory WindowSize.fromSize(Size size) {
-    if (size.width < 600) {
-      return WindowSizeCompact(viewportSize: size);
-    } else if (size.width < 840) {
-      return WindowSizeMedium(viewportSize: size);
-    } else if (size.width < 1200) {
-      return WindowSizeExpanded(viewportSize: size);
-    } else if (size.width < 1600) {
-      return WindowSizeLarge(viewportSize: size);
-    } else {
-      return WindowSizeExtraLarge(viewportSize: size);
+  /// Creates a [WindowSize] with the given [width] and [height].
+  WindowSize.fromSize(super.source) : super.copy();
+
+  /// Compact breakpoint
+  static const compact = 0;
+
+  /// Medium breakpoint
+  static const medium = 600;
+
+  /// Expanded breakpoint
+  static const expanded = 840;
+
+  /// Large breakpoint
+  static const large = 1200;
+
+  /// Extra large breakpoint
+  static const extraLarge = 1600;
+
+  /// Returns `true` if the viewport width is within the range of the compact breakpoint.
+  bool get isCompact => maybeMap(
+        compact: (_) => true,
+        orElse: (_) => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the compact breakpoint or bigger.
+  bool get isCompactOrUp => maybeMap(
+        orElse: (_) => true,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the medium breakpoint.
+  bool get isMedium => maybeMap(
+        medium: (_) => true,
+        orElse: (_) => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the medium breakpoint or bigger.
+  bool get isMediumOrUp => maybeMap(
+        medium: (_) => true,
+        expanded: (_) => true,
+        large: (_) => true,
+        extraLarge: (_) => true,
+        orElse: (_) => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the expanded breakpoint.
+  bool get isExpanded => maybeMap(
+        expanded: (_) => true,
+        orElse: (_) => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the expanded breakpoint or bigger.
+  bool get isExpandedOrUp => maybeMap(
+        expanded: (_) => true,
+        large: (_) => true,
+        extraLarge: (_) => true,
+        orElse: (_) => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the large breakpoint.
+  bool get isLarge => maybeMap(
+        large: (_) => true,
+        orElse: (_) => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the large breakpoint or bigger.
+  bool get isLargeOrUp => maybeMap(
+        large: (_) => true,
+        extraLarge: (_) => true,
+        orElse: (_) => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the extra large breakpoint.
+  bool get isExtraLarge => maybeMap(
+        extraLarge: (_) => true,
+        orElse: (_) => false,
+      );
+
+  /// Return value based on the current breakpoint.
+  T map<T>({
+    required T Function(WindowSize) compact,
+    required T Function(WindowSize) medium,
+    required T Function(WindowSize) expanded,
+    required T Function(WindowSize) large,
+    required T Function(WindowSize) extraLarge,
+  }) =>
+      switch (width) {
+        >= WindowSize.extraLarge => extraLarge(this),
+        >= WindowSize.large => large(this),
+        >= WindowSize.expanded => expanded(this),
+        >= WindowSize.medium => medium(this),
+        _ => compact(this),
+      };
+
+  /// Return value based on the current breakpoint.
+  T maybeMap<T>({
+    required T Function(WindowSize) orElse,
+    T Function(WindowSize)? compact,
+    T Function(WindowSize)? medium,
+    T Function(WindowSize)? expanded,
+    T Function(WindowSize)? large,
+    T Function(WindowSize)? extraLarge,
+  }) =>
+      map(
+        compact: compact ?? orElse,
+        medium: medium ?? orElse,
+        expanded: expanded ?? orElse,
+        large: large ?? orElse,
+        extraLarge: extraLarge ?? orElse,
+      );
+
+  @override
+  int compareTo(WindowSize other) {
+    final compareWidth = width.compareTo(other.width);
+
+    if (compareWidth != 0) {
+      return compareWidth;
     }
+
+    return height.compareTo(other.height);
   }
-
-  /// The minimum width of the viewport
-  final double min;
-
-  /// The maximum width of the viewport
-  final double max;
-}
-
-/// Compact window size.
-class WindowSizeCompact extends WindowSize {
-  /// Creates a [WindowSizeCompact] with the given [viewportSize].
-  WindowSizeCompact({
-    required super.viewportSize,
-  }) : super(min: 0, max: 600);
-}
-
-/// Medium window size.
-class WindowSizeMedium extends WindowSize {
-  /// Creates a [WindowSizeMedium] with the given [viewportSize].
-  WindowSizeMedium({
-    required super.viewportSize,
-  }) : super(min: 600, max: 840);
-}
-
-/// Expanded window size.
-class WindowSizeExpanded extends WindowSize {
-  /// Creates a [WindowSizeExpanded] with the given [viewportSize].
-  WindowSizeExpanded({
-    required super.viewportSize,
-  }) : super(min: 840, max: 1200);
-}
-
-/// Large window size.
-class WindowSizeLarge extends WindowSize {
-  /// Creates a [WindowSizeLarge] with the given [viewportSize].
-  WindowSizeLarge({
-    required super.viewportSize,
-  }) : super(min: 1200, max: 1600);
-}
-
-/// Extra large window size.
-class WindowSizeExtraLarge extends WindowSize {
-  /// Creates a [WindowSizeExtraLarge] with the given [viewportSize].
-  WindowSizeExtraLarge({
-    required super.viewportSize,
-  }) : super(min: 1600, max: double.infinity);
 }
 
 /// Scope that provides [WindowSize] to its descendants.
