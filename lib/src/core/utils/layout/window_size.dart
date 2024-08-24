@@ -32,87 +32,87 @@ class WindowSize extends Size implements Comparable<WindowSize> {
 
   /// Returns `true` if the viewport width is within the range of the compact breakpoint.
   bool get isCompact => maybeMap(
-        compact: (_) => true,
-        orElse: (_) => false,
+        compact: () => true,
+        orElse: () => false,
       );
 
   /// Returns `true` if the viewport width is within the range of the compact breakpoint or bigger.
   bool get isCompactOrUp => maybeMap(
-        orElse: (_) => true,
+        orElse: () => true,
       );
 
   /// Returns `true` if the viewport width is within the range of the medium breakpoint.
   bool get isMedium => maybeMap(
-        medium: (_) => true,
-        orElse: (_) => false,
+        medium: () => true,
+        orElse: () => false,
       );
 
   /// Returns `true` if the viewport width is within the range of the medium breakpoint or bigger.
   bool get isMediumOrUp => maybeMap(
-        medium: (_) => true,
-        expanded: (_) => true,
-        large: (_) => true,
-        extraLarge: (_) => true,
-        orElse: (_) => false,
+        medium: () => true,
+        expanded: () => true,
+        large: () => true,
+        extraLarge: () => true,
+        orElse: () => false,
       );
 
   /// Returns `true` if the viewport width is within the range of the expanded breakpoint.
   bool get isExpanded => maybeMap(
-        expanded: (_) => true,
-        orElse: (_) => false,
+        expanded: () => true,
+        orElse: () => false,
       );
 
   /// Returns `true` if the viewport width is within the range of the expanded breakpoint or bigger.
   bool get isExpandedOrUp => maybeMap(
-        expanded: (_) => true,
-        large: (_) => true,
-        extraLarge: (_) => true,
-        orElse: (_) => false,
+        expanded: () => true,
+        large: () => true,
+        extraLarge: () => true,
+        orElse: () => false,
       );
 
   /// Returns `true` if the viewport width is within the range of the large breakpoint.
   bool get isLarge => maybeMap(
-        large: (_) => true,
-        orElse: (_) => false,
+        large: () => true,
+        orElse: () => false,
       );
 
   /// Returns `true` if the viewport width is within the range of the large breakpoint or bigger.
   bool get isLargeOrUp => maybeMap(
-        large: (_) => true,
-        extraLarge: (_) => true,
-        orElse: (_) => false,
+        large: () => true,
+        extraLarge: () => true,
+        orElse: () => false,
       );
 
   /// Returns `true` if the viewport width is within the range of the extra large breakpoint.
   bool get isExtraLarge => maybeMap(
-        extraLarge: (_) => true,
-        orElse: (_) => false,
+        extraLarge: () => true,
+        orElse: () => false,
       );
 
   /// Return value based on the current breakpoint.
   T map<T>({
-    required T Function(WindowSize) compact,
-    required T Function(WindowSize) medium,
-    required T Function(WindowSize) expanded,
-    required T Function(WindowSize) large,
-    required T Function(WindowSize) extraLarge,
+    required T Function() compact,
+    required T Function() medium,
+    required T Function() expanded,
+    required T Function() large,
+    required T Function() extraLarge,
   }) =>
       switch (width) {
-        >= WindowSize.extraLarge => extraLarge(this),
-        >= WindowSize.large => large(this),
-        >= WindowSize.expanded => expanded(this),
-        >= WindowSize.medium => medium(this),
-        _ => compact(this),
+        >= WindowSize.extraLarge => extraLarge(),
+        >= WindowSize.large => large(),
+        >= WindowSize.expanded => expanded(),
+        >= WindowSize.medium => medium(),
+        _ => compact(),
       };
 
   /// Return value based on the current breakpoint.
   T maybeMap<T>({
-    required T Function(WindowSize) orElse,
-    T Function(WindowSize)? compact,
-    T Function(WindowSize)? medium,
-    T Function(WindowSize)? expanded,
-    T Function(WindowSize)? large,
-    T Function(WindowSize)? extraLarge,
+    required T Function() orElse,
+    T Function()? compact,
+    T Function()? medium,
+    T Function()? expanded,
+    T Function()? large,
+    T Function()? extraLarge,
   }) =>
       map(
         compact: compact ?? orElse,

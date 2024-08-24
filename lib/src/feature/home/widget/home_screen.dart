@@ -52,11 +52,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
                 crossAxisCount: windowSize.maybeMap(
-                  medium: (_) => 2,
-                  expanded: (_) => 3,
-                  large: (_) => 4,
-                  extraLarge: (_) => 5,
-                  orElse: (_) => 1,
+                  medium: () => 2,
+                  expanded: () => 3,
+                  large: () => 4,
+                  extraLarge: () => 5,
+                  orElse: () => 1,
                 ),
               ),
               itemBuilder: (context, index) => ColoredBox(
