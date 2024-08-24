@@ -22,8 +22,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final size = MediaQuery.sizeOf(context);
-    final windowSize = WindowSize(size);
+    final windowSize = WindowSizeScope.of(context);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Home Screen')),
@@ -47,17 +46,18 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           SliverPadding(
-            padding: HorizontalSpacing.centered(size.width),
+            padding: HorizontalSpacing.centered(windowSize.width, 1600),
             sliver: SliverGrid.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                crossAxisCount: switch (windowSize.width) {
-                  <= WindowSize.compactMax => 2,
-                  <= WindowSize.expandedMax => 3,
-                  <= WindowSize.largeMax => 4,
-                  _ => 5,
-                },
+                crossAxisCount: windowSize.maybeMap(
+                  medium: () => 2,
+                  expanded: () => 3,
+                  large: () => 4,
+                  extraLarge: () => 5,
+                  orElse: () => 1,
+                ),
               ),
               itemBuilder: (context, index) => ColoredBox(
                 color: Theme.of(context).colorScheme.primary,

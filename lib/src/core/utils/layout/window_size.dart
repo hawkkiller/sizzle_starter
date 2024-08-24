@@ -8,66 +8,130 @@ import 'package:sizzle_starter/src/core/utils/extensions/context_extension.dart'
 ///
 /// See more:
 /// - https://m3.material.io/foundations/layout/applying-layout
-extension type WindowSize(Size size) implements Size {
-  /// Compact breakpoint.
-  static const compactMin = 0;
+class WindowSize extends Size implements Comparable<WindowSize> {
+  /// Creates a [WindowSize] with the given [width] and [height].
+  WindowSize(super.width, super.height);
 
-  /// Compact breakpoint.
-  static const compactMax = 599;
+  /// Creates a [WindowSize] with the given [width] and [height].
+  WindowSize.fromSize(super.source) : super.copy();
 
-  /// Medium breakpoint.
-  static const mediumMin = 600;
+  /// Compact breakpoint
+  static const compact = 0;
 
-  /// Medium breakpoint.
-  static const mediumMax = 839;
+  /// Medium breakpoint
+  static const medium = 600;
 
-  /// Expanded breakpoint.
-  static const expandedMin = 840;
+  /// Expanded breakpoint
+  static const expanded = 840;
 
-  /// Expanded breakpoint.
-  static const expandedMax = 1199;
+  /// Large breakpoint
+  static const large = 1200;
 
-  /// Large breakpoint.
-  static const largeMin = 1200;
+  /// Extra large breakpoint
+  static const extraLarge = 1600;
 
-  /// Large breakpoint.
-  static const largeMax = 1599;
+  /// Returns `true` if the viewport width is within the range of the compact breakpoint.
+  bool get isCompact => maybeMap(
+        compact: () => true,
+        orElse: () => false,
+      );
 
-  /// Extra large breakpoint.
-  static const extraLargeMin = 1600;
+  /// Returns `true` if the viewport width is within the range of the compact breakpoint or bigger.
+  bool get isCompactOrUp => maybeMap(
+        orElse: () => true,
+      );
 
-  /// Extra large breakpoint.
-  static const extraLargeMax = double.infinity;
+  /// Returns `true` if the viewport width is within the range of the medium breakpoint.
+  bool get isMedium => maybeMap(
+        medium: () => true,
+        orElse: () => false,
+      );
 
-  /// Returns true if the window size is within the compact range.
-  bool get isCompact => compactMin <= width && width < compactMax;
+  /// Returns `true` if the viewport width is within the range of the medium breakpoint or bigger.
+  bool get isMediumOrUp => maybeMap(
+        medium: () => true,
+        expanded: () => true,
+        large: () => true,
+        extraLarge: () => true,
+        orElse: () => false,
+      );
 
-  /// Returns true if the window size is within or bigger than the compact range.
-  bool get isCompactUp => compactMin >= width;
+  /// Returns `true` if the viewport width is within the range of the expanded breakpoint.
+  bool get isExpanded => maybeMap(
+        expanded: () => true,
+        orElse: () => false,
+      );
 
-  /// Returns true if the window size is within the medium range.
-  bool get isMedium => mediumMin <= width && width < mediumMax;
+  /// Returns `true` if the viewport width is within the range of the expanded breakpoint or bigger.
+  bool get isExpandedOrUp => maybeMap(
+        expanded: () => true,
+        large: () => true,
+        extraLarge: () => true,
+        orElse: () => false,
+      );
 
-  /// Returns true if the window size is within or bigger than the medium range.
-  bool get isMediumUp => mediumMin >= width;
+  /// Returns `true` if the viewport width is within the range of the large breakpoint.
+  bool get isLarge => maybeMap(
+        large: () => true,
+        orElse: () => false,
+      );
 
-  /// Returns true if the window size is within the expanded range.
-  bool get isExpanded => expandedMin <= width && width < expandedMax;
+  /// Returns `true` if the viewport width is within the range of the large breakpoint or bigger.
+  bool get isLargeOrUp => maybeMap(
+        large: () => true,
+        extraLarge: () => true,
+        orElse: () => false,
+      );
 
-  /// Returns true if the window size is within or bigger than the expanded range.
-  bool get isExpandedUp => expandedMin >= width;
+  /// Returns `true` if the viewport width is within the range of the extra large breakpoint.
+  bool get isExtraLarge => maybeMap(
+        extraLarge: () => true,
+        orElse: () => false,
+      );
 
-  /// Returns true if the window size is within the large range.
-  bool get isLarge => largeMin <= width && width < largeMax;
+  /// Return value based on the current breakpoint.
+  T map<T>({
+    required T Function() compact,
+    required T Function() medium,
+    required T Function() expanded,
+    required T Function() large,
+    required T Function() extraLarge,
+  }) =>
+      switch (width) {
+        >= WindowSize.extraLarge => extraLarge(),
+        >= WindowSize.large => large(),
+        >= WindowSize.expanded => expanded(),
+        >= WindowSize.medium => medium(),
+        _ => compact(),
+      };
 
-  /// Returns true if the window size is within or bigger than the large range.
-  bool get isLargeUp => largeMin >= width;
+  /// Return value based on the current breakpoint.
+  T maybeMap<T>({
+    required T Function() orElse,
+    T Function()? compact,
+    T Function()? medium,
+    T Function()? expanded,
+    T Function()? large,
+    T Function()? extraLarge,
+  }) =>
+      map(
+        compact: compact ?? orElse,
+        medium: medium ?? orElse,
+        expanded: expanded ?? orElse,
+        large: large ?? orElse,
+        extraLarge: extraLarge ?? orElse,
+      );
 
-  /// Returns true if the window size is within the extra large range.
-  bool get isExtraLarge => extraLargeMin <= width && width < extraLargeMax;
+  @override
+  int compareTo(WindowSize other) {
+    final compareWidth = width.compareTo(other.width);
 
-  /// Returns true if the window size is within or bigger than the extra large range.
-  bool get isExtraLargeUp => extraLargeMax >= width;
+    if (compareWidth != 0) {
+      return compareWidth;
+    }
+
+    return height.compareTo(other.height);
+  }
 }
 
 /// Scope that provides [WindowSize] to its descendants.
@@ -94,7 +158,7 @@ class _WindowSizeScopeState extends State<WindowSizeScope> with WidgetsBindingOb
 
   WindowSize _getWindowSize() {
     final view = PlatformDispatcher.instance.views.first;
-    return WindowSize(view.physicalSize / view.devicePixelRatio);
+    return WindowSize.fromSize(view.physicalSize / view.devicePixelRatio);
   }
 
   @override
