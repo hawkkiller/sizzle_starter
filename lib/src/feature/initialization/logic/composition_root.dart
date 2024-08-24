@@ -2,7 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
 import 'package:sizzle_starter/src/feature/app/logic/tracking_manager.dart';
-import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dart';
+import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/settings_bloc.dart';
 import 'package:sizzle_starter/src/feature/settings/data/locale_datasource.dart';
 import 'package:sizzle_starter/src/feature/settings/data/locale_repository.dart';
@@ -47,15 +47,17 @@ final class CompositionRoot {
       dependencies: dependencies,
       msSpent: stopwatch.elapsedMilliseconds,
     );
+
     return result;
   }
 
-  Future<Dependencies> _initDependencies() async {
-    final errorTrackingManager = await _initErrorTrackingManager();
+  Future<DependenciesContainer> _initDependencies() async {
     final sharedPreferences = SharedPreferencesAsync();
+
+    final errorTrackingManager = await _initErrorTrackingManager();
     final settingsBloc = await _initSettingsBloc(sharedPreferences);
 
-    return Dependencies(
+    return DependenciesContainer(
       settingsBloc: settingsBloc,
       errorTrackingManager: errorTrackingManager,
     );
@@ -110,4 +112,29 @@ final class CompositionRoot {
     );
     return settingsBloc;
   }
+}
+
+/// {@template composition_result}
+/// Result of composition
+///
+/// {@macro composition_process}
+/// {@endtemplate}
+final class CompositionResult {
+  /// {@macro composition_result}
+  const CompositionResult({
+    required this.dependencies,
+    required this.msSpent,
+  });
+
+  /// The dependencies container
+  final DependenciesContainer dependencies;
+
+  /// The number of milliseconds spent
+  final int msSpent;
+
+  @override
+  String toString() => '$CompositionResult('
+      'dependencies: $dependencies, '
+      'msSpent: $msSpent'
+      ')';
 }
