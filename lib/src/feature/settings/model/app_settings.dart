@@ -28,11 +28,12 @@ class AppSettings with Diagnosticable {
     AppTheme? appTheme,
     Locale? locale,
     double? textScale,
-  }) => AppSettings(
-      appTheme: appTheme ?? this.appTheme,
-      locale: locale ?? this.locale,
-      textScale: textScale ?? this.textScale,
-    );
+  }) =>
+      AppSettings(
+        appTheme: appTheme ?? this.appTheme,
+        locale: locale ?? this.locale,
+        textScale: textScale ?? this.textScale,
+      );
 
   @override
   bool operator ==(Object other) {
