@@ -18,25 +18,22 @@ class MaterialContext extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = SettingsScope.themeOf(context).theme;
-    final locale = SettingsScope.localeOf(context).locale;
-    final textScale = SettingsScope.textScaleOf(context).textScale;
-
+    final settings = SettingsScope.settingsOf(context);
     final mediaQueryData = MediaQuery.of(context);
 
     return MaterialApp(
-      theme: theme.lightTheme,
-      darkTheme: theme.darkTheme,
-      themeMode: theme.mode,
+      theme: settings.appTheme?.lightTheme,
+      darkTheme: settings.appTheme?.darkTheme,
+      themeMode: settings.appTheme?.themeMode ?? ThemeMode.system,
+      locale: settings.locale,
       localizationsDelegates: Localization.localizationDelegates,
       supportedLocales: Localization.supportedLocales,
-      locale: locale,
       home: const HomeScreen(),
       builder: (context, child) => MediaQuery(
         key: _globalKey,
         data: mediaQueryData.copyWith(
           textScaler: TextScaler.linear(
-            mediaQueryData.textScaler.scale(textScale).clamp(0.5, 2),
+            mediaQueryData.textScaler.scale(settings.textScale ?? 1).clamp(0.5, 2),
           ),
         ),
         child: child!,
