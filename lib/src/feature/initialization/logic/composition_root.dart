@@ -39,7 +39,7 @@ final class CompositionRoot {
 
     logger.info('Initializing dependencies...');
     // initialize dependencies
-    final dependencies = await _initDependencies();
+    final dependencies = await DependenciesFactory(config, logger).create();
     logger.info('Dependencies initialized');
 
     stopwatch.stop();
@@ -50,20 +50,66 @@ final class CompositionRoot {
 
     return result;
   }
+}
 
-  Future<DependenciesContainer> _initDependencies() async {
+/// {@template factory}
+/// Factory that creates an instance of [T].
+/// {@endtemplate}
+abstract class Factory<T> {
+  /// Creates an instance of [T].
+  T create();
+}
+
+/// {@template async_factory}
+/// Factory that creates an instance of [T] asynchronously.
+/// {@endtemplate}
+abstract class AsyncFactory<T> {
+  /// Creates an instance of [T].
+  Future<T> create();
+}
+
+/// {@template dependencies_factory}
+/// Factory that creates an instance of [DependenciesContainer].
+/// {@endtemplate}
+class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
+  /// {@macro dependencies_factory}
+  DependenciesFactory(this.config, this.logger);
+
+  /// Application configuration
+  final Config config;
+
+  /// Logger used to log information during composition process.
+  final RefinedLogger logger;
+
+  @override
+  Future<DependenciesContainer> create() async {
     final sharedPreferences = SharedPreferencesAsync();
 
-    final errorTrackingManager = await _initErrorTrackingManager();
-    final settingsBloc = await _initSettingsBloc(sharedPreferences);
+    final errorTrackingManager = await ErrorTrackingManagerFactory(config, logger).create();
+    final settingsBloc = await SettingsBlocFactory(sharedPreferences).create();
 
     return DependenciesContainer(
       settingsBloc: settingsBloc,
       errorTrackingManager: errorTrackingManager,
     );
   }
+}
 
-  Future<ErrorTrackingManager> _initErrorTrackingManager() async {
+/// {@template error_tracking_manager_factory}
+/// Factory that creates an instance of [ErrorTrackingManager].
+/// {@endtemplate}
+class ErrorTrackingManagerFactory extends AsyncFactory<ErrorTrackingManager> {
+  /// {@macro error_tracking_manager_factory}
+  ErrorTrackingManagerFactory(this.config, this.logger);
+
+  /// Application configuration
+  final Config config;
+
+  /// Logger used to log information during composition process.
+  final RefinedLogger logger;
+
+  @override
+  Future<ErrorTrackingManager> create() async {
     final errorTrackingManager = SentryTrackingManager(
       logger,
       sentryDsn: config.sentryDsn,
@@ -76,21 +122,33 @@ final class CompositionRoot {
 
     return errorTrackingManager;
   }
+}
 
-  Future<SettingsBloc> _initSettingsBloc(SharedPreferencesAsync prefs) async {
+/// {@template settings_bloc_factory}
+/// Factory that creates an instance of [SettingsBloc].
+/// {@endtemplate}
+class SettingsBlocFactory extends AsyncFactory<SettingsBloc> {
+  /// {@macro settings_bloc_factory}
+  SettingsBlocFactory(this.sharedPreferences);
+
+  /// Shared preferences instance
+  final SharedPreferencesAsync sharedPreferences;
+
+  @override
+  Future<SettingsBloc> create() async {
     final localeRepository = LocaleRepositoryImpl(
-      localeDataSource: LocaleDataSourceLocal(sharedPreferences: prefs),
+      localeDataSource: LocaleDataSourceLocal(sharedPreferences: sharedPreferences),
     );
 
     final themeRepository = ThemeRepositoryImpl(
       themeDataSource: ThemeDataSourceLocal(
-        sharedPreferences: prefs,
+        sharedPreferences: sharedPreferences,
         codec: const ThemeModeCodec(),
       ),
     );
 
     final textScaleRepository = TextScaleRepositoryImpl(
-      textScaleDataSource: TextScaleDatasourceLocal(sharedPreferences: prefs),
+      textScaleDataSource: TextScaleDatasourceLocal(sharedPreferences: sharedPreferences),
     );
 
     final localeFuture = localeRepository.getLocale();
@@ -104,13 +162,12 @@ final class CompositionRoot {
       textScale: textScale,
     );
 
-    final settingsBloc = SettingsBloc(
+    return SettingsBloc(
       localeRepository: localeRepository,
       themeRepository: themeRepository,
       textScaleRepository: textScaleRepository,
       initialState: initialState,
     );
-    return settingsBloc;
   }
 }
 
