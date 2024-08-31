@@ -1,6 +1,6 @@
 import 'package:sizzle_starter/src/feature/app/logic/tracking_manager.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
-import 'package:sizzle_starter/src/feature/settings/bloc/settings_bloc.dart';
+import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 
 /// {@template dependencies_container}
 /// Composed dependencies from the [CompositionRoot].
@@ -13,12 +13,12 @@ import 'package:sizzle_starter/src/feature/settings/bloc/settings_bloc.dart';
 base class DependenciesContainer {
   /// {@macro dependencies_container}
   const DependenciesContainer({
-    required this.settingsBloc,
+    required this.appSettingsBloc,
     required this.errorTrackingManager,
   });
 
-  /// [SettingsBloc] instance, used to manage theme and locale.
-  final SettingsBloc settingsBloc;
+  /// [AppSettingsBloc] instance, used to manage theme and locale.
+  final AppSettingsBloc appSettingsBloc;
 
   /// [ErrorTrackingManager] instance, used to report errors.
   final ErrorTrackingManager errorTrackingManager;

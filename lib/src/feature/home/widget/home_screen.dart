@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/core/utils/layout/layout.dart';
+import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 
 /// {@template home_screen}
@@ -15,13 +16,8 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  void initState() {
-    SettingsScope.of(context, listen: false).setLocale(const Locale('ru'));
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
+    final appSettings = SettingsScope.settingsOf(context);
     final windowSize = WindowSizeScope.of(context);
 
     return Scaffold(
@@ -37,9 +33,13 @@ class _HomeScreenState extends State<HomeScreen> {
                   divisions: 8,
                   min: 0.5,
                   max: 2,
-                  value: SettingsScope.textScaleOf(context).textScale,
+                  value: SettingsScope.settingsOf(context).textScale ?? 1,
                   onChanged: (value) {
-                    SettingsScope.textScaleOf(context).setTextScale(value);
+                    SettingsScope.of(context).add(
+                      AppSettingsEvent.updateAppSettings(
+                        appSettings: appSettings.copyWith(textScale: value),
+                      ),
+                    );
                   },
                 ),
               ],

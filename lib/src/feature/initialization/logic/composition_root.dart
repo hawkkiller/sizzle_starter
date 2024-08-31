@@ -3,14 +3,9 @@ import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
 import 'package:sizzle_starter/src/feature/app/logic/tracking_manager.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
-import 'package:sizzle_starter/src/feature/settings/bloc/settings_bloc.dart';
-import 'package:sizzle_starter/src/feature/settings/data/locale_datasource.dart';
-import 'package:sizzle_starter/src/feature/settings/data/locale_repository.dart';
-import 'package:sizzle_starter/src/feature/settings/data/text_scale_datasource.dart';
-import 'package:sizzle_starter/src/feature/settings/data/text_scale_repository.dart';
-import 'package:sizzle_starter/src/feature/settings/data/theme_datasource.dart';
-import 'package:sizzle_starter/src/feature/settings/data/theme_mode_codec.dart';
-import 'package:sizzle_starter/src/feature/settings/data/theme_repository.dart';
+import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
+import 'package:sizzle_starter/src/feature/settings/data/app_settings_datasource.dart';
+import 'package:sizzle_starter/src/feature/settings/data/app_settings_repository.dart';
 
 /// {@template composition_root}
 /// A place where all dependencies are initialized.
@@ -89,7 +84,7 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
     final settingsBloc = await SettingsBlocFactory(sharedPreferences).create();
 
     return DependenciesContainer(
-      settingsBloc: settingsBloc,
+      appSettingsBloc: settingsBloc,
       errorTrackingManager: errorTrackingManager,
     );
   }
@@ -125,9 +120,9 @@ class ErrorTrackingManagerFactory extends AsyncFactory<ErrorTrackingManager> {
 }
 
 /// {@template settings_bloc_factory}
-/// Factory that creates an instance of [SettingsBloc].
+/// Factory that creates an instance of [AppSettingsBloc].
 /// {@endtemplate}
-class SettingsBlocFactory extends AsyncFactory<SettingsBloc> {
+class SettingsBlocFactory extends AsyncFactory<AppSettingsBloc> {
   /// {@macro settings_bloc_factory}
   SettingsBlocFactory(this.sharedPreferences);
 
@@ -135,37 +130,16 @@ class SettingsBlocFactory extends AsyncFactory<SettingsBloc> {
   final SharedPreferencesAsync sharedPreferences;
 
   @override
-  Future<SettingsBloc> create() async {
-    final localeRepository = LocaleRepositoryImpl(
-      localeDataSource: LocaleDataSourceLocal(sharedPreferences: sharedPreferences),
+  Future<AppSettingsBloc> create() async {
+    final appSettingsRepository = AppSettingsRepositoryImpl(
+      datasource: AppSettingsDatasourceImpl(sharedPreferences: sharedPreferences),
     );
 
-    final themeRepository = ThemeRepositoryImpl(
-      themeDataSource: ThemeDataSourceLocal(
-        sharedPreferences: sharedPreferences,
-        codec: const ThemeModeCodec(),
-      ),
-    );
+    final appSettings = await appSettingsRepository.getAppSettings();
+    final initialState = AppSettingsState.idle(appSettings: appSettings);
 
-    final textScaleRepository = TextScaleRepositoryImpl(
-      textScaleDataSource: TextScaleDatasourceLocal(sharedPreferences: sharedPreferences),
-    );
-
-    final localeFuture = localeRepository.getLocale();
-    final theme = await themeRepository.getTheme();
-    final locale = await localeFuture;
-    final textScale = await textScaleRepository.getScale();
-
-    final initialState = SettingsState.idle(
-      appTheme: theme,
-      locale: locale,
-      textScale: textScale,
-    );
-
-    return SettingsBloc(
-      localeRepository: localeRepository,
-      themeRepository: themeRepository,
-      textScaleRepository: textScaleRepository,
+    return AppSettingsBloc(
+      appSettingsRepository: appSettingsRepository,
       initialState: initialState,
     );
   }
