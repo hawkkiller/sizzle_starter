@@ -13,14 +13,14 @@ tasks:
     summary: |
       Run codegen
     cmds:
-      - dart run build_runner build --delete-conflicting-outputs
+      - dart run build_runner build -d
 
   dart:gen:watch:
     desc: Generate dart files
     summary: |
       Watch codegen
     cmds:
-      - dart run build_runner watch --delete-conflicting-outputs
+      - dart run build_runner watch -d
 
   # Template-related, safe to be removed for production
   tmpl:init:

@@ -105,7 +105,7 @@ abstract base class RestClientBase implements RestClient {
       return _jsonUTF8.encode(body);
     } on Object catch (e, stackTrace) {
       Error.throwWithStackTrace(
-        ClientException(message: 'Error occured during encoding', cause: e),
+        ClientException(message: 'Error occurred during encoding', cause: e),
         stackTrace,
       );
     }
@@ -138,7 +138,8 @@ abstract base class RestClientBase implements RestClient {
   @protected
   @visibleForTesting
   Future<Map<String, Object?>?> decodeResponse(
-    /* String, Map<String, Object?>, List<int> */ Object? body, {
+    /* String, Map<String, Object?>, List<int> */
+    Object? body, {
     int? statusCode,
   }) async {
     if (body == null) return null;

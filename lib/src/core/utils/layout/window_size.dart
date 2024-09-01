@@ -1,88 +1,205 @@
+import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:sizzle_starter/src/core/utils/extensions/context_extension.dart';
+
 /// A breakpoint that is used to determine the layout of the application.
 ///
 /// It follows the Material Design guidelines for breakpoints.
 ///
 /// See more:
 /// - https://m3.material.io/foundations/layout/applying-layout
-enum WindowSize {
-  /// Layouts for compact window size classes
-  /// are for screen widths smaller than 600dp.
-  compact._(0, 600),
+class WindowSize extends Size implements Comparable<WindowSize> {
+  /// Creates a [WindowSize] with the given [width] and [height].
+  WindowSize(super.width, super.height);
 
-  /// Layouts for medium window size classes
-  /// are for screen widths from 600dp to 839dp.
-  medium._(600, 839),
+  /// Creates a [WindowSize] with the given [width] and [height].
+  WindowSize.fromSize(super.source) : super.copy();
 
-  /// Layouts for expanded window size classes
-  /// are for screen widths 840dp to 1199dp.
-  expanded._(840, 1199),
+  /// Compact breakpoint
+  static const compact = 0;
 
-  /// Layouts for large window size classes
-  /// are for screen widths from 1200dp to 1599dp.
-  large._(1200, 1599),
+  /// Medium breakpoint
+  static const medium = 600;
 
-  /// Layouts for extra-large window size classes
-  /// are for screen widths of 1600dp and larger.
-  extraLarge._(1600, double.infinity);
+  /// Expanded breakpoint
+  static const expanded = 840;
 
-  /// The minimum width of the breakpoint.
-  final double min;
+  /// Large breakpoint
+  static const large = 1200;
 
-  /// The maximum width of the breakpoint.
-  final double max;
+  /// Extra large breakpoint
+  static const extraLarge = 1600;
 
-  /// Returns the [WindowSize] for the given width.
-  static WindowSize fromWidth(double width) {
-    if (width < 0) {
-      throw ArgumentError.value(width, 'width', 'Width cannot be negative');
+  /// Returns `true` if the viewport width is within the range of the compact breakpoint.
+  bool get isCompact => maybeMap(
+        compact: () => true,
+        orElse: () => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the compact breakpoint or bigger.
+  bool get isCompactOrUp => maybeMap(
+        orElse: () => true,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the medium breakpoint.
+  bool get isMedium => maybeMap(
+        medium: () => true,
+        orElse: () => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the medium breakpoint or bigger.
+  bool get isMediumOrUp => maybeMap(
+        medium: () => true,
+        expanded: () => true,
+        large: () => true,
+        extraLarge: () => true,
+        orElse: () => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the expanded breakpoint.
+  bool get isExpanded => maybeMap(
+        expanded: () => true,
+        orElse: () => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the expanded breakpoint or bigger.
+  bool get isExpandedOrUp => maybeMap(
+        expanded: () => true,
+        large: () => true,
+        extraLarge: () => true,
+        orElse: () => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the large breakpoint.
+  bool get isLarge => maybeMap(
+        large: () => true,
+        orElse: () => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the large breakpoint or bigger.
+  bool get isLargeOrUp => maybeMap(
+        large: () => true,
+        extraLarge: () => true,
+        orElse: () => false,
+      );
+
+  /// Returns `true` if the viewport width is within the range of the extra large breakpoint.
+  bool get isExtraLarge => maybeMap(
+        extraLarge: () => true,
+        orElse: () => false,
+      );
+
+  /// Return value based on the current breakpoint.
+  T map<T>({
+    required T Function() compact,
+    required T Function() medium,
+    required T Function() expanded,
+    required T Function() large,
+    required T Function() extraLarge,
+  }) =>
+      switch (width) {
+        >= WindowSize.extraLarge => extraLarge(),
+        >= WindowSize.large => large(),
+        >= WindowSize.expanded => expanded(),
+        >= WindowSize.medium => medium(),
+        _ => compact(),
+      };
+
+  /// Return value based on the current breakpoint.
+  T maybeMap<T>({
+    required T Function() orElse,
+    T Function()? compact,
+    T Function()? medium,
+    T Function()? expanded,
+    T Function()? large,
+    T Function()? extraLarge,
+  }) =>
+      map(
+        compact: compact ?? orElse,
+        medium: medium ?? orElse,
+        expanded: expanded ?? orElse,
+        large: large ?? orElse,
+        extraLarge: extraLarge ?? orElse,
+      );
+
+  @override
+  int compareTo(WindowSize other) {
+    final compareWidth = width.compareTo(other.width);
+
+    if (compareWidth != 0) {
+      return compareWidth;
     }
 
-    if (compact.isInRange(width)) {
-      return compact;
-    } else if (medium.isInRange(width)) {
-      return medium;
-    } else if (expanded.isInRange(width)) {
-      return expanded;
-    } else if (large.isInRange(width)) {
-      return large;
-    }
+    return height.compareTo(other.height);
+  }
+}
 
-    return extraLarge;
+/// Scope that provides [WindowSize] to its descendants.
+class WindowSizeScope extends StatefulWidget {
+  /// Creates a [WindowSizeScope] that provides [WindowSize] to its descendants.
+  const WindowSizeScope({
+    required this.child,
+    super.key,
+  });
+
+  /// The widget below this widget in the tree.
+  final Widget child;
+
+  /// Returns the [WindowSize] of the nearest [WindowSizeScope] ancestor.
+  static WindowSize of(BuildContext context, {bool listen = true}) =>
+      context.inhOf<_InheritedWindowSize>(listen: listen).windowSize;
+
+  @override
+  State<WindowSizeScope> createState() => _WindowSizeScopeState();
+}
+
+class _WindowSizeScopeState extends State<WindowSizeScope> with WidgetsBindingObserver {
+  late WindowSize _windowSize;
+
+  WindowSize _getWindowSize() {
+    final view = PlatformDispatcher.instance.views.first;
+    return WindowSize.fromSize(view.physicalSize / view.devicePixelRatio);
   }
 
-  /// Returns whether the given width is in the range of the breakpoint.
-  bool isInRange(double width) => width >= min && width <= max;
+  @override
+  void initState() {
+    _windowSize = _getWindowSize();
+    WidgetsBinding.instance.addObserver(this);
+    super.initState();
+  }
 
-  /// Returns whether the given width isless than
-  /// the minimum width of the breakpoint.
-  bool operator <(WindowSize other) => max < other.min;
+  @override
+  void didChangeMetrics() {
+    final windowSize = _getWindowSize();
 
-  /// Returns whether the given width is greater than
-  /// the maximum width of the breakpoint.
-  bool operator >(WindowSize other) => min > other.max;
+    if (_windowSize != windowSize) {
+      setState(() => _windowSize = windowSize);
+    }
+    super.didChangeMetrics();
+  }
 
-  /// Returns whether the given width is less than
-  /// or equal to the maximum width of the breakpoint.
-  bool operator <=(WindowSize other) => max <= other.max;
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
 
-  /// Returns whether the given width is greater than
-  /// or equal to the minimum width of the breakpoint.
-  bool operator >=(WindowSize other) => min >= other.min;
+  @override
+  Widget build(BuildContext context) => _InheritedWindowSize(
+        windowSize: _windowSize,
+        child: widget.child,
+      );
+}
 
-  /// If the breakpoint is compact.
-  bool get isCompact => this == WindowSize.compact;
+class _InheritedWindowSize extends InheritedWidget {
+  const _InheritedWindowSize({
+    required this.windowSize,
+    required super.child,
+  });
 
-  /// If the breakpoint is medium.
-  bool get isMedium => this == WindowSize.medium;
+  /// The [WindowSize] provided by this scope.
+  final WindowSize windowSize;
 
-  /// If the breakpoint is expanded.
-  bool get isExpanded => this == WindowSize.expanded;
-
-  /// If the breakpoint is large.
-  bool get isLarge => this == WindowSize.large;
-
-  /// If the breakpoint is extra-large.
-  bool get isExtraLarge => this == WindowSize.extraLarge;
-
-  const WindowSize._(this.min, this.max);
+  @override
+  bool updateShouldNotify(_InheritedWindowSize oldWidget) => windowSize != oldWidget.windowSize;
 }

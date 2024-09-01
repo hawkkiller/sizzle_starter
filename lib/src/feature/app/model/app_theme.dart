@@ -8,7 +8,7 @@ import 'package:flutter/material.dart';
 @immutable
 final class AppTheme with Diagnosticable {
   /// {@macro app_theme}
-  AppTheme({required this.mode, required this.seed})
+  AppTheme({required this.themeMode, required this.seed})
       : darkTheme = ThemeData(
           colorSchemeSeed: seed,
           brightness: Brightness.dark,
@@ -21,7 +21,7 @@ final class AppTheme with Diagnosticable {
         );
 
   /// The type of theme to use.
-  final ThemeMode mode;
+  final ThemeMode themeMode;
 
   /// The seed color to generate the [ColorScheme] from.
   final Color seed;
@@ -34,14 +34,14 @@ final class AppTheme with Diagnosticable {
 
   /// The default [AppTheme].
   static final defaultTheme = AppTheme(
-    mode: ThemeMode.system,
+    themeMode: ThemeMode.system,
     seed: Colors.blue,
   );
 
   /// The [ThemeData] for this [AppTheme].
-  /// This is computed based on the [mode].
+  /// This is computed based on the [themeMode].
   ThemeData computeTheme() {
-    switch (mode) {
+    switch (themeMode) {
       case ThemeMode.light:
         return lightTheme;
       case ThemeMode.dark:
@@ -57,15 +57,16 @@ final class AppTheme with Diagnosticable {
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
     properties.add(ColorProperty('seed', seed));
-    properties.add(EnumProperty<ThemeMode>('type', mode));
+    properties.add(EnumProperty<ThemeMode>('type', themeMode));
     properties.add(DiagnosticsProperty<ThemeData>('lightTheme', lightTheme));
     properties.add(DiagnosticsProperty<ThemeData>('darkTheme', darkTheme));
   }
 
   @override
   bool operator ==(Object other) =>
-      identical(this, other) || other is AppTheme && seed == other.seed && mode == other.mode;
+      identical(this, other) ||
+      other is AppTheme && seed == other.seed && themeMode == other.themeMode;
 
   @override
-  int get hashCode => Object.hash(seed, mode);
+  int get hashCode => Object.hash(seed, themeMode);
 }

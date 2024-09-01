@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/core/utils/layout/layout.dart';
+import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 
 /// {@template home_screen}
@@ -15,15 +16,9 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  void initState() {
-    SettingsScope.of(context, listen: false).setLocale(const Locale('ru'));
-    super.initState();
-  }
-
-  @override
   Widget build(BuildContext context) {
-    final windowWidth = MediaQuery.sizeOf(context).width;
-    final windowSize = WindowSize.fromWidth(windowWidth);
+    final appSettings = SettingsScope.settingsOf(context);
+    final windowSize = WindowSizeScope.of(context);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Home Screen')),
@@ -38,25 +33,31 @@ class _HomeScreenState extends State<HomeScreen> {
                   divisions: 8,
                   min: 0.5,
                   max: 2,
-                  value: SettingsScope.textScaleOf(context).textScale,
+                  value: SettingsScope.settingsOf(context).textScale ?? 1,
                   onChanged: (value) {
-                    SettingsScope.textScaleOf(context).setTextScale(value);
+                    SettingsScope.of(context).add(
+                      AppSettingsEvent.updateAppSettings(
+                        appSettings: appSettings.copyWith(textScale: value),
+                      ),
+                    );
                   },
                 ),
               ],
             ),
           ),
           SliverPadding(
-            padding: HorizontalSpacing.centered(windowWidth),
+            padding: HorizontalSpacing.centered(windowSize.width, 1600),
             sliver: SliverGrid.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisSpacing: 16,
                 mainAxisSpacing: 16,
-                crossAxisCount: switch (windowSize) {
-                  WindowSize.compact => 2,
-                  <= WindowSize.expanded => 3,
-                  _ => 4,
-                },
+                crossAxisCount: windowSize.maybeMap(
+                  medium: () => 2,
+                  expanded: () => 3,
+                  large: () => 4,
+                  extraLarge: () => 5,
+                  orElse: () => 1,
+                ),
               ),
               itemBuilder: (context, index) => ColoredBox(
                 color: Theme.of(context).colorScheme.primary,

@@ -2,15 +2,10 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
 import 'package:sizzle_starter/src/feature/app/logic/tracking_manager.dart';
-import 'package:sizzle_starter/src/feature/initialization/model/dependencies.dart';
-import 'package:sizzle_starter/src/feature/settings/bloc/settings_bloc.dart';
-import 'package:sizzle_starter/src/feature/settings/data/locale_datasource.dart';
-import 'package:sizzle_starter/src/feature/settings/data/locale_repository.dart';
-import 'package:sizzle_starter/src/feature/settings/data/text_scale_datasource.dart';
-import 'package:sizzle_starter/src/feature/settings/data/text_scale_repository.dart';
-import 'package:sizzle_starter/src/feature/settings/data/theme_datasource.dart';
-import 'package:sizzle_starter/src/feature/settings/data/theme_mode_codec.dart';
-import 'package:sizzle_starter/src/feature/settings/data/theme_repository.dart';
+import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
+import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
+import 'package:sizzle_starter/src/feature/settings/data/app_settings_datasource.dart';
+import 'package:sizzle_starter/src/feature/settings/data/app_settings_repository.dart';
 
 /// {@template composition_root}
 /// A place where all dependencies are initialized.
@@ -39,7 +34,7 @@ final class CompositionRoot {
 
     logger.info('Initializing dependencies...');
     // initialize dependencies
-    final dependencies = await _initDependencies();
+    final dependencies = await DependenciesFactory(config, logger).create();
     logger.info('Dependencies initialized');
 
     stopwatch.stop();
@@ -47,21 +42,69 @@ final class CompositionRoot {
       dependencies: dependencies,
       msSpent: stopwatch.elapsedMilliseconds,
     );
+
     return result;
   }
+}
 
-  Future<Dependencies> _initDependencies() async {
-    final errorTrackingManager = await _initErrorTrackingManager();
-    final sharedPreferences = await SharedPreferences.getInstance();
-    final settingsBloc = await _initSettingsBloc(sharedPreferences);
+/// {@template factory}
+/// Factory that creates an instance of [T].
+/// {@endtemplate}
+abstract class Factory<T> {
+  /// Creates an instance of [T].
+  T create();
+}
 
-    return Dependencies(
-      settingsBloc: settingsBloc,
+/// {@template async_factory}
+/// Factory that creates an instance of [T] asynchronously.
+/// {@endtemplate}
+abstract class AsyncFactory<T> {
+  /// Creates an instance of [T].
+  Future<T> create();
+}
+
+/// {@template dependencies_factory}
+/// Factory that creates an instance of [DependenciesContainer].
+/// {@endtemplate}
+class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
+  /// {@macro dependencies_factory}
+  DependenciesFactory(this.config, this.logger);
+
+  /// Application configuration
+  final Config config;
+
+  /// Logger used to log information during composition process.
+  final RefinedLogger logger;
+
+  @override
+  Future<DependenciesContainer> create() async {
+    final sharedPreferences = SharedPreferencesAsync();
+
+    final errorTrackingManager = await ErrorTrackingManagerFactory(config, logger).create();
+    final settingsBloc = await SettingsBlocFactory(sharedPreferences).create();
+
+    return DependenciesContainer(
+      appSettingsBloc: settingsBloc,
       errorTrackingManager: errorTrackingManager,
     );
   }
+}
 
-  Future<ErrorTrackingManager> _initErrorTrackingManager() async {
+/// {@template error_tracking_manager_factory}
+/// Factory that creates an instance of [ErrorTrackingManager].
+/// {@endtemplate}
+class ErrorTrackingManagerFactory extends AsyncFactory<ErrorTrackingManager> {
+  /// {@macro error_tracking_manager_factory}
+  ErrorTrackingManagerFactory(this.config, this.logger);
+
+  /// Application configuration
+  final Config config;
+
+  /// Logger used to log information during composition process.
+  final RefinedLogger logger;
+
+  @override
+  Future<ErrorTrackingManager> create() async {
     final errorTrackingManager = SentryTrackingManager(
       logger,
       sentryDsn: config.sentryDsn,
@@ -74,40 +117,55 @@ final class CompositionRoot {
 
     return errorTrackingManager;
   }
+}
 
-  Future<SettingsBloc> _initSettingsBloc(SharedPreferences prefs) async {
-    final localeRepository = LocaleRepositoryImpl(
-      localeDataSource: LocaleDataSourceLocal(sharedPreferences: prefs),
+/// {@template settings_bloc_factory}
+/// Factory that creates an instance of [AppSettingsBloc].
+/// {@endtemplate}
+class SettingsBlocFactory extends AsyncFactory<AppSettingsBloc> {
+  /// {@macro settings_bloc_factory}
+  SettingsBlocFactory(this.sharedPreferences);
+
+  /// Shared preferences instance
+  final SharedPreferencesAsync sharedPreferences;
+
+  @override
+  Future<AppSettingsBloc> create() async {
+    final appSettingsRepository = AppSettingsRepositoryImpl(
+      datasource: AppSettingsDatasourceImpl(sharedPreferences: sharedPreferences),
     );
 
-    final themeRepository = ThemeRepositoryImpl(
-      themeDataSource: ThemeDataSourceLocal(
-        sharedPreferences: prefs,
-        codec: const ThemeModeCodec(),
-      ),
-    );
+    final appSettings = await appSettingsRepository.getAppSettings();
+    final initialState = AppSettingsState.idle(appSettings: appSettings);
 
-    final textScaleRepository = TextScaleRepositoryImpl(
-      textScaleDataSource: TextScaleDatasourceLocal(sharedPreferences: prefs),
-    );
-
-    final localeFuture = localeRepository.getLocale();
-    final theme = await themeRepository.getTheme();
-    final locale = await localeFuture;
-    final textScale = await textScaleRepository.getScale();
-
-    final initialState = SettingsState.idle(
-      appTheme: theme,
-      locale: locale,
-      textScale: textScale,
-    );
-
-    final settingsBloc = SettingsBloc(
-      localeRepository: localeRepository,
-      themeRepository: themeRepository,
-      textScaleRepository: textScaleRepository,
+    return AppSettingsBloc(
+      appSettingsRepository: appSettingsRepository,
       initialState: initialState,
     );
-    return settingsBloc;
   }
+}
+
+/// {@template composition_result}
+/// Result of composition
+///
+/// {@macro composition_process}
+/// {@endtemplate}
+final class CompositionResult {
+  /// {@macro composition_result}
+  const CompositionResult({
+    required this.dependencies,
+    required this.msSpent,
+  });
+
+  /// The dependencies container
+  final DependenciesContainer dependencies;
+
+  /// The number of milliseconds spent
+  final int msSpent;
+
+  @override
+  String toString() => '$CompositionResult('
+      'dependencies: $dependencies, '
+      'msSpent: $msSpent'
+      ')';
 }

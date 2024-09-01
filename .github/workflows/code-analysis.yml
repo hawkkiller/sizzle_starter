@@ -16,12 +16,12 @@ jobs:
 
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4.1.7
 
       - name: 🐦 Setup Flutter
-        uses: subosito/flutter-action@v2.12.0
+        uses: subosito/flutter-action@v2.16.0
         with:
-          flutter-version: 3.22.0
+          flutter-version: 3.24.0
           channel: stable
           cache: true
           cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
@@ -33,10 +33,10 @@ jobs:
 
       - name: 🦄 Generate Code
         run: |
-          dart run build_runner build --delete-conflicting-outputs
+          dart run build_runner build -d
 
       - name: Install DCM
-        uses: CQLabs/setup-dcm@v1
+        uses: CQLabs/setup-dcm@v1.1.1
         with:
            github_token: ${{ secrets.GITHUB_TOKEN }}
   
@@ -50,7 +50,7 @@ jobs:
         run: flutter test --coverage --coverage-path=coverage/lcov.info --test-randomize-ordering-seed=random --concurrency=10
 
       - name: 📈 Upload Coverage
-        uses: codecov/codecov-action@v3
+        uses: codecov/codecov-action@v4.5.0
         with:
           # not needed for public repos
           token: ${{ secrets.CODECOV_TOKEN }}
