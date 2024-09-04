@@ -24,29 +24,30 @@ typedef PopupWidgetBuilder = Widget Function(
 /// the screen and ensures that the follower widget is always visible
 /// (i.e. it doesn't overflow the screen) by adjusting the position.
 /// {@endtemplate}
-class Popup extends StatefulWidget {
-  /// Creates a new instance of [Popup].
+class PopupBuilder extends StatefulWidget {
+  /// Creates a new instance of [PopupBuilder].
   ///
   /// {@macro popup}
-  const Popup({
-    required this.follower,
-    required this.child,
+  const PopupBuilder({
+    required this.followerBuilder,
+    required this.targetBuilder,
     this.controller,
-    this.flip = true,
-    this.adjustForOverflow = true,
-    this.edgeInsets = EdgeInsets.zero,
+    this.padding = EdgeInsets.zero,
     this.followerAnchor = Alignment.topCenter,
     this.targetAnchor = Alignment.bottomCenter,
+    this.flipWhenOveflow = true,
+    this.moveWhenOverflow = true,
+    this.resizeWhenOverflow = false,
     this.enforceLeaderWidth = false,
     this.enforceLeaderHeight = false,
     super.key,
   });
 
   /// The target widget that the follower widget is positioned relative to.
-  final PopupWidgetBuilder child;
+  final PopupWidgetBuilder targetBuilder;
 
   /// The widget that is positioned relative to the target widget.
-  final PopupWidgetBuilder follower;
+  final PopupWidgetBuilder followerBuilder;
 
   /// The alignment of the follower widget relative to the target widget.
   ///
@@ -58,14 +59,14 @@ class Popup extends StatefulWidget {
   /// Defaults to [Alignment.bottomCenter].
   final Alignment targetAnchor;
 
-  /// The minimal distance between the follower widget and corners.
+  /// The minimal distance between the follower widget and edges of the screen.
   ///
   /// Defaults to [EdgeInsets.zero].
-  final EdgeInsets edgeInsets;
+  final EdgeInsets padding;
 
-  /// The controller that will be used to show/hide the overlay.
+  /// The controller that is used to show/hide the overlay.
   ///
-  /// If not provided, a new controller will be created.
+  /// If not provided, a new controller is created.
   final OverlayPortalController? controller;
 
   /// Whether to flip the follower widget when it overflows the screen.
@@ -74,7 +75,15 @@ class Popup extends StatefulWidget {
   /// it will be flipped to the left side.
   ///
   /// Defaults to `true`.
-  final bool flip;
+  final bool flipWhenOveflow;
+
+  /// Whether to resize the follower widget when it overflows the screen.
+  /// 
+  /// For example, if the follower widget overflows the screen on the right side for 20 pixels,
+  /// it will be resized to be 20 pixels less wide, same for the top, bottom, and left sides.
+  /// 
+  /// Defaults to `false`.
+  final bool resizeWhenOverflow;
 
   /// Whether to adjust the position of the follower widget when it overflows the screen.
   ///
@@ -82,7 +91,7 @@ class Popup extends StatefulWidget {
   /// it will be moved to the left side for 20 pixels, same for the top, bottom, and left sides.
   ///
   /// Defaults to `true`.
-  final bool adjustForOverflow;
+  final bool moveWhenOverflow;
 
   /// Whether to enforce the width of the leader widget on the follower widget.
   ///
@@ -110,10 +119,10 @@ class Popup extends StatefulWidget {
       .map((DisplayFeature d) => d.bounds);
 
   @override
-  State<Popup> createState() => _PopupState();
+  State<PopupBuilder> createState() => _PopupBuilderState();
 }
 
-class _PopupState extends State<Popup> {
+class _PopupBuilderState extends State<PopupBuilder> {
   /// The link between the target widget and the follower widget.
   final _layerLink = EnhancedLayerLink();
 
@@ -127,7 +136,7 @@ class _PopupState extends State<Popup> {
   }
 
   @override
-  void didUpdateWidget(covariant Popup oldWidget) {
+  void didUpdateWidget(covariant PopupBuilder oldWidget) {
     if (!identical(widget.controller, oldWidget.controller)) {
       portalController = widget.controller ?? OverlayPortalController(debugLabel: 'Popup');
     }
@@ -136,7 +145,7 @@ class _PopupState extends State<Popup> {
 
   @override
   Widget build(BuildContext context) {
-    final displayFeatureBounds = Popup.findDisplayFeatureBounds(
+    final displayFeatureBounds = PopupBuilder.findDisplayFeatureBounds(
       MediaQuery.displayFeaturesOf(context),
     );
 
@@ -144,20 +153,21 @@ class _PopupState extends State<Popup> {
       link: _layerLink, // link the target widget to the follower widget.
       child: OverlayPortal(
         controller: portalController,
-        child: widget.child(context, portalController),
+        child: widget.targetBuilder(context, portalController),
         overlayChildBuilder: (BuildContext context) => Center(
           child: EnhancedCompositedTransformFollower(
             link: _layerLink, // link the follower widget to the target widget.
             showWhenUnlinked: false, // don't show the follower widget when unlinked.
             followerAnchor: widget.followerAnchor,
             targetAnchor: widget.targetAnchor,
-            edgePadding: widget.edgeInsets,
-            flip: widget.flip,
-            adjustForOverflow: widget.adjustForOverflow,
+            padding: widget.padding,
             enforceLeaderWidth: widget.enforceLeaderWidth,
             enforceLeaderHeight: widget.enforceLeaderHeight,
+            moveWhenOverflow: widget.moveWhenOverflow,
+            flipWhenOverflow: widget.flipWhenOveflow,
+            resizeWhenOverflow: widget.resizeWhenOverflow,
             displayFeatureBounds: displayFeatureBounds,
-            child: Builder(builder: (context) => widget.follower(context, portalController)),
+            child: Builder(builder: (context) => widget.followerBuilder(context, portalController)),
           ),
         ),
       ),
@@ -241,7 +251,7 @@ class PopupFollower extends StatefulWidget {
 class _PopupFollowerState extends State<PopupFollower>
     with WidgetsBindingObserver
     implements PopupFollowerController {
-  FollowerScope? _parent;
+  _FollowerScope? _parent;
   ScrollPosition? _scrollPosition;
 
   /// Whether the current widget is the root widget.
@@ -258,7 +268,7 @@ class _PopupFollowerState extends State<PopupFollower>
   void didChangeDependencies() {
     _scrollPosition?.removeListener(_scrollableListener);
     _scrollPosition = Scrollable.maybeOf(context)?.position?..addListener(_scrollableListener);
-    _parent = FollowerScope.maybeOf(context, listen: true);
+    _parent = _FollowerScope.maybeOf(context, listen: true);
     super.didChangeDependencies();
   }
 
@@ -292,7 +302,7 @@ class _PopupFollowerState extends State<PopupFollower>
   }
 
   @override
-  Widget build(BuildContext context) => FollowerScope(
+  Widget build(BuildContext context) => _FollowerScope(
         controller: this,
         parent: _parent,
         child: Actions(
@@ -332,35 +342,26 @@ class _PopupFollowerState extends State<PopupFollower>
 }
 
 /// Follower Scope
-class FollowerScope extends InheritedWidget {
-  /// Creates a new instance of [FollowerScope].
-  const FollowerScope({
+class _FollowerScope extends InheritedWidget {
+  /// Creates a new instance of [_FollowerScope].
+  const _FollowerScope({
     required super.child,
     required this.controller,
     this.parent,
-    super.key,
+    super.key, // ignore: unused_element
   });
 
   /// The controller that is used to dismiss the popup.
   final PopupFollowerController controller;
 
-  /// The parent [FollowerScope] instance.
-  final FollowerScope? parent;
+  /// The parent [_FollowerScope] instance.
+  final _FollowerScope? parent;
 
-  /// Returns the closest [FollowerScope] instance.
-  static FollowerScope? maybeOf(BuildContext context, {bool listen = false}) => listen
-      ? context.dependOnInheritedWidgetOfExactType<FollowerScope>()
-      : context.getElementForInheritedWidgetOfExactType<FollowerScope>()?.widget as FollowerScope?;
-
-  /// Returns the root [FollowerScope] instance.
-  static FollowerScope? findRootOf(BuildContext context, {bool listen = false}) {
-    var scope = maybeOf(context, listen: listen);
-    while (scope?.parent != null) {
-      scope = scope?.parent;
-    }
-    return scope;
-  }
+  /// Returns the closest [_FollowerScope] instance.
+  static _FollowerScope? maybeOf(BuildContext context, {bool listen = false}) => listen
+      ? context.dependOnInheritedWidgetOfExactType<_FollowerScope>()
+      : context.getElementForInheritedWidgetOfExactType<_FollowerScope>()?.widget as _FollowerScope?;
 
   @override
-  bool updateShouldNotify(FollowerScope oldWidget) => false;
+  bool updateShouldNotify(_FollowerScope oldWidget) => false;
 }

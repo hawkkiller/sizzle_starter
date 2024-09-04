@@ -32,11 +32,10 @@ final class AppRunner {
     Bloc.observer = AppBlocObserver(logger);
     Bloc.transformer = bloc_concurrency.sequential();
     const config = Config();
-    final initializationProcessor = CompositionRoot(config, logger);
 
     Future<void> initializeAndRun() async {
       try {
-        final result = await initializationProcessor.compose();
+        final result = await CompositionRoot(config, logger).compose();
         // Attach this widget to the root of the tree.
         runApp(App(result: result));
       } catch (e, stackTrace) {

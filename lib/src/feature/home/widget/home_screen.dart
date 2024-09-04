@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/core/utils/layout/layout.dart';
+import 'package:sizzle_starter/src/core/widget/popup.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 
@@ -28,6 +29,39 @@ class _HomeScreenState extends State<HomeScreen> {
           SliverToBoxAdapter(
             child: Column(
               children: [
+                PopupBuilder(
+                  resizeWhenOverflow: true,
+                  moveWhenOverflow: false,
+                  flipWhenOveflow: false,
+                  followerAnchor: Alignment.centerLeft,
+                  targetAnchor: Alignment.centerRight,
+                  followerBuilder: (context, controller) => SizedBox(
+                    width: 200,
+                    height: 100,
+                    child: PopupFollower(
+                      child: Material(
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(8),
+                        ),
+                        color: Theme.of(context).colorScheme.surface,
+                        elevation: 4,
+                        child: Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Text(
+                            'This is a popup',
+                            style: Theme.of(context).textTheme.bodyLarge,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                  targetBuilder: (context, controller) => ElevatedButton(
+                    onPressed: () {
+                      controller.show();
+                    },
+                    child: const Text('Show popup'),
+                  ),
+                ),
                 const Text('Text scale'),
                 Slider(
                   divisions: 8,
