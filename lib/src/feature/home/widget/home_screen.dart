@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
                 PopupBuilder(
                   resizeWhenOverflow: true,
                   moveWhenOverflow: false,
-                  flipWhenOveflow: false,
+                  flipWhenOverflow: false,
                   followerAnchor: Alignment.centerLeft,
                   targetAnchor: Alignment.centerRight,
                   followerBuilder: (context, controller) => SizedBox(
