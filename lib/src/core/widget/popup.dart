@@ -35,7 +35,7 @@ class PopupBuilder extends StatefulWidget {
     this.padding = EdgeInsets.zero,
     this.followerAnchor = Alignment.topCenter,
     this.targetAnchor = Alignment.bottomCenter,
-    this.flipWhenOveflow = true,
+    this.flipWhenOverflow = true,
     this.moveWhenOverflow = true,
     this.resizeWhenOverflow = false,
     this.enforceLeaderWidth = false,
@@ -75,7 +75,7 @@ class PopupBuilder extends StatefulWidget {
   /// it will be flipped to the left side.
   ///
   /// Defaults to `true`.
-  final bool flipWhenOveflow;
+  final bool flipWhenOverflow;
 
   /// Whether to resize the follower widget when it overflows the screen.
   /// 
@@ -164,7 +164,7 @@ class _PopupBuilderState extends State<PopupBuilder> {
             enforceLeaderWidth: widget.enforceLeaderWidth,
             enforceLeaderHeight: widget.enforceLeaderHeight,
             moveWhenOverflow: widget.moveWhenOverflow,
-            flipWhenOverflow: widget.flipWhenOveflow,
+            flipWhenOverflow: widget.flipWhenOverflow,
             resizeWhenOverflow: widget.resizeWhenOverflow,
             displayFeatureBounds: displayFeatureBounds,
             child: Builder(builder: (context) => widget.followerBuilder(context, portalController)),
