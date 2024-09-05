@@ -1,7 +1,8 @@
+import 'package:clock/clock.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
-import 'package:sizzle_starter/src/feature/app/logic/tracking_manager.dart';
+import 'package:sizzle_starter/src/feature/initialization/logic/error_tracking_manager.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:sizzle_starter/src/feature/settings/data/app_settings_datasource.dart';
@@ -30,7 +31,7 @@ final class CompositionRoot {
 
   /// Composes dependencies and returns result of composition.
   Future<CompositionResult> compose() async {
-    final stopwatch = Stopwatch()..start();
+    final stopwatch = clock.stopwatch()..start();
 
     logger.info('Initializing dependencies...');
     // initialize dependencies

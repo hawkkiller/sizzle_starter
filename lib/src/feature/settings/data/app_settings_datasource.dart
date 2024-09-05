@@ -2,7 +2,7 @@ import 'dart:ui';
 
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/core/utils/persisted_entry.dart';
-import 'package:sizzle_starter/src/feature/app/model/app_theme.dart';
+import 'package:sizzle_starter/src/feature/initialization/model/app_theme.dart';
 import 'package:sizzle_starter/src/feature/settings/data/theme_mode_codec.dart';
 import 'package:sizzle_starter/src/feature/settings/model/app_settings.dart';
 
