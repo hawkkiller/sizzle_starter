@@ -9,6 +9,11 @@ import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
 /// A class which is responsible for enabling error tracking.
 /// {@endtemplate}
 abstract interface class ErrorTrackingManager {
+  /// Handles the log message.
+  ///
+  /// This method is called when a log message is received.
+  Future<void> report(LogMessage log);
+
   /// Enables error tracking.
   ///
   /// This method should be called when the user has opted in to error tracking.
@@ -57,11 +62,6 @@ abstract base class ErrorTrackingManagerBase implements ErrorTrackingManager {
   /// Returns `true` if the error should be reported.
   @pragma('vm:prefer-inline')
   bool shouldReport(Object? error) => true;
-
-  /// Handles the log message.
-  ///
-  /// This method is called when a log message is received.
-  Future<void> report(LogMessage log);
 }
 
 /// {@template sentry_tracking_manager}

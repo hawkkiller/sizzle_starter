@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/core/constant/localization/localization.dart';
 import 'package:sizzle_starter/src/feature/home/widget/home_screen.dart';
+import 'package:sizzle_starter/src/feature/initialization/model/app_theme.dart';
 import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 
 /// {@template material_context}
@@ -22,8 +23,8 @@ class MaterialContext extends StatelessWidget {
     final mediaQueryData = MediaQuery.of(context);
 
     return MaterialApp(
-      theme: settings.appTheme?.lightTheme,
-      darkTheme: settings.appTheme?.darkTheme,
+      theme: settings.appTheme?.lightTheme ?? AppTheme.defaultTheme.lightTheme,
+      darkTheme: settings.appTheme?.darkTheme ?? AppTheme.defaultTheme.darkTheme,
       themeMode: settings.appTheme?.themeMode ?? ThemeMode.system,
       locale: settings.locale,
       localizationsDelegates: Localization.localizationDelegates,

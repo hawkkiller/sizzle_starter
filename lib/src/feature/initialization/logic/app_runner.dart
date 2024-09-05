@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/app_bloc_observer.dart';
 import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
-import 'package:sizzle_starter/src/feature/app/widget/app.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
+import 'package:sizzle_starter/src/feature/initialization/widget/app.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/initialization_failed_app.dart';
 
 /// {@template app_runner}
@@ -32,11 +32,10 @@ final class AppRunner {
     Bloc.observer = AppBlocObserver(logger);
     Bloc.transformer = bloc_concurrency.sequential();
     const config = Config();
-    final initializationProcessor = CompositionRoot(config, logger);
 
     Future<void> initializeAndRun() async {
       try {
-        final result = await initializationProcessor.compose();
+        final result = await CompositionRoot(config, logger).compose();
         // Attach this widget to the root of the tree.
         runApp(App(result: result));
       } catch (e, stackTrace) {
