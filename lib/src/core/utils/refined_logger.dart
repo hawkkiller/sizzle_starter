@@ -21,14 +21,8 @@ RefinedLogger get logger => Zone.current[_loggerKey] as RefinedLogger? ?? _logge
 ///
 /// This is useful for testing purposes, where you can pass a mock logger
 /// to the callback.
-void runWithLogger<T>(
-  RefinedLogger logger,
-  T Function() callback,
-) {
-  runZoned(
-    callback,
-    zoneValues: {_loggerKey: logger},
-  );
+void runWithLogger<T>(RefinedLogger logger, T Function() callback) {
+  runZoned(callback, zoneValues: {_loggerKey: logger});
 }
 
 const _loggerKey = 'logger';

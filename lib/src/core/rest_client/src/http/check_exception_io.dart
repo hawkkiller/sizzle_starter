@@ -8,9 +8,10 @@ import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 Object? checkHttpException(http.ClientException e) => switch (e) {
       // Under the hood, HTTP has _ClientSocketException that implements
       // SocketException interface and extends ClientException
-      final SocketException e => ConnectionException(
-          message: e.message,
-          cause: e,
+      // ignore: avoid-unrelated-type-assertions
+      final SocketException socketException => ConnectionException(
+          message: socketException.message,
+          cause: socketException,
         ),
       _ => null,
     };

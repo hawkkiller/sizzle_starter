@@ -1,4 +1,4 @@
-include: package:sizzle_lints/sizzle_lints.yaml
+include: package:sizzle_lints/lints.yaml
 
 analyzer:
   exclude: 
