@@ -202,7 +202,7 @@ void main() {
 
       await authInterceptor.interceptResponse(response, mockResponseHandler);
 
-      mockResponseHandler.resolveResponse(response);
+      verify(mockResponseHandler.resolveResponse(response)).called(1);
     });
 
     test(
