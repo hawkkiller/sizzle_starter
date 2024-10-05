@@ -226,7 +226,7 @@ class DefaultLogger extends RefinedLogger {
 }
 
 /// {@macro logger}
-/// 
+///
 /// A logger that does nothing.
 class NoOpLogger extends RefinedLogger {
   /// Constructs an instance of [NoOpLogger].
