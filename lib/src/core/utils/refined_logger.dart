@@ -225,8 +225,40 @@ class DefaultLogger extends RefinedLogger {
   }
 }
 
+/// {@macro logger}
+/// 
+/// A logger that does nothing.
+class NoOpLogger extends RefinedLogger {
+  /// Constructs an instance of [NoOpLogger].
+  const NoOpLogger();
+
+  @override
+  // ignore: no-empty-block
+  void destroy() {}
+
+  @override
+  void log(
+    String message, {
+    required LogLevel level,
+    Object? error,
+    StackTrace? stackTrace,
+    Map<String, Object?>? context,
+    bool printStackTrace = true,
+    bool printError = true,
+    // ignore: no-empty-block
+  }) {}
+
+  @override
+  Stream<LogMessage> get logs => const Stream.empty();
+}
+
+/// {@template logger}
 /// Logger class, that manages the logging of messages
+/// {@endtemplate}
 abstract class RefinedLogger {
+  /// Constructs an instance of [RefinedLogger].
+  const RefinedLogger();
+
   /// Stream of log messages
   Stream<LogMessage> get logs;
 

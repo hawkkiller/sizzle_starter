@@ -44,7 +44,7 @@ base class AnalyticsEvent {
   ///
   /// Parameters are optional and can be used to provide additional context or
   /// data with the event.
-  final Set<AnalyticsProperty<Object>>? parameters;
+  final Set<AnalyticsParameter<Object>>? parameters;
 
   @override
   String toString() {
@@ -70,61 +70,61 @@ base class AnalyticsEvent {
   int get hashCode => name.hashCode ^ const DeepCollectionEquality().hash(parameters);
 }
 
-/// {@template analytics_property}
+/// {@template analytics_parameter}
 /// A property that can be added to an [AnalyticsEvent].
 ///
 /// Currently, there are two types of properties:
-/// - [StringAnalyticsProperty]
-/// - [NumberAnalyticsProperty]
+/// - [StringAnalyticsParameter]
+/// - [NumberAnalyticsParameter]
 ///
 /// Other types are not supported by Firebase Analytics. If you are using a
 /// different tool for analytics, you can create a custom property type.
 /// {@endtemplate}
-sealed class AnalyticsProperty<T> {
-  /// {@macro analytics_property}
-  const AnalyticsProperty(this.name, this.value);
+sealed class AnalyticsParameter<T> {
+  /// {@macro analytics_parameter}
+  const AnalyticsParameter(this.name, this.value);
 
-  /// The name of the property.
+  /// The name of the parameter;
   final String name;
 
-  /// The value of the property.
+  /// The value of the parameter.
   final T value;
 }
 
-/// {@template string_analytics_property}
-/// Analytics property that contains a [String] value.
+/// {@template string_analytics_parameter}
+/// Analytics parameter that contains a [String] value.
 /// {@endtemplate}
-final class StringAnalyticsProperty extends AnalyticsProperty<String> {
-  /// {@macro string_analytics_property}
-  const StringAnalyticsProperty(super.name, super.value);
+final class StringAnalyticsParameter extends AnalyticsParameter<String> {
+  /// {@macro string_analytics_parameter}
+  const StringAnalyticsParameter(super.name, super.value);
 
   @override
-  String toString() => 'StringAnalyticsProperty(name: $name, value: $value)';
+  String toString() => 'StringAnalyticsParameter(name: $name, value: $value)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is StringAnalyticsProperty && other.name == name && other.value == value;
+    return other is StringAnalyticsParameter && other.name == name && other.value == value;
   }
 
   @override
   int get hashCode => name.hashCode ^ value.hashCode;
 }
 
-/// {@template number_analytics_property}
+/// {@template number_analytics_parameter}
 /// Analytics property that contains a [num] value.
 /// {@endtemplate}
-final class NumberAnalyticsProperty extends AnalyticsProperty<num> {
-  /// {@macro number_analytics_property}
-  const NumberAnalyticsProperty(super.name, super.value);
+final class NumberAnalyticsParameter extends AnalyticsParameter<num> {
+  /// {@macro number_analytics_parameter}
+  const NumberAnalyticsParameter(super.name, super.value);
 
   @override
-  String toString() => 'NumberAnalyticsProperty(name: $name, value: $value)';
+  String toString() => 'NumberAnalyticsParameter(name: $name, value: $value)';
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
-    return other is NumberAnalyticsProperty && other.name == name && other.value == value;
+    return other is NumberAnalyticsParameter && other.name == name && other.value == value;
   }
 
   @override
