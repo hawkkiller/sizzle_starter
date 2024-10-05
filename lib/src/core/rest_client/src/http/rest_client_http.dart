@@ -18,12 +18,11 @@ http.Client createDefaultHttpClient() {
   final platform = defaultTargetPlatform;
 
   try {
-    if (platform == TargetPlatform.android) {
-      client = CronetClient.defaultCronetEngine();
-    }
-    if (platform == TargetPlatform.iOS || platform == TargetPlatform.macOS) {
-      client = CupertinoClient.defaultSessionConfiguration();
-    }
+    client = switch (platform) {
+      TargetPlatform.android => CronetClient.defaultCronetEngine(),
+      TargetPlatform.iOS || TargetPlatform.macOS => CupertinoClient.defaultSessionConfiguration(),
+      _ => null,
+    };
   } on Object catch (e, stackTrace) {
     logger.warn(
       'Failed to create a default http client for platform $platform',
@@ -63,8 +62,8 @@ final class RestClientHttp extends RestClientBase {
     required String path,
     required String method,
     Map<String, String?>? queryParams,
+    Map<String, String>? headers,
     Map<String, Object?>? body,
-    Map<String, Object?>? headers,
   }) async {
     try {
       final uri = buildUri(path: path, queryParams: queryParams);
@@ -76,9 +75,7 @@ final class RestClientHttp extends RestClientBase {
       }
 
       if (headers != null) {
-        request.headers.addAll(
-          headers.map((key, value) => MapEntry(key, value.toString())),
-        );
+        request.headers.addAll(headers);
       }
 
       final response = await _client.send(request).then(

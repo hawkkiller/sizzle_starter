@@ -15,7 +15,7 @@ abstract interface class AppSettingsRepository {
 /// {@macro app_settings_repository}
 final class AppSettingsRepositoryImpl implements AppSettingsRepository {
   /// {@macro app_settings_repository}
-  AppSettingsRepositoryImpl({required this.datasource});
+  const AppSettingsRepositoryImpl({required this.datasource});
 
   /// The instance of [AppSettingsDatasource] used to read and write values.
   final AppSettingsDatasource datasource;

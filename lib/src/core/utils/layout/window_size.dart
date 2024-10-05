@@ -10,7 +10,7 @@ import 'package:sizzle_starter/src/core/utils/extensions/context_extension.dart'
 /// - https://m3.material.io/foundations/layout/applying-layout
 class WindowSize extends Size implements Comparable<WindowSize> {
   /// Creates a [WindowSize] with the given [width] and [height].
-  WindowSize(super.width, super.height);
+  const WindowSize(super.width, super.height);
 
   /// Creates a [WindowSize] with the given [width] and [height].
   WindowSize.fromSize(super.source) : super.copy();
@@ -31,95 +31,81 @@ class WindowSize extends Size implements Comparable<WindowSize> {
   static const extraLarge = 1600;
 
   /// Returns `true` if the viewport width is within the range of the compact breakpoint.
-  bool get isCompact => maybeMap(
-        compact: () => true,
-        orElse: () => false,
-      );
+  bool get isCompact => maybeMap(compactFn: () => true, orElse: () => false);
 
   /// Returns `true` if the viewport width is within the range of the compact breakpoint or bigger.
-  bool get isCompactOrUp => maybeMap(
-        orElse: () => true,
-      );
+  bool get isCompactOrUp => maybeMap(orElse: () => true);
 
   /// Returns `true` if the viewport width is within the range of the medium breakpoint.
-  bool get isMedium => maybeMap(
-        medium: () => true,
-        orElse: () => false,
-      );
+  bool get isMedium => maybeMap(mediumFn: () => true, orElse: () => false);
 
   /// Returns `true` if the viewport width is within the range of the medium breakpoint or bigger.
   bool get isMediumOrUp => maybeMap(
-        medium: () => true,
-        expanded: () => true,
-        large: () => true,
-        extraLarge: () => true,
+        mediumFn: () => true,
+        expandedFn: () => true,
+        largeFn: () => true,
+        extraLargeFn: () => true,
         orElse: () => false,
       );
 
   /// Returns `true` if the viewport width is within the range of the expanded breakpoint.
-  bool get isExpanded => maybeMap(
-        expanded: () => true,
-        orElse: () => false,
-      );
+  bool get isExpanded => maybeMap(expandedFn: () => true, orElse: () => false);
 
   /// Returns `true` if the viewport width is within the range of the expanded breakpoint or bigger.
   bool get isExpandedOrUp => maybeMap(
-        expanded: () => true,
-        large: () => true,
-        extraLarge: () => true,
+        expandedFn: () => true,
+        largeFn: () => true,
+        extraLargeFn: () => true,
         orElse: () => false,
       );
 
   /// Returns `true` if the viewport width is within the range of the large breakpoint.
-  bool get isLarge => maybeMap(
-        large: () => true,
-        orElse: () => false,
-      );
+  bool get isLarge => maybeMap(largeFn: () => true, orElse: () => false);
 
   /// Returns `true` if the viewport width is within the range of the large breakpoint or bigger.
   bool get isLargeOrUp => maybeMap(
-        large: () => true,
-        extraLarge: () => true,
+        largeFn: () => true,
+        extraLargeFn: () => true,
         orElse: () => false,
       );
 
   /// Returns `true` if the viewport width is within the range of the extra large breakpoint.
   bool get isExtraLarge => maybeMap(
-        extraLarge: () => true,
+        extraLargeFn: () => true,
         orElse: () => false,
       );
 
   /// Return value based on the current breakpoint.
   T map<T>({
-    required T Function() compact,
-    required T Function() medium,
-    required T Function() expanded,
-    required T Function() large,
-    required T Function() extraLarge,
+    required T Function() compactFn,
+    required T Function() mediumFn,
+    required T Function() expandedFn,
+    required T Function() largeFn,
+    required T Function() extraLargeFn,
   }) =>
       switch (width) {
-        >= WindowSize.extraLarge => extraLarge(),
-        >= WindowSize.large => large(),
-        >= WindowSize.expanded => expanded(),
-        >= WindowSize.medium => medium(),
-        _ => compact(),
+        >= WindowSize.extraLarge => extraLargeFn(),
+        >= WindowSize.large => largeFn(),
+        >= WindowSize.expanded => expandedFn(),
+        >= WindowSize.medium => mediumFn(),
+        _ => compactFn(),
       };
 
   /// Return value based on the current breakpoint.
   T maybeMap<T>({
     required T Function() orElse,
-    T Function()? compact,
-    T Function()? medium,
-    T Function()? expanded,
-    T Function()? large,
-    T Function()? extraLarge,
+    T Function()? compactFn,
+    T Function()? mediumFn,
+    T Function()? expandedFn,
+    T Function()? largeFn,
+    T Function()? extraLargeFn,
   }) =>
       map(
-        compact: compact ?? orElse,
-        medium: medium ?? orElse,
-        expanded: expanded ?? orElse,
-        large: large ?? orElse,
-        extraLarge: extraLarge ?? orElse,
+        compactFn: compactFn ?? orElse,
+        mediumFn: mediumFn ?? orElse,
+        expandedFn: expandedFn ?? orElse,
+        largeFn: largeFn ?? orElse,
+        extraLargeFn: extraLargeFn ?? orElse,
       );
 
   @override
@@ -137,10 +123,7 @@ class WindowSize extends Size implements Comparable<WindowSize> {
 /// Scope that provides [WindowSize] to its descendants.
 class WindowSizeScope extends StatefulWidget {
   /// Creates a [WindowSizeScope] that provides [WindowSize] to its descendants.
-  const WindowSizeScope({
-    required this.child,
-    super.key,
-  });
+  const WindowSizeScope({required this.child, super.key});
 
   /// The widget below this widget in the tree.
   final Widget child;
@@ -163,9 +146,10 @@ class _WindowSizeScopeState extends State<WindowSizeScope> with WidgetsBindingOb
 
   @override
   void initState() {
+    super.initState();
+
     _windowSize = _getWindowSize();
     WidgetsBinding.instance.addObserver(this);
-    super.initState();
   }
 
   @override

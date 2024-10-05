@@ -27,9 +27,7 @@ class App extends StatelessWidget {
         child: DependenciesScope(
           dependencies: result.dependencies,
           child: const SettingsScope(
-            child: WindowSizeScope(
-              child: MaterialContext(),
-            ),
+            child: WindowSizeScope(child: MaterialContext()),
           ),
         ),
       );

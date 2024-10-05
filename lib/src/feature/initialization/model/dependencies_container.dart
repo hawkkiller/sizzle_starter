@@ -31,8 +31,11 @@ base class DependenciesContainer {
 /// extend this class and provide the dependencies that are needed for the test.
 /// {@endtemplate}
 base class TestDependenciesContainer implements DependenciesContainer {
+  /// {@macro testing_dependencies_container}
+  const TestDependenciesContainer();
+
   @override
-  Object? noSuchMethod(Invocation invocation) {
+  Object noSuchMethod(Invocation invocation) {
     throw UnimplementedError(
       'The test tries to access ${invocation.memberName} dependency, but '
       'it was not provided. Please provide the dependency in the test. '

@@ -7,15 +7,15 @@ class Config {
 
   /// The current environment.
   Environment get environment {
-    var environment = const String.fromEnvironment('ENVIRONMENT');
+    var env = const String.fromEnvironment('ENVIRONMENT');
 
-    if (environment.isNotEmpty) {
-      return Environment.from(environment);
+    if (env.isNotEmpty) {
+      return Environment.from(env);
     }
 
-    environment = const String.fromEnvironment('FLUTTER_APP_FLAVOR');
+    env = const String.fromEnvironment('FLUTTER_APP_FLAVOR');
 
-    return Environment.from(environment);
+    return Environment.from(env);
   }
 
   /// The Sentry DSN.

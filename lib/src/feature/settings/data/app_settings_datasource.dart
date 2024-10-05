@@ -100,10 +100,7 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<AppSettings> {
     Locale? appLocale;
 
     if (languageCode != null) {
-      appLocale = Locale(
-        languageCode,
-        countryCode,
-      );
+      appLocale = Locale(languageCode, countryCode);
     }
 
     return AppSettings(
@@ -120,7 +117,7 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<AppSettings> {
       _themeSeedColor.remove(),
       _localeLanguageCode.remove(),
       _localeCountryCode.remove(),
-      _textScale.remove()
+      _textScale.remove(),
     ).wait;
   }
 
