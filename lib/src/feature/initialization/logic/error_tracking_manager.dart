@@ -125,8 +125,7 @@ final class SentryTrackingManager extends ErrorTrackingManagerBase {
   }
 
   SentryLevel _logLevel(LogLevel level) => switch (level) {
-        LogLevel.trace => SentryLevel.debug,
-        LogLevel.debug => SentryLevel.debug,
+        LogLevel.trace || LogLevel.debug => SentryLevel.debug,
         LogLevel.info => SentryLevel.info,
         LogLevel.warn => SentryLevel.warning,
         LogLevel.error => SentryLevel.error,

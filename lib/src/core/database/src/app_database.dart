@@ -16,9 +16,7 @@ class AppDatabase extends _$AppDatabase {
       : super(
           driftDatabase(
             name: 'sizzle',
-            native: const DriftNativeOptions(
-              shareAcrossIsolates: true,
-            ),
+            native: const DriftNativeOptions(shareAcrossIsolates: true),
             // TODO(mlazebny): Update the sqlite3Wasm and driftWorker paths
             // to match the location of the files in your project if needed.
             // https://drift.simonbinder.eu/web/#prerequisites

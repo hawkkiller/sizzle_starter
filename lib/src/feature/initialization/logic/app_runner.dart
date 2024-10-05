@@ -44,7 +44,7 @@ final class AppRunner {
           InitializationFailedApp(
             error: e,
             stackTrace: stackTrace,
-            retryInitialization: initializeAndRun,
+            onRetryInitialization: initializeAndRun,
           ),
         );
       } finally {

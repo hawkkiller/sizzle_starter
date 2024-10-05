@@ -12,7 +12,7 @@ import 'package:stack_trace/stack_trace.dart';
 ///
 /// This is a zone-scoped logger, which means that it can be overridden
 /// in nested zones or during tests.
-RefinedLogger get logger => Zone.current[_loggerKey] as RefinedLogger? ?? _logger;
+RefinedLogger get logger => Zone.current[kLoggerKey] as RefinedLogger? ?? _logger;
 
 /// Runs [callback] with the given [logger] instance.
 ///
@@ -22,10 +22,11 @@ RefinedLogger get logger => Zone.current[_loggerKey] as RefinedLogger? ?? _logge
 /// This is useful for testing purposes, where you can pass a mock logger
 /// to the callback.
 void runWithLogger<T>(RefinedLogger logger, T Function() callback) {
-  runZoned(callback, zoneValues: {_loggerKey: logger});
+  runZoned(callback, zoneValues: {kLoggerKey: logger});
 }
 
-const _loggerKey = 'logger';
+/// The key used to store the logger in the zone.
+const kLoggerKey = 'logger';
 
 /// A logger used to log errors in the root zone.
 final _logger = DefaultLogger();
@@ -64,7 +65,7 @@ class LoggingOptions {
     this.showEmoji = true,
     this.logInRelease = false,
     this.useDebugPrint = false,
-    this.formatter,
+    this.onMessageFormat,
   });
 
   /// Whether to include the timestamp in the log message.
@@ -91,7 +92,7 @@ class LoggingOptions {
   /// An optional custom formatter for log messages.
   ///
   /// If not provided, a default formatter is used.
-  final LogFormatter? formatter;
+  final LogFormatter? onMessageFormat;
 }
 
 /// Internal class used by [DefaultLogger] to wrap the log messages.
@@ -122,7 +123,8 @@ class DefaultLogger extends RefinedLogger {
 
   final _controller = StreamController<LogWrapper>();
   late final _logWrapStream = _controller.stream.asBroadcastStream();
-  late final _logStream = _logWrapStream.map((wrapper) => wrapper.message);
+  late final _logs = _logWrapStream.map((wrapper) => wrapper.message);
+  StreamSubscription<LogWrapper>? _logSubscription;
   bool _destroyed = false;
 
   void _init(LoggingOptions options) {
@@ -130,15 +132,16 @@ class DefaultLogger extends RefinedLogger {
       return;
     }
 
-    _logWrapStream.listen((l) => _printLogMessage(l, options));
+    _logSubscription = _logWrapStream.listen((l) => _printLogMessage(l, options));
   }
 
   @override
-  Stream<LogMessage> get logs => _logStream;
+  Stream<LogMessage> get logs => _logs;
 
   @override
   void destroy() {
     _controller.close();
+    _logSubscription?.cancel();
     _destroyed = true;
   }
 
@@ -179,8 +182,8 @@ class DefaultLogger extends RefinedLogger {
       return;
     }
 
-    final formattedMessage = options.formatter != null
-        ? options.formatter!(wrappedMessage, options)
+    final formattedMessage = options.onMessageFormat != null
+        ? options.onMessageFormat!(wrappedMessage, options)
         : _defaultFormatter(wrappedMessage, options);
 
     _log(formattedMessage);
