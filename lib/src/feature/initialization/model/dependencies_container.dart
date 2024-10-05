@@ -1,5 +1,5 @@
+import 'package:sizzle_starter/src/core/utils/error_tracking_manager.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
-import 'package:sizzle_starter/src/feature/initialization/logic/error_tracking_manager.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 
 /// {@template dependencies_container}
