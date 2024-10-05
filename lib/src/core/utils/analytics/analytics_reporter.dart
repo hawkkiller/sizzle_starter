@@ -84,7 +84,7 @@ sealed class AnalyticsParameter<T> {
   /// {@macro analytics_parameter}
   const AnalyticsParameter(this.name, this.value);
 
-  /// The name of the parameter;
+  /// The name of the parameter.
   final String name;
 
   /// The value of the parameter.
