@@ -71,14 +71,14 @@ base class AnalyticsEvent {
 }
 
 /// {@template analytics_parameter}
-/// A property that can be added to an [AnalyticsEvent].
+/// A parameter that can be added to an [AnalyticsEvent].
 ///
-/// Currently, there are two types of properties:
+/// Currently, there are two types of parameters:
 /// - [StringAnalyticsParameter]
 /// - [NumberAnalyticsParameter]
 ///
 /// Other types are not supported by Firebase Analytics. If you are using a
-/// different tool for analytics, you can create a custom property type.
+/// different tool for analytics, you can create a custom parameter type.
 /// {@endtemplate}
 sealed class AnalyticsParameter<T> {
   /// {@macro analytics_parameter}
@@ -112,7 +112,7 @@ final class StringAnalyticsParameter extends AnalyticsParameter<String> {
 }
 
 /// {@template number_analytics_parameter}
-/// Analytics property that contains a [num] value.
+/// Analytics parameter that contains a [num] value.
 /// {@endtemplate}
 final class NumberAnalyticsParameter extends AnalyticsParameter<num> {
   /// {@macro number_analytics_parameter}
