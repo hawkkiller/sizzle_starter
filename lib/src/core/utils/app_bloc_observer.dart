@@ -20,7 +20,7 @@ class AppBlocObserver extends BlocObserver {
       ..writeln('Event: ${transition.event.runtimeType}')
       ..writeln('Transition: ${transition.currentState.runtimeType} => '
           '${transition.nextState.runtimeType}')
-      ..write('New State: ${transition.nextState.toString().limit(100)}');
+      ..write('New State: ${transition.nextState?.toString().limit(100)}');
 
     logger.info(logMessage.toString());
     super.onTransition(bloc, transition);
@@ -31,7 +31,7 @@ class AppBlocObserver extends BlocObserver {
     final logMessage = StringBuffer()
       ..writeln('Bloc: ${bloc.runtimeType}')
       ..writeln('Event: ${event.runtimeType}')
-      ..write('Details: ${event.toString().limit(200)}');
+      ..write('Details: ${event?.toString().limit(200)}');
 
     logger.info(logMessage.toString());
     super.onEvent(bloc, event);

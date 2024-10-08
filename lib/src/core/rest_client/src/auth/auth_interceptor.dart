@@ -46,8 +46,10 @@ class AuthInterceptor extends SequentialHttpInterceptor with RetryRequestMixin {
     Token? token,
   })  : retryClient = retryClient ?? Client(),
         _token = token {
-    tokenStorage.getStream().listen((newToken) => _token = newToken);
+    _tokenStorageSubscription = tokenStorage.getStream().listen((newToken) => _token = newToken);
   }
+
+  StreamSubscription<Token?>? _tokenStorageSubscription;
 
   /// [Client] to retry the request
   final Client retryClient;
@@ -59,7 +61,7 @@ class AuthInterceptor extends SequentialHttpInterceptor with RetryRequestMixin {
   final AuthorizationClient<Token> authorizationClient;
   Token? _token;
 
-  Future<Token?> _loadToken() async => _token;
+  Token? _loadToken() => _token;
 
   Map<String, String> _buildHeaders(Token token) => {
         'Authorization': 'Bearer ${token.accessToken}',
@@ -79,7 +81,7 @@ class AuthInterceptor extends SequentialHttpInterceptor with RetryRequestMixin {
     BaseRequest request,
     RequestHandler handler,
   ) async {
-    var token = await _loadToken();
+    var token = _loadToken();
 
     // If token is null, then the request is rejected
     if (token == null) {
@@ -143,7 +145,7 @@ class AuthInterceptor extends SequentialHttpInterceptor with RetryRequestMixin {
       return handler.resolveResponse(response);
     }
 
-    var token = await _loadToken();
+    var token = _loadToken();
 
     // If token is null, then reject the response
     if (token == null) {
@@ -200,5 +202,11 @@ class AuthInterceptor extends SequentialHttpInterceptor with RetryRequestMixin {
     final newResponse = await retryRequest(response, retryClient);
 
     return handler.resolveResponse(newResponse);
+  }
+
+  /// Dispose the [AuthInterceptor]
+  void dispose() {
+    _tokenStorageSubscription?.cancel();
+    retryClient.close();
   }
 }

@@ -1,18 +1,14 @@
 import 'dart:ui' show Locale;
 
 import 'package:flutter/foundation.dart';
-import 'package:sizzle_starter/src/feature/app/model/app_theme.dart';
+import 'package:sizzle_starter/src/feature/initialization/model/app_theme.dart';
 
 /// {@template app_settings}
 /// Application settings
 /// {@endtemplate}
 class AppSettings with Diagnosticable {
   /// {@macro app_settings}
-  const AppSettings({
-    this.appTheme,
-    this.locale,
-    this.textScale,
-  });
+  const AppSettings({this.appTheme, this.locale, this.textScale});
 
   /// The theme of the app,
   final AppTheme? appTheme;

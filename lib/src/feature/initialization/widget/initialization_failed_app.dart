@@ -13,13 +13,13 @@ class InitializationFailedApp extends StatefulWidget {
   /// The callback that will be called when the retry button is pressed.
   ///
   /// If null, the retry button will not be shown.
-  final Future<void> Function()? retryInitialization;
+  final Future<void> Function()? onRetryInitialization;
 
   /// {@macro initialization_failed_screen}
   const InitializationFailedApp({
     required this.error,
     required this.stackTrace,
-    this.retryInitialization,
+    this.onRetryInitialization,
     super.key,
   });
 
@@ -39,7 +39,7 @@ class _InitializationFailedAppState extends State<InitializationFailedApp> {
 
   Future<void> _retryInitialization() async {
     _inProgress.value = true;
-    await widget.retryInitialization?.call();
+    await widget.onRetryInitialization?.call();
     _inProgress.value = false;
   }
 
@@ -57,7 +57,7 @@ class _InitializationFailedAppState extends State<InitializationFailedApp> {
                       'Initialization failed',
                       style: Theme.of(context).textTheme.headlineMedium,
                     ),
-                    if (widget.retryInitialization != null)
+                    if (widget.onRetryInitialization != null)
                       IconButton(
                         icon: const Icon(Icons.refresh),
                         onPressed: _retryInitialization,

@@ -40,7 +40,7 @@ abstract class SharedPreferencesEntry<T extends Object> extends PersistedEntry<T
 /// A [int] implementation of [SharedPreferencesEntry].
 class IntPreferencesEntry extends SharedPreferencesEntry<int> {
   /// {@macro int_preferences_entry}
-  IntPreferencesEntry({
+  const IntPreferencesEntry({
     required super.sharedPreferences,
     required super.key,
   });
@@ -62,7 +62,7 @@ class IntPreferencesEntry extends SharedPreferencesEntry<int> {
 /// A [String] implementation of [SharedPreferencesEntry].
 class StringPreferencesEntry extends SharedPreferencesEntry<String> {
   /// {@macro string_preferences_entry}
-  StringPreferencesEntry({
+  const StringPreferencesEntry({
     required super.sharedPreferences,
     required super.key,
   });
@@ -84,7 +84,7 @@ class StringPreferencesEntry extends SharedPreferencesEntry<String> {
 /// A [bool] implementation of [SharedPreferencesEntry].
 class BoolPreferencesEntry extends SharedPreferencesEntry<bool> {
   /// {@macro bool_preferences_entry}
-  BoolPreferencesEntry({
+  const BoolPreferencesEntry({
     required super.sharedPreferences,
     required super.key,
   });
@@ -106,7 +106,7 @@ class BoolPreferencesEntry extends SharedPreferencesEntry<bool> {
 /// A [double] implementation of [SharedPreferencesEntry].
 class DoublePreferencesEntry extends SharedPreferencesEntry<double> {
   /// {@macro double_preferences_entry}
-  DoublePreferencesEntry({
+  const DoublePreferencesEntry({
     required super.sharedPreferences,
     required super.key,
   });
@@ -128,7 +128,7 @@ class DoublePreferencesEntry extends SharedPreferencesEntry<double> {
 /// A [List<String>] implementation of [SharedPreferencesEntry].
 class StringListPreferencesEntry extends SharedPreferencesEntry<List<String>> {
   /// {@macro string_list_preferences_entry}
-  StringListPreferencesEntry({
+  const StringListPreferencesEntry({
     required super.sharedPreferences,
     required super.key,
   });

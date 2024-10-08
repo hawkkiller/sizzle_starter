@@ -9,19 +9,13 @@ import 'package:sizzle_starter/src/feature/settings/model/app_settings.dart';
 /// {@endtemplate}
 class SettingsScope extends StatefulWidget {
   /// {@macro settings_scope}
-  const SettingsScope({
-    required this.child,
-    super.key,
-  });
+  const SettingsScope({required this.child, super.key});
 
   /// The child widget.
   final Widget child;
 
   /// Get the [AppSettingsBloc] instance.
-  static AppSettingsBloc of(
-    BuildContext context, {
-    bool listen = true,
-  }) {
+  static AppSettingsBloc of(BuildContext context, {bool listen = true}) {
     final settingsScope = listen
         ? context.dependOnInheritedWidgetOfExactType<_InheritedSettings>()
         : context.getInheritedWidgetOfExactType<_InheritedSettings>();
@@ -29,10 +23,7 @@ class SettingsScope extends StatefulWidget {
   }
 
   /// Get the [AppSettings] instance.
-  static AppSettings settingsOf(
-    BuildContext context, {
-    bool listen = true,
-  }) {
+  static AppSettings settingsOf(BuildContext context, {bool listen = true}) {
     final settingsScope = listen
         ? context.dependOnInheritedWidgetOfExactType<_InheritedSettings>()
         : context.getInheritedWidgetOfExactType<_InheritedSettings>();
@@ -49,8 +40,8 @@ class _SettingsScopeState extends State<SettingsScope> {
 
   @override
   void initState() {
-    _appSettingsBloc = DependenciesScope.of(context).appSettingsBloc;
     super.initState();
+    _appSettingsBloc = DependenciesScope.of(context).appSettingsBloc;
   }
 
   @override

@@ -22,14 +22,14 @@ abstract base class RestClientBase implements RestClient {
     required String path,
     required String method,
     Map<String, Object?>? body,
-    Map<String, Object?>? headers,
+    Map<String, String>? headers,
     Map<String, String?>? queryParams,
   });
 
   @override
   Future<Map<String, Object?>?> delete(
     String path, {
-    Map<String, Object?>? headers,
+    Map<String, String>? headers,
     Map<String, String?>? queryParams,
   }) =>
       send(
@@ -42,7 +42,7 @@ abstract base class RestClientBase implements RestClient {
   @override
   Future<Map<String, Object?>?> get(
     String path, {
-    Map<String, Object?>? headers,
+    Map<String, String>? headers,
     Map<String, String?>? queryParams,
   }) =>
       send(
@@ -56,7 +56,7 @@ abstract base class RestClientBase implements RestClient {
   Future<Map<String, Object?>?> patch(
     String path, {
     required Map<String, Object?> body,
-    Map<String, Object?>? headers,
+    Map<String, String>? headers,
     Map<String, String?>? queryParams,
   }) =>
       send(
@@ -71,7 +71,7 @@ abstract base class RestClientBase implements RestClient {
   Future<Map<String, Object?>?> post(
     String path, {
     required Map<String, Object?> body,
-    Map<String, Object?>? headers,
+    Map<String, String>? headers,
     Map<String, String?>? queryParams,
   }) =>
       send(
@@ -86,7 +86,7 @@ abstract base class RestClientBase implements RestClient {
   Future<Map<String, Object?>?> put(
     String path, {
     required Map<String, Object?> body,
-    Map<String, Object?>? headers,
+    Map<String, String>? headers,
     Map<String, String?>? queryParams,
   }) =>
       send(
@@ -118,10 +118,7 @@ abstract base class RestClientBase implements RestClient {
     final finalPath = p.join(baseUri.path, path);
     return baseUri.replace(
       path: finalPath,
-      queryParameters: {
-        ...baseUri.queryParameters,
-        if (queryParams != null) ...queryParams,
-      },
+      queryParameters: {...baseUri.queryParameters, ...?queryParams},
     );
   }
 

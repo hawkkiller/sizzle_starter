@@ -81,9 +81,7 @@ void main() {
           Stream.value([]),
           401,
           request: http.Request('GET', Uri.parse('https://example.com'))
-            ..headers.addAll(
-              {'Authorization': 'Bearer access token'},
-            ),
+            ..headers['Authorization'] = 'Bearer access token',
         );
 
         when(mockAuthorizationClient.isAccessTokenValid(any))
@@ -189,26 +187,23 @@ void main() {
       },
     );
 
-    test(
-      'should resolve response if status code is not 401',
-      () async {
-        final authInterceptor = AuthInterceptor(
-          tokenStorage: mockTokenStorage,
-          authorizationClient: mockAuthorizationClient,
-          token: const Token('access token', 'refresh token'),
-        );
+    test('should resolve response if status code is not 401', () async {
+      final authInterceptor = AuthInterceptor(
+        tokenStorage: mockTokenStorage,
+        authorizationClient: mockAuthorizationClient,
+        token: const Token('access token', 'refresh token'),
+      );
 
-        final response = http.StreamedResponse(
-          Stream.value([]),
-          200,
-          headers: {},
-        );
+      final response = http.StreamedResponse(
+        Stream.value([]),
+        200,
+        headers: {},
+      );
 
-        await authInterceptor.interceptResponse(response, mockResponseHandler);
+      await authInterceptor.interceptResponse(response, mockResponseHandler);
 
-        mockResponseHandler.resolveResponse(response);
-      },
-    );
+      verify(mockResponseHandler.resolveResponse(response)).called(1);
+    });
 
     test(
       'if response doesnt have token in request, resolve response',
@@ -246,9 +241,7 @@ void main() {
           Stream.value([]),
           401,
           request: http.Request('GET', Uri.parse('https://example.com'))
-            ..headers.addAll(
-              {'Authorization': 'Bearer access token'},
-            ),
+            ..headers['Authorization'] = 'Bearer access token',
         );
 
         when(mockAuthorizationClient.isAccessTokenValid(any))
@@ -283,9 +276,7 @@ void main() {
           Stream.value([]),
           401,
           request: http.Request('GET', Uri.parse('https://example.com'))
-            ..headers.addAll(
-              {'Authorization': 'Bearer access token'},
-            ),
+            ..headers['Authorization'] = 'Bearer access token',
         );
 
         when(mockAuthorizationClient.isAccessTokenValid(any))
@@ -346,9 +337,7 @@ void main() {
           Stream.value([]),
           401,
           request: http.Request('GET', Uri.parse('https://example.com'))
-            ..headers.addAll(
-              {'Authorization': 'Bearer access token'},
-            ),
+            ..headers['Authorization'] = 'Bearer access token',
         );
 
         await authInterceptor.interceptResponse(response, mockResponseHandler);

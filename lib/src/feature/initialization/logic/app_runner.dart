@@ -6,8 +6,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/app_bloc_observer.dart';
 import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
-import 'package:sizzle_starter/src/feature/app/widget/app.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
+import 'package:sizzle_starter/src/feature/initialization/widget/app.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/initialization_failed_app.dart';
 
 /// {@template app_runner}
@@ -44,7 +44,7 @@ final class AppRunner {
           InitializationFailedApp(
             error: e,
             stackTrace: stackTrace,
-            retryInitialization: initializeAndRun,
+            onRetryInitialization: initializeAndRun,
           ),
         );
       } finally {

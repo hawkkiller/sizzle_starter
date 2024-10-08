@@ -1,6 +1,5 @@
 name: sizzle_starter
-description: >
-  Highly scalable Flutter starter kit, designed with an optimal predefined structure  and inclusive of libraries that are widely applicable in numerous use cases. #magic___^_^___line
+description: Production-ready template for Flutter applications.
 # Prevent accidental publishing to pub.dev.
 publish_to: "none"
 
@@ -34,7 +33,7 @@ dependencies:
   cronet_http: ^1.3.2
   cupertino_http: ^1.5.1
 
-  # Persisting
+  # Storing data
   shared_preferences: ^2.3.2
   drift: ^2.20.0
   drift_flutter: ^0.2.0
@@ -43,30 +42,35 @@ dependencies:
   stack_trace: ^1.11.1
   sentry_flutter: ^8.7.0
 
+  # Firebase
+  firebase_core: ^3.6.0
+  firebase_analytics: ^11.3.3
+
   # Utils
   platform_info: ^5.0.0
   path: ^1.9.0
   path_provider: ^2.1.4
   intercepted_client: ^0.0.1
-  mockito: ^5.4.4
   clock: ^1.1.1
 
 dev_dependencies:
   # Testing
+  mockito: ^5.4.4
   flutter_test:
     sdk: flutter
 
   # Lints
-  sizzle_lints: ^2.1.0
+  sizzle_lints: ^2.1.3
 
   # Utils
   flutter_gen_runner: ^5.6.0
-  flutter_launcher_icons: ^0.13.1
+  flutter_launcher_icons: ^0.14.1
   flutter_native_splash: ^2.4.1
 
   # Codegen
   drift_dev: ^2.20.1
   build_runner: ^2.4.12
+  dart_code_metrics_presets: ^2.16.0
 
 flutter:
   uses-material-design: true
@@ -74,8 +78,8 @@ flutter:
   generate: true
 
   assets:
-  # Add assets from the images directory to the application.
-  - assets/images/
+    # Add assets from the images directory to the application.
+    - assets/images/
 
 flutter_gen:
   output: lib/src/core/constant/generated
