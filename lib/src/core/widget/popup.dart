@@ -78,10 +78,10 @@ class PopupBuilder extends StatefulWidget {
   final bool flipWhenOverflow;
 
   /// Whether to resize the follower widget when it overflows the screen.
-  /// 
+  ///
   /// For example, if the follower widget overflows the screen on the right side for 20 pixels,
   /// it will be resized to be 20 pixels less wide, same for the top, bottom, and left sides.
-  /// 
+  ///
   /// Defaults to `false`.
   final bool resizeWhenOverflow;
 
@@ -131,16 +131,16 @@ class _PopupBuilderState extends State<PopupBuilder> {
 
   @override
   void initState() {
-    portalController = widget.controller ?? OverlayPortalController(debugLabel: 'Popup');
     super.initState();
+    portalController = widget.controller ?? OverlayPortalController(debugLabel: 'Popup');
   }
 
   @override
   void didUpdateWidget(covariant PopupBuilder oldWidget) {
+    super.didUpdateWidget(oldWidget);
     if (!identical(widget.controller, oldWidget.controller)) {
       portalController = widget.controller ?? OverlayPortalController(debugLabel: 'Popup');
     }
-    super.didUpdateWidget(oldWidget);
   }
 
   @override
@@ -259,9 +259,8 @@ class _PopupFollowerState extends State<PopupFollower>
 
   @override
   void initState() {
-    WidgetsBinding.instance.addObserver(this);
-
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
   }
 
   @override
@@ -360,7 +359,8 @@ class _FollowerScope extends InheritedWidget {
   /// Returns the closest [_FollowerScope] instance.
   static _FollowerScope? maybeOf(BuildContext context, {bool listen = false}) => listen
       ? context.dependOnInheritedWidgetOfExactType<_FollowerScope>()
-      : context.getElementForInheritedWidgetOfExactType<_FollowerScope>()?.widget as _FollowerScope?;
+      : context.getElementForInheritedWidgetOfExactType<_FollowerScope>()?.widget
+          as _FollowerScope?;
 
   @override
   bool updateShouldNotify(_FollowerScope oldWidget) => false;

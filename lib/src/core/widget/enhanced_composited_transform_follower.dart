@@ -469,18 +469,17 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
 
     size = (child?..layout(constraints, parentUsesSize: true))?.size ??
         computeSizeForNoChild(constraints);
-    return;
   }
 
   @override
   void paint(PaintingContext context, Offset offset) {
-    final overlayRect = Offset.zero & constraints.biggest;
     final leaderRenderObject = link.leaderRenderObject;
     var linkedOffset = Offset.zero;
 
     if (leaderRenderObject != null) {
       final leaderGlobalPosition = leaderRenderObject.localToGlobal(Offset.zero);
       final leaderSize = leaderRenderObject.size;
+      final overlayRect = Offset.zero & constraints.biggest;
 
       final subScreens = DisplayFeatureSubScreen.subScreensInBounds(
         overlayRect,
@@ -542,9 +541,6 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
     required Rect targetRect,
     required Size screenSize,
   }) {
-    var dx = followerRect.left;
-    var dy = followerRect.top;
-
     // Effective screen area considering edge padding
     final leftBoundary = padding.left;
     final topBoundary = padding.top;
@@ -560,7 +556,7 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
       required double altPosition,
       required double altSize,
     }) {
-      double adjustedPosition = position;
+      var adjustedPosition = position;
 
       if (flipWhenOverflow) {
         // If `flipWhenOverflow` is true, try placing on the opposite side if there's an overflow
@@ -588,13 +584,12 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
         }
       }
 
-
       return adjustedPosition;
     }
 
     // Adjust horizontal position
-    dx = adjust(
-      position: dx,
+    final dx = adjust(
+      position: followerRect.left,
       size: followerRect.width,
       minBoundary: leftBoundary,
       maxBoundary: rightBoundary,
@@ -603,8 +598,8 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
     );
 
     // Adjust vertical position
-    dy = adjust(
-      position: dy,
+    final dy = adjust(
+      position: followerRect.top,
       size: followerRect.height,
       minBoundary: topBoundary,
       maxBoundary: bottomBoundary,
