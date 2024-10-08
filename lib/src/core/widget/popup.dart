@@ -32,7 +32,6 @@ class PopupBuilder extends StatefulWidget {
     required this.followerBuilder,
     required this.targetBuilder,
     this.controller,
-    this.padding = EdgeInsets.zero,
     this.followerAnchor = Alignment.topCenter,
     this.targetAnchor = Alignment.bottomCenter,
     this.flipWhenOverflow = true,
@@ -58,11 +57,6 @@ class PopupBuilder extends StatefulWidget {
   ///
   /// Defaults to [Alignment.bottomCenter].
   final Alignment targetAnchor;
-
-  /// The minimal distance between the follower widget and edges of the screen.
-  ///
-  /// Defaults to [EdgeInsets.zero].
-  final EdgeInsets padding;
 
   /// The controller that is used to show/hide the overlay.
   ///
@@ -160,7 +154,6 @@ class _PopupBuilderState extends State<PopupBuilder> {
             showWhenUnlinked: false, // don't show the follower widget when unlinked.
             followerAnchor: widget.followerAnchor,
             targetAnchor: widget.targetAnchor,
-            padding: widget.padding,
             enforceLeaderWidth: widget.enforceLeaderWidth,
             enforceLeaderHeight: widget.enforceLeaderHeight,
             moveWhenOverflow: widget.moveWhenOverflow,

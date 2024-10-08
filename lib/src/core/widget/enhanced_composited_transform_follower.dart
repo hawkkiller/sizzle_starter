@@ -42,7 +42,6 @@ class EnhancedCompositedTransformFollower extends SingleChildRenderObjectWidget 
   const EnhancedCompositedTransformFollower({
     required this.link,
     required this.displayFeatureBounds,
-    this.padding = EdgeInsets.zero,
     this.targetAnchor = Alignment.topLeft,
     this.followerAnchor = Alignment.topLeft,
     this.showWhenUnlinked = true,
@@ -94,9 +93,6 @@ class EnhancedCompositedTransformFollower extends SingleChildRenderObjectWidget 
   /// Defaults to [Alignment.topLeft].
   final Alignment followerAnchor;
 
-  /// Minimum padding from the edge of the screen.
-  final EdgeInsets padding;
-
   /// Whether to flip the follower widget when it overflows the screen.
   ///
   /// For example, if the follower widget overflows the screen on the right side,
@@ -143,7 +139,6 @@ class EnhancedCompositedTransformFollower extends SingleChildRenderObjectWidget 
       EnhancedRenderFollowerLayer(
         link: link,
         showWhenUnlinked: showWhenUnlinked,
-        edgePadding: padding,
         leaderAnchor: targetAnchor,
         followerAnchor: followerAnchor,
         enforceLeaderWidth: enforceLeaderWidth,
@@ -161,7 +156,6 @@ class EnhancedCompositedTransformFollower extends SingleChildRenderObjectWidget 
       ..showWhenUnlinked = showWhenUnlinked
       ..leaderAnchor = targetAnchor
       ..followerAnchor = followerAnchor
-      ..padding = padding
       ..moveWhenOverflow = moveWhenOverflow
       ..resizeWhenOverflow = resizeWhenOverflow
       ..flipWhenOverflow = flipWhenOverflow
@@ -192,7 +186,6 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
     bool showWhenUnlinked = true,
     bool flipWhenOverflow = true,
     bool moveWhenOverflow = true,
-    EdgeInsets edgePadding = EdgeInsets.zero,
     Alignment leaderAnchor = Alignment.topLeft,
     Alignment followerAnchor = Alignment.topLeft,
     bool enforceLeaderWidth = false,
@@ -203,7 +196,6 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
         _flipWhenOverflow = flipWhenOverflow,
         _moveWhenOverflow = moveWhenOverflow,
         _showWhenUnlinked = showWhenUnlinked,
-        _padding = edgePadding,
         _leaderAnchor = leaderAnchor,
         _followerAnchor = followerAnchor,
         _enforceLeaderWidth = enforceLeaderWidth,
@@ -241,17 +233,6 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
       return;
     }
     _link = value;
-    markNeedsPaint();
-  }
-
-  /// Minimum padding from the edge of the screen.
-  EdgeInsets get padding => _padding;
-  EdgeInsets _padding;
-  set padding(EdgeInsets value) {
-    if (_padding == value) {
-      return;
-    }
-    _padding = value;
     markNeedsPaint();
   }
 
@@ -446,7 +427,7 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
 
   @override
   void performLayout() {
-    var constraints = this.constraints.deflate(padding);
+    var constraints = this.constraints;
 
     // use leader size if enforceLeaderWidth or enforceLeaderHeight is true
     final leaderSize = link.leaderSize;
@@ -542,10 +523,10 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
     required Size screenSize,
   }) {
     // Effective screen area considering edge padding
-    final leftBoundary = padding.left;
-    final topBoundary = padding.top;
-    final rightBoundary = screenSize.width - padding.right;
-    final bottomBoundary = screenSize.height - padding.bottom;
+    const leftBoundary = 0.0;
+    const topBoundary = 0.0;
+    final rightBoundary = screenSize.width;
+    final bottomBoundary = screenSize.height;
 
     // Helper function to adjust for overflow
     double adjust({
