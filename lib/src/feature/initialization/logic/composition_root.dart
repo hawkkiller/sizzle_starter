@@ -1,4 +1,5 @@
 import 'package:clock/clock.dart';
+import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/error_tracking_manager.dart';
@@ -112,7 +113,7 @@ class ErrorTrackingManagerFactory extends AsyncFactory<ErrorTrackingManager> {
       environment: config.environment.value,
     );
 
-    if (config.enableSentry) {
+    if (config.enableSentry && kReleaseMode) {
       await errorTrackingManager.enableReporting();
     }
 
