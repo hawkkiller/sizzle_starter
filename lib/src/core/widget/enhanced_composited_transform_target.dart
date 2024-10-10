@@ -15,10 +15,16 @@ class EnhancedLayerLink extends LayerLink {
   /// The render object of the follower.
   EnhancedRenderFollowerLayer? followerRenderObject;
 
+  /// Global bounds of the leader.
+  Rect? leaderGlobalBounds;
+
   /// Callback that is called when the size of the leader changes.
-  void leaderSizeChanged(Size? size) {
+  void leaderUpdated(Size? size) {
     leaderSize = size;
-    followerRenderObject?.leaderSizeChanged();
+    if (leaderRenderObject != null && size != null) {
+      leaderGlobalBounds = leaderRenderObject!.localToGlobal(Offset.zero) & size;
+    }
+    followerRenderObject?.leaderUpdated();
   }
 }
 
@@ -93,11 +99,11 @@ class EnhancedRenderLeaderLayer extends RenderProxyBox {
     if (_link == value) {
       return;
     }
-    _link.leaderSizeChanged(null);
+    _link.leaderUpdated(null);
     _link = value;
     _link.leaderRenderObject = this;
     if (_previousLayoutSize != null) {
-      _link.leaderSizeChanged(_previousLayoutSize);
+      _link.leaderUpdated(_previousLayoutSize);
     }
     markNeedsPaint();
   }
@@ -114,7 +120,8 @@ class EnhancedRenderLeaderLayer extends RenderProxyBox {
   void performLayout() {
     super.performLayout();
     if (_previousLayoutSize != size) {
-      link.leaderSizeChanged(size);
+      // calculate rect
+      link.leaderUpdated(size);
       _previousLayoutSize = size;
     }
   }

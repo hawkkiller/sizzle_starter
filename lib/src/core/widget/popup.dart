@@ -36,7 +36,6 @@ class PopupBuilder extends StatefulWidget {
     this.targetAnchor = Alignment.bottomCenter,
     this.flipWhenOverflow = true,
     this.moveWhenOverflow = true,
-    this.resizeWhenOverflow = false,
     this.enforceLeaderWidth = false,
     this.enforceLeaderHeight = false,
     super.key,
@@ -70,14 +69,6 @@ class PopupBuilder extends StatefulWidget {
   ///
   /// Defaults to `true`.
   final bool flipWhenOverflow;
-
-  /// Whether to resize the follower widget when it overflows the screen.
-  ///
-  /// For example, if the follower widget overflows the screen on the right side for 20 pixels,
-  /// it will be resized to be 20 pixels less wide, same for the top, bottom, and left sides.
-  ///
-  /// Defaults to `false`.
-  final bool resizeWhenOverflow;
 
   /// Whether to adjust the position of the follower widget when it overflows the screen.
   ///
@@ -157,7 +148,6 @@ class _PopupBuilderState extends State<PopupBuilder> {
             enforceLeaderHeight: widget.enforceLeaderHeight,
             moveWhenOverflow: widget.moveWhenOverflow,
             flipWhenOverflow: widget.flipWhenOverflow,
-            resizeWhenOverflow: widget.resizeWhenOverflow,
             displayFeatureBounds: displayFeatureBounds,
             child: widget.followerBuilder(context, portalController),
           ),

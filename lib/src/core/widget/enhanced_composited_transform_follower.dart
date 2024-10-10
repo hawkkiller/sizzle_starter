@@ -11,10 +11,6 @@ import 'package:sizzle_starter/src/core/widget/enhanced_composited_transform_tar
 /// after the paint phase, as described in [WidgetsBinding.drawFrame]), it
 /// applies a transformation that brings [targetAnchor] of the linked
 /// [CompositedTransformTarget] and [followerAnchor] of this widget together.
-/// The two anchor points will have the same global coordinates, unless [padding]
-/// is not [Offset.zero], in which case [followerAnchor] will be offset by
-/// [padding] in the linked [CompositedTransformTarget]'s coordinate space.
-///
 /// The [LayerLink] object used as the [link] must be the same object as that
 /// provided to the matching [CompositedTransformTarget].
 ///
@@ -49,7 +45,6 @@ class EnhancedCompositedTransformFollower extends SingleChildRenderObjectWidget 
     this.enforceLeaderHeight = false,
     this.flipWhenOverflow = true,
     this.moveWhenOverflow = true,
-    this.resizeWhenOverflow = false,
     super.child,
     super.key,
   });
@@ -107,20 +102,8 @@ class EnhancedCompositedTransformFollower extends SingleChildRenderObjectWidget 
   /// For example, if the follower widget overflows the screen on the right side for 20 pixels,
   /// it will be moved to the left side for 20 pixels, same for the top, bottom, and left sides.
   ///
-  /// Choose either this or [resizeWhenOverflow].
-  ///
   /// Defaults to `true`.
   final bool moveWhenOverflow;
-
-  /// Whether to resize the follower widget when it overflows the screen.
-  ///
-  /// For example, if the follower widget overflows the screen on the right side for 20 pixels,
-  /// it will be resized to be 20 pixels less wide, same for the top, bottom, and left sides.
-  ///
-  /// Choose either this or [resizeWhenOverflow].
-  ///
-  /// Defaults to `false`.
-  final bool resizeWhenOverflow;
 
   /// Whether to enforce the width of the leader widget on the follower widget.
   ///
@@ -150,7 +133,6 @@ class EnhancedCompositedTransformFollower extends SingleChildRenderObjectWidget 
         enforceLeaderHeight: enforceLeaderHeight,
         flipWhenOverflow: flipWhenOverflow,
         moveWhenOverflow: moveWhenOverflow,
-        resizeWhenOverflow: resizeWhenOverflow,
         displayFeatureBounds: displayFeatureBounds,
       );
 
@@ -162,7 +144,6 @@ class EnhancedCompositedTransformFollower extends SingleChildRenderObjectWidget 
       ..leaderAnchor = targetAnchor
       ..followerAnchor = followerAnchor
       ..moveWhenOverflow = moveWhenOverflow
-      ..resizeWhenOverflow = resizeWhenOverflow
       ..flipWhenOverflow = flipWhenOverflow
       ..enforceLeaderWidth = enforceLeaderWidth
       ..enforceLeaderHeight = enforceLeaderHeight
@@ -193,7 +174,6 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
     bool showWhenUnlinked = true,
     bool flipWhenOverflow = true,
     bool moveWhenOverflow = true,
-    bool resizeWhenOverflow = false,
     bool enforceLeaderWidth = false,
     bool enforceLeaderHeight = false,
     RenderBox? child,
@@ -206,11 +186,10 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
         _enforceLeaderWidth = enforceLeaderWidth,
         _enforceLeaderHeight = enforceLeaderHeight,
         _displayFeatureBounds = displayFeatureBounds,
-        _resizeWhenOverflow = resizeWhenOverflow,
         super(child);
 
   /// Called when the size of the leader widget changes.
-  void leaderSizeChanged() {
+  void leaderUpdated() {
     if (_enforceLeaderHeight || _enforceLeaderWidth) {
       RendererBinding.instance.addPostFrameCallback((_) {
         markNeedsLayout();
@@ -274,22 +253,6 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
       return;
     }
     _moveWhenOverflow = value;
-    markNeedsPaint();
-  }
-
-  /// Whether to adjust the position of the follower widget when it overflows the screen.
-  ///
-  /// For example, if the follower widget overflows the screen on the right side for 20 pixels,
-  /// it will be moved to the left side for 20 pixels, same for the top, bottom, and left sides.
-  ///
-  /// Defaults to `true`.
-  bool get resizeWhenOverflow => _resizeWhenOverflow;
-  bool _resizeWhenOverflow;
-  set resizeWhenOverflow(bool value) {
-    if (_resizeWhenOverflow == value) {
-      return;
-    }
-    _resizeWhenOverflow = value;
     markNeedsPaint();
   }
 
@@ -411,7 +374,6 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
   @override
   void performLayout() {
     var constraints = this.constraints;
-
     // use leader size if enforceLeaderWidth or enforceLeaderHeight is true
     final leaderSize = link.leaderSize;
 
@@ -431,8 +393,7 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
       }
     }
 
-    size = (child?..layout(constraints, parentUsesSize: true))?.size ??
-        computeSizeForNoChild(constraints);
+    size = (child!..layout(constraints, parentUsesSize: true)).size;
   }
 
   @override
@@ -454,13 +415,16 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
       // ignore: unused_local_variable
       final allowedRect = _closestScreen(subScreens, leaderGlobalPosition);
 
+      // Where the follower would like to be positioned relative to the leader
       linkedOffset = leaderAnchor.alongSize(leaderSize) - followerAnchor.alongSize(size);
       final followerGlobalPosition = leaderGlobalPosition + linkedOffset;
 
-      linkedOffset = _adjustOverflow(
+      linkedOffset = calculateLinkedOffset(
             followerRect: followerGlobalPosition & size,
             targetRect: leaderGlobalPosition & leaderSize,
             screenSize: constraints.biggest,
+            flipWhenOverflow: flipWhenOverflow,
+            moveWhenOverflow: moveWhenOverflow,
           ) -
           leaderGlobalPosition;
     }
@@ -479,18 +443,19 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
         ..linkedOffset = linkedOffset
         ..unlinkedOffset = offset;
     }
+
     context.pushLayer(
       layer!,
       super.paint,
       Offset.zero,
       childPaintBounds: const Rect.fromLTRB(
-        // We don't know where we'll end up, so we have no idea what our cull rect should be.
         double.negativeInfinity,
         double.negativeInfinity,
         double.infinity,
         double.infinity,
       ),
     );
+
     assert(
       () {
         layer!.debugCreator = debugCreator;
@@ -500,10 +465,14 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
     );
   }
 
-  Offset _adjustOverflow({
+  /// Calculate the offset of the follower widget.
+  @visibleForTesting
+  static Offset calculateLinkedOffset({
     required Rect followerRect,
     required Rect targetRect,
     required Size screenSize,
+    required bool flipWhenOverflow,
+    required bool moveWhenOverflow,
   }) {
     // Effective screen area considering edge padding
     const leftBoundary = 0.0;
