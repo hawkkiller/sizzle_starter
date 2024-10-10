@@ -38,13 +38,13 @@ class EnhancedCompositedTransformFollower extends SingleChildRenderObjectWidget 
   /// If the [link] property was also provided to a [CompositedTransformTarget],
   /// that widget must come earlier in the paint order.
   ///
-  /// The [showWhenUnlinked] and [padding] properties must also not be null.
+  /// The [showWhenUnlinked] argument must not be null.
   const EnhancedCompositedTransformFollower({
     required this.link,
     required this.displayFeatureBounds,
     this.targetAnchor = Alignment.topLeft,
     this.followerAnchor = Alignment.topLeft,
-    this.showWhenUnlinked = true,
+    this.showWhenUnlinked = false,
     this.enforceLeaderWidth = false,
     this.enforceLeaderHeight = false,
     this.flipWhenOverflow = true,
@@ -95,8 +95,9 @@ class EnhancedCompositedTransformFollower extends SingleChildRenderObjectWidget 
 
   /// Whether to flip the follower widget when it overflows the screen.
   ///
-  /// For example, if the follower widget overflows the screen on the right side,
-  /// it will be flipped to the left side.
+  /// For example, if the follower widget overflows the screen on one side and
+  /// on the other side there is enough space, the follower widget will be
+  /// flipped to the other side.
   ///
   /// Defaults to `true`.
   final bool flipWhenOverflow;
@@ -106,8 +107,20 @@ class EnhancedCompositedTransformFollower extends SingleChildRenderObjectWidget 
   /// For example, if the follower widget overflows the screen on the right side for 20 pixels,
   /// it will be moved to the left side for 20 pixels, same for the top, bottom, and left sides.
   ///
+  /// Choose either this or [resizeWhenOverflow].
+  ///
   /// Defaults to `true`.
   final bool moveWhenOverflow;
+
+  /// Whether to resize the follower widget when it overflows the screen.
+  ///
+  /// For example, if the follower widget overflows the screen on the right side for 20 pixels,
+  /// it will be resized to be 20 pixels less wide, same for the top, bottom, and left sides.
+  ///
+  /// Choose either this or [resizeWhenOverflow].
+  ///
+  /// Defaults to `false`.
+  final bool resizeWhenOverflow;
 
   /// Whether to enforce the width of the leader widget on the follower widget.
   ///
@@ -122,14 +135,6 @@ class EnhancedCompositedTransformFollower extends SingleChildRenderObjectWidget 
   ///
   /// Defaults to `false`.
   final bool enforceLeaderHeight;
-
-  /// Whether to adjust the position of the follower widget when it overflows the screen.
-  ///
-  /// For example, if the follower widget overflows the screen on the right side for 20 pixels,
-  /// it will be moved to the left side for 20 pixels, same for the top, bottom, and left sides.
-  ///
-  /// Defaults to `true`.
-  final bool resizeWhenOverflow;
 
   /// List of rects that may be obstructed by physical features.
   final Iterable<Rect> displayFeatureBounds;
@@ -183,14 +188,14 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
   EnhancedRenderFollowerLayer({
     required EnhancedLayerLink link,
     required Iterable<Rect> displayFeatureBounds,
+    Alignment leaderAnchor = Alignment.topLeft,
+    Alignment followerAnchor = Alignment.topLeft,
     bool showWhenUnlinked = true,
     bool flipWhenOverflow = true,
     bool moveWhenOverflow = true,
-    Alignment leaderAnchor = Alignment.topLeft,
-    Alignment followerAnchor = Alignment.topLeft,
+    bool resizeWhenOverflow = false,
     bool enforceLeaderWidth = false,
     bool enforceLeaderHeight = false,
-    bool resizeWhenOverflow = false,
     RenderBox? child,
   })  : _link = link,
         _flipWhenOverflow = flipWhenOverflow,
@@ -404,28 +409,6 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
   Matrix4 getCurrentTransform() => layer?.getLastTransform() ?? Matrix4.identity();
 
   @override
-  bool hitTest(BoxHitTestResult result, {required Offset position}) {
-    // Disables the hit testing if this render object is hidden.
-    if (link.leader == null && !showWhenUnlinked) {
-      return false;
-    }
-    // RenderFollowerLayer objects don't check if they are
-    // themselves hit, because it's confusing to think about
-    // how the untransformed size and the child's transformed
-    // position interact.
-    return hitTestChildren(result, position: position);
-  }
-
-  @override
-  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) =>
-      result.addWithPaintTransform(
-        transform: getCurrentTransform(),
-        position: position,
-        hitTest: (BoxHitTestResult result, Offset position) =>
-            super.hitTestChildren(result, position: position),
-      );
-
-  @override
   void performLayout() {
     var constraints = this.constraints;
 
@@ -613,4 +596,26 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
     properties.add(DiagnosticsProperty<bool>('showWhenUnlinked', showWhenUnlinked));
     properties.add(TransformProperty('current transform matrix', getCurrentTransform()));
   }
+
+  @override
+  bool hitTest(BoxHitTestResult result, {required Offset position}) {
+    // Disables the hit testing if this render object is hidden.
+    if (link.leader == null && !showWhenUnlinked) {
+      return false;
+    }
+    // RenderFollowerLayer objects don't check if they are
+    // themselves hit, because it's confusing to think about
+    // how the untransformed size and the child's transformed
+    // position interact.
+    return hitTestChildren(result, position: position);
+  }
+
+  @override
+  bool hitTestChildren(BoxHitTestResult result, {required Offset position}) =>
+      result.addWithPaintTransform(
+        transform: getCurrentTransform(),
+        position: position,
+        hitTest: (BoxHitTestResult result, Offset position) =>
+            super.hitTestChildren(result, position: position),
+      );
 }

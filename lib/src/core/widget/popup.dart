@@ -42,10 +42,10 @@ class PopupBuilder extends StatefulWidget {
     super.key,
   });
 
-  /// The target widget that the follower widget is positioned relative to.
+  /// The target widget that the follower widget [followerBuilder] is positioned relative to.
   final PopupWidgetBuilder targetBuilder;
 
-  /// The widget that is positioned relative to the target widget.
+  /// The widget that is positioned relative to the target widget [targetBuilder].
   final PopupWidgetBuilder followerBuilder;
 
   /// The alignment of the follower widget relative to the target widget.
@@ -151,7 +151,6 @@ class _PopupBuilderState extends State<PopupBuilder> {
         overlayChildBuilder: (BuildContext context) => Center(
           child: EnhancedCompositedTransformFollower(
             link: _layerLink, // link the follower widget to the target widget.
-            showWhenUnlinked: false, // don't show the follower widget when unlinked.
             followerAnchor: widget.followerAnchor,
             targetAnchor: widget.targetAnchor,
             enforceLeaderWidth: widget.enforceLeaderWidth,
@@ -160,7 +159,7 @@ class _PopupBuilderState extends State<PopupBuilder> {
             flipWhenOverflow: widget.flipWhenOverflow,
             resizeWhenOverflow: widget.resizeWhenOverflow,
             displayFeatureBounds: displayFeatureBounds,
-            child: Builder(builder: (context) => widget.followerBuilder(context, portalController)),
+            child: widget.followerBuilder(context, portalController),
           ),
         ),
       ),

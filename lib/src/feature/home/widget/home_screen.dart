@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/core/utils/layout/layout.dart';
 import 'package:sizzle_starter/src/core/widget/popup.dart';
-import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 
 /// {@template home_screen}
@@ -22,91 +21,53 @@ class _HomeScreenState extends State<HomeScreen> {
     final windowSize = WindowSizeScope.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Home Screen')),
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                PopupBuilder(
-                  resizeWhenOverflow: true,
-                  moveWhenOverflow: false,
-                  flipWhenOverflow: false,
-                  followerAnchor: Alignment.centerLeft,
-                  targetAnchor: Alignment.centerRight,
-                  followerBuilder: (context, controller) => SizedBox(
-                    width: 200,
-                    height: 100,
-                    child: PopupFollower(
-                      child: Material(
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8),
-                        ),
-                        color: Theme.of(context).colorScheme.surface,
-                        elevation: 4,
-                        child: Padding(
-                          padding: const EdgeInsets.all(16),
-                          child: Text(
-                            'This is a popup',
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.all(16),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Text(
+              'Welcome to Sizzle Starter!',
+              style: Theme.of(context).textTheme.headlineLarge,
+            ),
+            const SizedBox(height: 16),
+            Align(
+              alignment: const Alignment(0.8, 0.0),
+              child: PopupBuilder(
+                flipWhenOverflow: false,
+                moveWhenOverflow: false,
+                resizeWhenOverflow: true,
+                targetAnchor: Alignment.centerRight,
+                followerAnchor: Alignment.centerLeft,
+                followerBuilder: (context, controller) => PopupFollower(
+                  child: Material(
+                    elevation: 4,
+                    child: SizedBox(
+                      width: 200,
+                      height: 100,
+                      child: LayoutBuilder(
+                        builder: (context, constraints) => Center(
+                          child: Text('${constraints.maxWidth}x${constraints.maxHeight}'),
                         ),
                       ),
                     ),
                   ),
-                  targetBuilder: (context, controller) => ElevatedButton(
-                    onPressed: () {
+                ),
+                targetBuilder: (context, controller) => ElevatedButton(
+                  onPressed: () {
+                    if (controller.isShowing) {
+                      controller.hide();
+                    } else {
                       controller.show();
-                    },
-                    child: const Text('Show popup'),
-                  ),
-                ),
-                const Text('Text scale'),
-                Slider(
-                  divisions: 8,
-                  min: 0.5,
-                  max: 2,
-                  value: SettingsScope.settingsOf(context).textScale ?? 1,
-                  onChanged: (value) {
-                    SettingsScope.of(context).add(
-                      AppSettingsEvent.updateAppSettings(
-                        appSettings: appSettings.copyWith(textScale: value),
-                      ),
-                    );
+                    }
                   },
-                ),
-              ],
-            ),
-          ),
-          SliverPadding(
-            padding: HorizontalSpacing.centered(windowSize.width, 1600),
-            sliver: SliverGrid.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                crossAxisCount: windowSize.maybeMap(
-                  mediumFn: () => 2,
-                  expandedFn: () => 3,
-                  largeFn: () => 4,
-                  extraLargeFn: () => 5,
-                  orElse: () => 1,
-                ),
-              ),
-              itemBuilder: (context, index) => ColoredBox(
-                color: Theme.of(context).colorScheme.primary,
-                child: Center(
-                  child: Text(
-                    'Item $index',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                  ),
+                  child: const Text('Show Popup'),
                 ),
               ),
             ),
-          ),
-        ],
+          ],
+        ),
       ),
     );
   }
