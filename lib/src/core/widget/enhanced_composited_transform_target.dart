@@ -15,15 +15,9 @@ class EnhancedLayerLink extends LayerLink {
   /// The render object of the follower.
   EnhancedRenderFollowerLayer? followerRenderObject;
 
-  /// Global bounds of the leader.
-  Rect? leaderGlobalBounds;
-
   /// Callback that is called when the size of the leader changes.
   void leaderUpdated(Size? size) {
     leaderSize = size;
-    if (leaderRenderObject != null && size != null) {
-      leaderGlobalBounds = leaderRenderObject!.localToGlobal(Offset.zero) & size;
-    }
     followerRenderObject?.leaderUpdated();
   }
 }
