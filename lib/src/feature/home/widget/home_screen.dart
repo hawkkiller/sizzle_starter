@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/core/utils/layout/layout.dart';
-import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
-import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 
 /// {@template home_screen}
 /// HomeScreen is a simple screen that displays a grid of items.
@@ -16,64 +13,20 @@ class HomeScreen extends StatefulWidget {
 
 class _HomeScreenState extends State<HomeScreen> {
   @override
-  Widget build(BuildContext context) {
-    final appSettings = SettingsScope.settingsOf(context);
-    final windowSize = WindowSizeScope.of(context);
-
-    return Scaffold(
-      appBar: AppBar(title: const Text('Home Screen')),
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: CustomScrollView(
-        slivers: [
-          SliverToBoxAdapter(
-            child: Column(
-              children: [
-                const Text('Text scale'),
-                Slider(
-                  divisions: 8,
-                  min: 0.5,
-                  max: 2,
-                  value: SettingsScope.settingsOf(context).textScale ?? 1,
-                  onChanged: (value) {
-                    SettingsScope.of(context).add(
-                      AppSettingsEvent.updateAppSettings(
-                        appSettings: appSettings.copyWith(textScale: value),
-                      ),
-                    );
-                  },
-                ),
-              ],
-            ),
-          ),
-          SliverPadding(
-            padding: HorizontalSpacing.centered(windowSize.width, 1600),
-            sliver: SliverGrid.builder(
-              gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisSpacing: 16,
-                mainAxisSpacing: 16,
-                crossAxisCount: windowSize.maybeMap(
-                  mediumFn: () => 2,
-                  expandedFn: () => 3,
-                  largeFn: () => 4,
-                  extraLargeFn: () => 5,
-                  orElse: () => 1,
-                ),
+  Widget build(BuildContext context) => Scaffold(
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        body: SingleChildScrollView(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Text(
+                'Welcome to Sizzle Starter!',
+                style: Theme.of(context).textTheme.headlineLarge,
               ),
-              itemBuilder: (context, index) => ColoredBox(
-                color: Theme.of(context).colorScheme.primary,
-                child: Center(
-                  child: Text(
-                    'Item $index',
-                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color: Theme.of(context).colorScheme.onPrimary,
-                        ),
-                  ),
-                ),
-              ),
-            ),
+              const SizedBox(height: 16),
+            ],
           ),
-        ],
-      ),
-    );
-  }
+        ),
+      );
 }
