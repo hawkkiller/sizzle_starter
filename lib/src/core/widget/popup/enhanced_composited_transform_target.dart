@@ -1,6 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sizzle_starter/src/core/widget/enhanced_composited_transform_follower.dart';
+import 'package:sizzle_starter/src/core/widget/popup/enhanced_composited_transform_follower.dart';
 
 /// A link that can be established between a [EnhancedCompositedTransformTarget] and a
 /// [EnhancedCompositedTransformFollower].

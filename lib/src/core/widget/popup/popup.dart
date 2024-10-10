@@ -2,8 +2,8 @@ import 'dart:ui';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:sizzle_starter/src/core/widget/enhanced_composited_transform_follower.dart';
-import 'package:sizzle_starter/src/core/widget/enhanced_composited_transform_target.dart';
+import 'package:sizzle_starter/src/core/widget/popup/enhanced_composited_transform_follower.dart';
+import 'package:sizzle_starter/src/core/widget/popup/enhanced_composited_transform_target.dart';
 
 /// A function that builds a widget with a controller.
 typedef PopupWidgetBuilder = Widget Function(
