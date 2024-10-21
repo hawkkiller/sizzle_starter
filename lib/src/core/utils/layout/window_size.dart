@@ -4,7 +4,7 @@ import 'package:sizzle_starter/src/core/utils/extensions/context_extension.dart'
 
 /// {@template window_size}
 /// Breakpoints for responsive design.
-/// 
+///
 /// The [WindowSize] class represents a breakpoint for responsive design.
 /// {@endtemplate}
 // ignore: prefer-overriding-parent-equality
@@ -40,6 +40,52 @@ sealed class WindowSize extends Size {
 
   /// Maximum width of the window for the breakpoint.
   final double maxWidth;
+
+  /// Returns true if the window size is compact.
+  bool get isCompact => maybeMap(orElse: () => false, compact: (_) => true);
+
+  /// Returns true if the window size is compact or larger.
+  bool get isCompactOrLarger => maybeMap(
+        orElse: () => false,
+        compact: (_) => true,
+        medium: (_) => true,
+        expanded: (_) => true,
+        large: (_) => true,
+        extraLarge: (_) => true,
+      );
+
+  /// Returns true if the window size is medium.
+  bool get isMedium => maybeMap(orElse: () => false, medium: (_) => true);
+
+  /// Returns true if the window size is medium or larger.
+  bool get isMediumOrLarger => maybeMap(
+        orElse: () => false,
+        medium: (_) => true,
+        expanded: (_) => true,
+        large: (_) => true,
+        extraLarge: (_) => true,
+      );
+
+  /// Returns true if the window size is expanded.
+  bool get isExpanded => maybeMap(orElse: () => false, expanded: (_) => true);
+
+  /// Returns true if the window size is expanded or larger.
+  bool get isExpandedOrLarger => maybeMap(
+        orElse: () => false,
+        expanded: (_) => true,
+        large: (_) => true,
+        extraLarge: (_) => true,
+      );
+
+  /// Returns true if the window size is large.
+  bool get isLarge => maybeMap(orElse: () => false, large: (_) => true);
+
+  /// Returns true if the window size is large or larger.
+  bool get isLargeOrLarger =>
+      maybeMap(orElse: () => false, large: (_) => true, extraLarge: (_) => true);
+
+  /// Returns true if the window size is extra large.
+  bool get isExtraLarge => maybeMap(orElse: () => false, extraLarge: (_) => true);
 
   /// Maps the [WindowSize] to a value of type [T].
   T map<T>({
