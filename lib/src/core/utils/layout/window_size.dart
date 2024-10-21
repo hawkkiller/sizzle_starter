@@ -20,19 +20,14 @@ sealed class WindowSize extends Size {
   factory WindowSize.fromSize(Size size) {
     assert(size.width >= 0, 'Width must be greater than or equal to 0');
 
-    if (size.width >= WindowSizeCompact.$minWidth && size.width <= WindowSizeCompact.$maxWidth) {
-      return WindowSizeCompact(size);
-    } else if (size.width >= WindowSizeMedium.$minWidth &&
-        size.width <= WindowSizeMedium.$maxWidth) {
-      return WindowSizeMedium(size);
-    } else if (size.width >= WindowSizeExpanded.$minWidth &&
-        size.width <= WindowSizeExpanded.$maxWidth) {
-      return WindowSizeExpanded(size);
-    } else if (size.width >= WindowSizeLarge.$minWidth && size.width <= WindowSizeLarge.$maxWidth) {
-      return WindowSizeLarge(size);
-    }
-
-    return WindowSizeExtraLarge(size);
+    return switch (size.width) {
+      >= WindowSizeCompact.$minWidth && <= WindowSizeCompact.$maxWidth => WindowSizeCompact(size),
+      >= WindowSizeMedium.$minWidth && <= WindowSizeMedium.$maxWidth => WindowSizeMedium(size),
+      >= WindowSizeExpanded.$minWidth && <= WindowSizeExpanded.$maxWidth => WindowSizeExpanded(size),
+      >= WindowSizeLarge.$minWidth && <= WindowSizeLarge.$maxWidth => WindowSizeLarge(size),
+      >= WindowSizeExtraLarge.$minWidth => WindowSizeExtraLarge(size),
+      _ => throw AssertionError('Invalid window size: $size'),
+    };
   }
 
   /// Minimum width of the window for the breakpoint.
