@@ -21,10 +21,10 @@ sealed class WindowSize extends Size {
     assert(size.width >= 0, 'Width must be greater than or equal to 0');
 
     return switch (size.width) {
-      >= WindowSizeCompact.$minWidth && <= WindowSizeCompact.$maxWidth => WindowSizeCompact(size),
-      >= WindowSizeMedium.$minWidth && <= WindowSizeMedium.$maxWidth => WindowSizeMedium(size),
-      >= WindowSizeExpanded.$minWidth && <= WindowSizeExpanded.$maxWidth => WindowSizeExpanded(size),
-      >= WindowSizeLarge.$minWidth && <= WindowSizeLarge.$maxWidth => WindowSizeLarge(size),
+      >= WindowSizeCompact.$minWidth && < WindowSizeMedium.$minWidth => WindowSizeCompact(size),
+      >= WindowSizeMedium.$minWidth && < WindowSizeExpanded.$minWidth => WindowSizeMedium(size),
+      >= WindowSizeExpanded.$minWidth && < WindowSizeLarge.$minWidth => WindowSizeExpanded(size),
+      >= WindowSizeLarge.$minWidth && < WindowSizeExtraLarge.$minWidth => WindowSizeLarge(size),
       >= WindowSizeExtraLarge.$minWidth => WindowSizeExtraLarge(size),
       _ => throw AssertionError('Invalid window size: $size'),
     };
