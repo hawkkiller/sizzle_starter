@@ -21,11 +21,11 @@ sealed class WindowSize extends Size {
     assert(size.width >= 0, 'Width must be greater than or equal to 0');
 
     return switch (size.width) {
-      >= WindowSizeCompact.$minWidth && < WindowSizeMedium.$minWidth => WindowSizeCompact(size),
-      >= WindowSizeMedium.$minWidth && < WindowSizeExpanded.$minWidth => WindowSizeMedium(size),
-      >= WindowSizeExpanded.$minWidth && < WindowSizeLarge.$minWidth => WindowSizeExpanded(size),
-      >= WindowSizeLarge.$minWidth && < WindowSizeExtraLarge.$minWidth => WindowSizeLarge(size),
-      >= WindowSizeExtraLarge.$minWidth => WindowSizeExtraLarge(size),
+      >= WindowSizeCompact._minWidth && < WindowSizeMedium._minWidth => WindowSizeCompact(size),
+      >= WindowSizeMedium._minWidth && < WindowSizeExpanded._minWidth => WindowSizeMedium(size),
+      >= WindowSizeExpanded._minWidth && < WindowSizeLarge._minWidth => WindowSizeExpanded(size),
+      >= WindowSizeLarge._minWidth && < WindowSizeExtraLarge._minWidth => WindowSizeLarge(size),
+      >= WindowSizeExtraLarge._minWidth => WindowSizeExtraLarge(size),
       _ => throw AssertionError('Invalid window size: $size'),
     };
   }
@@ -119,13 +119,13 @@ sealed class WindowSize extends Size {
 /// Compact breakpoint for responsive design.
 final class WindowSizeCompact extends WindowSize {
   /// Creates a [WindowSizeCompact] breakpoint.
-  WindowSizeCompact(Size size) : super(minWidth: $minWidth, maxWidth: $maxWidth, size: size);
+  WindowSizeCompact(Size size) : super(minWidth: _minWidth, maxWidth: _maxWidth, size: size);
 
   /// The minimum width of the window for the compact breakpoint.
-  static const $minWidth = 0.0;
+  static const _minWidth = 0.0;
 
   /// The maximum width of the window for the compact breakpoint.
-  static const $maxWidth = 599.0;
+  static const _maxWidth = 599.0;
 
   @override
   bool operator ==(Object other) =>
@@ -145,13 +145,13 @@ final class WindowSizeCompact extends WindowSize {
 /// Medium breakpoint for responsive design.
 final class WindowSizeMedium extends WindowSize {
   /// Creates a [WindowSizeMedium] breakpoint.
-  WindowSizeMedium(Size size) : super(minWidth: $minWidth, maxWidth: $maxWidth, size: size);
+  WindowSizeMedium(Size size) : super(minWidth: _minWidth, maxWidth: _maxWidth, size: size);
 
   /// The minimum width of the window for the medium breakpoint.
-  static const $minWidth = 600.0;
+  static const _minWidth = 600.0;
 
   /// The maximum width of the window for the medium breakpoint.
-  static const $maxWidth = 839.0;
+  static const _maxWidth = 839.0;
 
   @override
   bool operator ==(Object other) =>
@@ -171,13 +171,13 @@ final class WindowSizeMedium extends WindowSize {
 /// Expanded breakpoint for responsive design.
 final class WindowSizeExpanded extends WindowSize {
   /// Creates a [WindowSizeExpanded] breakpoint.
-  WindowSizeExpanded(Size size) : super(minWidth: $minWidth, maxWidth: $maxWidth, size: size);
+  WindowSizeExpanded(Size size) : super(minWidth: _minWidth, maxWidth: _maxWidth, size: size);
 
   /// The minimum width of the window for the expanded breakpoint.
-  static const $minWidth = 840.0;
+  static const _minWidth = 840.0;
 
   /// The maximum width of the window for the expanded breakpoint.
-  static const $maxWidth = 1199.0;
+  static const _maxWidth = 1199.0;
 
   @override
   bool operator ==(Object other) =>
@@ -197,13 +197,13 @@ final class WindowSizeExpanded extends WindowSize {
 /// Large breakpoint for responsive design.
 final class WindowSizeLarge extends WindowSize {
   /// Creates a [WindowSizeLarge] breakpoint.
-  WindowSizeLarge(Size size) : super(minWidth: $minWidth, maxWidth: $maxWidth, size: size);
+  WindowSizeLarge(Size size) : super(minWidth: _minWidth, maxWidth: _maxWidth, size: size);
 
   /// The minimum width of the window for the large breakpoint.
-  static const $minWidth = 1200.0;
+  static const _minWidth = 1200.0;
 
   /// The maximum width of the window for the large breakpoint.
-  static const $maxWidth = 1599.0;
+  static const _maxWidth = 1599.0;
 
   @override
   bool operator ==(Object other) =>
@@ -223,13 +223,13 @@ final class WindowSizeLarge extends WindowSize {
 /// Extra large breakpoint for responsive design.
 final class WindowSizeExtraLarge extends WindowSize {
   /// Creates a [WindowSizeExtraLarge] breakpoint.
-  WindowSizeExtraLarge(Size size) : super(minWidth: $minWidth, maxWidth: $maxWidth, size: size);
+  WindowSizeExtraLarge(Size size) : super(minWidth: _minWidth, maxWidth: _maxWidth, size: size);
 
   /// The minimum width of the window for the extra large breakpoint.
-  static const $minWidth = 1600.0;
+  static const _minWidth = 1600.0;
 
   /// The maximum width of the window for the extra large breakpoint.
-  static const $maxWidth = double.infinity;
+  static const _maxWidth = double.infinity;
 
   @override
   bool operator ==(Object other) =>
