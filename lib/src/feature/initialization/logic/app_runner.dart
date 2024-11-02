@@ -1,10 +1,10 @@
 import 'dart:async';
 
-import 'package:bloc_concurrency/bloc_concurrency.dart' as bloc_concurrency;
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/app_bloc_observer.dart';
+import 'package:sizzle_starter/src/core/utils/bloc_transformer.dart';
 import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/app.dart';
@@ -30,7 +30,7 @@ final class AppRunner {
 
     // Setup bloc observer and transformer
     Bloc.observer = AppBlocObserver(logger);
-    Bloc.transformer = bloc_concurrency.sequential();
+    Bloc.transformer = SequentialBlocTransformer().transform;
     const config = Config();
 
     Future<void> initializeAndRun() async {
