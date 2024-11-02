@@ -1,5 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/error_tracking_manager/error_tracking_manager.dart';
@@ -83,12 +84,14 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
   Future<DependenciesContainer> create() async {
     final sharedPreferences = SharedPreferencesAsync();
 
+    final packageInfo = await PackageInfo.fromPlatform();
     final errorTrackingManager = await ErrorTrackingManagerFactory(config, logger).create();
     final settingsBloc = await SettingsBlocFactory(sharedPreferences).create();
 
     return DependenciesContainer(
       appSettingsBloc: settingsBloc,
       errorTrackingManager: errorTrackingManager,
+      packageInfo: packageInfo,
     );
   }
 }
