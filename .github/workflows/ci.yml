@@ -1,4 +1,4 @@
-name: "Code Analysis"
+name: "Continuous Integration"
 
 on:
   push:
@@ -10,10 +10,10 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
-
+  ci:
+    name: "🚀 CI"
     runs-on: ubuntu-latest
-
+    timeout-minutes: 10
     steps:
       - name: 📚 Git Checkout
         uses: actions/checkout@v4.1.7
@@ -51,14 +51,36 @@ jobs:
         run: dcm analyze .
 
       - name: 🧪 Run Tests
-        run: flutter test --coverage --coverage-path=coverage/lcov.info --test-randomize-ordering-seed=random --concurrency=10
+        run: very_good test --coverage --exclude-coverage "*.*.dart" -j 10
+
+      - name: 📥 Upload test report
+        uses: actions/upload-artifact@v4
+        if: (success() || failure()) && ${{ github.actor != 'dependabot[bot]' }}
+        with:
+          name: test-results
+          path: reports/tests.json
 
       - name: 📈 Upload Coverage
         uses: codecov/codecov-action@v4.5.0
         with:
-          # not needed for public repos
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage/lcov.info
-          flags: unittests
           name: codecov-umbrella
           fail_ci_if_error: true
+
+  report_tests:
+    name: "🚛 Test report"
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    continue-on-error: true
+    needs: 
+      - ci
+    steps:
+      - name: Test report
+        uses: dorny/test-reporter@v1
+        with:
+          artifact: test-results
+          name: Test Report
+          path: "**/tests.json"
+          reporter: flutter-json
+          fail-on-error: false
