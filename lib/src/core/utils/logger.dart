@@ -4,33 +4,6 @@ import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:stack_trace/stack_trace.dart';
 
-/// Logger global instance.
-///
-/// This is the default logger used by the application.
-/// Prefer to pass this logger instance as a parameter to the classes
-/// that need it, instead of using it directly.
-///
-/// This is a zone-scoped logger, which means that it can be overridden
-/// in nested zones or during tests.
-RefinedLogger get logger => Zone.current[kLoggerKey] as RefinedLogger? ?? _logger;
-
-/// Runs [callback] with the given [logger] instance.
-///
-/// This is [Zone]-scoped, so asynchronous callbacks spawned within [callback]
-/// will also use the new value for [logger].
-///
-/// This is useful for testing purposes, where you can pass a mock logger
-/// to the callback.
-void runWithLogger<T>(RefinedLogger logger, T Function() callback) {
-  runZoned(callback, zoneValues: {kLoggerKey: logger});
-}
-
-/// The key used to store the logger in the zone.
-const kLoggerKey = 'logger';
-
-/// A logger used to log errors in the root zone.
-final _logger = DefaultLogger();
-
 /// Defines the format of a log message.
 ///
 /// This is a function type that takes a [LogMessage] and
@@ -65,7 +38,7 @@ class LoggingOptions {
     this.showEmoji = true,
     this.logInRelease = false,
     this.useDebugPrint = false,
-    this.onMessageFormat,
+    this.onMessageFormatter,
   });
 
   /// Whether to include the timestamp in the log message.
@@ -92,7 +65,7 @@ class LoggingOptions {
   /// An optional custom formatter for log messages.
   ///
   /// If not provided, a default formatter is used.
-  final LogFormatter? onMessageFormat;
+  final LogFormatter? onMessageFormatter;
 }
 
 /// Internal class used by [DefaultLogger] to wrap the log messages.
@@ -114,8 +87,8 @@ class LogWrapper {
   bool printError;
 }
 
-/// Logger class, that manages the logging of messages
-class DefaultLogger extends RefinedLogger {
+/// The default logger implementation, used by the application.
+final class DefaultLogger extends Logger {
   /// Constructs an instance of [DefaultLogger].
   DefaultLogger([LoggingOptions options = const LoggingOptions()]) {
     _init(options);
@@ -133,6 +106,33 @@ class DefaultLogger extends RefinedLogger {
     }
 
     _logSubscription = _logWrapStream.listen((l) => _printLogMessage(l, options));
+  }
+
+  /// Default log message formatter
+  static String defaultFormatter(LogWrapper wrappedMessage, LoggingOptions options) {
+    final message = wrappedMessage.message;
+    final time = options.showTime ? message.timestamp.toIso8601String() : '';
+    final emoji = options.showEmoji ? message.level.emoji : '';
+    final level = message.level;
+    final content = message.message;
+    final stackTrace = message.stackTrace;
+    final error = message.error;
+
+    final buffer = StringBuffer();
+
+    buffer.write('$emoji $time [${level.name.toUpperCase()}] $content');
+
+    if (error != null && wrappedMessage.printError) {
+      buffer.writeln();
+      buffer.write(error);
+    }
+
+    if (stackTrace != null && wrappedMessage.printStackTrace) {
+      buffer.writeln();
+      buffer.write(Trace.from(stackTrace).terse);
+    }
+
+    return buffer.toString();
   }
 
   @override
@@ -182,37 +182,11 @@ class DefaultLogger extends RefinedLogger {
       return;
     }
 
-    final formattedMessage = options.onMessageFormat != null
-        ? options.onMessageFormat!(wrappedMessage, options)
-        : _defaultFormatter(wrappedMessage, options);
+    final formattedMessage = options.onMessageFormatter != null
+        ? options.onMessageFormatter!(wrappedMessage, options)
+        : defaultFormatter(wrappedMessage, options);
 
     _log(formattedMessage);
-  }
-
-  String _defaultFormatter(LogWrapper wrappedMessage, LoggingOptions options) {
-    final message = wrappedMessage.message;
-    final time = options.showTime ? message.timestamp.toIso8601String() : '';
-    final emoji = options.showEmoji ? message.level.emoji : '';
-    final level = message.level;
-    final content = message.message;
-    final stackTrace = message.stackTrace;
-    final error = message.error;
-
-    final buffer = StringBuffer();
-
-    buffer.write('$emoji $time [${level.name.toUpperCase()}] $content');
-
-    if (error != null && wrappedMessage.printError) {
-      buffer.writeln();
-      buffer.write(error);
-    }
-
-    if (stackTrace != null && wrappedMessage.printStackTrace) {
-      buffer.writeln();
-      buffer.write(Trace.from(stackTrace).terse);
-    }
-
-    return buffer.toString();
   }
 
   /// Logs a chunk of message
@@ -227,8 +201,8 @@ class DefaultLogger extends RefinedLogger {
 
 /// {@macro logger}
 ///
-/// A logger that does nothing.
-class NoOpLogger extends RefinedLogger {
+/// A logger that does nothing, used for testing purposes.
+final class NoOpLogger extends Logger {
   /// Constructs an instance of [NoOpLogger].
   const NoOpLogger();
 
@@ -255,14 +229,16 @@ class NoOpLogger extends RefinedLogger {
 /// {@template logger}
 /// Logger class, that manages the logging of messages
 /// {@endtemplate}
-abstract class RefinedLogger {
-  /// Constructs an instance of [RefinedLogger].
-  const RefinedLogger();
+abstract base class Logger {
+  /// Constructs an instance of [Logger].
+  const Logger();
 
   /// Stream of log messages
   Stream<LogMessage> get logs;
 
-  /// Destroys the logger and releases any resources
+  /// Destroys the logger and releases all resources
+  ///
+  /// After calling this method, the logger should not be used anymore.
   void destroy();
 
   /// Logs a message with the specified [level].
@@ -297,13 +273,17 @@ abstract class RefinedLogger {
   /// Logs a platform dispatcher error with [LogLevel.error].
   bool logPlatformDispatcherError(Object error, StackTrace stackTrace) {
     log(
-      'Platform dispatcher error',
+      'Platform Error',
       level: LogLevel.error,
       error: error,
       stackTrace: stackTrace,
     );
+
     return true;
   }
+
+  /// Creates a logger that uses this instance with a new prefix.
+  Logger withPrefix(String prefix) => PrefixedLogger(this, prefix);
 
   /// Logs a message with [LogLevel.trace].
   void trace(
@@ -418,6 +398,45 @@ abstract class RefinedLogger {
         printStackTrace: printStackTrace,
         printError: printError,
       );
+}
+
+/// A logger that prefixes all log messages with a given string.
+base class PrefixedLogger extends Logger {
+  /// Constructs an instance of [PrefixedLogger].
+  const PrefixedLogger(this._logger, this._prefix);
+
+  final Logger _logger;
+  final String _prefix;
+
+  @override
+  Stream<LogMessage> get logs => _logger.logs;
+
+  @override
+  void destroy() => _logger.destroy();
+
+  @override
+  Logger withPrefix(String prefix) => PrefixedLogger(_logger, '$_prefix $prefix');
+
+  @override
+  void log(
+    String message, {
+    required LogLevel level,
+    Object? error,
+    StackTrace? stackTrace,
+    Map<String, Object?>? context,
+    bool printStackTrace = true,
+    bool printError = true,
+  }) {
+    _logger.log(
+      '$_prefix $message',
+      level: level,
+      error: error,
+      stackTrace: stackTrace,
+      context: context,
+      printStackTrace: printStackTrace,
+      printError: printError,
+    );
+  }
 }
 
 /// Represents a single log message with various details

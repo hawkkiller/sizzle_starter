@@ -5,7 +5,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/app_bloc_observer.dart';
 import 'package:sizzle_starter/src/core/utils/bloc_transformer.dart';
-import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
+import 'package:sizzle_starter/src/core/utils/logger.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/app.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/initialization_failed_app.dart';
@@ -15,7 +15,10 @@ import 'package:sizzle_starter/src/feature/initialization/widget/initialization_
 /// {@endtemplate}
 final class AppRunner {
   /// {@macro app_runner}
-  const AppRunner();
+  const AppRunner(this.logger);
+
+  /// The logger instance
+  final Logger logger;
 
   /// Start the initialization and in case of success run application
   Future<void> initializeAndRun() async {

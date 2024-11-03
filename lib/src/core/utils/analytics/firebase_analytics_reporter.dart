@@ -1,6 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:sizzle_starter/src/core/utils/analytics/analytics_reporter.dart';
-import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
+import 'package:sizzle_starter/src/core/utils/logger.dart';
 
 /// {@template firebase_analytics_reporter}
 /// An implementation of [AnalyticsReporter] that reports events to Firebase
@@ -11,7 +11,7 @@ final class FirebaseAnalyticsReporter implements AnalyticsReporter {
   const FirebaseAnalyticsReporter({required this.logger, required this.analytics});
 
   /// The logger used to log events locally for debugging.
-  final RefinedLogger logger;
+  final Logger logger;
 
   /// The Firebase Analytics instance used to log events.
   final FirebaseAnalytics analytics;

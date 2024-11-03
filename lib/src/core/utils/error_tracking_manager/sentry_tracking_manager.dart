@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizzle_starter/src/core/utils/error_tracking_manager/error_tracking_manager.dart';
-import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
+import 'package:sizzle_starter/src/core/utils/logger.dart';
 
 /// {@template sentry_tracking_manager}
 /// A class that is responsible for managing Sentry error tracking.

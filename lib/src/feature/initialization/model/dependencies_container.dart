@@ -1,5 +1,7 @@
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/error_tracking_manager/error_tracking_manager.dart';
+import 'package:sizzle_starter/src/core/utils/logger.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 
@@ -11,13 +13,21 @@ import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart'
 ///
 /// {@macro composition_process}
 /// {@endtemplate}
-base class DependenciesContainer {
+class DependenciesContainer {
   /// {@macro dependencies_container}
   const DependenciesContainer({
+    required this.logger,
+    required this.config,
     required this.appSettingsBloc,
     required this.errorTrackingManager,
     required this.packageInfo,
   });
+
+  /// [Logger] instance, used to log messages.
+  final Logger logger;
+
+  /// [Config] instance, contains configuration of the application.
+  final Config config;
 
   /// [AppSettingsBloc] instance, used to manage theme and locale.
   final AppSettingsBloc appSettingsBloc;

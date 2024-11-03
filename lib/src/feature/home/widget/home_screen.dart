@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizzle_starter/src/feature/initialization/widget/dependencies_scope.dart';
 
 /// {@template home_screen}
 /// HomeScreen is a simple screen that displays a grid of items.
@@ -12,6 +13,14 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
+  late final _homeLogger = DependenciesScope.of(context).logger.withPrefix('[HOME]');
+
+  @override
+  void initState() {
+    super.initState();
+    _homeLogger.info('Welcome To Sizzle Starter!');
+  }
+
   @override
   Widget build(BuildContext context) => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,

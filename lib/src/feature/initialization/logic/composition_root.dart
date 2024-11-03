@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/error_tracking_manager/error_tracking_manager.dart';
 import 'package:sizzle_starter/src/core/utils/error_tracking_manager/sentry_tracking_manager.dart';
-import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
+import 'package:sizzle_starter/src/core/utils/logger.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:sizzle_starter/src/feature/settings/data/app_settings_datasource.dart';
@@ -30,7 +30,7 @@ final class CompositionRoot {
   final Config config;
 
   /// Logger used to log information during composition process.
-  final RefinedLogger logger;
+  final Logger logger;
 
   /// Composes dependencies and returns result of composition.
   Future<CompositionResult> compose() async {
@@ -44,11 +44,36 @@ final class CompositionRoot {
     stopwatch.stop();
     final result = CompositionResult(
       dependencies: dependencies,
-      msSpent: stopwatch.elapsedMilliseconds,
+      millisecondsSpent: stopwatch.elapsedMilliseconds,
     );
 
     return result;
   }
+}
+
+/// {@template composition_result}
+/// Result of composition
+///
+/// {@macro composition_process}
+/// {@endtemplate}
+final class CompositionResult {
+  /// {@macro composition_result}
+  const CompositionResult({
+    required this.dependencies,
+    required this.millisecondsSpent,
+  });
+
+  /// The dependencies container
+  final DependenciesContainer dependencies;
+
+  /// The number of milliseconds spent
+  final int millisecondsSpent;
+
+  @override
+  String toString() => '$CompositionResult('
+      'dependencies: $dependencies, '
+      'millisecondsSpent: $millisecondsSpent'
+      ')';
 }
 
 /// {@template factory}
@@ -78,7 +103,7 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
   final Config config;
 
   /// Logger used to log information during composition process.
-  final RefinedLogger logger;
+  final Logger logger;
 
   @override
   Future<DependenciesContainer> create() async {
@@ -89,6 +114,8 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
     final settingsBloc = await SettingsBlocFactory(sharedPreferences).create();
 
     return DependenciesContainer(
+      logger: logger,
+      config: config,
       appSettingsBloc: settingsBloc,
       errorTrackingManager: errorTrackingManager,
       packageInfo: packageInfo,
@@ -107,7 +134,7 @@ class ErrorTrackingManagerFactory extends AsyncFactory<ErrorTrackingManager> {
   final Config config;
 
   /// Logger used to log information during composition process.
-  final RefinedLogger logger;
+  final Logger logger;
 
   @override
   Future<ErrorTrackingManager> create() async {
@@ -149,29 +176,4 @@ class SettingsBlocFactory extends AsyncFactory<AppSettingsBloc> {
       initialState: initialState,
     );
   }
-}
-
-/// {@template composition_result}
-/// Result of composition
-///
-/// {@macro composition_process}
-/// {@endtemplate}
-final class CompositionResult {
-  /// {@macro composition_result}
-  const CompositionResult({
-    required this.dependencies,
-    required this.msSpent,
-  });
-
-  /// The dependencies container
-  final DependenciesContainer dependencies;
-
-  /// The number of milliseconds spent
-  final int msSpent;
-
-  @override
-  String toString() => '$CompositionResult('
-      'dependencies: $dependencies, '
-      'msSpent: $msSpent'
-      ')';
 }

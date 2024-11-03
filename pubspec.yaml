@@ -13,12 +13,14 @@ dependencies:
   # Flutter SDK
   flutter:
     sdk: flutter
+  flutter_test:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
   collection: any
   async: any
   meta: any
   intl: any
-  flutter_localizations:
-    sdk: flutter
 
   # Stream
   stream_transform: ^2.1.0
@@ -56,8 +58,6 @@ dependencies:
 dev_dependencies:
   # Testing
   mockito: ^5.4.4
-  flutter_test:
-    sdk: flutter
 
   # Lints
   sizzle_lints: ^2.1.3
