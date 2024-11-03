@@ -21,7 +21,7 @@ void main() {
 
 /// {@template home_screen_dependencies_container}
 /// Example of how to create a dependencies container for testing purposes.
-/// 
+///
 /// If the dependency is dynamic, like mocks, you can pass them as parameters
 /// to the constructor.
 /// {@endtemplate}
