@@ -4,7 +4,7 @@ import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sizzle_starter/src/core/utils/analytics/analytics_reporter.dart';
 import 'package:sizzle_starter/src/core/utils/analytics/firebase_analytics_reporter.dart';
-import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
+import 'package:sizzle_starter/src/core/utils/logger.dart';
 
 @GenerateNiceMocks([MockSpec<FirebaseAnalytics>()])
 import 'firebase_analytics_reporter_test.mocks.dart';

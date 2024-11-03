@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:meta/meta.dart';
-import 'package:sizzle_starter/src/core/utils/refined_logger.dart';
+import 'package:sizzle_starter/src/core/utils/logger.dart';
 
 /// {@template error_tracking_manager}
 /// A class which is responsible for enabling error tracking.
@@ -30,7 +30,7 @@ abstract base class ErrorTrackingManagerBase implements ErrorTrackingManager {
   /// {@macro error_tracking_manager_base}
   ErrorTrackingManagerBase(this._logger);
 
-  final RefinedLogger _logger;
+  final Logger _logger;
   StreamSubscription<LogMessage>? _subscription;
 
   /// Catch only warnings and errors
