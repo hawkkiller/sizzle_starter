@@ -78,9 +78,7 @@ final class RestClientHttp extends RestClientBase {
         request.headers.addAll(headers);
       }
 
-      final response = await _client.send(request).then(
-            http.Response.fromStream,
-          );
+      final response = await _client.send(request).then(http.Response.fromStream);
 
       final result = await decodeResponse(
         BytesResponseBody(response.bodyBytes),
