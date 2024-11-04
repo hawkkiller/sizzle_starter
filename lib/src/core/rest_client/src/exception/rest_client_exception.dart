@@ -64,7 +64,7 @@ final class ClientException extends RestClientException {
 /// This class exists to make handling of structured errors easier.
 /// Basically, in data providers that use [RestClientBase], you can catch
 /// this exception and convert it to a system-wide error.
-/// 
+///
 /// For example, if backend returns an error with code "not_allowed" that means that the action
 /// is not allowed and you can convert this exception to a NotAllowedException
 /// and rethrow. This way, the rest of the application does not need to know
