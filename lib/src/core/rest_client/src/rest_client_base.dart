@@ -1,8 +1,7 @@
 import 'dart:async';
 import 'dart:convert';
-import 'dart:isolate';
 
-import 'package:meta/meta.dart';
+import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 
@@ -135,26 +134,16 @@ abstract base class RestClientBase implements RestClient {
   @protected
   @visibleForTesting
   Future<Map<String, Object?>?> decodeResponse(
-    /* String, Map<String, Object?>, List<int> */
-    Object? body, {
+    ResponseBody<Object>? body, {
     int? statusCode,
   }) async {
     if (body == null) return null;
 
-    assert(
-      body is String || body is Map<String, Object?> || body is List<int>,
-      'Unexpected response body type: ${body.runtimeType}',
-    );
-
     try {
       final decodedBody = switch (body) {
-        final Map<String, Object?> map => map,
-        final String str => await _decodeString(str),
-        final List<int> bytes => await _decodeBytes(bytes),
-        _ => throw WrongResponseTypeException(
-            message: 'Unexpected response body type: ${body.runtimeType}',
-            statusCode: statusCode,
-          ),
+        MapResponseBody(:final Map<String, Object?> data) => data,
+        StringResponseBody(:final String data) => await _decodeString(data),
+        BytesResponseBody(:final List<int> data) => await _decodeBytes(data),
       };
 
       if (decodedBody case {'error': final Map<String, Object?> error}) {
@@ -169,8 +158,6 @@ abstract base class RestClientBase implements RestClient {
       }
 
       // Simply return decoded body if it is not an error or data
-      // This is useful for responses that do not follow the structured response
-      // But generally, it is recommended to follow the structured response :)
       return decodedBody;
     } on RestClientException {
       rethrow;
@@ -187,26 +174,67 @@ abstract base class RestClientBase implements RestClient {
   }
 
   /// Decodes a [String] to a [Map<String, Object?>]
-  Future<Map<String, Object?>?> _decodeString(String str) async {
-    if (str.isEmpty) return null;
+  Future<Map<String, Object?>?> _decodeString(String stringBody) async {
+    if (stringBody.isEmpty) return null;
 
-    if (str.length > 1000) {
-      return Isolate.run(() => json.decode(str) as Map<String, Object?>);
+    if (stringBody.length > 1000) {
+      return (await compute(
+        json.decode,
+        stringBody,
+        debugLabel: kDebugMode ? 'Decode String Compute' : null,
+      )) as Map<String, Object?>;
     }
 
-    return json.decode(str) as Map<String, Object?>;
+    return json.decode(stringBody) as Map<String, Object?>;
   }
 
   /// Decodes a [List<int>] to a [Map<String, Object?>]
-  Future<Map<String, Object?>?> _decodeBytes(List<int> bytes) async {
-    if (bytes.isEmpty) return null;
+  Future<Map<String, Object?>?> _decodeBytes(List<int> bytesBody) async {
+    if (bytesBody.isEmpty) return null;
 
-    if (bytes.length > 1000) {
-      return Isolate.run(
-        () => _jsonUTF8.decode(bytes)! as Map<String, Object?>,
-      );
+    if (bytesBody.length > 1000) {
+      return (await compute(
+        _jsonUTF8.decode,
+        bytesBody,
+        debugLabel: kDebugMode ? 'Decode Bytes Compute' : null,
+      ))! as Map<String, Object?>;
     }
 
-    return _jsonUTF8.decode(bytes)! as Map<String, Object?>;
+    return _jsonUTF8.decode(bytesBody)! as Map<String, Object?>;
   }
+}
+
+/// {@template response_body}
+/// A sealed class representing the response body
+/// {@endtemplate}
+sealed class ResponseBody<T> {
+  /// {@macro response_body}
+  const ResponseBody(this.data);
+
+  /// The data of the response.
+  final T data;
+}
+
+/// {@template string_response_body}
+/// A [ResponseBody] for a [String] response
+/// {@endtemplate}
+class StringResponseBody extends ResponseBody<String> {
+  /// {@macro string_response_body}
+  const StringResponseBody(super.data);
+}
+
+/// {@template map_response_body}
+/// A [ResponseBody] for a [Map<String, Object?>] response
+/// {@endtemplate}
+class MapResponseBody extends ResponseBody<Map<String, Object?>> {
+  /// {@macro map_response_body}
+  const MapResponseBody(super.data);
+}
+
+/// {@template bytes_response_body}
+/// A [ResponseBody] for both [Uint8List] and [List<int>] responses
+/// {@endtemplate}
+class BytesResponseBody extends ResponseBody<List<int>> {
+  /// {@macro bytes_response_body}
+  const BytesResponseBody(super.data);
 }
