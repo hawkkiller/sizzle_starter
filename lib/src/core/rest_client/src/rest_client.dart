@@ -1,7 +1,7 @@
 /// {@template rest_client}
 /// A REST client for making HTTP requests.
 /// {@endtemplate}
-abstract class RestClient {
+abstract interface class RestClient {
   /// Sends a GET request to the given [path].
   Future<Map<String, Object?>?> get(
     String path, {

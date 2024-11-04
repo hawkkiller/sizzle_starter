@@ -83,7 +83,7 @@ final class RestClientHttp extends RestClientBase {
           );
 
       final result = await decodeResponse(
-        response.bodyBytes,
+        BytesResponseBody(response.bodyBytes),
         statusCode: response.statusCode,
       );
 

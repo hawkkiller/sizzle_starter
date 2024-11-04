@@ -62,28 +62,28 @@ void main() {
 
     test('decodeResponseWithEmptyBody', () {
       final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
-      expectLater(client.decodeResponse(<int>[]), completion(isNull));
+      expectLater(client.decodeResponse(const BytesResponseBody(<int>[])), completion(isNull));
     });
 
     test('decodeResponseWithMapBody', () {
       final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       final body = {'key1': 'value1', 'key2': 2, 'key3': true};
       final encodedBody = jsonUtf8.encode(body);
-      expectLater(client.decodeResponse(encodedBody), completion(equals(body)));
+      expectLater(client.decodeResponse(BytesResponseBody(encodedBody)), completion(equals(body)));
     });
 
     test('decodeResponseWithStringBody', () {
       final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       const body = '{}';
       final encodedBody = utf8.encode(body);
-      expectLater(client.decodeResponse(encodedBody), completion(equals({})));
+      expectLater(client.decodeResponse(BytesResponseBody(encodedBody)), completion(equals({})));
     });
 
     test('decodeResponseWithEmptyStringBody', () {
       final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       const body = '';
       final encodedBody = utf8.encode(body);
-      expectLater(client.decodeResponse(encodedBody), completion(equals(null)));
+      expectLater(client.decodeResponse(BytesResponseBody(encodedBody)), completion(equals(null)));
     });
 
     test('decodeResponseWithInvalidJsonBody', () {
@@ -91,7 +91,7 @@ void main() {
       const body = 'invalid json';
       final encodedBody = utf8.encode(body);
       expectLater(
-        client.decodeResponse(encodedBody),
+        client.decodeResponse(BytesResponseBody(encodedBody)),
         throwsA(isA<ClientException>()),
       );
     });
@@ -101,7 +101,7 @@ void main() {
       const body = 'invalid json';
       final encodedBody = utf8.encode(body);
       expectLater(
-        client.decodeResponse(encodedBody),
+        client.decodeResponse(BytesResponseBody(encodedBody)),
         throwsA(isA<ClientException>()),
       );
     });
@@ -113,7 +113,7 @@ void main() {
       };
       final encodedBody = jsonUtf8.encode(body);
       expectLater(
-        client.decodeResponse(encodedBody),
+        client.decodeResponse(BytesResponseBody(encodedBody)),
         throwsA(isA<StructuredBackendException>()),
       );
     });
@@ -125,7 +125,7 @@ void main() {
       };
       final encodedBody = jsonUtf8.encode(body);
       expectLater(
-        client.decodeResponse(encodedBody),
+        client.decodeResponse(BytesResponseBody(encodedBody)),
         completion(equals(body['data'])),
       );
     });
