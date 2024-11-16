@@ -8,142 +8,143 @@ final jsonUtf8 = const JsonCodec().fuse(utf8);
 void main() {
   group('RestClientBase', () {
     test('encodeBodyWithValidMap', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       final body = {'key1': 'value1', 'key2': 2, 'key3': true};
-      final encodedBody = client.encodeBody(body);
+      final encodedBody = RestClientBase.encodeBody(body);
       final expectedBody = jsonUtf8.encode(body);
       expect(encodedBody, equals(expectedBody));
     });
 
     test('encodeBodyWithEmptyMap', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       final body = <String, Object?>{};
-      final encodedBody = client.encodeBody(body);
+      final encodedBody = RestClientBase.encodeBody(body);
       const expectedBody = [123, 125];
       expect(encodedBody, equals(expectedBody));
     });
 
     test('encodeBodyWithInvalidMap', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       final body = {'key1': const _NoOpClass()};
-      expect(() => client.encodeBody(body), throwsA(isA<ClientException>()));
+      expect(() => RestClientBase.encodeBody(body), throwsA(isA<ClientException>()));
     });
 
     test('encodeBodyWithNestedMap', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       final body = {
         'key1': 'value1',
         'key2': 2,
         'key3': true,
         'key4': {'key5': 'value5'},
       };
-      final encodedBody = client.encodeBody(body);
+      final encodedBody = RestClientBase.encodeBody(body);
       final expectedBody = jsonUtf8.encode(body);
       expect(encodedBody, equals(expectedBody));
     });
 
     test('encodeBodyWithNestedLists', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       final body = {
         'key1': 'value1',
         'key2': 2,
         'key3': true,
         'key4': ['value5'],
       };
-      final encodedBody = client.encodeBody(body);
+      final encodedBody = RestClientBase.encodeBody(body);
       final expectedBody = jsonUtf8.encode(body);
       expect(encodedBody, equals(expectedBody));
     });
 
-    test('decodeResponseWithNullBody', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
-      expectLater(client.decodeResponse(null), completion(isNull));
-    });
-
     test('decodeResponseWithEmptyBody', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
-      expectLater(client.decodeResponse(const BytesResponseBody(<int>[])), completion(isNull));
+      expectLater(
+        RestClientBase.decodeResponse(const BytesResponseBody(<int>[]), statusCode: 200),
+        completion(isNull),
+      );
     });
 
     test('decodeResponseWithMapBody', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       final body = {'key1': 'value1', 'key2': 2, 'key3': true};
       final encodedBody = jsonUtf8.encode(body);
-      expectLater(client.decodeResponse(BytesResponseBody(encodedBody)), completion(equals(body)));
+
+      expectLater(
+        RestClientBase.decodeResponse(BytesResponseBody(encodedBody), statusCode: 200),
+        completion(equals(body)),
+      );
     });
 
     test('decodeResponseWithStringBody', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       const body = '{}';
       final encodedBody = utf8.encode(body);
-      expectLater(client.decodeResponse(BytesResponseBody(encodedBody)), completion(equals({})));
+      expectLater(
+        RestClientBase.decodeResponse(BytesResponseBody(encodedBody), statusCode: 200),
+        completion(equals({})),
+      );
     });
 
     test('decodeResponseWithEmptyStringBody', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       const body = '';
       final encodedBody = utf8.encode(body);
-      expectLater(client.decodeResponse(BytesResponseBody(encodedBody)), completion(equals(null)));
+      expectLater(
+        RestClientBase.decodeResponse(BytesResponseBody(encodedBody), statusCode: 200),
+        completion(equals(null)),
+      );
     });
 
     test('decodeResponseWithInvalidJsonBody', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       const body = 'invalid json';
       final encodedBody = utf8.encode(body);
       expectLater(
-        client.decodeResponse(BytesResponseBody(encodedBody)),
+        RestClientBase.decodeResponse(BytesResponseBody(encodedBody), statusCode: 200),
         throwsA(isA<ClientException>()),
       );
     });
 
     test('decodeResponseWithInvalidJson', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       const body = 'invalid json';
       final encodedBody = utf8.encode(body);
       expectLater(
-        client.decodeResponse(BytesResponseBody(encodedBody)),
+        RestClientBase.decodeResponse(BytesResponseBody(encodedBody), statusCode: 200),
         throwsA(isA<ClientException>()),
       );
     });
 
     test('decodeResponseWithErrorInResponseBody', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       final body = {
         'error': {'message': 'Some error message', 'code': 123},
       };
       final encodedBody = jsonUtf8.encode(body);
       expectLater(
-        client.decodeResponse(BytesResponseBody(encodedBody)),
+        RestClientBase.decodeResponse(BytesResponseBody(encodedBody), statusCode: 400),
         throwsA(isA<StructuredBackendException>()),
       );
     });
 
     test('decodeResponseWithDataInResponseBody', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       final body = {
         'data': {'key1': 'value1', 'key2': 2, 'key3': true},
       };
       final encodedBody = jsonUtf8.encode(body);
       expectLater(
-        client.decodeResponse(BytesResponseBody(encodedBody)),
+        RestClientBase.decodeResponse(BytesResponseBody(encodedBody), statusCode: 200),
         completion(equals(body['data'])),
       );
     });
 
     test('buildUriWithValidPathAndQueryParams', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       const path = '/path';
       final queryParams = {'key1': 'value1', 'key2': 'value2'};
-      final uri = client.buildUri(path: path, queryParams: queryParams);
+      final uri = RestClientBase.buildUri(
+        baseUrl: Uri.parse('http://localhost:8080'),
+        path: path,
+        queryParams: queryParams,
+      );
       final expectedUri = Uri.parse('http://localhost:8080$path?key1=value1&key2=value2');
       expect(uri, equals(expectedUri));
     });
 
     test('buildUriWithEmptyPath', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       const path = '';
       final queryParams = {'key1': 'value1', 'key2': 'value2'};
-      final uri = client.buildUri(path: path, queryParams: queryParams);
+      final uri = RestClientBase.buildUri(
+        baseUrl: Uri.parse('http://localhost:8080'),
+        path: path,
+        queryParams: queryParams,
+      );
       final expectedUri = Uri.parse(
         'http://localhost:8080?key1=value1&key2=value2',
       );
@@ -151,10 +152,13 @@ void main() {
     });
 
     test('buildUriWithSpecialCharactersInPath', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       const path = '/path with spaces';
       final queryParams = {'key1': 'value1', 'key2': 'value2'};
-      final uri = client.buildUri(path: path, queryParams: queryParams);
+      final uri = RestClientBase.buildUri(
+        baseUrl: Uri.parse('http://localhost:8080'),
+        path: path,
+        queryParams: queryParams,
+      );
       final expectedUri = Uri.parse(
         'http://localhost:8080/path%20with%20spaces?key1=value1&key2=value2',
       );
@@ -162,10 +166,13 @@ void main() {
     });
 
     test('buildUriWithEndingSlashInBaseUrl', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080/');
       const path = '/path';
       final queryParams = {'key1': 'value1', 'key2': 'value2'};
-      final uri = client.buildUri(path: path, queryParams: queryParams);
+      final uri = RestClientBase.buildUri(
+        baseUrl: Uri.parse('http://localhost:8080/'),
+        path: path,
+        queryParams: queryParams,
+      );
       final expectedUri = Uri.parse(
         'http://localhost:8080$path?key1=value1&key2=value2',
       );
@@ -173,10 +180,13 @@ void main() {
     });
 
     test('buildUriWithPathWithoutSlash', () {
-      final client = NoOpRestClientBase(baseUrl: 'http://localhost:8080');
       const path = 'path';
       final queryParams = {'key1': 'value1', 'key2': 'value2'};
-      final uri = client.buildUri(path: path, queryParams: queryParams);
+      final uri = RestClientBase.buildUri(
+        baseUrl: Uri.parse('http://localhost:8080'),
+        path: path,
+        queryParams: queryParams,
+      );
       final expectedUri = Uri.parse(
         'http://localhost:8080/$path?key1=value1&key2=value2',
       );
@@ -184,7 +194,7 @@ void main() {
     });
 
     test('getReturns', () {
-      final client = _ReturningRestClientBase(baseUrl: 'http://localhost:8080');
+      const client = _ReturningRestClientBase();
       expectLater(
         client.get('/path'),
         completion(
@@ -200,7 +210,7 @@ void main() {
     });
 
     test('postReturns', () {
-      final client = _ReturningRestClientBase(baseUrl: 'http://localhost:8080');
+      const client = _ReturningRestClientBase();
       expectLater(
         client.post('/path', body: {}),
         completion(
@@ -216,7 +226,7 @@ void main() {
     });
 
     test('putReturns', () {
-      final client = _ReturningRestClientBase(baseUrl: 'http://localhost:8080');
+      const client = _ReturningRestClientBase();
       expectLater(
         client.put('/path', body: {}),
         completion(
@@ -232,7 +242,7 @@ void main() {
     });
 
     test('deleteReturns', () {
-      final client = _ReturningRestClientBase(baseUrl: 'http://localhost:8080');
+      const client = _ReturningRestClientBase();
       expectLater(
         client.delete('/path'),
         completion(
@@ -248,7 +258,7 @@ void main() {
     });
 
     test('patchReturns', () {
-      final client = _ReturningRestClientBase(baseUrl: 'http://localhost:8080');
+      const client = _ReturningRestClientBase();
       expectLater(
         client.patch('/path', body: {}),
         completion(
@@ -264,7 +274,7 @@ void main() {
     });
 
     test('sendReturns', () {
-      final client = _ReturningRestClientBase(baseUrl: 'http://localhost:8080');
+      const client = _ReturningRestClientBase();
       expectLater(
         client.send(path: '/path', method: 'GET'),
         completion(
@@ -286,7 +296,7 @@ class _NoOpClass {
 }
 
 final class _ReturningRestClientBase extends RestClientBase {
-  _ReturningRestClientBase({required super.baseUrl});
+  const _ReturningRestClientBase();
 
   @override
   Future<Map<String, Object?>?> send({
@@ -303,6 +313,24 @@ final class _ReturningRestClientBase extends RestClientBase {
         'headers': headers,
         'queryParams': queryParams,
       };
+
+  @override
+  Future<Map<String, Object?>?> multipartPost({
+    required String path,
+    required String method,
+    required List<MultipartFile> files,
+    Map<String, String>? headers,
+    Map<String, String?>? queryParams,
+    Map<String, String>? fields,
+  }) async =>
+      {
+        'path': path,
+        'method': method,
+        'files': files,
+        'headers': headers,
+        'queryParams': queryParams,
+        'fields': fields,
+      };
 }
 
 /// A no-op implementation of [RestClientBase].
@@ -310,7 +338,7 @@ final class _ReturningRestClientBase extends RestClientBase {
 /// This is used in tests to verify behaviour of basic methods
 /// like encoding and decoding of request and response.
 final class NoOpRestClientBase extends RestClientBase {
-  NoOpRestClientBase({required super.baseUrl});
+  const NoOpRestClientBase();
 
   @override
   Future<Map<String, Object?>?> send({
@@ -319,6 +347,17 @@ final class NoOpRestClientBase extends RestClientBase {
     Map<String, Object?>? body,
     Map<String, Object?>? headers,
     Map<String, Object?>? queryParams,
+  }) =>
+      throw UnimplementedError();
+
+  @override
+  Future<Map<String, Object?>?> multipartPost({
+    required String path,
+    required String method,
+    required List<MultipartFile> files,
+    Map<String, Object?>? headers,
+    Map<String, Object?>? queryParams,
+    Map<String, Object?>? fields,
   }) =>
       throw UnimplementedError();
 }

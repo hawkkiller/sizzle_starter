@@ -9,10 +9,7 @@ import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 @immutable
 abstract base class RestClientBase implements RestClient {
   /// {@macro rest_client}
-  RestClientBase({required String baseUrl}) : baseUri = Uri.parse(baseUrl);
-
-  /// The base url for the client
-  final Uri baseUri;
+  const RestClientBase();
 
   static final _jsonUTF8 = json.fuse(utf8);
 
@@ -97,9 +94,7 @@ abstract base class RestClientBase implements RestClient {
       );
 
   /// Encodes [body] to JSON and then to UTF8
-  @protected
-  @visibleForTesting
-  List<int> encodeBody(Map<String, Object?> body) {
+  static List<int> encodeBody(Map<String, Object?> body) {
     try {
       return _jsonUTF8.encode(body);
     } on Object catch (e, stackTrace) {
@@ -110,14 +105,16 @@ abstract base class RestClientBase implements RestClient {
     }
   }
 
-  /// Builds [Uri] from [path], [queryParams] and [baseUri]
-  @protected
-  @visibleForTesting
-  Uri buildUri({required String path, Map<String, String?>? queryParams}) {
-    final finalPath = p.join(baseUri.path, path);
-    return baseUri.replace(
+  /// Builds [Uri] from [path], [queryParams] and [baseUrl]
+  static Uri buildUri({
+    required Uri baseUrl,
+    required String path,
+    Map<String, String?>? queryParams,
+  }) {
+    final finalPath = p.join(baseUrl.path, path);
+    return baseUrl.replace(
       path: finalPath,
-      queryParameters: {...baseUri.queryParameters, ...?queryParams},
+      queryParameters: {...baseUrl.queryParameters, ...?queryParams},
     );
   }
 
@@ -131,19 +128,15 @@ abstract base class RestClientBase implements RestClient {
   ///
   /// If the response is neither an error nor successful, it returns the decoded
   /// body as is.
-  @protected
-  @visibleForTesting
-  Future<Map<String, Object?>?> decodeResponse(
-    ResponseBody<Object>? body, {
-    int? statusCode,
+  static Future<Map<String, Object?>?> decodeResponse(
+    ResponseBody<Object> body, {
+    required int statusCode,
   }) async {
-    if (body == null) return null;
-
     try {
       final decodedBody = switch (body) {
         MapResponseBody(:final Map<String, Object?> data) => data,
-        StringResponseBody(:final String data) => await _decodeString(data),
-        BytesResponseBody(:final List<int> data) => await _decodeBytes(data),
+        StringResponseBody(:final String data) => await decodeString(data),
+        BytesResponseBody(:final List<int> data) => await decodeBytes(data),
       };
 
       if (decodedBody case {'error': final Map<String, Object?> error}) {
@@ -174,7 +167,7 @@ abstract base class RestClientBase implements RestClient {
   }
 
   /// Decodes a [String] to a [Map<String, Object?>]
-  Future<Map<String, Object?>?> _decodeString(String stringBody) async {
+  static Future<Map<String, Object?>?> decodeString(String stringBody) async {
     if (stringBody.isEmpty) return null;
 
     if (stringBody.length > 1000) {
@@ -189,7 +182,7 @@ abstract base class RestClientBase implements RestClient {
   }
 
   /// Decodes a [List<int>] to a [Map<String, Object?>]
-  Future<Map<String, Object?>?> _decodeBytes(List<int> bytesBody) async {
+  static Future<Map<String, Object?>?> decodeBytes(List<int> bytesBody) async {
     if (bytesBody.isEmpty) return null;
 
     if (bytesBody.length > 1000) {

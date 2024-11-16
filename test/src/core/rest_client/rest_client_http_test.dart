@@ -11,7 +11,7 @@ void main() {
       );
 
       final restClient = RestClientHttp(
-        baseUrl: 'https://example.com',
+        baseUrl: Uri.parse('https://example.com'),
         client: mockClient,
       );
 
@@ -39,7 +39,7 @@ void main() {
       });
 
       final restClient = RestClientHttp(
-        baseUrl: 'https://example.com',
+        baseUrl: Uri.parse('https://example.com'),
         client: mockClient,
       );
 
@@ -62,7 +62,7 @@ void main() {
       });
 
       final restClient = RestClientHttp(
-        baseUrl: 'https://example.com',
+        baseUrl: Uri.parse('https://example.com'),
         client: mockClient,
       );
 
@@ -88,7 +88,7 @@ void main() {
       );
 
       final restClient = RestClientHttp(
-        baseUrl: 'https://example.com',
+        baseUrl: Uri.parse('https://example.com'),
         client: mockClient,
       );
 

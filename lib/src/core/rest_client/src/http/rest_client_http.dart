@@ -53,7 +53,10 @@ final class RestClientHttp extends RestClientBase {
   ///  client: client,
   /// );
   /// ```
-  RestClientHttp({required super.baseUrl, http.Client? client}) : _client = client ?? http.Client();
+  RestClientHttp({required this.baseUrl, http.Client? client}) : _client = client ?? http.Client();
+
+  /// The base URI for the client.
+  final Uri baseUrl;
 
   final http.Client _client;
 
@@ -66,11 +69,15 @@ final class RestClientHttp extends RestClientBase {
     Map<String, Object?>? body,
   }) async {
     try {
-      final uri = buildUri(path: path, queryParams: queryParams);
+      final uri = RestClientBase.buildUri(
+        baseUrl: baseUrl,
+        path: path,
+        queryParams: queryParams,
+      );
       final request = http.Request(method, uri);
 
       if (body != null) {
-        request.bodyBytes = encodeBody(body);
+        request.bodyBytes = RestClientBase.encodeBody(body);
         request.headers['content-type'] = 'application/json;charset=utf-8';
       }
 
@@ -80,7 +87,68 @@ final class RestClientHttp extends RestClientBase {
 
       final response = await _client.send(request).then(http.Response.fromStream);
 
-      final result = await decodeResponse(
+      final result = await RestClientBase.decodeResponse(
+        BytesResponseBody(response.bodyBytes),
+        statusCode: response.statusCode,
+      );
+
+      return result;
+    } on RestClientException {
+      rethrow;
+    } on http.ClientException catch (e, stack) {
+      final checkedException = checkHttpException(e);
+
+      if (checkedException != null) {
+        Error.throwWithStackTrace(checkedException, stack);
+      }
+
+      Error.throwWithStackTrace(
+        ClientException(message: e.message, cause: e),
+        stack,
+      );
+    }
+  }
+
+  @override
+  Future<Map<String, Object?>?> multipartPost({
+    required String path,
+    required String method,
+    required List<MultipartFile> files,
+    Map<String, String>? headers,
+    Map<String, String?>? queryParams,
+    Map<String, String>? fields,
+  }) async {
+    try {
+      final uri = RestClientBase.buildUri(
+        baseUrl: baseUrl,
+        path: path,
+        queryParams: queryParams,
+      );
+
+      final request = http.MultipartRequest(method, uri);
+
+      if (fields != null) {
+        request.fields.addAll(fields);
+      }
+
+      request.files.addAll(
+        files.map(
+          (file) => http.MultipartFile.fromBytes(
+            file.field,
+            file.bytes,
+            filename: file.filename,
+          ),
+        ),
+      );
+
+      if (headers != null) {
+        request.headers.addAll(headers);
+      }
+
+      final streamedResponse = await _client.send(request);
+      final response = await http.Response.fromStream(streamedResponse);
+
+      final result = await RestClientBase.decodeResponse(
         BytesResponseBody(response.bodyBytes),
         statusCode: response.statusCode,
       );
