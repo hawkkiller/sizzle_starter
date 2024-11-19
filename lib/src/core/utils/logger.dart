@@ -1,17 +1,9 @@
 import 'dart:async';
+import 'dart:developer' as developer;
 
 import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:stack_trace/stack_trace.dart';
-
-/// Defines the format of a log message.
-///
-/// This is a function type that takes a [LogMessage] and
-/// [LoggingOptions] and returns a formatted string.
-typedef LogFormatter = String Function(
-  LogWrapper wrappedMessage,
-  LoggingOptions options,
-);
 
 /// Configuration options for logging behavior.
 ///
@@ -19,53 +11,20 @@ typedef LogFormatter = String Function(
 class LoggingOptions {
   /// Constructs an instance of [LoggingOptions].
   ///
-  /// - [showTime]: Whether to include the timestamp in the log message.
-  ///   Defaults to `true`.
-  /// - [showEmoji]: Whether to include an emoji representing the log level.
-  ///   Defaults to `true`.
   /// - [logInRelease]: Whether logging is enabled in release builds.
   ///   Defaults to `false`.
   /// - [level]: The minimum log level that will be displayed.
   ///   Defaults to [LogLevel.info].
-  /// - [chunkSize]: The maximum size of a log message chunk. Defaults to 1024.
-  /// - [coloredOutput]: Whether to use colored text for the console output.
-  ///   Defaults to `false`.
-  /// - [formatter]: An optional custom formatter for log messages.
-  ///   If not provided, a default formatter is used.
   const LoggingOptions({
-    this.level = LogLevel.info,
-    this.showTime = true,
-    this.showEmoji = true,
     this.logInRelease = false,
-    this.useDebugPrint = false,
-    this.onMessageFormatter,
+    this.level = LogLevel.info,
   });
-
-  /// Whether to include the timestamp in the log message.
-  final bool showTime;
-
-  /// Whether to include an emoji representing the log level in the log message.
-  final bool showEmoji;
 
   /// Whether logging is enabled in release builds.
   final bool logInRelease;
 
   /// The minimum log level that will be displayed.
   final LogLevel level;
-
-  /// Whether or not to chunk the log message.
-  ///
-  /// This is useful when the log message is too long.
-  /// Use it with caution, as it affects the performance.
-  /// Recommended for debugging purposes only.
-  ///
-  /// Uses [debugPrint] under the hood.
-  final bool useDebugPrint;
-
-  /// An optional custom formatter for log messages.
-  ///
-  /// If not provided, a default formatter is used.
-  final LogFormatter? onMessageFormatter;
 }
 
 /// Internal class used by [DefaultLogger] to wrap the log messages.
@@ -87,53 +46,62 @@ class LogWrapper {
   bool printError;
 }
 
-/// The default logger implementation, used by the application.
-final class DefaultLogger extends Logger {
-  /// Constructs an instance of [DefaultLogger].
-  DefaultLogger([LoggingOptions options = const LoggingOptions()]) {
-    _init(options);
+/// {@template printing_logger}
+/// A logger that prints log messages to the console.
+/// {@endtemplate}
+base class PrintingLogger extends DefaultLogger {
+  /// Constructs an instance of [PrintingLogger].
+  PrintingLogger([this.options = const LoggingOptions()]) {
+    _subscription = _logWrapStream.listen((wrappedLog) {
+      _printLogMessage(wrappedLog, options);
+    });
   }
+
+  /// The options used by this logger.
+  final LoggingOptions options;
+
+  /// The subscription to the log stream.
+  StreamSubscription<LogWrapper>? _subscription;
+
+  @override
+  void destroy() {
+    super.destroy();
+    _subscription?.cancel();
+  }
+
+  void _printLogMessage(LogWrapper wrappedLog, LoggingOptions options) {
+    if (wrappedLog.message.level.compareTo(options.level) < 0) return;
+
+    final log = wrappedLog.message;
+
+    final logLevelsLength = LogLevel.values.length;
+    final severityPerLevel = 2000 ~/ logLevelsLength;
+    final severity = log.level.index * severityPerLevel;
+
+    developer.log(
+      log.message,
+      error: wrappedLog.printError ? log.error : null,
+      // We have levels from 0 to 5, but developer.log has from 0 to 2000,
+      // so we need to multiply by 400 to get a value between 0 and 2000.
+      level: severity,
+      name: log.level.toShortName(),
+      stackTrace: wrappedLog.printStackTrace && log.stackTrace != null
+          ? Trace.from(log.stackTrace!).terse
+          : null,
+      time: log.timestamp,
+    );
+  }
+}
+
+/// The default logger implementation, used by the application.
+base class DefaultLogger extends Logger {
+  /// Constructs an instance of [DefaultLogger].
+  DefaultLogger();
 
   final _controller = StreamController<LogWrapper>();
   late final _logWrapStream = _controller.stream.asBroadcastStream();
   late final _logs = _logWrapStream.map((wrapper) => wrapper.message);
-  StreamSubscription<LogWrapper>? _logSubscription;
   bool _destroyed = false;
-
-  void _init(LoggingOptions options) {
-    if (kReleaseMode && !options.logInRelease) {
-      return;
-    }
-
-    _logSubscription = _logWrapStream.listen((l) => _printLogMessage(l, options));
-  }
-
-  /// Default log message formatter
-  static String defaultFormatter(LogWrapper wrappedMessage, LoggingOptions options) {
-    final message = wrappedMessage.message;
-    final time = options.showTime ? message.timestamp.toIso8601String() : '';
-    final emoji = options.showEmoji ? message.level.emoji : '';
-    final level = message.level;
-    final content = message.message;
-    final stackTrace = message.stackTrace;
-    final error = message.error;
-
-    final buffer = StringBuffer();
-
-    buffer.write('$emoji $time [${level.name.toUpperCase()}] $content');
-
-    if (error != null && wrappedMessage.printError) {
-      buffer.writeln();
-      buffer.write(error);
-    }
-
-    if (stackTrace != null && wrappedMessage.printStackTrace) {
-      buffer.writeln();
-      buffer.write(Trace.from(stackTrace).terse);
-    }
-
-    return buffer.toString();
-  }
 
   @override
   Stream<LogMessage> get logs => _logs;
@@ -141,7 +109,6 @@ final class DefaultLogger extends Logger {
   @override
   void destroy() {
     _controller.close();
-    _logSubscription?.cancel();
     _destroyed = true;
   }
 
@@ -155,10 +122,8 @@ final class DefaultLogger extends Logger {
     bool printStackTrace = true,
     bool printError = true,
   }) {
-    if (_destroyed) {
-      _log('Logger has been destroyed. It cannot be used anymore.');
-      return;
-    }
+    assert(!_destroyed, 'Logger has been destroyed. It cannot be used anymore.');
+    if (_destroyed) return;
 
     final logMessage = LogWrapper(
       message: LogMessage(
@@ -174,28 +139,6 @@ final class DefaultLogger extends Logger {
     );
 
     _controller.add(logMessage);
-  }
-
-  void _printLogMessage(LogWrapper wrappedMessage, LoggingOptions options) {
-    if (_destroyed) {
-      _log('Logger has been destroyed. It cannot be used anymore.');
-      return;
-    }
-
-    final formattedMessage = options.onMessageFormatter != null
-        ? options.onMessageFormatter!(wrappedMessage, options)
-        : defaultFormatter(wrappedMessage, options);
-
-    _log(formattedMessage);
-  }
-
-  /// Logs a chunk of message
-  void _log(String message, {bool useDebugPrint = false}) {
-    if (useDebugPrint) {
-      debugPrint(message);
-    } else {
-      Zone.current.print(message);
-    }
   }
 }
 
@@ -488,50 +431,47 @@ class LogMessage {
 }
 
 /// Log level, that describes the severity of the log message
+///
+/// Index of the log level is used to determine the severity of the log message.
 enum LogLevel implements Comparable<LogLevel> {
   /// A log level describing events showing step by step execution of your code
   /// that can be ignored during the standard operation,
   /// but may be useful during extended debugging sessions.
-  trace._(0),
+  trace._(),
 
   /// A log level used for events considered to be useful during software
   /// debugging when more granular information is needed.
-  debug._(1),
+  debug._(),
 
   /// An event happened, the event is purely informative
   /// and can be ignored during normal operations.
-  info._(2),
+  info._(),
 
   /// Unexpected behavior happened inside the application, but it is continuing
   /// its work and the key business features are operating as expected.
-  warn._(3),
+  warn._(),
 
   /// One or more functionalities are not working,
   /// preventing some functionalities from working correctly.
   /// For example, a network request failed, a file is missing, etc.
-  error._(4),
+  error._(),
 
   /// One or more key business functionalities are not working
   /// and the whole system doesn’t fulfill the business functionalities.
-  fatal._(5);
+  fatal._();
 
-  const LogLevel._(this.severity);
-
-  /// The integer value of the log level.
-  final int severity;
+  const LogLevel._();
 
   @override
-  int compareTo(LogLevel other) => severity.compareTo(other.severity);
-}
+  int compareTo(LogLevel other) => index - other.index;
 
-extension on LogLevel {
-  /// Get emoji from the log level
-  String get emoji => const {
-        LogLevel.trace: '🔍',
-        LogLevel.debug: '🐛',
-        LogLevel.info: 'ℹ️',
-        LogLevel.warn: '⚠️',
-        LogLevel.error: '❌',
-        LogLevel.fatal: '💥',
-      }[this]!;
+  /// Return short name of the log level.
+  String toShortName() => switch (this) {
+        LogLevel.trace => 'TRC',
+        LogLevel.debug => 'DBG',
+        LogLevel.info => 'INF',
+        LogLevel.warn => 'WRN',
+        LogLevel.error => 'ERR',
+        LogLevel.fatal => 'FTL',
+      };
 }

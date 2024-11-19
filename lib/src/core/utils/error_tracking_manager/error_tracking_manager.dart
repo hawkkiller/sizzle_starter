@@ -36,7 +36,7 @@ abstract base class ErrorTrackingManagerBase implements ErrorTrackingManager {
   /// Catch only warnings and errors
   Stream<LogMessage> get _reportLogs => _logger.logs.where(_warnOrUp);
 
-  static bool _warnOrUp(LogMessage log) => log.level.severity >= LogLevel.warn.severity;
+  static bool _warnOrUp(LogMessage log) => log.level.index >= LogLevel.warn.index;
 
   @mustCallSuper
   @mustBeOverridden

@@ -7,7 +7,6 @@ import 'package:sizzle_starter/src/core/utils/extensions/context_extension.dart'
 ///
 /// The [WindowSize] class represents a breakpoint for responsive design.
 /// {@endtemplate}
-// ignore: prefer-overriding-parent-equality
 sealed class WindowSize extends Size {
   /// {@macro window_size}
   WindowSize({
