@@ -47,11 +47,11 @@ class LogWrapper {
 }
 
 /// {@template printing_logger}
-/// A logger that prints log messages to the console.
+/// A logger that uses [developer.log] to print log messages.
 /// {@endtemplate}
-base class PrintingLogger extends DefaultLogger {
-  /// Constructs an instance of [PrintingLogger].
-  PrintingLogger([this.options = const LoggingOptions()]) {
+base class DeveloperLogger extends DefaultLogger {
+  /// Constructs an instance of [DeveloperLogger].
+  DeveloperLogger([this.options = const LoggingOptions()]) {
     _subscription = _logWrapStream.listen((wrappedLog) {
       _printLogMessage(wrappedLog, options);
     });
