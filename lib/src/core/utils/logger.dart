@@ -70,17 +70,21 @@ base class PrintingLogger extends DefaultLogger {
   }
 
   void _printLogMessage(LogWrapper wrappedLog, LoggingOptions options) {
-    if (wrappedLog.message.level.severity < options.level.severity) return;
+    if (wrappedLog.message.level.compareTo(options.level) < 0) return;
 
     final log = wrappedLog.message;
+
+    final logLevelsLength = LogLevel.values.length;
+    final severityPerLevel = 2000 ~/ logLevelsLength;
+    final severity = log.level.index * severityPerLevel;
 
     developer.log(
       log.message,
       error: wrappedLog.printError ? log.error : null,
       // We have levels from 0 to 5, but developer.log has from 0 to 2000,
       // so we need to multiply by 400 to get a value between 0 and 2000.
-      level: log.level.severity * 400,
-      name: log.level.name.toUpperCase(),
+      level: severity,
+      name: log.level.toShortName(),
       stackTrace: wrappedLog.printStackTrace && log.stackTrace != null
           ? Trace.from(log.stackTrace!).terse
           : null,
@@ -427,50 +431,47 @@ class LogMessage {
 }
 
 /// Log level, that describes the severity of the log message
+///
+/// Index of the log level is used to determine the severity of the log message.
 enum LogLevel implements Comparable<LogLevel> {
   /// A log level describing events showing step by step execution of your code
   /// that can be ignored during the standard operation,
   /// but may be useful during extended debugging sessions.
-  trace._(0),
+  trace._(),
 
   /// A log level used for events considered to be useful during software
   /// debugging when more granular information is needed.
-  debug._(1),
+  debug._(),
 
   /// An event happened, the event is purely informative
   /// and can be ignored during normal operations.
-  info._(2),
+  info._(),
 
   /// Unexpected behavior happened inside the application, but it is continuing
   /// its work and the key business features are operating as expected.
-  warn._(3),
+  warn._(),
 
   /// One or more functionalities are not working,
   /// preventing some functionalities from working correctly.
   /// For example, a network request failed, a file is missing, etc.
-  error._(4),
+  error._(),
 
   /// One or more key business functionalities are not working
   /// and the whole system doesn’t fulfill the business functionalities.
-  fatal._(5);
+  fatal._();
 
-  const LogLevel._(this.severity);
-
-  /// The integer value of the log level.
-  final int severity;
+  const LogLevel._();
 
   @override
-  int compareTo(LogLevel other) => severity.compareTo(other.severity);
-}
+  int compareTo(LogLevel other) => index - other.index;
 
-extension on LogLevel {
-  /// Get emoji from the log level
-  String get emoji => const {
-        LogLevel.trace: '🔍',
-        LogLevel.debug: '🐛',
-        LogLevel.info: 'ℹ️',
-        LogLevel.warn: '⚠️',
-        LogLevel.error: '❌',
-        LogLevel.fatal: '💥',
-      }[this]!;
+  /// Return short name of the log level.
+  String toShortName() => switch (this) {
+        LogLevel.trace => 'TRC',
+        LogLevel.debug => 'DBG',
+        LogLevel.info => 'INF',
+        LogLevel.warn => 'WRN',
+        LogLevel.error => 'ERR',
+        LogLevel.fatal => 'FTL',
+      };
 }
