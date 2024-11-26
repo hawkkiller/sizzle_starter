@@ -47,7 +47,7 @@ Future<void> main() async {
           ).compose();
           // Attach this widget to the root of the tree.
           runApp(App(result: compositionResult));
-        } catch (e, stackTrace) {
+        } on Object catch (e, stackTrace) {
           logger.error('Initialization failed', error: e, stackTrace: stackTrace);
           runApp(
             InitializationFailedApp(

@@ -6,8 +6,7 @@ import 'package:flutter/foundation.dart';
 /// {@endtemplate}
 base class AppLogger extends Logger {
   /// Constructs an instance of [AppLogger].
-  AppLogger({List<LogObserver> observers = const []})
-      : _observers = List.unmodifiable(observers);
+  AppLogger({List<LogObserver> observers = const []}) : _observers = List.unmodifiable(observers);
 
   final List<LogObserver> _observers;
 
@@ -46,6 +45,32 @@ base class AppLogger extends Logger {
   }
 }
 
+/// A logger that does nothing.
+final class NoOpLogger extends Logger {
+  /// Constructs an instance of [NoOpLogger].
+  const NoOpLogger();
+
+  @override
+  void log(
+    String message, {
+    required LogLevel level,
+    Object? error,
+    StackTrace? stackTrace,
+    Map<String, Object?>? context,
+    bool printStackTrace = true,
+    bool printError = true,
+    // ignore: no-empty-block
+  }) {
+    // no-op
+  }
+
+  @override
+  // ignore: no-empty-block
+  void destroy() {
+    // no-op
+  }
+}
+
 /// {@template logger}
 /// Logger class, that manages the logging of messages
 /// {@endtemplate}
@@ -78,14 +103,16 @@ abstract base class Logger {
       );
 
   /// Logs a flutter error with [LogLevel.error].
-  void logFlutterError(FlutterErrorDetails details) => log(
-        details.toString(),
-        level: LogLevel.error,
-        error: details.exceptionAsString(),
-        stackTrace: details.stack,
-        printStackTrace: false,
-        printError: false,
-      );
+  void logFlutterError(FlutterErrorDetails details) {
+    log(
+      details.summary.toString(),
+      level: LogLevel.error,
+      error: details.exception,
+      stackTrace: details.stack,
+      printStackTrace: false,
+      printError: false,
+    );
+  }
 
   /// Logs a platform dispatcher error with [LogLevel.error].
   bool logPlatformDispatcherError(Object error, StackTrace stackTrace) {
