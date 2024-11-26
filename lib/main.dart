@@ -14,7 +14,6 @@ import 'package:sizzle_starter/src/feature/initialization/widget/initialization_
 
 Future<void> main() async {
   const config = Config();
-
   final errorTrackingManager = await const ErrorTrackingManagerFactory(config).create();
   final logger = AppLoggerFactory(
     observers: [
@@ -25,10 +24,7 @@ Future<void> main() async {
 
   await runZonedGuarded(
     () async {
-      final binding = WidgetsFlutterBinding.ensureInitialized();
-
-      // Preserve splash screen
-      binding.deferFirstFrame();
+      WidgetsFlutterBinding.ensureInitialized();
 
       // Override logging
       FlutterError.onError = logger.logFlutterError;
@@ -56,9 +52,6 @@ Future<void> main() async {
               onRetryInitialization: startApp,
             ),
           );
-        } finally {
-          // Allow rendering
-          binding.allowFirstFrame();
         }
       }
 
