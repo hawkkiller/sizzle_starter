@@ -1,25 +1,27 @@
 import 'dart:async';
 
-import 'package:meta/meta.dart';
-import 'package:sizzle_starter/src/core/utils/logger.dart';
+import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
 
 /// {@template error_tracking_manager}
 /// A class which is responsible for enabling error tracking.
 /// {@endtemplate}
-abstract interface class ErrorTrackingManager {
+abstract interface class ErrorTrackingManager implements LogObserver {
   /// Handles the log message.
   ///
   /// This method is called when a log message is received.
   Future<void> report(LogMessage log);
 
+  /// Returns `true` if automatic error reporting is enabled.
+  bool get automaticReportingEnabled;
+
   /// Enables error tracking.
   ///
-  /// This method should be called when the user has opted in to error tracking.
+  /// This method enables automatic error log reporting.
   Future<void> enableReporting();
 
   /// Disables error tracking.
   ///
-  /// This method should be called when the user has opted out of error tracking
+  /// This method disables automatic error log reporting.
   Future<void> disableReporting();
 }
 
@@ -28,33 +30,28 @@ abstract interface class ErrorTrackingManager {
 /// {@endtemplate}
 abstract base class ErrorTrackingManagerBase implements ErrorTrackingManager {
   /// {@macro error_tracking_manager_base}
-  ErrorTrackingManagerBase(this._logger);
+  ErrorTrackingManagerBase();
 
-  final Logger _logger;
-  StreamSubscription<LogMessage>? _subscription;
-
-  /// Catch only warnings and errors
-  Stream<LogMessage> get _reportLogs => _logger.logs.where(_warnOrUp);
-
-  static bool _warnOrUp(LogMessage log) => log.level.index >= LogLevel.warn.index;
-
-  @mustCallSuper
-  @mustBeOverridden
+  /// Returns `true` if automatic error reporting is enabled.
   @override
-  Future<void> disableReporting() async {
-    await _subscription?.cancel();
-    _subscription = null;
+  bool get automaticReportingEnabled => _automaticReportingEnabled;
+  var _automaticReportingEnabled = false;
+
+  @override
+  void onLog(LogMessage logMessage) {
+    if (_automaticReportingEnabled && shouldReport(logMessage.error)) {
+      report(logMessage);
+    }
   }
 
-  @mustCallSuper
-  @mustBeOverridden
   @override
   Future<void> enableReporting() async {
-    _subscription ??= _reportLogs.listen((log) async {
-      if (shouldReport(log.error)) {
-        await report(log);
-      }
-    });
+    _automaticReportingEnabled = true;
+  }
+
+  @override
+  Future<void> disableReporting() async {
+    _automaticReportingEnabled = false;
   }
 
   /// Returns `true` if the error should be reported.

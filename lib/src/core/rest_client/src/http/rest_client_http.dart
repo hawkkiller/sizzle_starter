@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
 import 'package:sizzle_starter/src/core/rest_client/src/http/check_exception_io.dart'
     if (dart.library.js_interop) 'package:sizzle_starter/src/core/rest_client/src/http/check_exception_browser.dart';
-import 'package:sizzle_starter/src/core/utils/logger.dart';
+import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
 
 // coverage:ignore-start
 /// Creates an [http.Client] based on the current platform.

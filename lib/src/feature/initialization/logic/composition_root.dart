@@ -5,7 +5,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/core/constant/config.dart';
 import 'package:sizzle_starter/src/core/utils/error_tracking_manager/error_tracking_manager.dart';
 import 'package:sizzle_starter/src/core/utils/error_tracking_manager/sentry_tracking_manager.dart';
-import 'package:sizzle_starter/src/core/utils/logger.dart';
+import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:sizzle_starter/src/feature/settings/data/app_settings_datasource.dart';
@@ -24,7 +24,11 @@ import 'package:sizzle_starter/src/feature/settings/data/app_settings_repository
 /// {@endtemplate}
 final class CompositionRoot {
   /// {@macro composition_root}
-  const CompositionRoot(this.config, this.logger);
+  const CompositionRoot({
+    required this.config,
+    required this.logger,
+    required this.errorTrackingManager,
+  });
 
   /// Application configuration
   final Config config;
@@ -32,13 +36,20 @@ final class CompositionRoot {
   /// Logger used to log information during composition process.
   final Logger logger;
 
+  /// Error tracking manager used to track errors in the application.
+  final ErrorTrackingManager errorTrackingManager;
+
   /// Composes dependencies and returns result of composition.
   Future<CompositionResult> compose() async {
     final stopwatch = clock.stopwatch()..start();
 
     logger.info('Initializing dependencies...');
     // initialize dependencies
-    final dependencies = await DependenciesFactory(config, logger).create();
+    final dependencies = await DependenciesFactory(
+      config: config,
+      logger: logger,
+      errorTrackingManager: errorTrackingManager,
+    ).create();
     logger.info('Dependencies initialized');
 
     stopwatch.stop();
@@ -80,6 +91,9 @@ final class CompositionResult {
 /// Factory that creates an instance of [T].
 /// {@endtemplate}
 abstract class Factory<T> {
+  /// {@macro factory}
+  const Factory();
+
   /// Creates an instance of [T].
   T create();
 }
@@ -88,6 +102,9 @@ abstract class Factory<T> {
 /// Factory that creates an instance of [T] asynchronously.
 /// {@endtemplate}
 abstract class AsyncFactory<T> {
+  /// {@macro async_factory}
+  const AsyncFactory();
+
   /// Creates an instance of [T].
   Future<T> create();
 }
@@ -97,7 +114,11 @@ abstract class AsyncFactory<T> {
 /// {@endtemplate}
 class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
   /// {@macro dependencies_factory}
-  DependenciesFactory(this.config, this.logger);
+  const DependenciesFactory({
+    required this.config,
+    required this.logger,
+    required this.errorTrackingManager,
+  });
 
   /// Application configuration
   final Config config;
@@ -105,12 +126,14 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
   /// Logger used to log information during composition process.
   final Logger logger;
 
+  /// Error tracking manager used to track errors in the application.
+  final ErrorTrackingManager errorTrackingManager;
+
   @override
   Future<DependenciesContainer> create() async {
     final sharedPreferences = SharedPreferencesAsync();
 
     final packageInfo = await PackageInfo.fromPlatform();
-    final errorTrackingManager = await ErrorTrackingManagerFactory(config, logger).create();
     final settingsBloc = await SettingsBlocFactory(sharedPreferences).create();
 
     return DependenciesContainer(
@@ -123,25 +146,35 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
   }
 }
 
+/// {@template app_logger_factory}
+/// Factory that creates an instance of [AppLogger].
+/// {@endtemplate}
+class AppLoggerFactory extends Factory<AppLogger> {
+  /// {@macro app_logger_factory}
+  const AppLoggerFactory({this.observers = const []});
+
+  /// List of observers that will be notified when a log message is received.
+  final List<LogObserver> observers;
+
+  @override
+  AppLogger create() => AppLogger(observers: observers);
+}
+
 /// {@template error_tracking_manager_factory}
 /// Factory that creates an instance of [ErrorTrackingManager].
 /// {@endtemplate}
 class ErrorTrackingManagerFactory extends AsyncFactory<ErrorTrackingManager> {
   /// {@macro error_tracking_manager_factory}
-  ErrorTrackingManagerFactory(this.config, this.logger);
+  const ErrorTrackingManagerFactory(this.config);
 
   /// Application configuration
   final Config config;
 
-  /// Logger used to log information during composition process.
-  final Logger logger;
-
   @override
   Future<ErrorTrackingManager> create() async {
     final errorTrackingManager = SentryTrackingManager(
-      logger,
       sentryDsn: config.sentryDsn,
-      environment: config.environment.value,
+      environment: config.environment,
     );
 
     if (config.enableSentry && kReleaseMode) {
@@ -157,7 +190,7 @@ class ErrorTrackingManagerFactory extends AsyncFactory<ErrorTrackingManager> {
 /// {@endtemplate}
 class SettingsBlocFactory extends AsyncFactory<AppSettingsBloc> {
   /// {@macro settings_bloc_factory}
-  SettingsBlocFactory(this.sharedPreferences);
+  const SettingsBlocFactory(this.sharedPreferences);
 
   /// Shared preferences instance
   final SharedPreferencesAsync sharedPreferences;
