@@ -2,14 +2,10 @@ import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sizzle_starter/src/core/constant/application_config.dart';
 import 'package:sizzle_starter/src/core/utils/error_tracking_manager/error_tracking_manager.dart';
 import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
-import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 
 /// {@template dependencies_container}
-/// Composed dependencies from the [CompositionRoot].
-///
-/// This class contains all the dependencies that are required for the application
-/// to work.
+/// Container used to reuse dependencies across the application.
 ///
 /// {@macro composition_process}
 /// {@endtemplate}
