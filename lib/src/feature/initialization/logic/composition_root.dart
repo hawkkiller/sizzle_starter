@@ -12,15 +12,12 @@ import 'package:sizzle_starter/src/feature/settings/data/app_settings_datasource
 import 'package:sizzle_starter/src/feature/settings/data/app_settings_repository.dart';
 
 /// {@template composition_root}
-/// A place where all dependencies are initialized.
+/// A place where top-level dependencies are initialized.
 /// {@endtemplate}
 ///
 /// {@template composition_process}
 /// Composition of dependencies is a process of creating and configuring
 /// instances of classes that are required for the application to work.
-///
-/// It is a good practice to keep all dependencies in one place to make it
-/// easier to manage them and to ensure that they are initialized only once.
 /// {@endtemplate}
 final class CompositionRoot {
   /// {@macro composition_root}
