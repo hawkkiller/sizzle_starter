@@ -40,16 +40,15 @@ final class CompositionRoot {
   Future<CompositionResult> compose() async {
     final stopwatch = clock.stopwatch()..start();
 
-    logger.info('Initializing dependencies...');
+    logger.info('Creating dependencies...');
     // initialize dependencies
     final dependencies = await DependenciesFactory(
       config: config,
       logger: logger,
       errorTrackingManager: errorTrackingManager,
     ).create();
-    logger.info('Dependencies initialized');
-
     stopwatch.stop();
+    logger.info('Dependencies created successfully in ${stopwatch.elapsedMilliseconds} ms.');
     final result = CompositionResult(
       dependencies: dependencies,
       millisecondsSpent: stopwatch.elapsedMilliseconds,
