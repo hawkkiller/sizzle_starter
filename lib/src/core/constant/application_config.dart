@@ -38,7 +38,7 @@ base class TestConfig implements ApplicationConfig {
   @override
   Object noSuchMethod(Invocation invocation) {
     throw UnimplementedError(
-      'The test tries to access ${invocation.memberName} config option, but '
+      'The test tries to access ${invocation.memberName} (${invocation.runtimeType}) config option, but '
       'it was not provided. Please provide the option in the test. '
       'You can do it by extending this class and providing the option.',
     );
