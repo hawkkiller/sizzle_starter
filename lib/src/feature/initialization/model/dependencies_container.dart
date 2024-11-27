@@ -1,5 +1,5 @@
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:sizzle_starter/src/core/constant/config.dart';
+import 'package:sizzle_starter/src/core/constant/application_config.dart';
 import 'package:sizzle_starter/src/core/utils/error_tracking_manager/error_tracking_manager.dart';
 import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
@@ -26,8 +26,8 @@ class DependenciesContainer {
   /// [Logger] instance, used to log messages.
   final Logger logger;
 
-  /// [Config] instance, contains configuration of the application.
-  final Config config;
+  /// [ApplicationConfig] instance, contains configuration of the application.
+  final ApplicationConfig config;
 
   /// [AppSettingsBloc] instance, used to manage theme and locale.
   final AppSettingsBloc appSettingsBloc;

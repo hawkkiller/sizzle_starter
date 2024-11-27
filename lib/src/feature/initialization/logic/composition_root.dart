@@ -2,7 +2,7 @@ import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sizzle_starter/src/core/constant/config.dart';
+import 'package:sizzle_starter/src/core/constant/application_config.dart';
 import 'package:sizzle_starter/src/core/utils/error_tracking_manager/error_tracking_manager.dart';
 import 'package:sizzle_starter/src/core/utils/error_tracking_manager/sentry_tracking_manager.dart';
 import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
@@ -31,7 +31,7 @@ final class CompositionRoot {
   });
 
   /// Application configuration
-  final Config config;
+  final ApplicationConfig config;
 
   /// Logger used to log information during composition process.
   final Logger logger;
@@ -87,6 +87,9 @@ final class CompositionResult {
       ')';
 }
 
+/// Value with time.
+typedef ValueWithTime<T> = ({T value, Duration timeSpent});
+
 /// {@template factory}
 /// Factory that creates an instance of [T].
 /// {@endtemplate}
@@ -121,7 +124,7 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
   });
 
   /// Application configuration
-  final Config config;
+  final ApplicationConfig config;
 
   /// Logger used to log information during composition process.
   final Logger logger;
@@ -134,14 +137,14 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
     final sharedPreferences = SharedPreferencesAsync();
 
     final packageInfo = await PackageInfo.fromPlatform();
-    final settingsBloc = await SettingsBlocFactory(sharedPreferences).create();
+    final settingsBloc = await AppSettingsBlocFactory(sharedPreferences).create();
 
     return DependenciesContainer(
       logger: logger,
       config: config,
-      appSettingsBloc: settingsBloc,
       errorTrackingManager: errorTrackingManager,
       packageInfo: packageInfo,
+      appSettingsBloc: settingsBloc,
     );
   }
 }
@@ -168,7 +171,7 @@ class ErrorTrackingManagerFactory extends AsyncFactory<ErrorTrackingManager> {
   const ErrorTrackingManagerFactory(this.config);
 
   /// Application configuration
-  final Config config;
+  final ApplicationConfig config;
 
   @override
   Future<ErrorTrackingManager> create() async {
@@ -185,12 +188,16 @@ class ErrorTrackingManagerFactory extends AsyncFactory<ErrorTrackingManager> {
   }
 }
 
-/// {@template settings_bloc_factory}
+/// {@template app_settings_bloc_factory}
 /// Factory that creates an instance of [AppSettingsBloc].
+///
+/// The [AppSettingsBloc] should be initialized during the application startup
+/// in order to load the app settings from the local storage, so user can see
+/// their selected theme,locale, etc.
 /// {@endtemplate}
-class SettingsBlocFactory extends AsyncFactory<AppSettingsBloc> {
-  /// {@macro settings_bloc_factory}
-  const SettingsBlocFactory(this.sharedPreferences);
+class AppSettingsBlocFactory extends AsyncFactory<AppSettingsBloc> {
+  /// {@macro app_settings_bloc_factory}
+  const AppSettingsBlocFactory(this.sharedPreferences);
 
   /// Shared preferences instance
   final SharedPreferencesAsync sharedPreferences;

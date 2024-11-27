@@ -1,9 +1,9 @@
 import 'package:sizzle_starter/src/feature/initialization/model/environment.dart';
 
 /// Application configuration
-class Config {
-  /// Creates a new [Config] instance.
-  const Config();
+class ApplicationConfig {
+  /// Creates a new [ApplicationConfig] instance.
+  const ApplicationConfig();
 
   /// The current environment.
   Environment get environment {
@@ -26,12 +26,12 @@ class Config {
 }
 
 /// {@template testing_dependencies_container}
-/// A special version of [Config] that is used in tests.
+/// A special version of [ApplicationConfig] that is used in tests.
 ///
-/// In order to use [Config] in tests, it is needed to
+/// In order to use [ApplicationConfig] in tests, it is needed to
 /// extend this class and provide the dependencies that are needed for the test.
 /// {@endtemplate}
-base class TestConfig implements Config {
+base class TestConfig implements ApplicationConfig {
   /// {@macro testing_dependencies_container}
   const TestConfig();
 
