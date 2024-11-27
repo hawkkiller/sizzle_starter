@@ -58,3 +58,18 @@ abstract base class ErrorTrackingManagerBase implements ErrorTrackingManager {
   @pragma('vm:prefer-inline')
   bool shouldReport(Object? error) => true;
 }
+
+/// {@template no_op_error_tracking_manager}
+/// Tracking manager that does nothing.
+/// {@endtemplate}
+final class NoOpErrorTrackingManager extends ErrorTrackingManagerBase {
+  /// {@macro no_op_error_tracking_manager}
+  NoOpErrorTrackingManager();
+
+  @override
+  // ignore: no-empty-block
+  Future<void> report(LogMessage log) async {}
+
+  @override
+  bool shouldReport(Object? error) => false;
+}
