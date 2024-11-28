@@ -1,62 +1,75 @@
 import 'dart:async';
 
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:sizzle_starter/src/core/constant/config.dart';
+import 'package:sizzle_starter/src/core/constant/application_config.dart';
 import 'package:sizzle_starter/src/core/utils/app_bloc_observer.dart';
 import 'package:sizzle_starter/src/core/utils/bloc_transformer.dart';
-import 'package:sizzle_starter/src/core/utils/logger.dart';
+import 'package:sizzle_starter/src/core/utils/error_reporter/error_reporter.dart';
+import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
+import 'package:sizzle_starter/src/core/utils/logger/printing_log_observer.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
-import 'package:sizzle_starter/src/feature/initialization/widget/app.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/initialization_failed_app.dart';
+import 'package:sizzle_starter/src/feature/initialization/widget/root_context.dart';
 
 /// {@template app_runner}
-/// A class which is responsible for initialization and running the app.
+/// A class that is responsible for running the application.
 /// {@endtemplate}
-final class AppRunner {
+sealed class AppRunner {
   /// {@macro app_runner}
-  const AppRunner(this.logger);
+  const AppRunner._();
 
-  /// The logger instance
-  final Logger logger;
+  /// Initializes dependencies and launches the application within a guarded execution zone.
+  static Future<void> startup() async {
+    const config = ApplicationConfig();
+    final errorReporter = await const ErrorReporterFactory(config).create();
 
-  /// Start the initialization and in case of success run application
-  Future<void> initializeAndRun() async {
-    final binding = WidgetsFlutterBinding.ensureInitialized();
+    final logger = AppLoggerFactory(
+      observers: [
+        ErrorReporterLogObserver(errorReporter),
+        if (!kReleaseMode) const PrintingLogObserver(logLevel: LogLevel.trace),
+      ],
+    ).create();
 
-    // Preserve splash screen
-    binding.deferFirstFrame();
+    await runZonedGuarded(
+      () async {
+        // Ensure Flutter is initialized
+        WidgetsFlutterBinding.ensureInitialized();
 
-    // Override logging
-    FlutterError.onError = logger.logFlutterError;
-    WidgetsBinding.instance.platformDispatcher.onError = logger.logPlatformDispatcherError;
+        // Configure global error interception
+        FlutterError.onError = logger.logFlutterError;
+        WidgetsBinding.instance.platformDispatcher.onError = logger.logPlatformDispatcherError;
 
-    // Setup bloc observer and transformer
-    Bloc.observer = AppBlocObserver(logger);
-    Bloc.transformer = SequentialBlocTransformer().transform;
-    const config = Config();
+        // Setup bloc observer and transformer
+        Bloc.observer = AppBlocObserver(logger);
+        Bloc.transformer = SequentialBlocTransformer().transform;
 
-    Future<void> initializeAndRun() async {
-      try {
-        final result = await CompositionRoot(config, logger).compose();
-        // Attach this widget to the root of the tree.
-        runApp(App(result: result));
-      } catch (e, stackTrace) {
-        logger.error('Initialization failed', error: e, stackTrace: stackTrace);
-        runApp(
-          InitializationFailedApp(
-            error: e,
-            stackTrace: stackTrace,
-            onRetryInitialization: initializeAndRun,
-          ),
-        );
-      } finally {
-        // Allow rendering
-        binding.allowFirstFrame();
-      }
-    }
+        Future<void> launchApplication() async {
+          try {
+            final compositionResult = await CompositionRoot(
+              config: config,
+              logger: logger,
+              errorReporter: errorReporter,
+            ).compose();
 
-    // Run the app
-    await initializeAndRun();
+            runApp(RootContext(compositionResult: compositionResult));
+          } on Object catch (e, stackTrace) {
+            logger.error('Initialization failed', error: e, stackTrace: stackTrace);
+            runApp(
+              InitializationFailedApp(
+                error: e,
+                stackTrace: stackTrace,
+                onRetryInitialization: launchApplication,
+              ),
+            );
+          }
+        }
+
+        // Launch the application
+        await launchApplication();
+      },
+      logger.logZoneError,
+    );
   }
 }

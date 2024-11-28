@@ -13,12 +13,12 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  late final _homeLogger = DependenciesScope.of(context).logger.withPrefix('[HOME]');
+  late final _logger = DependenciesScope.of(context).logger;
 
   @override
   void initState() {
     super.initState();
-    _homeLogger.info('Welcome To Sizzle Starter!');
+    _logger.info('Welcome To Sizzle Starter!');
   }
 
   @override

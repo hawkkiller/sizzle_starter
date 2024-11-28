@@ -1,15 +1,11 @@
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:sizzle_starter/src/core/constant/config.dart';
-import 'package:sizzle_starter/src/core/utils/error_tracking_manager/error_tracking_manager.dart';
-import 'package:sizzle_starter/src/core/utils/logger.dart';
-import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
+import 'package:sizzle_starter/src/core/constant/application_config.dart';
+import 'package:sizzle_starter/src/core/utils/error_reporter/error_reporter.dart';
+import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 
 /// {@template dependencies_container}
-/// Composed dependencies from the [CompositionRoot].
-///
-/// This class contains all the dependencies that are required for the application
-/// to work.
+/// Container used to reuse dependencies across the application.
 ///
 /// {@macro composition_process}
 /// {@endtemplate}
@@ -19,21 +15,21 @@ class DependenciesContainer {
     required this.logger,
     required this.config,
     required this.appSettingsBloc,
-    required this.errorTrackingManager,
+    required this.errorReporter,
     required this.packageInfo,
   });
 
   /// [Logger] instance, used to log messages.
   final Logger logger;
 
-  /// [Config] instance, contains configuration of the application.
-  final Config config;
+  /// [ApplicationConfig] instance, contains configuration of the application.
+  final ApplicationConfig config;
 
   /// [AppSettingsBloc] instance, used to manage theme and locale.
   final AppSettingsBloc appSettingsBloc;
 
-  /// [ErrorTrackingManager] instance, used to report errors.
-  final ErrorTrackingManager errorTrackingManager;
+  /// [ErrorReporter] instance, used to report errors.
+  final ErrorReporter errorReporter;
 
   /// [PackageInfo] instance, contains information about the application.
   final PackageInfo packageInfo;
