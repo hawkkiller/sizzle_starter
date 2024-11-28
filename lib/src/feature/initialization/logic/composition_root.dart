@@ -1,10 +1,9 @@
 import 'package:clock/clock.dart';
-import 'package:flutter/foundation.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/core/constant/application_config.dart';
-import 'package:sizzle_starter/src/core/utils/error_tracking_manager/error_tracking_manager.dart';
-import 'package:sizzle_starter/src/core/utils/error_tracking_manager/sentry_tracking_manager.dart';
+import 'package:sizzle_starter/src/core/utils/error_reporter/error_reporter.dart';
+import 'package:sizzle_starter/src/core/utils/error_reporter/sentry_error_reporter.dart';
 import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
@@ -24,7 +23,7 @@ final class CompositionRoot {
   const CompositionRoot({
     required this.config,
     required this.logger,
-    required this.errorTrackingManager,
+    required this.errorReporter,
   });
 
   /// Application configuration
@@ -34,21 +33,21 @@ final class CompositionRoot {
   final Logger logger;
 
   /// Error tracking manager used to track errors in the application.
-  final ErrorTrackingManager errorTrackingManager;
+  final ErrorReporter errorReporter;
 
   /// Composes dependencies and returns result of composition.
   Future<CompositionResult> compose() async {
     final stopwatch = clock.stopwatch()..start();
 
-    logger.info('Creating dependencies...');
+    logger.info('Initializing dependencies...');
     // initialize dependencies
     final dependencies = await DependenciesFactory(
       config: config,
       logger: logger,
-      errorTrackingManager: errorTrackingManager,
+      errorReporter: errorReporter,
     ).create();
     stopwatch.stop();
-    logger.info('Dependencies created successfully in ${stopwatch.elapsedMilliseconds} ms.');
+    logger.info('Dependencies initialized successfully in ${stopwatch.elapsedMilliseconds} ms.');
     final result = CompositionResult(
       dependencies: dependencies,
       millisecondsSpent: stopwatch.elapsedMilliseconds,
@@ -116,7 +115,7 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
   const DependenciesFactory({
     required this.config,
     required this.logger,
-    required this.errorTrackingManager,
+    required this.errorReporter,
   });
 
   /// Application configuration
@@ -126,7 +125,7 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
   final Logger logger;
 
   /// Error tracking manager used to track errors in the application.
-  final ErrorTrackingManager errorTrackingManager;
+  final ErrorReporter errorReporter;
 
   @override
   Future<DependenciesContainer> create() async {
@@ -138,7 +137,7 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
     return DependenciesContainer(
       logger: logger,
       config: config,
-      errorTrackingManager: errorTrackingManager,
+      errorReporter: errorReporter,
       packageInfo: packageInfo,
       appSettingsBloc: settingsBloc,
     );
@@ -159,28 +158,28 @@ class AppLoggerFactory extends Factory<AppLogger> {
   AppLogger create() => AppLogger(observers: observers);
 }
 
-/// {@template error_tracking_manager_factory}
-/// Factory that creates an instance of [ErrorTrackingManager].
+/// {@template error_reporter_factory}
+/// Factory that creates an instance of [ErrorReporter].
 /// {@endtemplate}
-class ErrorTrackingManagerFactory extends AsyncFactory<ErrorTrackingManager> {
-  /// {@macro error_tracking_manager_factory}
-  const ErrorTrackingManagerFactory(this.config);
+class ErrorReporterFactory extends AsyncFactory<ErrorReporter> {
+  /// {@macro error_reporter_factory}
+  const ErrorReporterFactory(this.config);
 
   /// Application configuration
   final ApplicationConfig config;
 
   @override
-  Future<ErrorTrackingManager> create() async {
-    final errorTrackingManager = SentryTrackingManager(
+  Future<ErrorReporter> create() async {
+    final errorReporter = SentryErrorReporter(
       sentryDsn: config.sentryDsn,
-      environment: config.environment,
+      environment: config.environment.value,
     );
 
-    if (config.enableSentry && kReleaseMode) {
-      await errorTrackingManager.enableReporting();
+    if (config.sentryDsn.isNotEmpty) {
+      await errorReporter.initialize();
     }
 
-    return errorTrackingManager;
+    return errorReporter;
   }
 }
 

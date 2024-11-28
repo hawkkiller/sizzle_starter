@@ -7,19 +7,19 @@ class ApplicationConfig {
 
   /// The current environment.
   Environment get environment {
-    var env = const String.fromEnvironment('ENVIRONMENT');
+    var env = const String.fromEnvironment('ENVIRONMENT').trim();
 
     if (env.isNotEmpty) {
       return Environment.from(env);
     }
 
-    env = const String.fromEnvironment('FLUTTER_APP_FLAVOR');
+    env = const String.fromEnvironment('FLUTTER_APP_FLAVOR').trim();
 
     return Environment.from(env);
   }
 
   /// The Sentry DSN.
-  String get sentryDsn => const String.fromEnvironment('SENTRY_DSN');
+  String get sentryDsn => const String.fromEnvironment('SENTRY_DSN').trim();
 
   /// Whether Sentry is enabled.
   bool get enableSentry => sentryDsn.isNotEmpty;

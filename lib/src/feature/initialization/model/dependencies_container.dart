@@ -1,6 +1,6 @@
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sizzle_starter/src/core/constant/application_config.dart';
-import 'package:sizzle_starter/src/core/utils/error_tracking_manager/error_tracking_manager.dart';
+import 'package:sizzle_starter/src/core/utils/error_reporter/error_reporter.dart';
 import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 
@@ -15,7 +15,7 @@ class DependenciesContainer {
     required this.logger,
     required this.config,
     required this.appSettingsBloc,
-    required this.errorTrackingManager,
+    required this.errorReporter,
     required this.packageInfo,
   });
 
@@ -28,8 +28,8 @@ class DependenciesContainer {
   /// [AppSettingsBloc] instance, used to manage theme and locale.
   final AppSettingsBloc appSettingsBloc;
 
-  /// [ErrorTrackingManager] instance, used to report errors.
-  final ErrorTrackingManager errorTrackingManager;
+  /// [ErrorReporter] instance, used to report errors.
+  final ErrorReporter errorReporter;
 
   /// [PackageInfo] instance, contains information about the application.
   final PackageInfo packageInfo;

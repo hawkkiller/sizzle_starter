@@ -6,8 +6,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizzle_starter/src/core/constant/application_config.dart';
 import 'package:sizzle_starter/src/core/utils/app_bloc_observer.dart';
 import 'package:sizzle_starter/src/core/utils/bloc_transformer.dart';
+import 'package:sizzle_starter/src/core/utils/error_reporter/error_reporter.dart';
 import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
-import 'package:sizzle_starter/src/core/utils/logger/logging_observer.dart';
+import 'package:sizzle_starter/src/core/utils/logger/printing_log_observer.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/initialization_failed_app.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/root_context.dart';
@@ -22,12 +23,12 @@ sealed class AppRunner {
   /// Initializes dependencies and launches the application within a guarded execution zone.
   static Future<void> startup() async {
     const config = ApplicationConfig();
-    final errorTrackingManager = await const ErrorTrackingManagerFactory(config).create();
+    final errorReporter = await const ErrorReporterFactory(config).create();
 
     final logger = AppLoggerFactory(
       observers: [
-        errorTrackingManager,
-        if (!kReleaseMode) const LoggingObserver(logLevel: LogLevel.trace),
+        ErrorReporterLogObserver(errorReporter),
+        if (!kReleaseMode) const PrintingLogObserver(logLevel: LogLevel.trace),
       ],
     ).create();
 
@@ -49,7 +50,7 @@ sealed class AppRunner {
             final compositionResult = await CompositionRoot(
               config: config,
               logger: logger,
-              errorTrackingManager: errorTrackingManager,
+              errorReporter: errorReporter,
             ).compose();
 
             runApp(RootContext(compositionResult: compositionResult));
