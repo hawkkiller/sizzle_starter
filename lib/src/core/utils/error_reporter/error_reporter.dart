@@ -10,7 +10,7 @@ import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
 abstract interface class ErrorReporter {
   /// Returns `true` if the error reporting service is initialized
   /// and ready to report errors.
-  /// 
+  ///
   /// If this returns `false`, the error reporting service should not be used.
   bool get isInitialized;
 
