@@ -47,5 +47,5 @@ class DependenciesScope extends InheritedWidget {
 
   @override
   bool updateShouldNotify(DependenciesScope oldWidget) =>
-      identical(dependencies, oldWidget.dependencies);
+      !identical(dependencies, oldWidget.dependencies);
 }
