@@ -3,9 +3,9 @@ import 'package:http/http.dart' as http;
 import 'package:intercepted_client/intercepted_client.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
-import 'package:sizzle_starter/src/core/rest_client/src/auth/auth_interceptor.dart';
-import 'package:sizzle_starter/src/core/rest_client/src/auth/authorization_client.dart';
-import 'package:sizzle_starter/src/core/rest_client/src/auth/token_storage.dart';
+import 'package:sizzle_starter/src/feature/auth/data/authorization_client.dart';
+import 'package:sizzle_starter/src/feature/auth/data/token_storage.dart';
+import 'package:sizzle_starter/src/feature/auth/logic/auth_interceptor.dart';
 
 @GenerateNiceMocks([
   MockSpec<AuthorizationClient<Token>>(),
