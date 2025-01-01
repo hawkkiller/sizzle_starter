@@ -11,6 +11,7 @@ environment:
 
 workspace:
   - packages/rest_client
+  - packages/app_database
 
 dependencies:
   # Flutter SDK
@@ -47,6 +48,12 @@ dependencies:
   # Firebase
   firebase_core: ^3.6.0
   firebase_analytics: ^11.3.3
+
+  # Packages
+  rest_client:
+    path: packages/rest_client
+  app_database:
+    path: packages/app_database
 
   # Utils
   path: ^1.9.0

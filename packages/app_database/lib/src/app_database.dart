@@ -12,10 +12,10 @@ class AppDatabase extends _$AppDatabase {
   AppDatabase(super.e);
 
   /// {@macro app_database}
-  AppDatabase.defaults()
+  AppDatabase.defaults({required String name})
       : super(
           driftDatabase(
-            name: 'sizzle',
+            name: name,
             native: const DriftNativeOptions(shareAcrossIsolates: true),
             // TODO(Sizzle): Update the sqlite3Wasm and driftWorker paths to match the location of the files in your project if needed.
             // https://drift.simonbinder.eu/web/#prerequisites
