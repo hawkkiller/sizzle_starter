@@ -22,7 +22,7 @@ final class AppTheme with Diagnosticable {
   );
 
   /// Builds a [ThemeData] based on the [themeMode] and [seed].
-  /// 
+  ///
   /// This can also be used to add additional properties to the [ThemeData],
   /// such as extensions or custom properties.
   ThemeData buildThemeData(Brightness brightness) {
