@@ -87,27 +87,7 @@ jobs:
 
       - name: 🔗 Merge Coverage Reports
         run: |
-          mkdir -p coverage
-          # Copy main app coverage
-          cp coverage/lcov.info coverage/main_lcov.info || echo "" > coverage/main_lcov.info
-
-          # Copy app_database coverage
-          if [ -f "packages/app_database/coverage/lcov.info" ]; then
-            cp packages/app_database/coverage/lcov.info coverage/db_lcov.info
-          else
-            echo "" > coverage/db_lcov.info
-          fi
-
-          # Copy rest_client coverage
-          if [ -f "packages/rest_client/coverage/lcov.info" ]; then
-            cp packages/rest_client/coverage/lcov.info coverage/rest_lcov.info
-          else
-            echo "" > coverage/rest_lcov.info
-          fi
-
-          # Merge them
-          cat coverage/main_lcov.info coverage/db_lcov.info coverage/rest_lcov.info > coverage/lcov_combined.info
-          mv coverage/lcov_combined.info coverage/lcov.info
+          bash scripts/merge_coverage.sh
 
       - name: 📥 Upload test report
         uses: actions/upload-artifact@v4
