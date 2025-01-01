@@ -6,14 +6,15 @@ publish_to: "none"
 version: 0.0.1+1
 
 environment:
-  sdk: ">=3.5.0 <4.0.0"
-  flutter: ">=3.24.4 <4.0.0"
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.1 <4.0.0"
+
+workspace:
+  - packages/rest_client
 
 dependencies:
   # Flutter SDK
   flutter:
-    sdk: flutter
-  flutter_test:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
@@ -58,6 +59,8 @@ dependencies:
 dev_dependencies:
   # Testing
   mockito: ^5.4.4
+  flutter_test:
+    sdk: flutter
 
   # Lints
   sizzle_lints: ^2.1.3

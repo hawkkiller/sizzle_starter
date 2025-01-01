@@ -1,0 +1,9 @@
+include: package:sizzle_lints/lints.yaml
+
+analyzer:
+  exclude: 
+    - "lib/src/core/localization/generated/**"
+
+dart_code_metrics:
+  extends:
+    - package:sizzle_lints/dcm.yaml

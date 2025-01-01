@@ -1,0 +1,25 @@
+name: rest_client
+description: A sample command-line application.
+version: 1.0.0
+# repository: https://github.com/my_org/my_repo
+
+environment:
+  sdk: ">=3.6.0 <4.0.0"
+  flutter: ">=3.27.1 <4.0.0"
+
+resolution: workspace
+
+# Add regular dependencies here.
+dependencies:
+  flutter:
+    sdk: flutter
+  http: ^1.2.2
+  intercepted_client: ^0.0.1
+  meta: ^1.15.0
+  path: ^1.9.0
+
+dev_dependencies:
+  mockito: ^5.4.4
+  build_runner: ^2.4.14
+  flutter_test:
+    sdk: flutter

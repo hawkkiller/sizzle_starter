@@ -2,8 +2,8 @@ import 'package:cronet_http/cronet_http.dart' show CronetClient;
 import 'package:cupertino_http/cupertino_http.dart' show CupertinoClient;
 import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform;
 import 'package:http/http.dart' as http;
-import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
-import 'package:sizzle_starter/src/core/rest_client/src/http/check_exception_io.dart'
+import '../../rest_client.dart';
+import 'check_exception_io.dart'
     if (dart.library.js_interop) 'package:sizzle_starter/src/core/rest_client/src/http/check_exception_browser.dart';
 import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
 

@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:http/http.dart';
 import 'package:intercepted_client/intercepted_client.dart';
-import 'package:sizzle_starter/src/core/rest_client/src/auth/authorization_client.dart';
-import 'package:sizzle_starter/src/core/rest_client/src/auth/token_storage.dart';
-import 'package:sizzle_starter/src/core/utils/retry_request_mixin.dart';
+import 'package:rest_client/rest_client.dart';
+import 'package:rest_client/src/utils/retry_request_mixin.dart';
 
 /// [Token] is a simple class that holds the pair of tokens
 class Token {
