@@ -35,7 +35,7 @@ jobs:
       - name: 🦄 Generate Code
         run: |
           dart run build_runner build -d 
-          cd packages/rest_client ; dart run build_runner build -d ; cd -
+          cd packages/rest_client && dart run build_runner build -d && cd -
 
       - name: Install DCM
         uses: CQLabs/setup-dcm@v1.1.1
