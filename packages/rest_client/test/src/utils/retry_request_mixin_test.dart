@@ -5,14 +5,8 @@ import 'package:rest_client/src/utils/retry_request_mixin.dart';
 
 void main() {
   group('Retry request mixin', () {
-    late RetryRequestMixin retryRequestMixin;
-
-    setUp(() {
-      retryRequestMixin = const RetryRequestMixin();
-    });
-
     test('retries base request', () async {
-      await retryRequestMixin.retryRequest(
+      await retryRequest(
         http.StreamedResponse(
           Stream.fromIterable([]),
           request: http.Request('GET', Uri.parse('https://example.com')),
@@ -27,7 +21,7 @@ void main() {
     });
 
     test('retries multipart request', () async {
-      await retryRequestMixin.retryRequest(
+      await retryRequest(
         http.StreamedResponse(
           Stream.fromIterable([]),
           request: http.MultipartRequest(
@@ -46,7 +40,7 @@ void main() {
 
     test('throws on unsupported / not provided request', () {
       expect(
-        () => retryRequestMixin.retryRequest(
+        () => retryRequest(
           http.StreamedResponse(Stream.fromIterable([]), 200),
           http_testing.MockClient(
             (request) => Future.value(

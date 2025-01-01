@@ -34,7 +34,7 @@ abstract interface class AuthStatusSource {
 
 /// AuthInterceptor is used to add the Auth token to the request header
 /// and refreshes or clears the token if the request fails with a 401
-class AuthInterceptor extends SequentialHttpInterceptor with RetryRequestMixin {
+class AuthInterceptor extends SequentialHttpInterceptor {
   /// Create an Auth interceptor
   ///
   /// [token] may be preloaded and passed via constructor
