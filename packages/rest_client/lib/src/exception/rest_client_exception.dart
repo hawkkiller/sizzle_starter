@@ -1,5 +1,5 @@
 import 'package:meta/meta.dart';
-import '../../rest_client.dart';
+import 'package:rest_client/rest_client.dart';
 
 /// {@template rest_client_exception}
 /// Base class for all [RestClient] exceptions
