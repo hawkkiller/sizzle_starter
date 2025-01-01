@@ -3,10 +3,8 @@ name: "Continuous Integration"
 on:
   push:
     branches: [main]
-
   pull_request:
     branches: [main]
-
   workflow_dispatch:
 
 jobs:
@@ -16,15 +14,14 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4
 
       - name: 🐦 Setup Flutter
-        uses: subosito/flutter-action@v2.16.0
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.27.1
           channel: stable
           cache: true
-          cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
 
       - name: 📦 Install Dependencies
         run: |
@@ -34,7 +31,7 @@ jobs:
 
       - name: 🦄 Generate Code
         run: |
-          # Run builds with error checking
+          # Run builds with error checking in parallel
           dart run build_runner build -d &
           main_pid=$!
           
@@ -58,36 +55,58 @@ jobs:
       - name: Install DCM
         uses: CQLabs/setup-dcm@v1.1.1
         with:
-           github_token: ${{ secrets.GITHUB_TOKEN }}
-  
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: ✨ Check Formatting
-        run: find lib test -name "*.dart" ! -name "*.*.dart" -print0 | xargs -0 dart format --set-exit-if-changed --line-length 100 -o none
+        run: |
+          find lib test -name "*.dart" ! -name "*.*.dart" -print0 \
+            | xargs -0 dart format --set-exit-if-changed --line-length 100 -o none
 
       - name: 🕵️ Analyze
         run: flutter analyze .
       
-        # TODO: Remove this step if you don't use DCM
       - name: 🕵️ Analyze with DCM
+        # Remove this step if you don't actually use DCM
         run: dcm analyze .
 
-      - name: 🧪 Run Tests for Main App
+      # ———————————————————————————————————————————————————————
+      #   RUN TESTS + COVERAGE
+      # ———————————————————————————————————————————————————————
+
+      - name: 🧪 Test Main App
         run: very_good test --coverage --exclude-coverage "*.*.dart" -j 10
         working-directory: .
-
-      - name: 🧪 Run Tests for App Database
+      
+      - name: 🧪 Test App Database
         run: very_good test --coverage --exclude-coverage "*.*.dart" -j 10
         working-directory: packages/app_database
 
-      - name: 🧪 Run Tests for Rest Client
+      - name: 🧪 Test Rest Client
         run: very_good test --coverage --exclude-coverage "*.*.dart" -j 10
         working-directory: packages/rest_client
 
       - name: 🔗 Merge Coverage Reports
         run: |
-          echo "" > coverage/lcov.info
-          if [ -f "coverage/lcov.info" ]; then cat coverage/lcov.info >> coverage/lcov_combined.info; fi
-          if [ -f "packages/app_database/coverage/lcov.info" ]; then cat packages/app_database/coverage/lcov.info >> coverage/lcov_combined.info; fi
-          if [ -f "packages/rest_client/coverage/lcov.info" ]; then cat packages/rest_client/coverage/lcov.info >> coverage/lcov_combined.info; fi
+          mkdir -p coverage
+          # Copy main app coverage
+          cp coverage/lcov.info coverage/main_lcov.info || echo "" > coverage/main_lcov.info
+
+          # Copy app_database coverage
+          if [ -f "packages/app_database/coverage/lcov.info" ]; then
+            cp packages/app_database/coverage/lcov.info coverage/db_lcov.info
+          else
+            echo "" > coverage/db_lcov.info
+          fi
+
+          # Copy rest_client coverage
+          if [ -f "packages/rest_client/coverage/lcov.info" ]; then
+            cp packages/rest_client/coverage/lcov.info coverage/rest_lcov.info
+          else
+            echo "" > coverage/rest_lcov.info
+          fi
+
+          # Merge them
+          cat coverage/main_lcov.info coverage/db_lcov.info coverage/rest_lcov.info > coverage/lcov_combined.info
           mv coverage/lcov_combined.info coverage/lcov.info
 
       - name: 📥 Upload test report
@@ -97,23 +116,26 @@ jobs:
           name: test-results
           path: reports/tests.json
 
-      - name: 📈 Upload Coverage
-        uses: codecov/codecov-action@v4.5.0
+      - name: 📈 Upload Coverage to Codecov
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage/lcov.info
           name: codecov-umbrella
           fail_ci_if_error: true
 
+  # ———————————————————————————————————————————————————————
+  #   TEST REPORT JOB
+  # ———————————————————————————————————————————————————————
   report_tests:
     name: "🚛 Test report"
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # continue-on-error allows this job to run even if 'ci' fails
     continue-on-error: true
-    needs: 
-      - ci
+    needs: [ci]
     steps:
-      - name: Test report
+      - name: Test Report
         uses: dorny/test-reporter@v1
         with:
           artifact: test-results
