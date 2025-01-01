@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/core/constant/localization/localization.dart';
 import 'package:sizzle_starter/src/feature/home/widget/home_screen.dart';
-import 'package:sizzle_starter/src/feature/initialization/model/app_theme.dart';
+import 'package:sizzle_starter/src/feature/settings/model/app_theme.dart';
 import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 
 /// {@template material_context}
