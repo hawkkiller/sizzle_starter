@@ -70,8 +70,25 @@ jobs:
       - name: 🕵️ Analyze with DCM
         run: dcm analyze .
 
-      - name: 🧪 Run Tests
+      - name: 🧪 Run Tests for Main App
         run: very_good test --coverage --exclude-coverage "*.*.dart" -j 10
+        working-directory: .
+
+      - name: 🧪 Run Tests for App Database
+        run: very_good test --coverage --exclude-coverage "*.*.dart" -j 10
+        working-directory: packages/app_database
+
+      - name: 🧪 Run Tests for Rest Client
+        run: very_good test --coverage --exclude-coverage "*.*.dart" -j 10
+        working-directory: packages/rest_client
+
+      - name: 🔗 Merge Coverage Reports
+        run: |
+          echo "" > coverage/lcov.info
+          if [ -f "coverage/lcov.info" ]; then cat coverage/lcov.info >> coverage/lcov_combined.info; fi
+          if [ -f "packages/app_database/coverage/lcov.info" ]; then cat packages/app_database/coverage/lcov.info >> coverage/lcov_combined.info; fi
+          if [ -f "packages/rest_client/coverage/lcov.info" ]; then cat packages/rest_client/coverage/lcov.info >> coverage/lcov_combined.info; fi
+          mv coverage/lcov_combined.info coverage/lcov.info
 
       - name: 📥 Upload test report
         uses: actions/upload-artifact@v4
