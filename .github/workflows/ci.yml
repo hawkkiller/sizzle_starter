@@ -30,10 +30,13 @@ jobs:
         run: |
           flutter pub global activate very_good_cli
           flutter pub global activate coverage
+          flutter pub get
 
       - name: 🦄 Generate Code
         run: |
-          dart run build_runner build -d
+          dart run build_runner build -d & 
+          dart pub -C packages/app_database run build_runner build --delete-conflicting-outputs &
+          wait
 
       - name: Install DCM
         uses: CQLabs/setup-dcm@v1.1.1
