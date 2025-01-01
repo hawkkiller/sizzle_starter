@@ -25,7 +25,8 @@ http.Client createDefaultHttpClient() {
       _ => null,
     };
   } on Object catch (e, stackTrace) {
-    Zone.current.print('Failed to create a default http client for platform $platform $e $stackTrace');
+    Zone.current
+        .print('Failed to create a default http client for platform $platform $e $stackTrace');
   }
 
   return client ?? http.Client();
