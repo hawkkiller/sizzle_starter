@@ -15,17 +15,23 @@ class MaterialContext extends StatelessWidget {
 
   // This global key is needed for [MaterialApp]
   // to work properly when Widgets Inspector is enabled.
-  static final _globalKey = GlobalKey();
+  static final _globalKey = GlobalKey(debugLabel: 'MaterialContext');
 
   @override
   Widget build(BuildContext context) {
     final settings = SettingsScope.settingsOf(context);
     final mediaQueryData = MediaQuery.of(context);
 
+    final theme = settings.appTheme ?? AppTheme.defaultTheme;
+
+    final lightTheme = theme.buildThemeData(Brightness.light);
+    final darkTheme = theme.buildThemeData(Brightness.dark);
+    final themeMode = theme.themeMode;
+
     return MaterialApp(
-      theme: settings.appTheme?.lightTheme ?? AppTheme.defaultTheme.lightTheme,
-      darkTheme: settings.appTheme?.darkTheme ?? AppTheme.defaultTheme.darkTheme,
-      themeMode: settings.appTheme?.themeMode ?? ThemeMode.system,
+      theme: lightTheme,
+      darkTheme: darkTheme,
+      themeMode: themeMode,
       locale: settings.locale,
       localizationsDelegates: Localization.localizationDelegates,
       supportedLocales: Localization.supportedLocales,

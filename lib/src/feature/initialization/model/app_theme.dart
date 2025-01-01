@@ -2,23 +2,12 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 /// {@template app_theme}
-/// An immutable class that holds properties needed
-/// to build a [ThemeData] for the app.
+/// An immutable class that holds properties needed to build a [ThemeData] for the app.
 /// {@endtemplate}
 @immutable
 final class AppTheme with Diagnosticable {
   /// {@macro app_theme}
-  AppTheme({required this.themeMode, required this.seed})
-      : darkTheme = ThemeData(
-          colorSchemeSeed: seed,
-          brightness: Brightness.dark,
-          useMaterial3: true,
-        ),
-        lightTheme = ThemeData(
-          colorSchemeSeed: seed,
-          brightness: Brightness.light,
-          useMaterial3: true,
-        );
+  const AppTheme({required this.themeMode, required this.seed});
 
   /// The type of theme to use.
   final ThemeMode themeMode;
@@ -26,31 +15,19 @@ final class AppTheme with Diagnosticable {
   /// The seed color to generate the [ColorScheme] from.
   final Color seed;
 
-  /// The dark [ThemeData] for this [AppTheme].
-  final ThemeData darkTheme;
-
-  /// The light [ThemeData] for this [AppTheme].
-  final ThemeData lightTheme;
-
-  /// The default [AppTheme].
-  static final defaultTheme = AppTheme(
+  /// The default theme to use.
+  static const defaultTheme = AppTheme(
     themeMode: ThemeMode.system,
-    seed: Colors.blue,
+    seed: Color(0xFF6200EE),
   );
 
-  /// The [ThemeData] for this [AppTheme].
-  /// This is computed based on the [themeMode].
-  ThemeData computeTheme() {
-    switch (themeMode) {
-      case ThemeMode.light:
-        return lightTheme;
-      case ThemeMode.dark:
-        return darkTheme;
-      case ThemeMode.system:
-        return PlatformDispatcher.instance.platformBrightness == Brightness.dark
-            ? darkTheme
-            : lightTheme;
-    }
+  /// Builds a [ThemeData] based on the [themeMode] and [seed].
+  /// 
+  /// This can also be used to add additional properties to the [ThemeData],
+  /// such as extensions or custom properties.
+  ThemeData buildThemeData(Brightness brightness) {
+    final colorScheme = ColorScheme.fromSeed(seedColor: seed, brightness: brightness);
+    return ThemeData.from(colorScheme: colorScheme, useMaterial3: true);
   }
 
   @override
@@ -58,8 +35,6 @@ final class AppTheme with Diagnosticable {
     super.debugFillProperties(properties);
     properties.add(ColorProperty('seed', seed));
     properties.add(EnumProperty<ThemeMode>('type', themeMode));
-    properties.add(DiagnosticsProperty<ThemeData>('lightTheme', lightTheme));
-    properties.add(DiagnosticsProperty<ThemeData>('darkTheme', darkTheme));
   }
 
   @override

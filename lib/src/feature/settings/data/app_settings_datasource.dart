@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:sizzle_starter/src/core/utils/color_codec.dart';
 import 'package:sizzle_starter/src/core/utils/persisted_entry.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/app_theme.dart';
 import 'package:sizzle_starter/src/feature/settings/data/theme_mode_codec.dart';
@@ -93,7 +94,7 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<AppSettings> {
     if (themeMode != null && themeSeedColor != null) {
       appTheme = AppTheme(
         themeMode: const ThemeModeCodec().decode(themeMode),
-        seed: Color(themeSeedColor),
+        seed: colorCodec.decode(themeSeedColor),
       );
     }
 
@@ -126,7 +127,7 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<AppSettings> {
     if (value.appTheme != null) {
       await (
         _themeMode.set(const ThemeModeCodec().encode(value.appTheme!.themeMode)),
-        _themeSeedColor.set(value.appTheme!.seed.value),
+        _themeSeedColor.set(colorCodec.encode(value.appTheme!.seed)),
       ).wait;
     }
 
