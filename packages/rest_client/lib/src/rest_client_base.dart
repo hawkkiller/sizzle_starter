@@ -3,7 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
-import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
+import 'package:rest_client/rest_client.dart';
 
 /// {@macro rest_client}
 @immutable

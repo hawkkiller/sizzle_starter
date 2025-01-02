@@ -1,7 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart' as http_testing;
-import 'package:sizzle_starter/src/core/rest_client/rest_client.dart';
+import 'package:rest_client/rest_client.dart';
 
 void main() {
   group('RestClientHttp', () {

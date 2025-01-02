@@ -2,9 +2,8 @@ import 'dart:async';
 
 import 'package:http/http.dart';
 import 'package:intercepted_client/intercepted_client.dart';
-import 'package:sizzle_starter/src/core/rest_client/src/auth/authorization_client.dart';
-import 'package:sizzle_starter/src/core/rest_client/src/auth/token_storage.dart';
-import 'package:sizzle_starter/src/core/utils/retry_request_mixin.dart';
+import 'package:rest_client/rest_client.dart';
+import 'package:rest_client/src/utils/retry_request_mixin.dart';
 
 /// [Token] is a simple class that holds the pair of tokens
 class Token {
@@ -35,7 +34,7 @@ abstract interface class AuthStatusSource {
 
 /// AuthInterceptor is used to add the Auth token to the request header
 /// and refreshes or clears the token if the request fails with a 401
-class AuthInterceptor extends SequentialHttpInterceptor with RetryRequestMixin {
+class AuthInterceptor extends SequentialHttpInterceptor {
   /// Create an Auth interceptor
   ///
   /// [token] may be preloaded and passed via constructor

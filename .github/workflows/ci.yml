@@ -3,10 +3,8 @@ name: "Continuous Integration"
 on:
   push:
     branches: [main]
-
   pull_request:
     branches: [main]
-
   workflow_dispatch:
 
 jobs:
@@ -16,42 +14,80 @@ jobs:
     timeout-minutes: 10
     steps:
       - name: 📚 Git Checkout
-        uses: actions/checkout@v4.1.7
+        uses: actions/checkout@v4
 
       - name: 🐦 Setup Flutter
-        uses: subosito/flutter-action@v2.16.0
+        uses: subosito/flutter-action@v2
         with:
           flutter-version: 3.27.1
           channel: stable
           cache: true
-          cache-key: flutter-:os:-:channel:-:version:-:arch:-:hash:-${{ hashFiles('**/pubspec.lock') }}
 
       - name: 📦 Install Dependencies
         run: |
           flutter pub global activate very_good_cli
           flutter pub global activate coverage
+          flutter pub get
 
       - name: 🦄 Generate Code
         run: |
-          dart run build_runner build -d
+          # Run builds with error checking in parallel
+          dart run build_runner build -d &
+          main_pid=$!
+          
+          if [ -d "packages/app_database" ]; then
+            (cd packages/app_database && dart run build_runner build -d) &
+            db_pid=$!
+          fi
+          
+          if [ -d "packages/rest_client" ]; then
+            (cd packages/rest_client && dart run build_runner build -d) &
+            rest_pid=$!
+          fi
+          
+          # Wait for all processes and check their exit status
+          for pid in $main_pid $db_pid $rest_pid; do
+            if [ -n "$pid" ]; then
+              wait $pid || exit 1
+            fi
+          done
 
       - name: Install DCM
         uses: CQLabs/setup-dcm@v1.1.1
         with:
-           github_token: ${{ secrets.GITHUB_TOKEN }}
-  
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+
       - name: ✨ Check Formatting
-        run: find lib test -name "*.dart" ! -name "*.*.dart" -print0 | xargs -0 dart format --set-exit-if-changed --line-length 100 -o none
+        run: |
+          find lib test -name "*.dart" ! -name "*.*.dart" -print0 \
+            | xargs -0 dart format --set-exit-if-changed --line-length 100 -o none
 
       - name: 🕵️ Analyze
         run: flutter analyze .
       
-        # TODO: Remove this step if you don't use DCM
       - name: 🕵️ Analyze with DCM
+        # Remove this step if you don't actually use DCM
         run: dcm analyze .
 
-      - name: 🧪 Run Tests
+      # ———————————————————————————————————————————————————————
+      #   RUN TESTS + COVERAGE
+      # ———————————————————————————————————————————————————————
+
+      - name: 🧪 Test Main App
         run: very_good test --coverage --exclude-coverage "*.*.dart" -j 10
+        working-directory: .
+      
+      - name: 🧪 Test App Database
+        run: very_good test --coverage --exclude-coverage "*.*.dart" -j 10
+        working-directory: packages/app_database
+
+      - name: 🧪 Test Rest Client
+        run: very_good test --coverage --exclude-coverage "*.*.dart" -j 10
+        working-directory: packages/rest_client
+
+      - name: 🔗 Merge Coverage Reports
+        run: |
+          bash ./scripts/merge_coverage.bash
 
       - name: 📥 Upload test report
         uses: actions/upload-artifact@v4
@@ -60,23 +96,26 @@ jobs:
           name: test-results
           path: reports/tests.json
 
-      - name: 📈 Upload Coverage
-        uses: codecov/codecov-action@v4.5.0
+      - name: 📈 Upload Coverage to Codecov
+        uses: codecov/codecov-action@v4
         with:
           token: ${{ secrets.CODECOV_TOKEN }}
           file: ./coverage/lcov.info
           name: codecov-umbrella
           fail_ci_if_error: true
 
+  # ———————————————————————————————————————————————————————
+  #   TEST REPORT JOB
+  # ———————————————————————————————————————————————————————
   report_tests:
     name: "🚛 Test report"
     runs-on: ubuntu-latest
     timeout-minutes: 10
+    # continue-on-error allows this job to run even if 'ci' fails
     continue-on-error: true
-    needs: 
-      - ci
+    needs: [ci]
     steps:
-      - name: Test report
+      - name: Test Report
         uses: dorny/test-reporter@v1
         with:
           artifact: test-results
