@@ -58,16 +58,15 @@ dependencies:
   # Utils
   path: ^1.9.0
   path_provider: ^2.1.5
-  intercepted_client: ^0.0.1
   clock: ^1.1.1
   fake_async: ^1.3.1
   package_info_plus: ^8.1.0
 
 dev_dependencies:
   # Testing
-  mockito: ^5.4.4
   flutter_test:
     sdk: flutter
+  mockito: ^5.4.4
 
   # Lints
   sizzle_lints: ^2.1.3
@@ -76,6 +75,7 @@ dev_dependencies:
   flutter_gen_runner: ^5.8.0
   flutter_launcher_icons: ^0.14.1
   flutter_native_splash: ^2.4.2
+  build_runner: ^2.4.14
 
 flutter:
   uses-material-design: true
