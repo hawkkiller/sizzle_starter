@@ -11,17 +11,18 @@ resolution: workspace
 
 # Add regular dependencies here.
 dependencies:
-  cronet_http: ^1.3.2
-  cupertino_http: ^2.0.1
   flutter:
     sdk: flutter
+  cronet_http: ^1.3.2
+  cupertino_http: ^2.0.1
   http: ^1.2.2
   intercepted_client: ^0.0.1
-  meta: ^1.15.0
-  path: ^1.9.0
+  path:
+  meta:
 
 dev_dependencies:
-  mockito: ^5.4.4
-  build_runner: ^2.4.14
   flutter_test:
     sdk: flutter
+  mockito:
+  build_runner:
+  sizzle_lints:
