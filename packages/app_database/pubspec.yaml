@@ -1,5 +1,5 @@
 name: app_database
-description: "A new Flutter package project."
+description: "Database for the app"
 version: 1.0.0
 publish_to: none
 
