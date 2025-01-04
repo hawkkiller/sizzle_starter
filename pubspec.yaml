@@ -19,10 +19,10 @@ dependencies:
     sdk: flutter
   flutter_localizations:
     sdk: flutter
-  collection: any
-  async: any
-  meta: any
-  intl: any
+  collection: ^1.19.0
+  async: ^2.11.0
+  meta: ^1.15.0
+  intl: ^0.19.0
 
   # Stream
   stream_transform: ^2.1.0
@@ -75,7 +75,6 @@ dev_dependencies:
   flutter_gen_runner: ^5.8.0
   flutter_launcher_icons: ^0.14.1
   flutter_native_splash: ^2.4.2
-  build_runner: ^2.4.14
 
 flutter:
   uses-material-design: true

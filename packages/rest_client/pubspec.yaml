@@ -1,5 +1,5 @@
 name: rest_client
-description: A sample command-line application.
+description: Rest client
 version: 1.0.0
 publish_to: none
 
@@ -17,12 +17,12 @@ dependencies:
   cupertino_http: ^2.0.1
   http: ^1.2.2
   intercepted_client: ^0.0.1
-  path:
-  meta:
+  path: ^1.9.0
+  meta: ^1.15.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  mockito:
-  build_runner:
-  sizzle_lints:
+  mockito: ^5.4.4
+  build_runner: ^2.4.14
+  sizzle_lints: ^2.1.3

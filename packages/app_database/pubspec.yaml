@@ -1,5 +1,5 @@
 name: app_database
-description: "A new Flutter package project."
+description: "Database for the app"
 version: 1.0.0
 publish_to: none
 
@@ -19,5 +19,5 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
   drift_dev: ^2.21.2
-  build_runner:
-  sizzle_lints:
+  build_runner: ^2.4.14
+  sizzle_lints: ^2.1.3
