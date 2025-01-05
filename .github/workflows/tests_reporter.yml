@@ -19,4 +19,4 @@ jobs:
           name: Test Report
           path: "**/tests.json"
           reporter: flutter-json
-          fail-on-error: fals
+          fail-on-error: false
