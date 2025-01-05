@@ -74,7 +74,7 @@ jobs:
       # ———————————————————————————————————————————————————————
 
       - name: 🧪 Run Tests
-        run: ./scripts/test.bash
+        run: bash ./scripts/test.bash
 
       - name: 📥 Upload test report
         uses: actions/upload-artifact@v4
