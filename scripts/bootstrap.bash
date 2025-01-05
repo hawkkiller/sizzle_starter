@@ -1,3 +1,4 @@
+#!/bin/bash
 # Get workspace dependencies
 flutter pub get
 
