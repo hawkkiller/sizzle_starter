@@ -2,13 +2,13 @@
 # Get workspace dependencies
 flutter pub get
 
-# For each package in packages that has build_runner dependency run build_runner
-for dir in packages/*; do
+# For each package that has a pubspec.yaml file and build_runner dependency
+# run generation
+find . -type f -name "pubspec.yaml" -exec grep -q build_runner {} \; -exec dirname {} \; | while read -r dir; do
   if [ -f "$dir/pubspec.yaml" ]; then
-    if grep -q build_runner "$dir/pubspec.yaml"; then
-      pushd $dir
-      dart run build_runner build --delete-conflicting-outputs
-      popd
-    fi
+    pushd $dir
+    printf "\nGenerating files for $dir\n"
+    dart run build_runner build --delete-conflicting-outputs
+    popd
   fi
 done

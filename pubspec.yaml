@@ -75,6 +75,7 @@ dev_dependencies:
   flutter_gen_runner: 5.8.0
   flutter_launcher_icons: 0.14.2
   flutter_native_splash: 2.4.4
+  build_runner: 2.4.14
 
 flutter:
   uses-material-design: true
