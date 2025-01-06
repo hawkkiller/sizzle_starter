@@ -27,30 +27,9 @@ jobs:
         run: |
           flutter pub global activate very_good_cli
           flutter pub global activate coverage
-          flutter pub get
 
-      - name: 🦄 Generate Code
-        run: |
-          # Run builds with error checking in parallel
-          dart run build_runner build -d &
-          main_pid=$!
-          
-          if [ -d "packages/app_database" ]; then
-            (cd packages/app_database && dart run build_runner build -d) &
-            db_pid=$!
-          fi
-          
-          if [ -d "packages/rest_client" ]; then
-            (cd packages/rest_client && dart run build_runner build -d) &
-            rest_pid=$!
-          fi
-          
-          # Wait for all processes and check their exit status
-          for pid in $main_pid $db_pid $rest_pid; do
-            if [ -n "$pid" ]; then
-              wait $pid || exit 1
-            fi
-          done
+      - name: 🦄 Bootstrap
+        run: bash ./scripts/bootstrap.bash
 
       - name: Install DCM
         uses: CQLabs/setup-dcm@v1.1.1
@@ -73,21 +52,8 @@ jobs:
       #   RUN TESTS + COVERAGE
       # ———————————————————————————————————————————————————————
 
-      - name: 🧪 Test Main App
-        run: very_good test --coverage --exclude-coverage "*.*.dart" -j 10
-        working-directory: .
-      
-      - name: 🧪 Test App Database
-        run: very_good test --coverage --exclude-coverage "*.*.dart" -j 10
-        working-directory: packages/app_database
-
-      - name: 🧪 Test Rest Client
-        run: very_good test --coverage --exclude-coverage "*.*.dart" -j 10
-        working-directory: packages/rest_client
-
-      - name: 🔗 Merge Coverage Reports
-        run: |
-          bash ./scripts/merge_coverage.bash
+      - name: 🧪 Run Tests
+        run: bash ./scripts/test.bash
 
       - name: 📥 Upload test report
         uses: actions/upload-artifact@v4
@@ -95,14 +61,6 @@ jobs:
         with:
           name: test-results
           path: reports/tests.json
-
-      - name: 📈 Upload Coverage to Codecov
-        uses: codecov/codecov-action@v4
-        with:
-          token: ${{ secrets.CODECOV_TOKEN }}
-          file: ./coverage/lcov.info
-          name: codecov-umbrella
-          fail_ci_if_error: true
 
   # ———————————————————————————————————————————————————————
   #   TEST REPORT JOB

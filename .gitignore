@@ -58,3 +58,5 @@ pubspec.lock
 
 # Test reports
 reports/
+coverage/
+**/coverage/
