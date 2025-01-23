@@ -15,7 +15,7 @@ find_test_dirs() {
 # Capture the output of find_test_dirs and pass it to flutter test
 test_dirs=$(find_test_dirs)
 if [ -n "$test_dirs" ]; then
-  flutter test $test_dirs --no-pub --coverage
+  flutter test $test_dirs --no-pub --coverage --file-reporter json:tests.json
 else
   echo "No directories with pubspec.yaml and test/ folder found."
 fi

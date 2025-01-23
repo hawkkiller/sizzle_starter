@@ -60,3 +60,7 @@ pubspec.lock
 reports/
 coverage/
 **/coverage/
+tests.json
+
+# Template
+.dev.gitignore
