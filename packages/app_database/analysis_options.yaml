@@ -1,5 +1,0 @@
-include: package:sizzle_lints/lints.yaml
-
-dart_code_metrics:
-  extends:
-    - package:sizzle_lints/dcm.yaml
