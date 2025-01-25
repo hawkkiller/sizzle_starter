@@ -1,9 +1,6 @@
 import 'dart:convert';
 import 'dart:ui' show Color;
 
-/// A codec for encoding and decoding [Color] objects.
-const colorCodec = ColorCodec();
-
 /// {@template color_codec}
 /// A codec for encoding and decoding [Color] objects.
 /// {@endtemplate}
