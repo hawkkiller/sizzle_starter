@@ -17,7 +17,7 @@ class ApplicationConfig {
 
     return Environment.from(env);
   }
-
+  
   /// The Sentry DSN.
   String get sentryDsn => const String.fromEnvironment('SENTRY_DSN').trim();
 

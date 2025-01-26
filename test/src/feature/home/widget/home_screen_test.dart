@@ -30,5 +30,5 @@ base class HomeScreenDependenciesContainer extends TestDependenciesContainer {
   const HomeScreenDependenciesContainer();
 
   @override
-  Logger get logger => const NoOpLogger();
+  Logger get logger => Logger();
 }
