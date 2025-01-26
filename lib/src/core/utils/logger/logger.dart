@@ -4,18 +4,18 @@ import 'package:sizzle_starter/src/core/utils/logger/printing_log_observer.dart'
 
 /// {@template logger}
 /// Base class for logging.
-/// 
+///
 /// By default, it doesn't log anything. To log messages, you can extend this class
 /// and override the [log] method. A better alternative would be to add a [PrintingLogObserver]
 /// to the logger, which will print all log messages to the console.
-/// 
+///
 /// To log a message, use [trace], [debug], [info], [warn], [error], [fatal] methods.
-/// 
+///
 /// To destroy the logger and release all resources, use the [destroy] method.
 /// {@endtemplate}
 base class Logger {
   /// Constructs an instance of [Logger].
-  /// 
+  ///
   /// {@macro logger}
   Logger();
 
