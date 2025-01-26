@@ -68,6 +68,8 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<AppSettings> {
     key: '$key.textScale',
   );
 
+  static const _colorCodec = ColorCodec();
+
   @override
   Future<AppSettings?> read() async {
     final themeModeFuture = _themeMode.read();
@@ -94,7 +96,7 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<AppSettings> {
     if (themeMode != null && themeSeedColor != null) {
       appTheme = AppTheme(
         themeMode: const ThemeModeCodec().decode(themeMode),
-        seed: colorCodec.decode(themeSeedColor),
+        seed: _colorCodec.decode(themeSeedColor),
       );
     }
 
@@ -127,7 +129,7 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<AppSettings> {
     if (value.appTheme != null) {
       await (
         _themeMode.set(const ThemeModeCodec().encode(value.appTheme!.themeMode)),
-        _themeSeedColor.set(colorCodec.encode(value.appTheme!.seed)),
+        _themeSeedColor.set(_colorCodec.encode(value.appTheme!.seed)),
       ).wait;
     }
 
