@@ -1,4 +1,0 @@
-timeout: 1x
-
-file_reporters:
-  json: reports/tests.json
