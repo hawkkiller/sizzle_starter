@@ -96,18 +96,14 @@ base class Logger {
       );
 
   /// Logs a zone error with [LogLevel.error].
-  void logZoneError(Object error, StackTrace stackTrace) => this.error(
-        'Zone error',
-        error: error,
-        stackTrace: stackTrace,
-      );
+  void logZoneError(Object error, StackTrace stackTrace) {
+    this.error('Zone error', error: error, stackTrace: stackTrace);
+  }
 
   /// Logs a flutter error with [LogLevel.error].
-  void logFlutterError(FlutterErrorDetails details) => error(
-        details.summary.toString(),
-        error: details.exception,
-        stackTrace: details.stack,
-      );
+  void logFlutterError(FlutterErrorDetails details) {
+    error('Flutter Error', error: details.exception, stackTrace: details.stack);
+  }
 
   /// Logs a platform dispatcher error with [LogLevel.error].
   bool logPlatformDispatcherError(Object error, StackTrace stackTrace) {
