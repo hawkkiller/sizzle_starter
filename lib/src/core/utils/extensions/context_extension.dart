@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-/// List of extensions for [BuildContext]
-extension ContextExtension on BuildContext {
+/// Extension methods on [BuildContext] for working with inherited widgets.
+extension InheritedExtension on BuildContext {
   /// Obtain the nearest widget of the given type T,
   /// which must be the type of a concrete [InheritedWidget] subclass,
   /// and register this build context with that widget such that
