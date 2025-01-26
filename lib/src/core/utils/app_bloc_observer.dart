@@ -47,7 +47,6 @@ class AppBlocObserver extends BlocObserver {
       logMessage.toString(),
       error: error,
       stackTrace: stackTrace,
-      printError: false,
     );
     super.onError(bloc, error, stackTrace);
   }

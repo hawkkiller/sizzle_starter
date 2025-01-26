@@ -17,7 +17,7 @@ void main() {
     mockAnalytics = MockFirebaseAnalytics();
     reporter = FirebaseAnalyticsReporter(
       analytics: mockAnalytics,
-      logger: const NoOpLogger(),
+      logger: Logger(),
     );
   });
 

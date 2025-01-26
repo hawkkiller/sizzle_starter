@@ -145,9 +145,9 @@ class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
 }
 
 /// {@template app_logger_factory}
-/// Factory that creates an instance of [AppLogger].
+/// Factory that creates an instance of [Logger].
 /// {@endtemplate}
-class AppLoggerFactory extends Factory<AppLogger> {
+class AppLoggerFactory extends Factory<Logger> {
   /// {@macro app_logger_factory}
   const AppLoggerFactory({this.observers = const []});
 
@@ -155,7 +155,15 @@ class AppLoggerFactory extends Factory<AppLogger> {
   final List<LogObserver> observers;
 
   @override
-  AppLogger create() => AppLogger(observers: observers);
+  Logger create() {
+    final logger = Logger();
+
+    for (final observer in observers) {
+      logger.addObserver(observer);
+    }
+
+    return logger;
+  }
 }
 
 /// {@template error_reporter_factory}

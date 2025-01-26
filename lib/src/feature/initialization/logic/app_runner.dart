@@ -43,7 +43,7 @@ sealed class AppRunner {
 
         // Setup bloc observer and transformer
         Bloc.observer = AppBlocObserver(logger);
-        Bloc.transformer = SequentialBlocTransformer().transform;
+        Bloc.transformer = SequentialBlocTransformer<Object?>().transform;
 
         Future<void> launchApplication() async {
           try {
