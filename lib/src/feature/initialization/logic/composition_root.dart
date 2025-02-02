@@ -26,7 +26,7 @@ final class CompositionRoot {
     required this.errorReporter,
   });
 
-  /// Application configuration
+  /// Application configuration.
   final ApplicationConfig config;
 
   /// Logger used to log information during composition process.
@@ -35,30 +35,29 @@ final class CompositionRoot {
   /// Error tracking manager used to track errors in the application.
   final ErrorReporter errorReporter;
 
-  /// Composes dependencies and returns result of composition.
+  /// Composes dependencies and returns the result of composition.
   Future<CompositionResult> compose() async {
     final stopwatch = clock.stopwatch()..start();
 
     logger.info('Initializing dependencies...');
-    // initialize dependencies
-    final dependencies = await DependenciesFactory(
-      config: config,
-      logger: logger,
-      errorReporter: errorReporter,
-    ).create();
+
+    // Create the dependencies container using functions.
+    final dependencies = await createDependenciesContainer(config, logger, errorReporter);
+
     stopwatch.stop();
-    logger.info('Dependencies initialized successfully in ${stopwatch.elapsedMilliseconds} ms.');
-    final result = CompositionResult(
+    logger.info(
+      'Dependencies initialized successfully in ${stopwatch.elapsedMilliseconds} ms.',
+    );
+
+    return CompositionResult(
       dependencies: dependencies,
       millisecondsSpent: stopwatch.elapsedMilliseconds,
     );
-
-    return result;
   }
 }
 
 /// {@template composition_result}
-/// Result of composition
+/// Result of composition.
 ///
 /// {@macro composition_process}
 /// {@endtemplate}
@@ -69,154 +68,83 @@ final class CompositionResult {
     required this.millisecondsSpent,
   });
 
-  /// The dependencies container
+  /// The dependencies container.
   final DependenciesContainer dependencies;
 
-  /// The number of milliseconds spent
+  /// The number of milliseconds spent composing dependencies.
   final int millisecondsSpent;
 
   @override
-  String toString() => '$CompositionResult('
+  String toString() => 'CompositionResult('
       'dependencies: $dependencies, '
       'millisecondsSpent: $millisecondsSpent'
       ')';
 }
 
-/// Value with time.
-typedef ValueWithTime<T> = ({T value, Duration timeSpent});
+/// Creates the full dependencies container.
+Future<DependenciesContainer> createDependenciesContainer(
+  ApplicationConfig config,
+  Logger logger,
+  ErrorReporter errorReporter,
+) async {
+  // Create or obtain the shared preferences instance.
+  final sharedPreferences = SharedPreferencesAsync();
 
-/// {@template factory}
-/// Factory that creates an instance of [T].
-/// {@endtemplate}
-abstract class Factory<T> {
-  /// {@macro factory}
-  const Factory();
+  // Get package info.
+  final packageInfo = await PackageInfo.fromPlatform();
 
-  /// Creates an instance of [T].
-  T create();
+  // Create the AppSettingsBloc using shared preferences.
+  final appSettingsBloc = await createAppSettingsBloc(sharedPreferences);
+
+  return DependenciesContainer(
+    logger: logger,
+    config: config,
+    errorReporter: errorReporter,
+    packageInfo: packageInfo,
+    appSettingsBloc: appSettingsBloc,
+  );
 }
 
-/// {@template async_factory}
-/// Factory that creates an instance of [T] asynchronously.
-/// {@endtemplate}
-abstract class AsyncFactory<T> {
-  /// {@macro async_factory}
-  const AsyncFactory();
+/// Creates an instance of [Logger] and attaches any provided observers.
+Logger createAppLogger({List<LogObserver> observers = const []}) {
+  final logger = Logger();
 
-  /// Creates an instance of [T].
-  Future<T> create();
-}
-
-/// {@template dependencies_factory}
-/// Factory that creates an instance of [DependenciesContainer].
-/// {@endtemplate}
-class DependenciesFactory extends AsyncFactory<DependenciesContainer> {
-  /// {@macro dependencies_factory}
-  const DependenciesFactory({
-    required this.config,
-    required this.logger,
-    required this.errorReporter,
-  });
-
-  /// Application configuration
-  final ApplicationConfig config;
-
-  /// Logger used to log information during composition process.
-  final Logger logger;
-
-  /// Error tracking manager used to track errors in the application.
-  final ErrorReporter errorReporter;
-
-  @override
-  Future<DependenciesContainer> create() async {
-    final sharedPreferences = SharedPreferencesAsync();
-
-    final packageInfo = await PackageInfo.fromPlatform();
-    final settingsBloc = await AppSettingsBlocFactory(sharedPreferences).create();
-
-    return DependenciesContainer(
-      logger: logger,
-      config: config,
-      errorReporter: errorReporter,
-      packageInfo: packageInfo,
-      appSettingsBloc: settingsBloc,
-    );
+  for (final observer in observers) {
+    logger.addObserver(observer);
   }
+
+  return logger;
 }
 
-/// {@template app_logger_factory}
-/// Factory that creates an instance of [Logger].
-/// {@endtemplate}
-class AppLoggerFactory extends Factory<Logger> {
-  /// {@macro app_logger_factory}
-  const AppLoggerFactory({this.observers = const []});
+/// Creates an instance of [ErrorReporter] (using Sentry) and initializes it if needed.
+Future<ErrorReporter> createErrorReporter(ApplicationConfig config) async {
+  final errorReporter = SentryErrorReporter(
+    sentryDsn: config.sentryDsn,
+    environment: config.environment.value,
+  );
 
-  /// List of observers that will be notified when a log message is received.
-  final List<LogObserver> observers;
-
-  @override
-  Logger create() {
-    final logger = Logger();
-
-    for (final observer in observers) {
-      logger.addObserver(observer);
-    }
-
-    return logger;
+  if (config.sentryDsn.isNotEmpty) {
+    await errorReporter.initialize();
   }
+
+  return errorReporter;
 }
 
-/// {@template error_reporter_factory}
-/// Factory that creates an instance of [ErrorReporter].
-/// {@endtemplate}
-class ErrorReporterFactory extends AsyncFactory<ErrorReporter> {
-  /// {@macro error_reporter_factory}
-  const ErrorReporterFactory(this.config);
-
-  /// Application configuration
-  final ApplicationConfig config;
-
-  @override
-  Future<ErrorReporter> create() async {
-    final errorReporter = SentryErrorReporter(
-      sentryDsn: config.sentryDsn,
-      environment: config.environment.value,
-    );
-
-    if (config.sentryDsn.isNotEmpty) {
-      await errorReporter.initialize();
-    }
-
-    return errorReporter;
-  }
-}
-
-/// {@template app_settings_bloc_factory}
-/// Factory that creates an instance of [AppSettingsBloc].
+/// Creates an instance of [AppSettingsBloc].
 ///
-/// The [AppSettingsBloc] should be initialized during the application startup
-/// in order to load the app settings from the local storage, so user can see
-/// their selected theme,locale, etc.
-/// {@endtemplate}
-class AppSettingsBlocFactory extends AsyncFactory<AppSettingsBloc> {
-  /// {@macro app_settings_bloc_factory}
-  const AppSettingsBlocFactory(this.sharedPreferences);
+/// The [AppSettingsBloc] is initialized at startup to load the app settings from local storage.
+Future<AppSettingsBloc> createAppSettingsBloc(
+  SharedPreferencesAsync sharedPreferences,
+) async {
+  final appSettingsRepository = AppSettingsRepositoryImpl(
+    datasource: AppSettingsDatasourceImpl(sharedPreferences: sharedPreferences),
+  );
 
-  /// Shared preferences instance
-  final SharedPreferencesAsync sharedPreferences;
+  final appSettings = await appSettingsRepository.getAppSettings();
+  final initialState = AppSettingsState.idle(appSettings: appSettings);
 
-  @override
-  Future<AppSettingsBloc> create() async {
-    final appSettingsRepository = AppSettingsRepositoryImpl(
-      datasource: AppSettingsDatasourceImpl(sharedPreferences: sharedPreferences),
-    );
-
-    final appSettings = await appSettingsRepository.getAppSettings();
-    final initialState = AppSettingsState.idle(appSettings: appSettings);
-
-    return AppSettingsBloc(
-      appSettingsRepository: appSettingsRepository,
-      initialState: initialState,
-    );
-  }
+  return AppSettingsBloc(
+    appSettingsRepository: appSettingsRepository,
+    initialState: initialState,
+  );
 }
