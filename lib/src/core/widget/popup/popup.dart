@@ -329,7 +329,6 @@ class _FollowerScope extends InheritedWidget {
     required super.child,
     required this.controller,
     this.parent,
-    super.key, // ignore: unused_element
   });
 
   /// The controller that is used to dismiss the popup.
