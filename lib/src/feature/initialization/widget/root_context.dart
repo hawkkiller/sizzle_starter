@@ -22,13 +22,15 @@ class RootContext extends StatelessWidget {
   final CompositionResult compositionResult;
 
   @override
-  Widget build(BuildContext context) => DefaultAssetBundle(
-        bundle: SentryAssetBundle(),
-        child: DependenciesScope(
-          dependencies: compositionResult.dependencies,
-          child: const SettingsScope(
-            child: WindowSizeScope(child: MaterialContext()),
-          ),
+  Widget build(BuildContext context) {
+    return DefaultAssetBundle(
+      bundle: SentryAssetBundle(),
+      child: DependenciesScope(
+        dependencies: compositionResult.dependencies,
+        child: const SettingsScope(
+          child: WindowSizeScope(child: MaterialContext()),
         ),
-      );
+      ),
+    );
+  }
 }

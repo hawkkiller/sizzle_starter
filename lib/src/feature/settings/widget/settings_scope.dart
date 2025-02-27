@@ -45,14 +45,16 @@ class _SettingsScopeState extends State<SettingsScope> {
   }
 
   @override
-  Widget build(BuildContext context) => BlocBuilder<AppSettingsBloc, AppSettingsState>(
-        bloc: _appSettingsBloc,
-        builder: (context, state) => _InheritedSettings(
-          settings: state.appSettings,
-          state: this,
-          child: widget.child,
-        ),
-      );
+  Widget build(BuildContext context) {
+    return BlocBuilder<AppSettingsBloc, AppSettingsState>(
+      bloc: _appSettingsBloc,
+      builder: (context, state) => _InheritedSettings(
+        settings: state.appSettings,
+        state: this,
+        child: widget.child,
+      ),
+    );
+  }
 }
 
 /// {@template inherited_settings}

@@ -69,7 +69,7 @@ dev_dependencies:
   mockito: 5.4.5
 
   # Lints
-  sizzle_lints: 2.1.3
+  sizzle_lints: 2.1.5
 
   # Utils
   flutter_gen_runner: 5.8.0
