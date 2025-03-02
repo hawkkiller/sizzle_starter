@@ -9,7 +9,7 @@ Object? checkHttpException(http.ClientException e) => switch (e) {
       // Under the hood, HTTP has _ClientSocketException that implements
       // SocketException interface and extends ClientException
       // ignore: avoid-unrelated-type-assertions
-      final SocketException socketException => ConnectionException(
+      final SocketException socketException => NetworkException(
           message: socketException.message,
           cause: socketException,
         ),

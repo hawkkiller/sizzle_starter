@@ -87,56 +87,23 @@ final class StructuredBackendException extends RestClientException {
       ')';
 }
 
-/// {@template wrong_response_type_exception}
-/// [WrongResponseTypeException] is thrown if the response type
-/// is not the expected one
+/// {@template network_exception}
+/// Exception caused by internet connection issues.
+///
+/// This can be raised in multiple scenarious:
+/// - When device is offline
+/// - When the host is unreachable (due to DNS issues, firewall, etc.)
 /// {@endtemplate}
-final class WrongResponseTypeException extends RestClientException {
-  /// {@macro wrong_response_type_exception}
-  const WrongResponseTypeException({
-    required super.message,
-    super.statusCode,
-  });
-
-  @override
-  String toString() => 'WrongResponseTypeException('
-      'message: $message, '
-      'statusCode: $statusCode, '
-      ')';
-}
-
-/// {@template connection_exception}
-/// [ConnectionException] is thrown if there are problems with the connection
-/// {@endtemplate}
-final class ConnectionException extends RestClientException {
+final class NetworkException extends RestClientException {
   /// {@macro connection_exception}
-  const ConnectionException({
+  const NetworkException({
     required super.message,
     super.statusCode,
     super.cause,
   });
 
   @override
-  String toString() => 'ConnectionException('
-      'message: $message, '
-      'statusCode: $statusCode, '
-      'cause: $cause'
-      ')';
-}
-
-/// {@template internal_server_exception}
-/// If something went wrong on the server side
-/// {@endtemplate}
-final class InternalServerException extends RestClientException {
-  /// {@macro internal_server_exception}
-  const InternalServerException({
-    required super.message,
-    super.statusCode,
-    super.cause,
-  });
-
-  @override
-  String toString() => 'InternalServerException('
+  String toString() => 'NetworkException('
       'message: $message, '
       'statusCode: $statusCode, '
       'cause: $cause'

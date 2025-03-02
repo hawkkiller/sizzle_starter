@@ -157,17 +157,13 @@ abstract base class RestClientBase implements RestClient {
         return data;
       }
 
-      // Simply return decoded body if it is not an error or data
+      // Return decoded body if it is not an error or data
       return decodedBody;
     } on RestClientException {
       rethrow;
     } on Object catch (e, stackTrace) {
       Error.throwWithStackTrace(
-        ClientException(
-          message: 'Error occured during decoding',
-          statusCode: statusCode,
-          cause: e,
-        ),
+        ClientException(message: 'Error occured during decoding', statusCode: statusCode, cause: e),
         stackTrace,
       );
     }
