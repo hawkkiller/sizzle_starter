@@ -32,6 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
           children: [
             Text('Welcome to Sizzle Starter!', style: Theme.of(context).textTheme.headlineLarge),
             const SizedBox(height: 16),
+            Builder(builder: (context) => const Text('Hello')),
           ],
         ),
       ),

@@ -1,3 +1,6 @@
+# flutter gen-l10n configuration, more here – https://docs.flutter.dev/ui/accessibility-and-internationalization/internationalization#configuring-the-l10n-yaml-file
 arb-dir: lib/src/core/constant/localization/translations
 template-arb-file: intl_en.arb
 output-localization-file: app_localizations.dart
+output-dir: lib/src/core/constant/localization/generated
+synthetic-package: false
