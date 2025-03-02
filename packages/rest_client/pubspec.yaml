@@ -25,7 +25,6 @@ dev_dependencies:
     sdk: flutter
   mockito: 5.4.5
   build_runner: 2.4.15
-  sizzle_lints: 2.1.6
 
 flutter:
   uses-material-design: true
