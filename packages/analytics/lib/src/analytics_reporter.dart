@@ -1,5 +1,5 @@
+import 'package:analytics/analytics.dart';
 import 'package:collection/collection.dart';
-import 'firebase_analytics_reporter.dart';
 
 /// {@template analytics_reporter}
 /// Interface for reporting analytics events.
