@@ -25,8 +25,9 @@ http.Client createDefaultHttpClient() {
       _ => null,
     };
   } on Object catch (e, stackTrace) {
-    Zone.current
-        .print('Failed to create a default http client for platform $platform $e $stackTrace');
+    Zone.current.print(
+      'Failed to create a default http client for platform $platform $e $stackTrace',
+    );
   }
 
   return client ?? http.Client();
@@ -93,10 +94,7 @@ final class RestClientHttp extends RestClientBase {
         Error.throwWithStackTrace(checkedException, stack);
       }
 
-      Error.throwWithStackTrace(
-        ClientException(message: e.message, cause: e),
-        stack,
-      );
+      Error.throwWithStackTrace(ClientException(message: e.message, cause: e), stack);
     }
   }
 }

@@ -36,15 +36,16 @@ class MaterialContext extends StatelessWidget {
       localizationsDelegates: Localization.localizationDelegates,
       supportedLocales: Localization.supportedLocales,
       home: const HomeScreen(),
-      builder: (context, child) => MediaQuery(
-        key: _globalKey,
-        data: mediaQueryData.copyWith(
-          textScaler: TextScaler.linear(
-            mediaQueryData.textScaler.scale(settings.textScale ?? 1).clamp(0.5, 2),
+      builder:
+          (context, child) => MediaQuery(
+            key: _globalKey,
+            data: mediaQueryData.copyWith(
+              textScaler: TextScaler.linear(
+                mediaQueryData.textScaler.scale(settings.textScale ?? 1).clamp(0.5, 2),
+              ),
+            ),
+            child: child!,
           ),
-        ),
-        child: child!,
-      ),
     );
   }
 }

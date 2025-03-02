@@ -16,17 +16,19 @@ class SettingsScope extends StatefulWidget {
 
   /// Get the [AppSettingsBloc] instance.
   static AppSettingsBloc of(BuildContext context, {bool listen = true}) {
-    final settingsScope = listen
-        ? context.dependOnInheritedWidgetOfExactType<_InheritedSettings>()
-        : context.getInheritedWidgetOfExactType<_InheritedSettings>();
+    final settingsScope =
+        listen
+            ? context.dependOnInheritedWidgetOfExactType<_InheritedSettings>()
+            : context.getInheritedWidgetOfExactType<_InheritedSettings>();
     return settingsScope!.state._appSettingsBloc;
   }
 
   /// Get the [AppSettings] instance.
   static AppSettings settingsOf(BuildContext context, {bool listen = true}) {
-    final settingsScope = listen
-        ? context.dependOnInheritedWidgetOfExactType<_InheritedSettings>()
-        : context.getInheritedWidgetOfExactType<_InheritedSettings>();
+    final settingsScope =
+        listen
+            ? context.dependOnInheritedWidgetOfExactType<_InheritedSettings>()
+            : context.getInheritedWidgetOfExactType<_InheritedSettings>();
     return settingsScope!.settings ?? const AppSettings();
   }
 
@@ -48,11 +50,9 @@ class _SettingsScopeState extends State<SettingsScope> {
   Widget build(BuildContext context) {
     return BlocBuilder<AppSettingsBloc, AppSettingsState>(
       bloc: _appSettingsBloc,
-      builder: (context, state) => _InheritedSettings(
-        settings: state.appSettings,
-        state: this,
-        child: widget.child,
-      ),
+      builder:
+          (context, state) =>
+              _InheritedSettings(settings: state.appSettings, state: this, child: widget.child),
     );
   }
 }
@@ -62,11 +62,7 @@ class _SettingsScopeState extends State<SettingsScope> {
 /// {@endtemplate}
 class _InheritedSettings extends InheritedWidget {
   /// {@macro inherited_settings}
-  const _InheritedSettings({
-    required super.child,
-    required this.state,
-    required this.settings,
-  });
+  const _InheritedSettings({required super.child, required this.state, required this.settings});
 
   /// _SettingsScopeState instance.
   final _SettingsScopeState state;

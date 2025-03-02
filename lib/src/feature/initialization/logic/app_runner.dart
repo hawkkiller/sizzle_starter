@@ -3,12 +3,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:logger/logger.dart';
+import 'package:sizzle_starter/src/core/common/bloc/app_bloc_observer.dart';
+import 'package:sizzle_starter/src/core/common/bloc/bloc_transformer.dart';
+import 'package:sizzle_starter/src/core/common/error_reporter/error_reporter.dart';
 import 'package:sizzle_starter/src/core/constant/application_config.dart';
-import 'package:sizzle_starter/src/core/utils/app_bloc_observer.dart';
-import 'package:sizzle_starter/src/core/utils/bloc_transformer.dart';
-import 'package:sizzle_starter/src/core/utils/error_reporter/error_reporter.dart';
-import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
-import 'package:sizzle_starter/src/core/utils/logger/printing_log_observer.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/initialization_failed_app.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/root_context.dart';
@@ -32,44 +31,42 @@ sealed class AppRunner {
       ],
     );
 
-    await runZonedGuarded(
-      () async {
-        // Ensure Flutter is initialized
-        WidgetsFlutterBinding.ensureInitialized();
+    await runZonedGuarded(() async {
+      // Ensure Flutter is initialized
+      WidgetsFlutterBinding.ensureInitialized();
 
-        // Configure global error interception
-        FlutterError.onError = logger.logFlutterError;
-        WidgetsBinding.instance.platformDispatcher.onError = logger.logPlatformDispatcherError;
+      // Configure global error interception
+      FlutterError.onError = logger.logFlutterError;
+      WidgetsBinding.instance.platformDispatcher.onError = logger.logPlatformDispatcherError;
 
-        // Setup bloc observer and transformer
-        Bloc.observer = AppBlocObserver(logger);
-        Bloc.transformer = SequentialBlocTransformer<Object?>().transform;
+      // Setup bloc observer and transformer
+      Bloc.observer = AppBlocObserver(logger);
+      Bloc.transformer = SequentialBlocTransformer<Object?>().transform;
 
-        Future<void> launchApplication() async {
-          try {
-            final compositionResult = await CompositionRoot(
-              config: config,
-              logger: logger,
-              errorReporter: errorReporter,
-            ).compose();
+      Future<void> launchApplication() async {
+        try {
+          final compositionResult =
+              await CompositionRoot(
+                config: config,
+                logger: logger,
+                errorReporter: errorReporter,
+              ).compose();
 
-            runApp(RootContext(compositionResult: compositionResult));
-          } on Object catch (e, stackTrace) {
-            logger.error('Initialization failed', error: e, stackTrace: stackTrace);
-            runApp(
-              InitializationFailedApp(
-                error: e,
-                stackTrace: stackTrace,
-                onRetryInitialization: launchApplication,
-              ),
-            );
-          }
+          runApp(RootContext(compositionResult: compositionResult));
+        } on Object catch (e, stackTrace) {
+          logger.error('Initialization failed', error: e, stackTrace: stackTrace);
+          runApp(
+            InitializationFailedApp(
+              error: e,
+              stackTrace: stackTrace,
+              onRetryInitialization: launchApplication,
+            ),
+          );
         }
+      }
 
-        // Launch the application
-        await launchApplication();
-      },
-      logger.logZoneError,
-    );
+      // Launch the application
+      await launchApplication();
+    }, logger.logZoneError);
   }
 }

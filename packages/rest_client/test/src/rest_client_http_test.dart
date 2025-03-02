@@ -10,10 +10,7 @@ void main() {
         (request) async => http.Response('{"data": {"hello": "world"}}', 200),
       );
 
-      final restClient = RestClientHttp(
-        baseUrl: 'https://example.com',
-        client: mockClient,
-      );
+      final restClient = RestClientHttp(baseUrl: 'https://example.com', client: mockClient);
 
       expectLater(
         restClient.send(path: '/', method: 'GET'),
@@ -29,19 +26,12 @@ void main() {
 
     test("adds body if it's not null", () async {
       final mockClient = http_testing.MockClient((request) async {
-        expect(
-          request.body,
-          '{"hello":"world"}',
-          reason: 'Body should be {"hello":"world"}',
-        );
+        expect(request.body, '{"hello":"world"}', reason: 'Body should be {"hello":"world"}');
 
         return http.Response('{"data": {"hello": "world"}}', 200);
       });
 
-      final restClient = RestClientHttp(
-        baseUrl: 'https://example.com',
-        client: mockClient,
-      );
+      final restClient = RestClientHttp(baseUrl: 'https://example.com', client: mockClient);
 
       await expectLater(
         restClient.send(path: '/', method: 'POST', body: {'hello': 'world'}),
@@ -61,17 +51,10 @@ void main() {
         return http.Response('{"data": {"hello": "world"}}', 200);
       });
 
-      final restClient = RestClientHttp(
-        baseUrl: 'https://example.com',
-        client: mockClient,
-      );
+      final restClient = RestClientHttp(baseUrl: 'https://example.com', client: mockClient);
 
       expectLater(
-        restClient.send(
-          path: '/',
-          method: 'GET',
-          headers: {'hello': 'world'},
-        ),
+        restClient.send(path: '/', method: 'GET', headers: {'hello': 'world'}),
         completion(
           isA<Map<String, Object?>>().having(
             (json) => json['hello'],
@@ -87,10 +70,7 @@ void main() {
         (request) async => http.Response('{"error": {}}', 400),
       );
 
-      final restClient = RestClientHttp(
-        baseUrl: 'https://example.com',
-        client: mockClient,
-      );
+      final restClient = RestClientHttp(baseUrl: 'https://example.com', client: mockClient);
 
       expectLater(
         restClient.send(path: '/', method: 'GET'),

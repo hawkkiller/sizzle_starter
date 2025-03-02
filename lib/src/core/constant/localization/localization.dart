@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
+import 'package:sizzle_starter/src/core/constant/localization/generated/app_localizations.gen.dart';
 
 /// {@template localization}
 /// Localization class which is used to localize app.
@@ -17,11 +17,11 @@ final class Localization {
 
   /// List of localization delegates.
   static List<LocalizationsDelegate<void>> get localizationDelegates => [
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        _delegate,
-      ];
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    _delegate,
+  ];
 
   /// {@macro localization}
   static Localization? get current => _current;

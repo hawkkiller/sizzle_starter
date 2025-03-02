@@ -144,9 +144,7 @@ void main() {
       const path = '';
       final queryParams = {'key1': 'value1', 'key2': 'value2'};
       final uri = client.buildUri(path: path, queryParams: queryParams);
-      final expectedUri = Uri.parse(
-        'http://localhost:8080?key1=value1&key2=value2',
-      );
+      final expectedUri = Uri.parse('http://localhost:8080?key1=value1&key2=value2');
       expect(uri, equals(expectedUri));
     });
 
@@ -166,9 +164,7 @@ void main() {
       const path = '/path';
       final queryParams = {'key1': 'value1', 'key2': 'value2'};
       final uri = client.buildUri(path: path, queryParams: queryParams);
-      final expectedUri = Uri.parse(
-        'http://localhost:8080$path?key1=value1&key2=value2',
-      );
+      final expectedUri = Uri.parse('http://localhost:8080$path?key1=value1&key2=value2');
       expect(uri, equals(expectedUri));
     });
 
@@ -177,9 +173,7 @@ void main() {
       const path = 'path';
       final queryParams = {'key1': 'value1', 'key2': 'value2'};
       final uri = client.buildUri(path: path, queryParams: queryParams);
-      final expectedUri = Uri.parse(
-        'http://localhost:8080/$path?key1=value1&key2=value2',
-      );
+      final expectedUri = Uri.parse('http://localhost:8080/$path?key1=value1&key2=value2');
       expect(uri, equals(expectedUri));
     });
 
@@ -295,14 +289,13 @@ final class _ReturningRestClientBase extends RestClientBase {
     Map<String, Object?>? body,
     Map<String, Object?>? headers,
     Map<String, Object?>? queryParams,
-  }) async =>
-      {
-        'path': path,
-        'method': method,
-        'body': body,
-        'headers': headers,
-        'queryParams': queryParams,
-      };
+  }) async => {
+    'path': path,
+    'method': method,
+    'body': body,
+    'headers': headers,
+    'queryParams': queryParams,
+  };
 }
 
 /// A no-op implementation of [RestClientBase].
@@ -319,6 +312,5 @@ final class NoOpRestClientBase extends RestClientBase {
     Map<String, Object?>? body,
     Map<String, Object?>? headers,
     Map<String, Object?>? queryParams,
-  }) =>
-      throw UnimplementedError();
+  }) => throw UnimplementedError();
 }

@@ -47,8 +47,8 @@ app.*.map.json
 # Codegen 
 *.*.dart
 generated_*
-lib/src/core/assets/generated/
-lib/src/core/localization/generated/
+lib/src/core/constant/localization/generated/
+lib/src/core/constant/generated/
 
 pubspec.lock
 .metadata
@@ -64,3 +64,4 @@ tests.json
 
 # Template
 .dev.gitignore
+

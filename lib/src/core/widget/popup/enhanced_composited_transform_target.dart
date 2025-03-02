@@ -45,11 +45,7 @@ class EnhancedCompositedTransformTarget extends SingleChildRenderObjectWidget {
   ///
   /// The [link] property must not be currently used by any other
   /// [EnhancedCompositedTransformTarget] object that is in the tree.
-  const EnhancedCompositedTransformTarget({
-    required this.link,
-    super.key,
-    super.child,
-  });
+  const EnhancedCompositedTransformTarget({required this.link, super.key, super.child});
 
   /// The link object that connects this [EnhancedCompositedTransformTarget] with one or
   /// more [CompositedTransformFollower]s.
@@ -76,11 +72,9 @@ class EnhancedCompositedTransformTarget extends SingleChildRenderObjectWidget {
 ///  * [LeaderLayer], the layer that this render object creates.
 class EnhancedRenderLeaderLayer extends RenderProxyBox {
   /// Creates a render object that uses a [LeaderLayer].
-  EnhancedRenderLeaderLayer({
-    required EnhancedLayerLink link,
-    RenderBox? child,
-  })  : _link = link,
-        super(child);
+  EnhancedRenderLeaderLayer({required EnhancedLayerLink link, RenderBox? child})
+    : _link = link,
+      super(child);
 
   /// The link object that connects this [EnhancedRenderLeaderLayer] with one or more
   /// [RenderFollowerLayer]s.
@@ -131,13 +125,10 @@ class EnhancedRenderLeaderLayer extends RenderProxyBox {
         ..offset = offset;
     }
     context.pushLayer(layer!, super.paint, Offset.zero);
-    assert(
-      () {
-        layer!.debugCreator = debugCreator;
-        return true;
-      }(),
-      '',
-    );
+    assert(() {
+      layer!.debugCreator = debugCreator;
+      return true;
+    }(), '');
   }
 
   @override

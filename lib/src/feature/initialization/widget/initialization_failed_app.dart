@@ -54,32 +54,22 @@ class _InitializationFailedAppState extends State<InitializationFailedApp> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text(
-                    'Initialization failed',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  ),
+                  Text('Initialization failed', style: Theme.of(context).textTheme.headlineMedium),
                   if (widget.onRetryInitialization != null)
-                    IconButton(
-                      icon: const Icon(Icons.refresh),
-                      onPressed: _retryInitialization,
-                    ),
+                    IconButton(icon: const Icon(Icons.refresh), onPressed: _retryInitialization),
                 ],
               ),
               const SizedBox(height: 16),
               Text(
                 '${widget.error}',
-                style: Theme.of(context)
-                    .textTheme
-                    .bodyLarge
-                    ?.copyWith(color: Theme.of(context).colorScheme.error),
+                style: Theme.of(
+                  context,
+                ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.error),
               ),
               const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text(
-                  '${widget.stackTrace}',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
+                child: Text('${widget.stackTrace}', style: Theme.of(context).textTheme.bodyLarge),
               ),
             ],
           ),

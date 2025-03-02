@@ -5,9 +5,10 @@ import 'package:rest_client/rest_client.dart';
 /// Checks the [http.ClientException] and tries to parse it.
 Object? checkHttpException(http.ClientException e) {
   if (e.message.contains('XMLHttpRequest error')) {
-    return ConnectionException(message: e.message, cause: e);
+    return NetworkException(message: e.message, cause: e);
   }
 
   return null;
 }
+
 // coverage:ignore-end

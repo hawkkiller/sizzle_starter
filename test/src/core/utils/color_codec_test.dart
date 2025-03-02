@@ -1,7 +1,7 @@
 import 'dart:ui' show Color;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sizzle_starter/src/core/utils/color_codec.dart';
+import 'package:sizzle_starter/src/core/common/color_codec.dart';
 
 void main() {
   group('ColorCodec', () {
@@ -13,15 +13,12 @@ void main() {
       expect(decodedColor, color);
     });
 
-    test(
-      'should match the color when encoding and decoding with alpha, red, green and blue',
-      () {
-        const colorCodec = ColorCodec();
-        const color = Color.fromARGB(0, 107, 107, 174);
-        final encodedColor = colorCodec.encode(color);
-        final decodedColor = colorCodec.decode(encodedColor);
-        expect(decodedColor, color);
-      },
-    );
+    test('should match the color when encoding and decoding with alpha, red, green and blue', () {
+      const colorCodec = ColorCodec();
+      const color = Color.fromARGB(0, 107, 107, 174);
+      final encodedColor = colorCodec.encode(color);
+      final decodedColor = colorCodec.decode(encodedColor);
+      expect(decodedColor, color);
+    });
   });
 }

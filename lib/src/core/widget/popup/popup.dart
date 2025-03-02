@@ -6,10 +6,8 @@ import 'package:sizzle_starter/src/core/widget/popup/enhanced_composited_transfo
 import 'package:sizzle_starter/src/core/widget/popup/enhanced_composited_transform_target.dart';
 
 /// A function that builds a widget with a controller.
-typedef PopupWidgetBuilder = Widget Function(
-  BuildContext context,
-  OverlayPortalController controller,
-);
+typedef PopupWidgetBuilder =
+    Widget Function(BuildContext context, OverlayPortalController controller);
 
 /// {@template popup}
 /// A widget that shows a follower widget relative to a target widget.
@@ -139,19 +137,20 @@ class _PopupBuilderState extends State<PopupBuilder> {
       child: OverlayPortal(
         controller: portalController,
         child: widget.targetBuilder(context, portalController),
-        overlayChildBuilder: (BuildContext context) => Center(
-          child: EnhancedCompositedTransformFollower(
-            link: _layerLink, // link the follower widget to the target widget.
-            followerAnchor: widget.followerAnchor,
-            targetAnchor: widget.targetAnchor,
-            enforceLeaderWidth: widget.enforceLeaderWidth,
-            enforceLeaderHeight: widget.enforceLeaderHeight,
-            moveWhenOverflow: widget.moveWhenOverflow,
-            flipWhenOverflow: widget.flipWhenOverflow,
-            displayFeatureBounds: displayFeatureBounds,
-            child: widget.followerBuilder(context, portalController),
-          ),
-        ),
+        overlayChildBuilder:
+            (BuildContext context) => Center(
+              child: EnhancedCompositedTransformFollower(
+                link: _layerLink, // link the follower widget to the target widget.
+                followerAnchor: widget.followerAnchor,
+                targetAnchor: widget.targetAnchor,
+                enforceLeaderWidth: widget.enforceLeaderWidth,
+                enforceLeaderHeight: widget.enforceLeaderHeight,
+                moveWhenOverflow: widget.moveWhenOverflow,
+                flipWhenOverflow: widget.flipWhenOverflow,
+                displayFeatureBounds: displayFeatureBounds,
+                child: widget.followerBuilder(context, portalController),
+              ),
+            ),
       ),
     );
   }
@@ -284,52 +283,43 @@ class _PopupFollowerState extends State<PopupFollower>
 
   @override
   Widget build(BuildContext context) => _FollowerScope(
-        controller: this,
-        parent: _parent,
-        child: Actions(
-          actions: {
-            DismissIntent: CallbackAction<DismissIntent>(
-              onInvoke: (intent) => widget.onDismiss?.call(),
-            ),
-          },
-          child: Shortcuts(
+    controller: this,
+    parent: _parent,
+    child: Actions(
+      actions: {
+        DismissIntent: CallbackAction<DismissIntent>(
+          onInvoke: (intent) => widget.onDismiss?.call(),
+        ),
+      },
+      child: Shortcuts(
+        debugLabel: 'PopupFollower',
+        shortcuts: {LogicalKeySet(LogicalKeyboardKey.escape): const DismissIntent()},
+        child: Semantics(
+          container: true,
+          explicitChildNodes: true,
+          child: FocusScope(
             debugLabel: 'PopupFollower',
-            shortcuts: {
-              LogicalKeySet(LogicalKeyboardKey.escape): const DismissIntent(),
-            },
-            child: Semantics(
-              container: true,
-              explicitChildNodes: true,
-              child: FocusScope(
-                debugLabel: 'PopupFollower',
-                node: widget.focusScopeNode,
-                skipTraversal: widget.skipTraversal,
-                canRequestFocus: true,
-                child: TapRegion(
-                  debugLabel: 'PopupFollower',
-                  groupId: widget.tapRegionGroupId,
-                  consumeOutsideTaps: widget.consumeOutsideTaps,
-                  onTapOutside: (_) => widget.onDismiss?.call(),
-                  child: ConstrainedBox(
-                    constraints: widget.constraints,
-                    child: widget.child,
-                  ),
-                ),
-              ),
+            node: widget.focusScopeNode,
+            skipTraversal: widget.skipTraversal,
+            canRequestFocus: true,
+            child: TapRegion(
+              debugLabel: 'PopupFollower',
+              groupId: widget.tapRegionGroupId,
+              consumeOutsideTaps: widget.consumeOutsideTaps,
+              onTapOutside: (_) => widget.onDismiss?.call(),
+              child: ConstrainedBox(constraints: widget.constraints, child: widget.child),
             ),
           ),
         ),
-      );
+      ),
+    ),
+  );
 }
 
 /// Follower Scope
 class _FollowerScope extends InheritedWidget {
   /// Creates a new instance of [_FollowerScope].
-  const _FollowerScope({
-    required super.child,
-    required this.controller,
-    this.parent,
-  });
+  const _FollowerScope({required super.child, required this.controller, this.parent});
 
   /// The controller that is used to dismiss the popup.
   final PopupFollowerController controller;
@@ -338,10 +328,11 @@ class _FollowerScope extends InheritedWidget {
   final _FollowerScope? parent;
 
   /// Returns the closest [_FollowerScope] instance.
-  static _FollowerScope? maybeOf(BuildContext context, {bool listen = false}) => listen
-      ? context.dependOnInheritedWidgetOfExactType<_FollowerScope>()
-      : context.getElementForInheritedWidgetOfExactType<_FollowerScope>()?.widget
-          as _FollowerScope?;
+  static _FollowerScope? maybeOf(BuildContext context, {bool listen = false}) =>
+      listen
+          ? context.dependOnInheritedWidgetOfExactType<_FollowerScope>()
+          : context.getElementForInheritedWidgetOfExactType<_FollowerScope>()?.widget
+              as _FollowerScope?;
 
   @override
   bool updateShouldNotify(_FollowerScope oldWidget) => false;

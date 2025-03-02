@@ -1,6 +1,6 @@
+import 'package:analytics/src/analytics_reporter.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:sizzle_starter/src/core/utils/analytics/analytics_reporter.dart';
-import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
+import 'package:logger/logger.dart';
 
 /// {@template firebase_analytics_reporter}
 /// An implementation of [AnalyticsReporter] that reports events to Firebase
@@ -20,13 +20,12 @@ final class FirebaseAnalyticsReporter implements AnalyticsReporter {
   Future<void> logEvent(AnalyticsEvent event) async {
     logger.trace('Logging analytics event: $event');
 
-    final parameters = event.parameters?.map(
-      (parameter) => MapEntry(parameter.name, parameter.value),
-    );
-
     await analytics.logEvent(
       name: event.name,
-      parameters: parameters != null ? Map.fromEntries(parameters) : null,
+      parameters:
+          event.parameters.isEmpty
+              ? null
+              : {for (final parameter in event.parameters) parameter.name: parameter.value},
     );
   }
 }

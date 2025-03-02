@@ -3,6 +3,7 @@ include: package:sizzle_lints/lints.yaml
 analyzer:
   exclude: 
     - "lib/src/core/localization/generated/**"
+    - "**/*.*.dart"
 
 dart_code_metrics:
   extends:

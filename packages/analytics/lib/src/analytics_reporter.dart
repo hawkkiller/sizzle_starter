@@ -1,5 +1,5 @@
+import 'package:analytics/analytics.dart';
 import 'package:collection/collection.dart';
-import 'package:sizzle_starter/src/core/utils/analytics/firebase_analytics_reporter.dart';
 
 /// {@template analytics_reporter}
 /// Interface for reporting analytics events.
@@ -32,7 +32,7 @@ abstract interface class AnalyticsReporter {
 /// {@endtemplate}
 base class AnalyticsEvent {
   /// {@macro analytics_event}
-  const AnalyticsEvent(this.name, {this.parameters});
+  const AnalyticsEvent(this.name, {this.parameters = const {}});
 
   /// The name of the event.
   ///
@@ -44,19 +44,10 @@ base class AnalyticsEvent {
   ///
   /// Parameters are optional and can be used to provide additional context or
   /// data with the event.
-  final Set<AnalyticsParameter<Object>>? parameters;
+  final Set<AnalyticsParameter<Object>> parameters;
 
   @override
-  String toString() {
-    final buffer = StringBuffer('AnalyticsEvent(name: $name');
-    if (parameters != null) {
-      for (final parameter in parameters!) {
-        buffer.write(', ${parameter.name}: ${parameter.value}');
-      }
-    }
-    buffer.write(')');
-    return buffer.toString();
-  }
+  String toString() => 'AnalyticsEvent(name: $name, parameters: ${parameters.join(', ')})';
 
   @override
   bool operator ==(Object other) {
@@ -67,7 +58,7 @@ base class AnalyticsEvent {
   }
 
   @override
-  int get hashCode => name.hashCode ^ const DeepCollectionEquality().hash(parameters);
+  int get hashCode => Object.hash(name, const DeepCollectionEquality().hash(parameters));
 }
 
 /// {@template analytics_parameter}
