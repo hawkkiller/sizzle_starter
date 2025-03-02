@@ -20,13 +20,12 @@ final class FirebaseAnalyticsReporter implements AnalyticsReporter {
   Future<void> logEvent(AnalyticsEvent event) async {
     logger.trace('Logging analytics event: $event');
 
-    final parameters = event.parameters.map(
-      (parameter) => MapEntry(parameter.name, parameter.value),
-    );
-
     await analytics.logEvent(
       name: event.name,
-      parameters: parameters.isEmpty ? Map.fromEntries(parameters) : null,
+      parameters:
+          event.parameters.isEmpty
+              ? null
+              : {for (final parameter in event.parameters) parameter.name: parameter.value},
     );
   }
 }

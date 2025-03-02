@@ -14,10 +14,7 @@ void main() {
 
   setUp(() {
     mockAnalytics = MockFirebaseAnalytics();
-    reporter = FirebaseAnalyticsReporter(
-      analytics: mockAnalytics,
-      logger: Logger(),
-    );
+    reporter = FirebaseAnalyticsReporter(analytics: mockAnalytics, logger: Logger());
   });
 
   group('FirebaseAnalyticsReporter', () {
@@ -34,6 +31,7 @@ void main() {
         parameters: {
           const StringAnalyticsParameter('test_parameter', 'test_value'),
           const StringAnalyticsParameter('test_parameter2', 'test_value2'),
+          const NumberAnalyticsParameter('number_event', 42),
         },
       );
 
@@ -42,7 +40,11 @@ void main() {
       verify(
         mockAnalytics.logEvent(
           name: 'test_event',
-          parameters: {'test_parameter': 'test_value', 'test_parameter2': 'test_value2'},
+          parameters: {
+            'test_parameter': 'test_value',
+            'test_parameter2': 'test_value2',
+            'number_event': 42,
+          },
         ),
       ).called(1);
     });
