@@ -12,6 +12,7 @@ environment:
 workspace:
   - packages/rest_client
   - packages/app_database
+  - packages/logger
 
 dependencies:
   # Flutter SDK
@@ -54,6 +55,8 @@ dependencies:
     path: packages/rest_client
   app_database:
     path: packages/app_database
+  logger:
+    path: packages/logger
 
   # Utils
   path: 1.9.1

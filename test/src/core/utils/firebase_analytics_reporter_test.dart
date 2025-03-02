@@ -1,10 +1,10 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:logger/logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 import 'package:sizzle_starter/src/core/common/analytics/analytics_reporter.dart';
 import 'package:sizzle_starter/src/core/common/analytics/firebase_analytics_reporter.dart';
-import 'package:sizzle_starter/src/core/common/logger/logger.dart';
 
 @GenerateNiceMocks([MockSpec<FirebaseAnalytics>()])
 import 'firebase_analytics_reporter_test.mocks.dart';
