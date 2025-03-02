@@ -82,7 +82,7 @@ final class StructuredBackendException extends RestClientException {
 /// {@template network_exception}
 /// Exception caused by internet connection issues.
 ///
-/// This can be raised in multiple scenarious:
+/// This can be raised in multiple scenarios:
 /// - When device is offline
 /// - When the host is unreachable (due to DNS issues, firewall, etc.)
 /// {@endtemplate}
