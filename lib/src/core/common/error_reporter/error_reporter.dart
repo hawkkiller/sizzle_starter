@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
+import 'package:sizzle_starter/src/core/common/logger/logger.dart';
 
 /// {@template error_reporter}
 /// An interface for reporting errors.

@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
+import 'package:sizzle_starter/src/core/common/logger/logger.dart';
 import 'package:sizzle_starter/src/feature/home/widget/home_screen.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
 import '../../../../helpers/test_widget_controller.dart';

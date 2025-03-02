@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
+import 'package:sizzle_starter/src/core/common/logger/logger.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 /// {@template printing_log_observer}

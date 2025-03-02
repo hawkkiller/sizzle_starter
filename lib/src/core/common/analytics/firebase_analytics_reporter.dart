@@ -1,6 +1,6 @@
 import 'package:firebase_analytics/firebase_analytics.dart';
-import 'package:sizzle_starter/src/core/utils/analytics/analytics_reporter.dart';
-import 'package:sizzle_starter/src/core/utils/logger/logger.dart';
+import 'package:sizzle_starter/src/core/common/analytics/analytics_reporter.dart';
+import 'package:sizzle_starter/src/core/common/logger/logger.dart';
 
 /// {@template firebase_analytics_reporter}
 /// An implementation of [AnalyticsReporter] that reports events to Firebase

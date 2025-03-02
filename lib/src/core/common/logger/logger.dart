@@ -1,6 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
-import 'package:sizzle_starter/src/core/utils/logger/printing_log_observer.dart';
+import 'package:sizzle_starter/src/core/common/logger/printing_log_observer.dart';
 
 /// {@template logger}
 /// Base class for logging.

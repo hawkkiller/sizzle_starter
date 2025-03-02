@@ -1,7 +1,7 @@
 import 'dart:ui' show Color;
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sizzle_starter/src/core/utils/color_codec.dart';
+import 'package:sizzle_starter/src/core/common/color_codec.dart';
 
 void main() {
   group('ColorCodec', () {

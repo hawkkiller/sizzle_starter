@@ -1,7 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sizzle_starter/src/core/utils/extensions/context_extension.dart';
+import 'package:sizzle_starter/src/core/common/extensions/context_extension.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
 
 /// {@template dependencies_scope}

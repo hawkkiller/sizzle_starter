@@ -1,6 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:sentry_flutter/sentry_flutter.dart';
-import 'package:sizzle_starter/src/core/utils/error_reporter/error_reporter.dart';
+import 'package:sizzle_starter/src/core/common/error_reporter/error_reporter.dart';
 
 /// {@template sentry_error_reporter}
 /// An implementation of [ErrorReporter] that reports errors to Sentry.
