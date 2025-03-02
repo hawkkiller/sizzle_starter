@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:sizzle_starter/src/core/constant/localization/generated/app_localizations.dart';
+import 'package:sizzle_starter/src/core/constant/localization/generated/app_localizations.gen.dart';
 
 /// {@template localization}
 /// Localization class which is used to localize app.
