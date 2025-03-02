@@ -7,11 +7,7 @@ import 'package:rest_client/rest_client.dart';
 @immutable
 sealed class RestClientException implements Exception {
   /// {@macro network_exception}
-  const RestClientException({
-    required this.message,
-    this.statusCode,
-    this.cause,
-  });
+  const RestClientException({required this.message, this.statusCode, this.cause});
 
   /// Message of the exception
   final String message;
@@ -32,11 +28,7 @@ sealed class RestClientException implements Exception {
 /// {@endtemplate}
 final class ClientException extends RestClientException {
   /// {@macro client_exception}
-  const ClientException({
-    required super.message,
-    super.statusCode,
-    super.cause,
-  });
+  const ClientException({required super.message, super.statusCode, super.cause});
 
   @override
   String toString() => 'ClientException('
@@ -96,11 +88,7 @@ final class StructuredBackendException extends RestClientException {
 /// {@endtemplate}
 final class NetworkException extends RestClientException {
   /// {@macro connection_exception}
-  const NetworkException({
-    required super.message,
-    super.statusCode,
-    super.cause,
-  });
+  const NetworkException({required super.message, super.statusCode, super.cause});
 
   @override
   String toString() => 'NetworkException('
