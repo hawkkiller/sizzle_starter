@@ -1,6 +1,6 @@
 import 'package:clock/clock.dart';
 import 'package:flutter/foundation.dart';
-import 'package:logger/printing_log_observer.dart';
+import 'package:logger/logger.dart';
 
 /// {@template logger}
 /// Base class for logging.
@@ -32,68 +32,43 @@ base class Logger {
   }
 
   /// Logs a message with [LogLevel.trace].
-  void trace(String message, {Object? error, StackTrace? stackTrace}) => _log(
-        message: message,
-        level: LogLevel.trace,
-        error: error,
-        stackTrace: stackTrace,
-      );
+  void trace(String message, {Object? error, StackTrace? stackTrace}) =>
+      _log(message: message, level: LogLevel.trace, error: error, stackTrace: stackTrace);
 
   /// Logs a message with [LogLevel.debug].
-  void debug(String message, {Object? error, StackTrace? stackTrace}) => _log(
-        message: message,
-        level: LogLevel.debug,
-        error: error,
-        stackTrace: stackTrace,
-      );
+  void debug(String message, {Object? error, StackTrace? stackTrace}) =>
+      _log(message: message, level: LogLevel.debug, error: error, stackTrace: stackTrace);
 
   /// Logs a message with [LogLevel.info].
-  void info(String message, {Object? error, StackTrace? stackTrace}) => _log(
-        message: message,
-        level: LogLevel.info,
-        error: error,
-        stackTrace: stackTrace,
-      );
+  void info(String message, {Object? error, StackTrace? stackTrace}) =>
+      _log(message: message, level: LogLevel.info, error: error, stackTrace: stackTrace);
 
   /// Logs a message with [LogLevel.warn].
-  void warn(String message, {Object? error, StackTrace? stackTrace}) => _log(
-        message: message,
-        level: LogLevel.warn,
-        error: error,
-        stackTrace: stackTrace,
-      );
+  void warn(String message, {Object? error, StackTrace? stackTrace}) =>
+      _log(message: message, level: LogLevel.warn, error: error, stackTrace: stackTrace);
 
   /// Logs a message with [LogLevel.error].
-  void error(String message, {Object? error, StackTrace? stackTrace}) => _log(
-        message: message,
-        level: LogLevel.error,
-        error: error,
-        stackTrace: stackTrace,
-      );
+  void error(String message, {Object? error, StackTrace? stackTrace}) =>
+      _log(message: message, level: LogLevel.error, error: error, stackTrace: stackTrace);
 
   /// Logs a message with [LogLevel.fatal].
-  void fatal(String message, {Object? error, StackTrace? stackTrace}) => _log(
-        message: message,
-        level: LogLevel.fatal,
-        error: error,
-        stackTrace: stackTrace,
-      );
+  void fatal(String message, {Object? error, StackTrace? stackTrace}) =>
+      _log(message: message, level: LogLevel.fatal, error: error, stackTrace: stackTrace);
 
   void _log({
     required String message,
     required LogLevel level,
     Object? error,
     StackTrace? stackTrace,
-  }) =>
-      log(
-        LogMessage(
-          message: message,
-          level: level,
-          error: error,
-          stackTrace: stackTrace,
-          timestamp: clock.now(),
-        ),
-      );
+  }) => log(
+    LogMessage(
+      message: message,
+      level: level,
+      error: error,
+      stackTrace: stackTrace,
+      timestamp: clock.now(),
+    ),
+  );
 
   /// Logs a zone error with [LogLevel.error].
   void logZoneError(Object error, StackTrace stackTrace) {
@@ -180,13 +155,13 @@ enum LogLevel implements Comparable<LogLevel> {
 
   /// Return short name of the log level.
   String toShortName() => switch (this) {
-        LogLevel.trace => 'TRC',
-        LogLevel.debug => 'DBG',
-        LogLevel.info => 'INF',
-        LogLevel.warn => 'WRN',
-        LogLevel.error => 'ERR',
-        LogLevel.fatal => 'FTL',
-      };
+    LogLevel.trace => 'TRC',
+    LogLevel.debug => 'DBG',
+    LogLevel.info => 'INF',
+    LogLevel.warn => 'WRN',
+    LogLevel.error => 'ERR',
+    LogLevel.fatal => 'FTL',
+  };
 }
 
 /// {@template log_observer}
