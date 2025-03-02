@@ -13,6 +13,7 @@ workspace:
   - packages/rest_client
   - packages/app_database
   - packages/logger
+  - packages/analytics
 
 dependencies:
   # Flutter SDK

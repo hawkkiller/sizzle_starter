@@ -1,0 +1,14 @@
+name: analytics
+description: Simple analytics library for Flutter applications.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ^3.7.0
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  collection: ^1.19.1
+  firebase_analytics: ^11.3.6
