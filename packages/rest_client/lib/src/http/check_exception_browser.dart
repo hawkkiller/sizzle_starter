@@ -10,4 +10,5 @@ Object? checkHttpException(http.ClientException e) {
 
   return null;
 }
+
 // coverage:ignore-end

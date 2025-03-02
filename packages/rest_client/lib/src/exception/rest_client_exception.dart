@@ -31,7 +31,8 @@ final class ClientException extends RestClientException {
   const ClientException({required super.message, super.statusCode, super.cause});
 
   @override
-  String toString() => 'ClientException('
+  String toString() =>
+      'ClientException('
       'message: $message, '
       'statusCode: $statusCode, '
       'cause: $cause'
@@ -66,13 +67,14 @@ final class ClientException extends RestClientException {
 final class StructuredBackendException extends RestClientException {
   /// {@macro structured_backend_exception}
   const StructuredBackendException({required this.error, super.statusCode})
-      : super(message: 'Backend returned structured error');
+    : super(message: 'Backend returned structured error');
 
   /// The error returned by the backend
   final Map<String, Object?> error;
 
   @override
-  String toString() => 'StructuredBackendException('
+  String toString() =>
+      'StructuredBackendException('
       'message: $message, '
       'error: $error, '
       'statusCode: $statusCode, '
@@ -91,7 +93,8 @@ final class NetworkException extends RestClientException {
   const NetworkException({required super.message, super.statusCode, super.cause});
 
   @override
-  String toString() => 'NetworkException('
+  String toString() =>
+      'NetworkException('
       'message: $message, '
       'statusCode: $statusCode, '
       'cause: $cause'

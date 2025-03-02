@@ -106,11 +106,7 @@ class AppSettingsPersistedEntry extends SharedPreferencesEntry<AppSettings> {
       appLocale = Locale(languageCode, countryCode);
     }
 
-    return AppSettings(
-      appTheme: appTheme,
-      locale: appLocale,
-      textScale: textScale,
-    );
+    return AppSettings(appTheme: appTheme, locale: appLocale, textScale: textScale);
   }
 
   @override

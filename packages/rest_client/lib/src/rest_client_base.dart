@@ -30,26 +30,14 @@ abstract base class RestClientBase implements RestClient {
     String path, {
     Map<String, String>? headers,
     Map<String, String?>? queryParams,
-  }) =>
-      send(
-        path: path,
-        method: 'DELETE',
-        headers: headers,
-        queryParams: queryParams,
-      );
+  }) => send(path: path, method: 'DELETE', headers: headers, queryParams: queryParams);
 
   @override
   Future<Map<String, Object?>?> get(
     String path, {
     Map<String, String>? headers,
     Map<String, String?>? queryParams,
-  }) =>
-      send(
-        path: path,
-        method: 'GET',
-        headers: headers,
-        queryParams: queryParams,
-      );
+  }) => send(path: path, method: 'GET', headers: headers, queryParams: queryParams);
 
   @override
   Future<Map<String, Object?>?> patch(
@@ -57,14 +45,7 @@ abstract base class RestClientBase implements RestClient {
     required Map<String, Object?> body,
     Map<String, String>? headers,
     Map<String, String?>? queryParams,
-  }) =>
-      send(
-        path: path,
-        method: 'PATCH',
-        body: body,
-        headers: headers,
-        queryParams: queryParams,
-      );
+  }) => send(path: path, method: 'PATCH', body: body, headers: headers, queryParams: queryParams);
 
   @override
   Future<Map<String, Object?>?> post(
@@ -72,14 +53,7 @@ abstract base class RestClientBase implements RestClient {
     required Map<String, Object?> body,
     Map<String, String>? headers,
     Map<String, String?>? queryParams,
-  }) =>
-      send(
-        path: path,
-        method: 'POST',
-        body: body,
-        headers: headers,
-        queryParams: queryParams,
-      );
+  }) => send(path: path, method: 'POST', body: body, headers: headers, queryParams: queryParams);
 
   @override
   Future<Map<String, Object?>?> put(
@@ -87,14 +61,7 @@ abstract base class RestClientBase implements RestClient {
     required Map<String, Object?> body,
     Map<String, String>? headers,
     Map<String, String?>? queryParams,
-  }) =>
-      send(
-        path: path,
-        method: 'PUT',
-        body: body,
-        headers: headers,
-        queryParams: queryParams,
-      );
+  }) => send(path: path, method: 'PUT', body: body, headers: headers, queryParams: queryParams);
 
   /// Encodes [body] to JSON and then to UTF8
   @protected
@@ -147,10 +114,7 @@ abstract base class RestClientBase implements RestClient {
       };
 
       if (decodedBody case {'error': final Map<String, Object?> error}) {
-        throw StructuredBackendException(
-          error: error,
-          statusCode: statusCode,
-        );
+        throw StructuredBackendException(error: error, statusCode: statusCode);
       }
 
       if (decodedBody case {'data': final Map<String, Object?> data}) {
@@ -175,10 +139,11 @@ abstract base class RestClientBase implements RestClient {
 
     if (stringBody.length > 1000) {
       return (await compute(
-        json.decode,
-        stringBody,
-        debugLabel: kDebugMode ? 'Decode String Compute' : null,
-      )) as Map<String, Object?>;
+            json.decode,
+            stringBody,
+            debugLabel: kDebugMode ? 'Decode String Compute' : null,
+          ))
+          as Map<String, Object?>;
     }
 
     return json.decode(stringBody) as Map<String, Object?>;
@@ -190,10 +155,11 @@ abstract base class RestClientBase implements RestClient {
 
     if (bytesBody.length > 1000) {
       return (await compute(
-        _jsonUTF8.decode,
-        bytesBody,
-        debugLabel: kDebugMode ? 'Decode Bytes Compute' : null,
-      ))! as Map<String, Object?>;
+            _jsonUTF8.decode,
+            bytesBody,
+            debugLabel: kDebugMode ? 'Decode Bytes Compute' : null,
+          ))!
+          as Map<String, Object?>;
     }
 
     return _jsonUTF8.decode(bytesBody)! as Map<String, Object?>;

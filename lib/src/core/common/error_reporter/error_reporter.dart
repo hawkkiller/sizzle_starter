@@ -24,10 +24,7 @@ abstract interface class ErrorReporter {
   ///
   /// The [throwable] is the exception that was thrown.
   /// The [stackTrace] is the stack trace associated with the exception.
-  Future<void> captureException({
-    required Object throwable,
-    StackTrace? stackTrace,
-  });
+  Future<void> captureException({required Object throwable, StackTrace? stackTrace});
 }
 
 /// {@template error_reporter_log_observer}

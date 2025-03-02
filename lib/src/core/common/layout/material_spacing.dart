@@ -34,9 +34,6 @@ class HorizontalSpacing extends EdgeInsets {
   /// the element and keep at width of [maxWidth]
   ///
   /// [windowWidth] is the width of a window.
-  factory HorizontalSpacing.centered(
-    double windowWidth, [
-    double maxWidth = 768,
-  ]) =>
+  factory HorizontalSpacing.centered(double windowWidth, [double maxWidth = 768]) =>
       HorizontalSpacing._(math.max((windowWidth - maxWidth) / 2, 16));
 }

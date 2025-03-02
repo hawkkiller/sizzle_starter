@@ -17,11 +17,11 @@ final class Localization {
 
   /// List of localization delegates.
   static List<LocalizationsDelegate<void>> get localizationDelegates => [
-        GlobalMaterialLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        _delegate,
-      ];
+    GlobalMaterialLocalizations.delegate,
+    GlobalCupertinoLocalizations.delegate,
+    GlobalWidgetsLocalizations.delegate,
+    _delegate,
+  ];
 
   /// {@macro localization}
   static Localization? get current => _current;

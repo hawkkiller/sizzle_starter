@@ -20,16 +20,11 @@ class AppSettings with Diagnosticable {
   final double? textScale;
 
   /// Copy the [AppSettings] with new values.
-  AppSettings copyWith({
-    AppTheme? appTheme,
-    Locale? locale,
-    double? textScale,
-  }) =>
-      AppSettings(
-        appTheme: appTheme ?? this.appTheme,
-        locale: locale ?? this.locale,
-        textScale: textScale ?? this.textScale,
-      );
+  AppSettings copyWith({AppTheme? appTheme, Locale? locale, double? textScale}) => AppSettings(
+    appTheme: appTheme ?? this.appTheme,
+    locale: locale ?? this.locale,
+    textScale: textScale ?? this.textScale,
+  );
 
   @override
   bool operator ==(Object other) {

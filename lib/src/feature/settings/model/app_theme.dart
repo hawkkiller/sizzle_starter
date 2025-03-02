@@ -16,10 +16,7 @@ final class AppTheme with Diagnosticable {
   final Color seed;
 
   /// The default theme to use.
-  static const defaultTheme = AppTheme(
-    themeMode: ThemeMode.system,
-    seed: Color(0xFF6200EE),
-  );
+  static const defaultTheme = AppTheme(themeMode: ThemeMode.system, seed: Color(0xFF6200EE));
 
   /// Builds a [ThemeData] based on the [themeMode] and [seed].
   ///

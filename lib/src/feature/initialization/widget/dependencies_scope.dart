@@ -24,11 +24,7 @@ import 'package:sizzle_starter/src/feature/initialization/model/dependencies_con
 /// {@endtemplate}
 class DependenciesScope extends InheritedWidget {
   /// {@macro dependencies_scope}
-  const DependenciesScope({
-    required super.child,
-    required this.dependencies,
-    super.key,
-  });
+  const DependenciesScope({required super.child, required this.dependencies, super.key});
 
   /// Container with dependencies.
   final DependenciesContainer dependencies;
@@ -40,9 +36,7 @@ class DependenciesScope extends InheritedWidget {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     super.debugFillProperties(properties);
-    properties.add(
-      DiagnosticsProperty<DependenciesContainer>('dependencies', dependencies),
-    );
+    properties.add(DiagnosticsProperty<DependenciesContainer>('dependencies', dependencies));
   }
 
   @override

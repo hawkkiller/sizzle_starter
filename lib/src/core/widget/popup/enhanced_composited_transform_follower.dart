@@ -177,16 +177,16 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
     bool enforceLeaderWidth = false,
     bool enforceLeaderHeight = false,
     RenderBox? child,
-  })  : _link = link,
-        _flipWhenOverflow = flipWhenOverflow,
-        _moveWhenOverflow = moveWhenOverflow,
-        _showWhenUnlinked = showWhenUnlinked,
-        _leaderAnchor = leaderAnchor,
-        _followerAnchor = followerAnchor,
-        _enforceLeaderWidth = enforceLeaderWidth,
-        _enforceLeaderHeight = enforceLeaderHeight,
-        _displayFeatureBounds = displayFeatureBounds,
-        super(child);
+  }) : _link = link,
+       _flipWhenOverflow = flipWhenOverflow,
+       _moveWhenOverflow = moveWhenOverflow,
+       _showWhenUnlinked = showWhenUnlinked,
+       _leaderAnchor = leaderAnchor,
+       _followerAnchor = followerAnchor,
+       _enforceLeaderWidth = enforceLeaderWidth,
+       _enforceLeaderHeight = enforceLeaderHeight,
+       _displayFeatureBounds = displayFeatureBounds,
+       super(child);
 
   /// Called when the size of the leader widget changes.
   void leaderUpdated() {
@@ -379,10 +379,7 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
 
     if (leaderSize != null) {
       if (enforceLeaderWidth) {
-        constraints = constraints.copyWith(
-          minWidth: leaderSize.width,
-          maxWidth: leaderSize.width,
-        );
+        constraints = constraints.copyWith(minWidth: leaderSize.width, maxWidth: leaderSize.width);
       }
 
       if (enforceLeaderHeight) {
@@ -419,7 +416,8 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
       linkedOffset = leaderAnchor.alongSize(leaderSize) - followerAnchor.alongSize(size);
       final followerGlobalPosition = leaderGlobalPosition + linkedOffset;
 
-      linkedOffset = calculateLinkedOffset(
+      linkedOffset =
+          calculateLinkedOffset(
             followerRect: followerGlobalPosition & size,
             targetRect: leaderGlobalPosition & leaderSize,
             screenSize: constraints.biggest,
@@ -456,13 +454,10 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
       ),
     );
 
-    assert(
-      () {
-        layer!.debugCreator = debugCreator;
-        return true;
-      }(),
-      '',
-    );
+    assert(() {
+      layer!.debugCreator = debugCreator;
+      return true;
+    }(), '');
   }
 
   /// Calculate the offset of the follower widget.
@@ -584,7 +579,8 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
       result.addWithPaintTransform(
         transform: getCurrentTransform(),
         position: position,
-        hitTest: (BoxHitTestResult result, Offset position) =>
-            super.hitTestChildren(result, position: position),
+        hitTest:
+            (BoxHitTestResult result, Offset position) =>
+                super.hitTestChildren(result, position: position),
       );
 }

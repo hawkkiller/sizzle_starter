@@ -25,10 +25,7 @@ abstract class PersistedEntry<T extends Object> {
 /// {@endtemplate}
 abstract class SharedPreferencesEntry<T extends Object> extends PersistedEntry<T> {
   /// {@macro shared_preferences_entry}
-  const SharedPreferencesEntry({
-    required this.sharedPreferences,
-    required this.key,
-  });
+  const SharedPreferencesEntry({required this.sharedPreferences, required this.key});
 
   /// The instance of [SharedPreferences] used to read and write values.
   final SharedPreferencesAsync sharedPreferences;
@@ -40,10 +37,7 @@ abstract class SharedPreferencesEntry<T extends Object> extends PersistedEntry<T
 /// A [int] implementation of [SharedPreferencesEntry].
 class IntPreferencesEntry extends SharedPreferencesEntry<int> {
   /// {@macro int_preferences_entry}
-  const IntPreferencesEntry({
-    required super.sharedPreferences,
-    required super.key,
-  });
+  const IntPreferencesEntry({required super.sharedPreferences, required super.key});
 
   @override
   Future<int?> read() => sharedPreferences.getInt(key);
@@ -62,10 +56,7 @@ class IntPreferencesEntry extends SharedPreferencesEntry<int> {
 /// A [String] implementation of [SharedPreferencesEntry].
 class StringPreferencesEntry extends SharedPreferencesEntry<String> {
   /// {@macro string_preferences_entry}
-  const StringPreferencesEntry({
-    required super.sharedPreferences,
-    required super.key,
-  });
+  const StringPreferencesEntry({required super.sharedPreferences, required super.key});
 
   @override
   Future<String?> read() => sharedPreferences.getString(key);
@@ -84,10 +75,7 @@ class StringPreferencesEntry extends SharedPreferencesEntry<String> {
 /// A [bool] implementation of [SharedPreferencesEntry].
 class BoolPreferencesEntry extends SharedPreferencesEntry<bool> {
   /// {@macro bool_preferences_entry}
-  const BoolPreferencesEntry({
-    required super.sharedPreferences,
-    required super.key,
-  });
+  const BoolPreferencesEntry({required super.sharedPreferences, required super.key});
 
   @override
   Future<bool?> read() => sharedPreferences.getBool(key);
@@ -106,10 +94,7 @@ class BoolPreferencesEntry extends SharedPreferencesEntry<bool> {
 /// A [double] implementation of [SharedPreferencesEntry].
 class DoublePreferencesEntry extends SharedPreferencesEntry<double> {
   /// {@macro double_preferences_entry}
-  const DoublePreferencesEntry({
-    required super.sharedPreferences,
-    required super.key,
-  });
+  const DoublePreferencesEntry({required super.sharedPreferences, required super.key});
 
   @override
   Future<double?> read() => sharedPreferences.getDouble(key);
@@ -128,10 +113,7 @@ class DoublePreferencesEntry extends SharedPreferencesEntry<double> {
 /// A [List<String>] implementation of [SharedPreferencesEntry].
 class StringListPreferencesEntry extends SharedPreferencesEntry<List<String>> {
   /// {@macro string_list_preferences_entry}
-  const StringListPreferencesEntry({
-    required super.sharedPreferences,
-    required super.key,
-  });
+  const StringListPreferencesEntry({required super.sharedPreferences, required super.key});
 
   @override
   Future<List<String>?> read() => sharedPreferences.getStringList(key);
