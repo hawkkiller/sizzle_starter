@@ -40,7 +40,7 @@ dependencies:
 
   # Storing data
   shared_preferences: 2.5.2
-  drift: 2.25.1
+  drift: 2.26.0
   drift_flutter: 0.2.4
 
   # Logging
