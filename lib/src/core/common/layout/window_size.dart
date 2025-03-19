@@ -9,41 +9,29 @@ import 'package:sizzle_starter/src/core/common/extensions/context_extension.dart
 /// {@endtemplate}
 sealed class WindowSize extends Size {
   /// {@macro window_size}
-  WindowSize({required this.minWidth, required this.maxWidth, required Size size})
-    : super.copy(size);
+  WindowSize(super.source) : super.copy();
 
   /// Creates a [WindowSize] from the given [Size].
   factory WindowSize.fromSize(Size size) {
     assert(size.width >= 0, 'Width must be greater than or equal to 0');
 
     return switch (size.width) {
-      >= WindowSizeCompact._minWidth && < WindowSizeMedium._minWidth => WindowSizeCompact(size),
-      >= WindowSizeMedium._minWidth && < WindowSizeExpanded._minWidth => WindowSizeMedium(size),
-      >= WindowSizeExpanded._minWidth && < WindowSizeLarge._minWidth => WindowSizeExpanded(size),
-      >= WindowSizeLarge._minWidth && < WindowSizeExtraLarge._minWidth => WindowSizeLarge(size),
-      >= WindowSizeExtraLarge._minWidth => WindowSizeExtraLarge(size),
-      _ => throw AssertionError('Invalid window size: $size'),
+      >= _compact && < _medium => WindowSizeCompact(size),
+      >= _medium && < _expanded => WindowSizeMedium(size),
+      >= _expanded && < _large => WindowSizeExpanded(size),
+      >= _large && < _extraLarge => WindowSizeLarge(size),
+      _ => WindowSizeExtraLarge(size),
     };
   }
 
-  /// Minimum width of the window for the breakpoint.
-  final double minWidth;
-
-  /// Maximum width of the window for the breakpoint.
-  final double maxWidth;
+  static const _compact = 0;
+  static const _medium = 600;
+  static const _expanded = 840;
+  static const _large = 1200;
+  static const _extraLarge = 1600;
 
   /// Returns true if the window size is compact.
   bool get isCompact => maybeMap(orElse: () => false, compact: (_) => true);
-
-  /// Returns true if the window size is compact or larger.
-  bool get isCompactOrLarger => maybeMap(
-    orElse: () => false,
-    compact: (_) => true,
-    medium: (_) => true,
-    expanded: (_) => true,
-    large: (_) => true,
-    extraLarge: (_) => true,
-  );
 
   /// Returns true if the window size is medium.
   bool get isMedium => maybeMap(orElse: () => false, medium: (_) => true);
@@ -101,36 +89,30 @@ sealed class WindowSize extends Size {
     T Function(WindowSizeExpanded)? expanded,
     T Function(WindowSizeLarge)? large,
     T Function(WindowSizeExtraLarge)? extraLarge,
-  }) => switch (this) {
-    final WindowSizeCompact size => compact?.call(size) ?? orElse(),
-    final WindowSizeMedium size => medium?.call(size) ?? orElse(),
-    final WindowSizeExpanded size => expanded?.call(size) ?? orElse(),
-    final WindowSizeLarge size => large?.call(size) ?? orElse(),
-    final WindowSizeExtraLarge size => extraLarge?.call(size) ?? orElse(),
-  };
+  }) => map(
+    compact: compact ?? (_) => orElse(),
+    medium: medium ?? (_) => orElse(),
+    expanded: expanded ?? (_) => orElse(),
+    large: large ?? (_) => orElse(),
+    extraLarge: extraLarge ?? (_) => orElse(),
+  );
 }
 
 /// Compact breakpoint for responsive design.
 final class WindowSizeCompact extends WindowSize {
   /// Creates a [WindowSizeCompact] breakpoint.
-  WindowSizeCompact(Size size) : super(minWidth: _minWidth, maxWidth: _maxWidth, size: size);
-
-  /// The minimum width of the window for the compact breakpoint.
-  static const _minWidth = 0.0;
-
-  /// The maximum width of the window for the compact breakpoint.
-  static const _maxWidth = 599.0;
+  WindowSizeCompact(super.source) 
+    : assert(
+        source.width >= WindowSize._compact && source.width < WindowSize._medium,
+        'Width must be between ${WindowSize._compact} and ${WindowSize._medium}',
+      );
 
   @override
   bool operator ==(Object other) =>
-      other is WindowSizeCompact &&
-      minWidth == other.minWidth &&
-      maxWidth == other.maxWidth &&
-      width == other.width &&
-      height == other.height;
+      other is WindowSizeCompact && width == other.width && height == other.height;
 
   @override
-  int get hashCode => Object.hashAll([minWidth, maxWidth, width, height]);
+  int get hashCode => Object.hashAll([width, height]);
 
   @override
   String toString() => 'WindowSizeCompact';
@@ -139,24 +121,18 @@ final class WindowSizeCompact extends WindowSize {
 /// Medium breakpoint for responsive design.
 final class WindowSizeMedium extends WindowSize {
   /// Creates a [WindowSizeMedium] breakpoint.
-  WindowSizeMedium(Size size) : super(minWidth: _minWidth, maxWidth: _maxWidth, size: size);
-
-  /// The minimum width of the window for the medium breakpoint.
-  static const _minWidth = 600.0;
-
-  /// The maximum width of the window for the medium breakpoint.
-  static const _maxWidth = 839.0;
+  WindowSizeMedium(super.source)
+    : assert(
+        source.width >= WindowSize._medium && source.width < WindowSize._expanded,
+        'Width must be between ${WindowSize._medium} and ${WindowSize._expanded}',
+      );
 
   @override
   bool operator ==(Object other) =>
-      other is WindowSizeMedium &&
-      minWidth == other.minWidth &&
-      maxWidth == other.maxWidth &&
-      width == other.width &&
-      height == other.height;
+      other is WindowSizeMedium && width == other.width && height == other.height;
 
   @override
-  int get hashCode => Object.hashAll([minWidth, maxWidth, width, height]);
+  int get hashCode => Object.hashAll([width, height]);
 
   @override
   String toString() => 'WindowSizeMedium';
@@ -165,24 +141,18 @@ final class WindowSizeMedium extends WindowSize {
 /// Expanded breakpoint for responsive design.
 final class WindowSizeExpanded extends WindowSize {
   /// Creates a [WindowSizeExpanded] breakpoint.
-  WindowSizeExpanded(Size size) : super(minWidth: _minWidth, maxWidth: _maxWidth, size: size);
-
-  /// The minimum width of the window for the expanded breakpoint.
-  static const _minWidth = 840.0;
-
-  /// The maximum width of the window for the expanded breakpoint.
-  static const _maxWidth = 1199.0;
+  WindowSizeExpanded(super.source)
+    : assert(
+        source.width >= WindowSize._expanded && source.width < WindowSize._large,
+        'Width must be between ${WindowSize._expanded} and ${WindowSize._large}',
+      );
 
   @override
   bool operator ==(Object other) =>
-      other is WindowSizeExpanded &&
-      minWidth == other.minWidth &&
-      maxWidth == other.maxWidth &&
-      width == other.width &&
-      height == other.height;
+      other is WindowSizeExpanded && width == other.width && height == other.height;
 
   @override
-  int get hashCode => Object.hashAll([minWidth, maxWidth, width, height]);
+  int get hashCode => Object.hashAll([width, height]);
 
   @override
   String toString() => 'WindowSizeExpanded';
@@ -191,24 +161,18 @@ final class WindowSizeExpanded extends WindowSize {
 /// Large breakpoint for responsive design.
 final class WindowSizeLarge extends WindowSize {
   /// Creates a [WindowSizeLarge] breakpoint.
-  WindowSizeLarge(Size size) : super(minWidth: _minWidth, maxWidth: _maxWidth, size: size);
-
-  /// The minimum width of the window for the large breakpoint.
-  static const _minWidth = 1200.0;
-
-  /// The maximum width of the window for the large breakpoint.
-  static const _maxWidth = 1599.0;
+  WindowSizeLarge(super.source)
+    : assert(
+        source.width >= WindowSize._large && source.width < WindowSize._extraLarge,
+        'Width must be between ${WindowSize._large} and ${WindowSize._extraLarge}',
+      );
 
   @override
   bool operator ==(Object other) =>
-      other is WindowSizeLarge &&
-      minWidth == other.minWidth &&
-      maxWidth == other.maxWidth &&
-      width == other.width &&
-      height == other.height;
+      other is WindowSizeLarge && width == other.width && height == other.height;
 
   @override
-  int get hashCode => Object.hashAll([minWidth, maxWidth, width, height]);
+  int get hashCode => Object.hashAll([width, height]);
 
   @override
   String toString() => 'WindowSizeLarge';
@@ -217,24 +181,18 @@ final class WindowSizeLarge extends WindowSize {
 /// Extra large breakpoint for responsive design.
 final class WindowSizeExtraLarge extends WindowSize {
   /// Creates a [WindowSizeExtraLarge] breakpoint.
-  WindowSizeExtraLarge(Size size) : super(minWidth: _minWidth, maxWidth: _maxWidth, size: size);
-
-  /// The minimum width of the window for the extra large breakpoint.
-  static const _minWidth = 1600.0;
-
-  /// The maximum width of the window for the extra large breakpoint.
-  static const _maxWidth = double.infinity;
+  WindowSizeExtraLarge(super.source)
+    : assert(
+        source.width >= WindowSize._extraLarge,
+        'Width must be greater than or equal to ${WindowSize._extraLarge}',
+      );
 
   @override
   bool operator ==(Object other) =>
-      other is WindowSizeExtraLarge &&
-      minWidth == other.minWidth &&
-      maxWidth == other.maxWidth &&
-      width == other.width &&
-      height == other.height;
+      other is WindowSizeExtraLarge && width == other.width && height == other.height;
 
   @override
-  int get hashCode => Object.hashAll([minWidth, maxWidth, width, height]);
+  int get hashCode => Object.hashAll([width, height]);
 
   @override
   String toString() => 'WindowSizeExtraLarge';
@@ -243,7 +201,7 @@ final class WindowSizeExtraLarge extends WindowSize {
 /// Scope that provides [WindowSize] to its descendants.
 class WindowSizeScope extends StatefulWidget {
   /// Creates a [WindowSizeScope] that provides [WindowSize] to its descendants.
-  const WindowSizeScope({required this.child, super.key});
+  const WindowSizeScope({required this.child, super.key})
 
   /// The widget below this widget in the tree.
   final Widget child;
