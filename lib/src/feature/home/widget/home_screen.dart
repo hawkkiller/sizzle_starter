@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sizzle_starter/src/core/common/layout/window_size.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/dependencies_scope.dart';
 
 /// {@template home_screen}
@@ -23,19 +24,21 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            Text('Welcome to Sizzle Starter!', style: Theme.of(context).textTheme.headlineLarge),
-            const SizedBox(height: 16),
-            Builder(builder: (context) => const Text('Hello')),
-          ],
-        ),
-      ),
+    final windowSize = WindowSizeScope.of(context);
+
+    return windowSize.mapWithLowerFallback(
+      compact: () {
+        return const Center(child: Text('Compact'));
+      },
+      medium: () {
+        return const Center(child: Text('Medium'));
+      },
+      expanded: () {
+        return const Center(child: Text('Expanded'));
+      },
+      large: () {
+        return const Center(child: Text('Large'));
+      },
     );
   }
 }

@@ -7,10 +7,10 @@ import 'package:sizzle_starter/src/core/common/extensions/context_extension.dart
 /// The [WindowSize] class represents a breakpoint for responsive design.
 /// {@endtemplate}
 extension type const WindowSize(Size _size) implements Size {
-  static const _medium = 600;
-  static const _expanded = 840;
-  static const _large = 1200;
-  static const _extraLarge = 1600;
+  static const _medium = 600.0;
+  static const _expanded = 840.0;
+  static const _large = 1200.0;
+  static const _extraLarge = 1600.0;
 
   /// Returns true if the window size is compact.
   bool get isCompact => maybeMap(orElse: () => false, compact: () => true);

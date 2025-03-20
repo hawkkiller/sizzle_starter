@@ -45,6 +45,10 @@ class _InitializationFailedAppState extends State<InitializationFailedApp> {
 
   @override
   Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final typography = theme.textTheme;
+    final colorScheme = theme.colorScheme;
+
     return MaterialApp(
       home: Scaffold(
         body: Center(
@@ -54,7 +58,7 @@ class _InitializationFailedAppState extends State<InitializationFailedApp> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  Text('Initialization failed', style: Theme.of(context).textTheme.headlineMedium),
+                  Text('Initialization failed', style: typography.headlineMedium),
                   if (widget.onRetryInitialization != null)
                     IconButton(icon: const Icon(Icons.refresh), onPressed: _retryInitialization),
                 ],
@@ -62,14 +66,12 @@ class _InitializationFailedAppState extends State<InitializationFailedApp> {
               const SizedBox(height: 16),
               Text(
                 '${widget.error}',
-                style: Theme.of(
-                  context,
-                ).textTheme.bodyLarge?.copyWith(color: Theme.of(context).colorScheme.error),
+                style: typography.bodyLarge?.copyWith(color: colorScheme.error),
               ),
               const SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Text('${widget.stackTrace}', style: Theme.of(context).textTheme.bodyLarge),
+                child: Text('${widget.stackTrace}', style: typography.bodyLarge),
               ),
             ],
           ),
