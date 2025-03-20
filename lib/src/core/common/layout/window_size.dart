@@ -6,10 +6,7 @@ import 'package:sizzle_starter/src/core/common/extensions/context_extension.dart
 ///
 /// The [WindowSize] class represents a breakpoint for responsive design.
 /// {@endtemplate}
-class WindowSize extends Size {
-  /// {@macro window_size}
-  WindowSize(super.source) : super.copy();
-
+extension type const WindowSize(Size _size) implements Size {
   static const _medium = 600;
   static const _expanded = 840;
   static const _large = 1200;
@@ -48,17 +45,15 @@ class WindowSize extends Size {
     required T Function() expanded,
     required T Function() large,
     required T Function() extraLarge,
-  }) {
-    return switch (width) {
-      < _medium => compact(),
-      < _expanded => medium(),
-      < _large => expanded(),
-      < _extraLarge => large(),
-      _ => extraLarge(),
-    };
-  }
+  }) => switch (_size.width) {
+    < _medium => compact(),
+    < _expanded => medium(),
+    < _large => expanded(),
+    < _extraLarge => large(),
+    _ => extraLarge(),
+  };
 
-  /// Maps the [WindowSize] to a value of type [T] or returns [orElse] if the [WindowSize] is not matched.
+  /// If value is not provided, returns the result of the [orElse] function.
   T maybeMap<T>({
     required T Function() orElse,
     T Function()? compact,
@@ -67,11 +62,27 @@ class WindowSize extends Size {
     T Function()? large,
     T Function()? extraLarge,
   }) => map(
-    compact: compact ?? () => orElse(),
-    medium: medium ?? () => orElse(),
-    expanded: expanded ?? () => orElse(),
-    large: large ?? () => orElse(),
-    extraLarge: extraLarge ?? () => orElse(),
+    compact: compact ?? orElse,
+    medium: medium ?? orElse,
+    expanded: expanded ?? orElse,
+    large: large ?? orElse,
+    extraLarge: extraLarge ?? orElse,
+  );
+
+  /// Returns values based on the [WindowSize] with a fallback to the lower size,
+  /// if the value is not provided.
+  T mapWithLowerFallback<T>({
+    required T Function() compact,
+    T Function()? medium,
+    T Function()? expanded,
+    T Function()? large,
+    T Function()? extraLarge,
+  }) => map(
+    compact: compact,
+    medium: medium ?? compact,
+    expanded: expanded ?? medium ?? compact,
+    large: large ?? expanded ?? medium ?? compact,
+    extraLarge: extraLarge ?? large ?? expanded ?? medium ?? compact,
   );
 }
 
