@@ -39,7 +39,7 @@ dependencies:
   cupertino_http: 2.0.2
 
   # Storing data
-  shared_preferences: 2.5.2
+  shared_preferences: 2.5.3
   drift: 2.25.1
   drift_flutter: 0.2.4
 
