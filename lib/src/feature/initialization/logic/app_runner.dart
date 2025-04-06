@@ -67,6 +67,6 @@ sealed class AppRunner {
 
       // Launch the application
       await launchApplication();
-    }, logger.logZoneError);
+    }, logger.logZoneError)
   }
 }

@@ -48,8 +48,21 @@ jobs:
         continue-on-error: true
 
       - name: 🕵️ Analyze
-        run: flutter analyze .
+        run: |
+          flutter analyze . | tee analysis.log
+          dreport analyze convert -i analysis.log -o reports/analysis.json -f rdjson
         continue-on-error: true
+
+      - name: 🕵️ Reviewdog
+        env:
+          REVIEWDOG_GITHUB_API_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # If it is a pull request run github-pr-check, otherwise run github-check
+          if [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            reviewdog -f=rdjson -name=flutter-analyze -reporter=github-pr-check -level=error < reports/analysis.json
+          else
+            reviewdog -f=rdjson -name=flutter-analyze -reporter=github-check -level=error < reports/analysis.json
+          fi
         
         # TODO: Remove this step if you don't use DCM
       - name: 🕵️ Analyze with DCM
