@@ -50,6 +50,7 @@ jobs:
       - name: 🕵️ Analyze
         run: |
           flutter analyze . | tee analysis.log
+          mkdir reports
           dreport analyze convert -i analysis.log -o reports/analysis.json -f rdjson
         continue-on-error: true
 
