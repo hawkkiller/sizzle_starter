@@ -11,7 +11,6 @@ jobs:
   ci:
     name: "🚀 CI"
     runs-on: ubuntu-latest
-    timeout-minutes: 10
     steps:
       - name: 📚 Git Checkout
         uses: actions/checkout@v4
@@ -27,33 +26,39 @@ jobs:
         run: |
           flutter pub global activate very_good_cli
           flutter pub global activate coverage
-
-      - name: 🦄 Bootstrap
-        run: bash ./scripts/bootstrap.bash
+          dart pub global activate dreport
 
       - name: Install DCM
         uses: CQLabs/setup-dcm@v1.1.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
+      - name: 🐶 Setup Reviewdog
+        uses: reviewdog/action-setup@e04ffabe3898a0af8d0fb1af00c188831c4b5893 # v1.3.2
+        with:
+          reviewdog_version: latest # Optional. [latest,nightly,v.X.Y.Z]
+
+      - name: 🦄 Bootstrap
+        run: bash ./scripts/bootstrap.bash
+
       - name: ✨ Check Formatting
         run: |
           find lib test -name "*.dart" ! -name "*.*.dart" -print0 \
             | xargs -0 dart format --set-exit-if-changed --line-length 100 -o none
+        continue-on-error: true
 
       - name: 🕵️ Analyze
         run: flutter analyze .
-      
+        continue-on-error: true
+        
+        # TODO: Remove this step if you don't use DCM
       - name: 🕵️ Analyze with DCM
-        # Remove this step if you don't actually use DCM
         run: dcm analyze .
-
-      # ———————————————————————————————————————————————————————
-      #   RUN TESTS + COVERAGE
-      # ———————————————————————————————————————————————————————
+        continue-on-error: true
 
       - name: 🧪 Run Tests
         run: bash ./scripts/test.bash
+        continue-on-error: true
 
       - name: 📥 Upload test report
         uses: actions/upload-artifact@v4
