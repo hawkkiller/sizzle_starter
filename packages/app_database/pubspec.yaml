@@ -5,20 +5,20 @@ publish_to: none
 
 environment:
   sdk: ">=3.7.0 <4.0.0"
-  flutter: ">=3.29.0 <4.0.0"
+  flutter: ">=3.29.3 <4.0.0"
 
 resolution: workspace
 
 dependencies:
   flutter:
     sdk: flutter
-  drift: 2.25.1
+  drift: ^2.26.1
   drift_flutter: 0.2.4
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  drift_dev: 2.25.2
+  drift_dev: ^2.26.1
   build_runner: 2.4.15
 
 flutter:
