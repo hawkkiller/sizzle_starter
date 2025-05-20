@@ -32,7 +32,7 @@ jobs:
         run: bash ./scripts/bootstrap.bash
 
       - name: Install DCM
-        uses: CQLabs/setup-dcm@v1.1.1
+        uses: CQLabs/setup-dcm@v2
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -44,7 +44,7 @@ jobs:
       
       - name: 🕵️ Analyze with DCM
         # Remove this step if you don't actually use DCM
-        run: dcm analyze .
+        run: dcm analyze . -r github
 
       # ———————————————————————————————————————————————————————
       #   RUN TESTS + COVERAGE
