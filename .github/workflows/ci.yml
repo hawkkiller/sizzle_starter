@@ -34,7 +34,7 @@ jobs:
       - name: Install DCM
         uses: CQLabs/setup-dcm@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: ✨ Check Formatting
         run: bash ./scripts/format.bash
