@@ -3,7 +3,7 @@ description: "Workspace root"
 
 environment:
   sdk: ">=3.7.0 <4.0.0"
-  flutter: ">=3.29.3 <4.0.0"
+  flutter: ">=3.32.0 <4.0.0"
 
 workspace:
   - app
