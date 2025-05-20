@@ -1,0 +1,87 @@
+name: sizzle_starter
+description: Production-ready template for Flutter applications.
+# Prevent accidental publishing to pub.dev.
+publish_to: "none"
+
+version: 0.0.1+1
+
+environment:
+  sdk: ">=3.7.0 <4.0.0"
+  flutter: ">=3.32.0 <4.0.0"
+
+resolution: workspace
+
+dependencies:
+  # Flutter SDK
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  collection: 1.19.1
+  async: ^2.13.0
+  meta: 1.16.0
+  intl: ^0.20.2
+
+  # Stream
+  stream_transform: 2.1.1
+  rxdart: 0.28.0
+
+  # BLoC
+  flutter_bloc: ^9.1.1
+
+  # Networking
+  http: ^1.4.0
+  cronet_http: ^1.3.4
+  cupertino_http: ^2.2.0
+
+  # Storing data
+  shared_preferences: ^2.5.3
+  drift: ^2.26.1
+  drift_flutter: 0.2.4
+
+  # Logging
+  stack_trace: 1.12.1
+  sentry_flutter: ^8.14.2
+
+  # Packages
+  rest_client:
+    path: ../packages/rest_client
+  app_database:
+    path: ../packages/app_database
+  logger:
+    path: ../packages/logger
+
+  # Utils
+  path: 1.9.1
+  path_provider: 2.1.5
+  clock: 1.1.2
+  fake_async: ^1.3.3
+  package_info_plus: 8.3.0
+
+dev_dependencies:
+  # Testing
+  flutter_test:
+    sdk: flutter
+  mockito: ^5.4.6
+
+  # Lints
+  sizzle_lints: 2.1.7
+
+  # Utils
+  flutter_gen_runner: 5.10.0
+  build_runner: 2.4.15
+  intl_utils: ^2.8.10
+
+flutter:
+  uses-material-design: true
+
+flutter_gen:
+  output: lib/src/core/constant/generated
+  line_length: 80
+
+flutter_intl:
+  enabled: true
+  main_locale: en
+  class_name: GeneratedLocalizations
+  arb_dir: lib/src/core/constant/localization/translations
+  output_dir: lib/src/core/constant/localization/generated

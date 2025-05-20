@@ -19,7 +19,7 @@ jobs:
       - name: 🐦 Setup Flutter
         uses: subosito/flutter-action@v2
         with:
-          flutter-version: 3.29.0
+          flutter-version: 3.32.0
           channel: stable
           cache: true
 
@@ -32,21 +32,19 @@ jobs:
         run: bash ./scripts/bootstrap.bash
 
       - name: Install DCM
-        uses: CQLabs/setup-dcm@v1.1.1
+        uses: CQLabs/setup-dcm@v2
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}
 
       - name: ✨ Check Formatting
-        run: |
-          find lib test -name "*.dart" ! -name "*.*.dart" -print0 \
-            | xargs -0 dart format --set-exit-if-changed --line-length 100 -o none
+        run: bash ./scripts/format.bash
 
       - name: 🕵️ Analyze
-        run: flutter analyze .
+        run: bash ./scripts/analyze.bash
       
-      - name: 🕵️ Analyze with DCM
-        # Remove this step if you don't actually use DCM
-        run: dcm analyze .
+      # - name: 🕵️ Analyze with DCM
+      #   # Remove this step if you don't actually use DCM
+      #   run: dcm analyze . -r github
 
       # ———————————————————————————————————————————————————————
       #   RUN TESTS + COVERAGE

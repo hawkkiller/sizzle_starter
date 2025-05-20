@@ -8,7 +8,10 @@ find . -type f -name "pubspec.yaml" -exec grep -q build_runner {} \; -exec dirna
   if [ -f "$dir/pubspec.yaml" ]; then
     pushd $dir
     printf "\nGenerating files for $dir\n"
-    dart run build_runner build --delete-conflicting-outputs
+    dart run build_runner build -d
     popd
   fi
 done
+
+# Run l10n generation
+cd app && bash scripts/l10n.bash

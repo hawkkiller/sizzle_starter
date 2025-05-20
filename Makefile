@@ -36,5 +36,4 @@ template-dev-init:
 	@echo "Initializing template for development..."
 	@echo 'android/\nios/\nweb/\nwindows/\nmacos/\nlinux/\n' > .dev.gitignore
 	@git config core.excludesfile .dev.gitignore
-	@flutter create --org com.sizzle.sizzle_starter .
-	@rm -f test/widget_test.dart
+	@cd app && flutter create --org com.sizzle.sizzle_starter . && rm -f test/widget_test.dart

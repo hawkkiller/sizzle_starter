@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
-import 'package:sizzle_starter/src/core/constant/localization/generated/app_localizations.gen.dart';
+import 'package:sizzle_starter/src/core/constant/localization/generated/l10n.dart';
 
 /// {@template localization}
 /// Localization class which is used to localize app.
@@ -10,10 +10,10 @@ final class Localization {
   /// {@macro localization}
   const Localization._({required this.locale});
 
-  /// List of supported locales.
-  static List<Locale> get supportedLocales => AppLocalizations.supportedLocales;
+  static const _delegate = GeneratedLocalizations.delegate;
 
-  static const _delegate = AppLocalizations.delegate;
+  /// List of supported locales.
+  static List<Locale> get supportedLocales => _delegate.supportedLocales;
 
   /// List of localization delegates.
   static List<LocalizationsDelegate<void>> get localizationDelegates => [
@@ -43,7 +43,6 @@ final class Localization {
     return const Locale('en');
   }
 
-  /// Obtain [AppLocalizations] instance from [BuildContext].
-  static AppLocalizations of(BuildContext context) =>
-      AppLocalizations.of(context) ?? (throw FlutterError('No Localization found in context'));
+  /// Obtain [GeneratedLocalizations] instance from [BuildContext].
+  static GeneratedLocalizations of(BuildContext context) => GeneratedLocalizations.of(context);
 }
