@@ -4,6 +4,7 @@ analyzer:
   exclude: 
     - "lib/src/core/localization/generated/**"
     - "**/*.*.dart"
+    - "**/generated/**"
 
 dart_code_metrics:
   extends:
