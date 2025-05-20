@@ -11,43 +11,36 @@ import 'package:sizzle_starter/src/feature/settings/data/app_settings_datasource
 import 'package:sizzle_starter/src/feature/settings/data/app_settings_repository.dart';
 
 /// {@template composition_root}
-/// A place where top-level dependencies are initialized.
+/// A place where Application-Wide dependencies are initialized.
+///
+/// Application-Wide dependencies are dependencies that have a global scope,
+/// used in the entire application and have a lifetime that is the same as the application.
 /// {@endtemplate}
 ///
 /// {@template composition_process}
 /// Composition of dependencies is a process of creating and configuring
 /// instances of classes that are required for the application to work.
 /// {@endtemplate}
-final class CompositionRoot {
-  /// {@macro composition_root}
-  const CompositionRoot({required this.config, required this.logger, required this.errorReporter});
+/// Composes dependencies and returns the result of composition.
+Future<CompositionResult> composeDependencies({
+  required ApplicationConfig config,
+  required Logger logger,
+  required ErrorReporter errorReporter,
+}) async {
+  final stopwatch = clock.stopwatch()..start();
 
-  /// Application configuration.
-  final ApplicationConfig config;
+  logger.info('Initializing dependencies...');
 
-  /// Logger used to log information during composition process.
-  final Logger logger;
+  // Create the dependencies container using functions.
+  final dependencies = await createDependenciesContainer(config, logger, errorReporter);
 
-  /// Error tracking manager used to track errors in the application.
-  final ErrorReporter errorReporter;
+  stopwatch.stop();
+  logger.info('Dependencies initialized successfully in ${stopwatch.elapsedMilliseconds} ms.');
 
-  /// Composes dependencies and returns the result of composition.
-  Future<CompositionResult> compose() async {
-    final stopwatch = clock.stopwatch()..start();
-
-    logger.info('Initializing dependencies...');
-
-    // Create the dependencies container using functions.
-    final dependencies = await createDependenciesContainer(config, logger, errorReporter);
-
-    stopwatch.stop();
-    logger.info('Dependencies initialized successfully in ${stopwatch.elapsedMilliseconds} ms.');
-
-    return CompositionResult(
-      dependencies: dependencies,
-      millisecondsSpent: stopwatch.elapsedMilliseconds,
-    );
-  }
+  return CompositionResult(
+    dependencies: dependencies,
+    millisecondsSpent: stopwatch.elapsedMilliseconds,
+  );
 }
 
 /// {@template composition_result}
