@@ -40,7 +40,7 @@ jobs:
         run: bash ./scripts/format.bash
 
       - name: 🕵️ Analyze
-        run: flutter analyze .
+        run: bash ./scripts/analyze.bash
       
       - name: 🕵️ Analyze with DCM
         # Remove this step if you don't actually use DCM
