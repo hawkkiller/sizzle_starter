@@ -18,7 +18,7 @@ class RootContext extends StatelessWidget {
   /// {@macro app}
   const RootContext({required this.compositionResult, super.key});
 
-  /// The result from the [CompositionRoot], required to launch the application.
+  /// The result from the CompositionRoot, required to launch the application.
   final CompositionResult compositionResult;
 
   @override

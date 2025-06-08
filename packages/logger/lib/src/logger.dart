@@ -17,7 +17,9 @@ base class Logger {
   /// Constructs an instance of [Logger].
   ///
   /// {@macro logger}
-  Logger();
+  Logger({List<LogObserver>? observers}) {
+    _observers.addAll(observers ?? []);
+  }
 
   final _observers = <LogObserver>{};
 
@@ -112,9 +114,12 @@ base class Logger {
   ///
   /// After calling this method, the logger should not be used anymore.
   @mustCallSuper
-  // ignore:  avoid-unused-ignores, avoid-unnecessary-futures, avoid-redundant-async
+  // ignore: avoid-unnecessary-futures
   Future<void> destroy() async {
+    if (_destroyed) return;
+
     _destroyed = true;
+    _observers.clear();
   }
 }
 
@@ -167,13 +172,9 @@ enum LogLevel implements Comparable<LogLevel> {
 /// {@template log_observer}
 /// Observer class, that is notified when a new log message is created
 /// {@endtemplate}
-mixin class LogObserver {
-  /// Constructs an instance of [LogObserver].
-  const LogObserver();
-
+mixin LogObserver {
   /// Called when a new log message is created.
-  // ignore: avoid-unused-parameters, no-empty-block
-  void onLog(LogMessage logMessage) {}
+  void onLog(LogMessage logMessage);
 }
 
 /// Represents a single log message with various details

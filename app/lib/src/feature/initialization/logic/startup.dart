@@ -36,14 +36,13 @@ Future<void> startup() async {
     Bloc.observer = AppBlocObserver(logger);
     Bloc.transformer = SequentialBlocTransformer<Object?>().transform;
 
-    Future<void> launchApplication() async {
+    Future<void> composeAndRun() async {
       try {
-        final compositionResult =
-            await CompositionRoot(
-              config: config,
-              logger: logger,
-              errorReporter: errorReporter,
-            ).compose();
+        final compositionResult = await composeDependencies(
+          config: config,
+          logger: logger,
+          errorReporter: errorReporter,
+        );
 
         runApp(RootContext(compositionResult: compositionResult));
       } on Object catch (e, stackTrace) {
@@ -52,13 +51,13 @@ Future<void> startup() async {
           InitializationFailedApp(
             error: e,
             stackTrace: stackTrace,
-            onRetryInitialization: launchApplication,
+            onRetryInitialization: composeAndRun,
           ),
         );
       }
     }
 
     // Launch the application
-    await launchApplication();
+    await composeAndRun();
   }, logger.logZoneError);
 }
