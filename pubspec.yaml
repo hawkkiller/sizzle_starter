@@ -7,7 +7,7 @@ environment:
 
 workspace:
   - app
-  - packages/analytics
-  - packages/app_database
-  - packages/logger
-  - packages/rest_client
+  - common/analytics
+  - common/app_database
+  - common/logger
+  - common/rest_client
