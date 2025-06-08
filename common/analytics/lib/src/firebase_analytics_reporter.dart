@@ -1,4 +1,4 @@
-import 'package:analytics/src/analytics_reporter.dart';
+import 'package:analytics/analytics.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:logger/logger.dart';
 

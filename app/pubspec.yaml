@@ -45,11 +45,11 @@ dependencies:
 
   # Packages
   rest_client:
-    path: ../packages/rest_client
+    path: ../common/rest_client
   app_database:
-    path: ../packages/app_database
+    path: ../common/app_database
   logger:
-    path: ../packages/logger
+    path: ../common/logger
 
   # Utils
   path: 1.9.1
