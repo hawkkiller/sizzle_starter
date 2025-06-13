@@ -3,11 +3,11 @@ import 'package:error_reporter/error_reporter.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sizzle_starter/src/common/constant/application_config.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
 import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 import 'package:sizzle_starter/src/feature/settings/data/app_settings_datasource.dart';
 import 'package:sizzle_starter/src/feature/settings/data/app_settings_repository.dart';
+import 'package:sizzle_starter/src/feature/settings/model/application_config.dart';
 
 /// {@template composition_root}
 /// A place where Application-Wide dependencies are initialized.

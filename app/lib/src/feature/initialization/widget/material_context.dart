@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/common/constant/localization/localization.dart';
 import 'package:sizzle_starter/src/feature/settings/model/app_theme.dart';
 import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 
@@ -32,8 +31,6 @@ class MaterialContext extends StatelessWidget {
       darkTheme: darkTheme,
       themeMode: themeMode,
       locale: settings.locale,
-      localizationsDelegates: Localization.localizationDelegates,
-      supportedLocales: Localization.supportedLocales,
       home: const Placeholder(),
       builder:
           (context, child) => MediaQuery(
