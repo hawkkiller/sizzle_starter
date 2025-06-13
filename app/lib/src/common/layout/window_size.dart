@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/core/common/extensions/context_extension.dart';
+import 'package:sizzle_starter/src/common/extensions/context_extension.dart';
 
 /// {@template window_size}
 /// Breakpoints for responsive design.
