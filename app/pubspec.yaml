@@ -50,6 +50,8 @@ dependencies:
     path: ../common/app_database
   logger:
     path: ../common/logger
+  error_reporter:
+    path: ../common/error_reporter
 
   # Utils
   path: 1.9.1
