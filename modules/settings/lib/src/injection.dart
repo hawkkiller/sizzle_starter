@@ -11,8 +11,13 @@ class SettingsContainer {
 
   /// Get the [SettingsContainer] instance from the context.
   static SettingsContainer of(BuildContext context) {
-    final settingsInherited = context.getInheritedWidgetOfExactType<SettingsInherited>();
-    return settingsInherited!.settingsContainer;
+    final settingsInherited = context.getInheritedWidgetOfExactType<SettingsContainerInherited>();
+
+    if (settingsInherited == null) {
+      throw Exception('SettingsInherited not found in context');
+    }
+
+    return settingsInherited.settingsContainer;
   }
 
   static Future<SettingsContainer> create(SharedPreferencesAsync preferences) async {
@@ -33,13 +38,13 @@ class SettingsContainer {
   }
 }
 
-class SettingsInherited extends InheritedWidget {
-  const SettingsInherited({required super.child, required this.settingsContainer});
+class SettingsContainerInherited extends InheritedWidget {
+  const SettingsContainerInherited({required super.child, required this.settingsContainer});
 
   final SettingsContainer settingsContainer;
 
   @override
-  bool updateShouldNotify(SettingsInherited oldWidget) {
+  bool updateShouldNotify(SettingsContainerInherited oldWidget) {
     return false;
   }
 }

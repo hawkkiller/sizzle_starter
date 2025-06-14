@@ -18,11 +18,22 @@ class MaterialContext extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = SettingsScope.settingsOf(context);
+    final themeMode = settings.themeConfiguration?.themeMode ?? ThemeModeVO.system;
+    final seedColor = settings.themeConfiguration?.seedColor ?? Colors.blue;
+
+    final materialThemeMode = switch (themeMode) {
+      ThemeModeVO.system => ThemeMode.system,
+      ThemeModeVO.light => ThemeMode.light,
+      ThemeModeVO.dark => ThemeMode.dark,
+    };
+
+    final darkTheme = ThemeData(colorSchemeSeed: seedColor, brightness: Brightness.dark);
+    final lightTheme = ThemeData(colorSchemeSeed: seedColor, brightness: Brightness.light);
 
     return MaterialApp(
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: settings.themeConfiguration,
+      themeMode: materialThemeMode,
       locale: settings.locale,
       home: const Placeholder(),
       builder: (context, child) {
