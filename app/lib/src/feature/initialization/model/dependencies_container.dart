@@ -1,8 +1,8 @@
 import 'package:error_reporter/error_reporter.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:settings/settings.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/application_config.dart';
-import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
 
 /// {@template dependencies_container}
 /// Container used to reuse dependencies across the application.
@@ -14,25 +14,16 @@ class DependenciesContainer {
   const DependenciesContainer({
     required this.logger,
     required this.config,
-    required this.appSettingsBloc,
     required this.errorReporter,
     required this.packageInfo,
+    required this.settingsContainer,
   });
 
-  /// [Logger] instance, used to log messages.
   final Logger logger;
-
-  /// [ApplicationConfig] instance, contains configuration of the application.
   final ApplicationConfig config;
-
-  /// [AppSettingsBloc] instance, used to manage theme and locale.
-  final AppSettingsBloc appSettingsBloc;
-
-  /// [ErrorReporter] instance, used to report errors.
   final ErrorReporter errorReporter;
-
-  /// [PackageInfo] instance, contains information about the application.
   final PackageInfo packageInfo;
+  final SettingsContainer settingsContainer;
 }
 
 /// {@template testing_dependencies_container}

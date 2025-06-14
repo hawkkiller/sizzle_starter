@@ -9,6 +9,7 @@ environment:
   flutter: ">=3.32.0 <4.0.0"
 
 dependencies:
+  bloc: ^9.0.0
   flutter:
     sdk: flutter
   shared_preferences: ^2.5.3

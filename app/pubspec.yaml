@@ -52,6 +52,10 @@ dependencies:
   error_reporter:
     path: ../common/error_reporter
 
+  # Modules
+  settings:
+    path: ../modules/settings
+
   # Utils
   path: 1.9.1
   path_provider: 2.1.5

@@ -1,6 +1,6 @@
 import 'package:settings/settings.dart';
 
 abstract interface class SettingsRepository {
-  Future<void> saveSettings(SettingsVO settings);
-  Future<SettingsVO?> readSettings();
+  Future<void> saveSettings(Settings settings);
+  Future<Settings?> readSettings();
 }

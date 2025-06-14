@@ -4,18 +4,18 @@ import 'package:flutter/foundation.dart';
 import 'package:settings/src/domain/model/theme_configuration.dart';
 
 /// Settings for the app.
-class SettingsVO with Diagnosticable {
-  const SettingsVO({this.themeConfiguration, this.locale, this.textScale});
+class Settings with Diagnosticable {
+  const Settings({this.themeConfiguration, this.locale, this.textScale});
 
-  final ThemeConfigurationVO? themeConfiguration;
+  final ThemeConfiguration? themeConfiguration;
   final Locale? locale;
   final double? textScale;
 
-  SettingsVO copyWith({
-    ThemeConfigurationVO? themeConfiguration,
+  Settings copyWith({
+    ThemeConfiguration? themeConfiguration,
     Locale? locale,
     double? textScale,
-  }) => SettingsVO(
+  }) => Settings(
     themeConfiguration: themeConfiguration ?? this.themeConfiguration,
     locale: locale ?? this.locale,
     textScale: textScale ?? this.textScale,
@@ -25,7 +25,7 @@ class SettingsVO with Diagnosticable {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is SettingsVO &&
+    return other is Settings &&
         other.themeConfiguration == themeConfiguration &&
         other.locale == locale &&
         other.textScale == textScale;
@@ -37,7 +37,7 @@ class SettingsVO with Diagnosticable {
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
     properties.add(
-      DiagnosticsProperty<ThemeConfigurationVO>('themeConfiguration', themeConfiguration),
+      DiagnosticsProperty<ThemeConfiguration>('themeConfiguration', themeConfiguration),
     );
     properties.add(DiagnosticsProperty<Locale>('locale', locale));
     properties.add(DoubleProperty('textScale', textScale));

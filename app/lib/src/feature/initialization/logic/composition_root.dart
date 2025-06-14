@@ -2,12 +2,10 @@ import 'package:clock/clock.dart';
 import 'package:error_reporter/error_reporter.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
+import 'package:settings/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/application_config.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
-import 'package:sizzle_starter/src/feature/settings/bloc/app_settings_bloc.dart';
-import 'package:sizzle_starter/src/feature/settings/data/app_settings_datasource.dart';
-import 'package:sizzle_starter/src/feature/settings/data/app_settings_repository.dart';
 
 /// {@template composition_root}
 /// A place where Application-Wide dependencies are initialized.
@@ -77,15 +75,14 @@ Future<DependenciesContainer> createDependenciesContainer(
   // Get package info.
   final packageInfo = await PackageInfo.fromPlatform();
 
-  // Create the AppSettingsBloc using shared preferences.
-  final appSettingsBloc = await createAppSettingsBloc(sharedPreferences);
+  final settingsContainer = await SettingsContainer.create(sharedPreferences);
 
   return DependenciesContainer(
     logger: logger,
     config: config,
     errorReporter: errorReporter,
     packageInfo: packageInfo,
-    appSettingsBloc: appSettingsBloc,
+    settingsContainer: settingsContainer,
   );
 }
 
@@ -112,18 +109,4 @@ Future<ErrorReporter> createErrorReporter(ApplicationConfig config) async {
   }
 
   return errorReporter;
-}
-
-/// Creates an instance of [AppSettingsBloc].
-///
-/// The [AppSettingsBloc] is initialized at startup to load the app settings from local storage.
-Future<AppSettingsBloc> createAppSettingsBloc(SharedPreferencesAsync sharedPreferences) async {
-  final appSettingsRepository = AppSettingsRepositoryImpl(
-    datasource: AppSettingsDatasourceImpl(sharedPreferences: sharedPreferences),
-  );
-
-  final appSettings = await appSettingsRepository.getAppSettings();
-  final initialState = AppSettingsState.idle(appSettings: appSettings);
-
-  return AppSettingsBloc(appSettingsRepository: appSettingsRepository, initialState: initialState);
 }

@@ -4,7 +4,6 @@ import 'package:sizzle_starter/src/common/layout/window_size.dart';
 import 'package:sizzle_starter/src/feature/initialization/logic/composition_root.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/dependencies_scope.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/material_context.dart';
-import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
 
 /// {@template app}
 /// [RootContext] is an entry point to the application.
@@ -27,7 +26,7 @@ class RootContext extends StatelessWidget {
       bundle: SentryAssetBundle(),
       child: DependenciesScope(
         dependencies: compositionResult.dependencies,
-        child: const SettingsScope(child: WindowSizeScope(child: MaterialContext())),
+        child: const WindowSizeScope(child: MaterialContext()),
       ),
     );
   }

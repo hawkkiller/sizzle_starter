@@ -8,12 +8,12 @@ final class SettingsRepositoryImpl implements SettingsRepository {
   final SettingsLocalDatasource settingsLocalDatasource;
 
   @override
-  Future<void> saveSettings(SettingsVO settings) {
+  Future<void> saveSettings(Settings settings) {
     return settingsLocalDatasource.saveSettings(settings);
   }
 
   @override
-  Future<SettingsVO?> readSettings() {
+  Future<Settings?> readSettings() {
     return settingsLocalDatasource.readSettings();
   }
 }

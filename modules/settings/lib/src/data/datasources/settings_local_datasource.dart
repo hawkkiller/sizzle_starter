@@ -5,8 +5,8 @@ import 'package:settings/src/data/mappers/settings_codec.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract interface class SettingsLocalDatasource {
-  Future<SettingsVO?> readSettings();
-  Future<void> saveSettings(SettingsVO settings);
+  Future<Settings?> readSettings();
+  Future<void> saveSettings(Settings settings);
 }
 
 final class SettingsLocalDatasourceSharedPreferences implements SettingsLocalDatasource {
@@ -19,13 +19,13 @@ final class SettingsLocalDatasourceSharedPreferences implements SettingsLocalDat
   final SettingsCodec settingsCodec;
 
   @override
-  Future<void> saveSettings(SettingsVO settings) async {
+  Future<void> saveSettings(Settings settings) async {
     final settingsMap = settingsCodec.encode(settings);
     await sharedPreferences.setString('settings', jsonEncode(settingsMap));
   }
 
   @override
-  Future<SettingsVO?> readSettings() async {
+  Future<Settings?> readSettings() async {
     final settingsMap = await sharedPreferences.getString('settings');
     if (settingsMap == null) return null;
 
