@@ -15,9 +15,9 @@ class DependenciesScope extends StatelessWidget {
   Widget build(BuildContext context) {
     return DependenciesInherited(
       dependencies: dependencies,
-      child: SettingsContainerInherited(
+      child: SettingsScope(
         settingsContainer: dependencies.settingsContainer,
-        child: SettingsScope(child: child),
+        child: child,
       ),
     );
   }

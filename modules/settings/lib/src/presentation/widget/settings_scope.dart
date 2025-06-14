@@ -1,16 +1,18 @@
 import 'package:flutter/widgets.dart';
-import 'package:settings/src/domain/model/settings.dart';
-import 'package:settings/src/injection.dart';
-import 'package:settings/src/presentation/bloc/settings_bloc.dart';
+import 'package:settings/settings.dart';
 
 /// {@template settings_scope}
 /// SettingsScope widget.
 /// {@endtemplate}
-class SettingsScope extends StatefulWidget {
+class SettingsScope extends StatelessWidget {
   /// {@macro settings_scope}
-  const SettingsScope({required this.child, super.key});
+  const SettingsScope({
+    required this.settingsContainer,
+    required this.child,
+    super.key,
+  });
 
-  /// The child widget.
+  final SettingsContainer settingsContainer;
   final Widget child;
 
   /// Get the [SettingsBloc] instance.
@@ -18,7 +20,7 @@ class SettingsScope extends StatefulWidget {
     final settingsScope = listen
         ? context.dependOnInheritedWidgetOfExactType<_InheritedSettings>()
         : context.getInheritedWidgetOfExactType<_InheritedSettings>();
-    return settingsScope!.state._settingsBloc;
+    return settingsScope!.settingsContainer.settingsBloc;
   }
 
   /// Get the [Settings] instance.
@@ -30,30 +32,16 @@ class SettingsScope extends StatefulWidget {
   }
 
   @override
-  State<SettingsScope> createState() => _SettingsScopeState();
-}
-
-/// State for widget SettingsScope.
-class _SettingsScopeState extends State<SettingsScope> {
-  late final SettingsBloc _settingsBloc;
-
-  @override
-  void initState() {
-    super.initState();
-    _settingsBloc = SettingsContainer.of(context).settingsBloc;
-  }
-
-  @override
   Widget build(BuildContext context) {
     return StreamBuilder<SettingsState>(
-      stream: _settingsBloc.stream,
+      stream: settingsContainer.settingsBloc.stream,
       builder: (context, state) {
         final data = state.data;
 
         return _InheritedSettings(
-          state: this,
+          settingsContainer: settingsContainer,
           settings: data?.settings,
-          child: widget.child,
+          child: child,
         );
       },
     );
@@ -67,12 +55,11 @@ class _InheritedSettings extends InheritedWidget {
   /// {@macro inherited_settings}
   const _InheritedSettings({
     required super.child,
-    required this.state,
+    required this.settingsContainer,
     required this.settings,
   });
 
-  /// _SettingsScopeState instance.
-  final _SettingsScopeState state;
+  final SettingsContainer settingsContainer;
   final Settings? settings;
 
   @override
