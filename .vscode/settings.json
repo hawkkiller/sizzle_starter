@@ -3,5 +3,6 @@
     "drift"
   ],
   "dart.lineLength": 100,
-  "dart.flutterSdkPath": ".fvm/versions/3.32.0"
+  "dart.flutterSdkPath": ".fvm/versions/3.32.0",
+  "cmake.ignoreCMakeListsMissing": true
 }

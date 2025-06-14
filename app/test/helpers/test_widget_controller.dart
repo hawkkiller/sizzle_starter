@@ -24,7 +24,7 @@ class TestWidgetController {
     }
 
     if (dependencies != null) {
-      child = DependenciesScope(dependencies: dependencies, child: child);
+      child = DependenciesInherited(dependencies: dependencies, child: child);
     }
 
     await tester.pumpWidget(child);

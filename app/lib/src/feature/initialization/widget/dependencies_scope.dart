@@ -1,16 +1,39 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:sizzle_starter/src/core/common/extensions/context_extension.dart';
+import 'package:settings/settings.dart';
+import 'package:sizzle_starter/src/common/extensions/context_extension.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
+
+class GlobalDependenciesScope extends StatelessWidget {
+  const GlobalDependenciesScope({
+    required this.dependencies,
+    required this.child,
+    super.key,
+  });
+
+  final DependenciesContainer dependencies;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) {
+    return DependenciesInherited(
+      dependencies: dependencies,
+      child: SettingsScope(
+        settingsContainer: dependencies.settingsContainer,
+        child: child,
+      ),
+    );
+  }
+}
 
 /// {@template dependencies_scope}
 /// A scope that provides composed [DependenciesContainer].
 ///
 /// **Testing**:
 ///
-/// To use [DependenciesScope] in tests, it is needed to wrap the widget with
-/// [DependenciesScope], extend [TestDependenciesContainer] and provide the
+/// To use [DependenciesInherited] in tests, it is needed to wrap the widget with
+/// [DependenciesInherited], extend [TestDependenciesContainer] and provide the
 /// dependencies that are needed for the test.
 ///
 /// ```dart
@@ -22,16 +45,16 @@ import 'package:sizzle_starter/src/feature/initialization/model/dependencies_con
 /// }
 /// ```
 /// {@endtemplate}
-class DependenciesScope extends InheritedWidget {
+class DependenciesInherited extends InheritedWidget {
   /// {@macro dependencies_scope}
-  const DependenciesScope({required super.child, required this.dependencies, super.key});
+  const DependenciesInherited({required super.child, required this.dependencies, super.key});
 
   /// Container with dependencies.
   final DependenciesContainer dependencies;
 
   /// Get the dependencies from the [context].
   static DependenciesContainer of(BuildContext context) =>
-      context.inhOf<DependenciesScope>(listen: false).dependencies;
+      context.inhOf<DependenciesInherited>(listen: false).dependencies;
 
   @override
   void debugFillProperties(DiagnosticPropertiesBuilder properties) {
@@ -40,7 +63,7 @@ class DependenciesScope extends InheritedWidget {
   }
 
   @override
-  bool updateShouldNotify(DependenciesScope oldWidget) {
+  bool updateShouldNotify(DependenciesInherited oldWidget) {
     return !identical(dependencies, oldWidget.dependencies);
   }
 }

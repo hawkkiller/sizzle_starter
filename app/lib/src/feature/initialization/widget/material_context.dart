@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/core/constant/localization/localization.dart';
-import 'package:sizzle_starter/src/feature/home/widget/home_screen.dart';
-import 'package:sizzle_starter/src/feature/settings/model/app_theme.dart';
-import 'package:sizzle_starter/src/feature/settings/widget/settings_scope.dart';
+import 'package:settings/settings.dart';
+import 'package:sizzle_starter/src/feature/initialization/widget/media_query_override.dart';
 
 /// {@template material_context}
 /// [MaterialContext] is an entry point to the material context.
@@ -20,32 +18,30 @@ class MaterialContext extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = SettingsScope.settingsOf(context);
-    final mediaQueryData = MediaQuery.of(context);
+    final themeMode = settings.themeConfiguration?.themeMode ?? ThemeModeVO.system;
+    final seedColor = settings.themeConfiguration?.seedColor ?? Colors.blue;
 
-    final theme = settings.appTheme ?? AppTheme.defaultTheme;
-    final lightTheme = theme.buildThemeData(Brightness.light);
-    final darkTheme = theme.buildThemeData(Brightness.dark);
+    final materialThemeMode = switch (themeMode) {
+      ThemeModeVO.system => ThemeMode.system,
+      ThemeModeVO.light => ThemeMode.light,
+      ThemeModeVO.dark => ThemeMode.dark,
+    };
 
-    final themeMode = theme.themeMode;
+    final darkTheme = ThemeData(colorSchemeSeed: seedColor, brightness: Brightness.dark);
+    final lightTheme = ThemeData(colorSchemeSeed: seedColor, brightness: Brightness.light);
 
     return MaterialApp(
       theme: lightTheme,
       darkTheme: darkTheme,
-      themeMode: themeMode,
+      themeMode: materialThemeMode,
       locale: settings.locale,
-      localizationsDelegates: Localization.localizationDelegates,
-      supportedLocales: Localization.supportedLocales,
-      home: const HomeScreen(),
-      builder:
-          (context, child) => MediaQuery(
-            key: _globalKey,
-            data: mediaQueryData.copyWith(
-              textScaler: TextScaler.linear(
-                mediaQueryData.textScaler.scale(settings.textScale ?? 1).clamp(0.5, 2),
-              ),
-            ),
-            child: child!,
-          ),
+      home: const Placeholder(),
+      builder: (context, child) {
+        return KeyedSubtree(
+          key: _globalKey,
+          child: MediaQueryRootOverride(child: child!),
+        );
+      },
     );
   }
 }
