@@ -5,8 +5,12 @@ import 'package:settings/settings.dart';
 import 'package:sizzle_starter/src/common/extensions/context_extension.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
 
-class DependenciesScope extends StatelessWidget {
-  const DependenciesScope({required this.dependencies, required this.child, super.key});
+class GlobalDependenciesScope extends StatelessWidget {
+  const GlobalDependenciesScope({
+    required this.dependencies,
+    required this.child,
+    super.key,
+  });
 
   final DependenciesContainer dependencies;
   final Widget child;
