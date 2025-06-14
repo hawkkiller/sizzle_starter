@@ -1,6 +1,6 @@
-@startuml component-diagram
+@startuml
 
-title "Sizzle Architecture Diagram"
+title Sizzle Architecture Diagram
 
 [Root] --> [Settings]
 [Root] --> [Home]
