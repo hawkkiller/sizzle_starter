@@ -7,17 +7,17 @@ final class SettingsRepositoryImpl implements SettingsRepository {
   final SettingsLocalDatasource settingsLocalDatasource;
 
   @override
-  Future<void> saveSettings(Settings settings) {
+  Future<void> save(Settings settings) {
     return settingsLocalDatasource.saveSettings(settings);
   }
 
   @override
-  Future<Settings?> readSettings() {
+  Future<Settings?> read() {
     return settingsLocalDatasource.readSettings();
   }
   
   @override
-  Stream<Settings?> watchSettings() {
+  Stream<Settings?> watch() {
     return settingsLocalDatasource.watchSettings();
   }
 }
