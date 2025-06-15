@@ -12,9 +12,8 @@ workspace:
   - app
   # Common
   - common/analytics
-  - common/app_database
   - common/logger
   - common/rest_client
   - common/error_reporter
-  # Modules
-  - modules/settings
+  - common/settings
+  # Feature modules
