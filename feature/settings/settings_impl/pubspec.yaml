@@ -1,5 +1,5 @@
-name: settings
-description: Settings module
+name: settings_impl
+description: Settings implementation module
 version: 0.0.1
 publish_to: none
 resolution: workspace
@@ -10,10 +10,6 @@ environment:
 
 dependencies:
   bloc: ^9.0.0
-  flutter:
-    sdk: flutter
   shared_preferences: ^2.5.3
-
-dev_dependencies:
-  flutter_test:
-    sdk: flutter
+  settings_domain:
+    path: ../settings_domain

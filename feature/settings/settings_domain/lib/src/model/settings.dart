@@ -1,10 +1,9 @@
 import 'dart:ui' show Locale;
 
-import 'package:flutter/foundation.dart';
-import 'package:settings/src/domain/model/theme_configuration.dart';
+import 'package:settings_domain/src/model/theme_configuration.dart';
 
 /// Settings for the app.
-class Settings with Diagnosticable {
+class Settings {
   const Settings({this.themeConfiguration, this.locale, this.textScale});
 
   final ThemeConfiguration? themeConfiguration;
@@ -33,14 +32,4 @@ class Settings with Diagnosticable {
 
   @override
   int get hashCode => Object.hash(themeConfiguration, locale, textScale);
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    properties.add(
-      DiagnosticsProperty<ThemeConfiguration>('themeConfiguration', themeConfiguration),
-    );
-    properties.add(DiagnosticsProperty<Locale>('locale', locale));
-    properties.add(DoubleProperty('textScale', textScale));
-    super.debugFillProperties(properties);
-  }
 }

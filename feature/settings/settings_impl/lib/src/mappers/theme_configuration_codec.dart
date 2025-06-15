@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:ui' show Color;
 
-import 'package:settings/settings.dart';
+import 'package:settings_domain/settings_domain.dart';
 
 /// {@template theme_configuration_codec}
 /// Codec for [ThemeConfiguration]

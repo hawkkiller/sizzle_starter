@@ -15,4 +15,7 @@ workspace:
   - core/logger
   - core/rest_client
   - core/error_reporter
-  - core/settings
+  # Feature
+  - feature/settings/settings_impl
+  - feature/settings/settings_domain
+  # - feature/settings/settings_presentation

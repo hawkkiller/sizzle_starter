@@ -1,8 +1,8 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:settings/settings.dart';
-import 'package:settings/src/data/mappers/settings_codec.dart';
+import 'package:settings_domain/settings_domain.dart';
+import 'package:settings_impl/src/mappers/settings_codec.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 abstract interface class SettingsLocalDatasource {

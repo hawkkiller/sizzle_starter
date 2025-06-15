@@ -1,8 +1,8 @@
 import 'dart:convert';
 import 'dart:ui' show Locale;
 
-import 'package:settings/settings.dart';
-import 'package:settings/src/data/mappers/theme_configuration_codec.dart';
+import 'package:settings_domain/settings_domain.dart';
+import 'package:settings_impl/src/mappers/theme_configuration_codec.dart';
 
 class SettingsCodec extends Codec<Settings, Map<String, Object?>> {
   const SettingsCodec();
