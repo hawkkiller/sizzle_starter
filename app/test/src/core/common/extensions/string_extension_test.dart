@@ -1,5 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
-import 'package:sizzle_starter/src/core/common/extensions/string_extension.dart';
+import 'package:sizzle_starter/src/common/extensions/string_extension.dart';
 
 void main() {
   group('StringExtension.limit', () {
