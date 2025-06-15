@@ -1,9 +1,0 @@
-@startuml
-
-title Sizzle Architecture Diagram
-
-[Root] --> [Settings]
-[Root] --> [Home]
-[Home] --> [Settings]
-
-@enduml

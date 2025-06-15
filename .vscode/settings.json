@@ -4,5 +4,6 @@
   ],
   "dart.lineLength": 100,
   "dart.flutterSdkPath": ".fvm/versions/3.32.0",
-  "cmake.ignoreCMakeListsMissing": true
+  "cmake.ignoreCMakeListsMissing": true,
+  "makefile.configureOnOpen": false
 }

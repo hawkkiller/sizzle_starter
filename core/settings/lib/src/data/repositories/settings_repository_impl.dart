@@ -16,4 +16,9 @@ final class SettingsRepositoryImpl implements SettingsRepository {
   Future<Settings?> readSettings() {
     return settingsLocalDatasource.readSettings();
   }
+  
+  @override
+  Stream<Settings?> watchSettings() {
+    return settingsLocalDatasource.watchSettings();
+  }
 }
