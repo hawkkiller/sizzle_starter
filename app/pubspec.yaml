@@ -42,17 +42,17 @@ dependencies:
   stack_trace: 1.12.1
   sentry_flutter: 8.14.2
 
-  # Common
+  # Core
   rest_client:
-    path: ../common/rest_client
+    path: ../core/rest_client
   app_database:
-    path: ../common/app_database
+    path: ../core/app_database
   logger:
-    path: ../common/logger
+    path: ../core/logger
   error_reporter:
-    path: ../common/error_reporter
+    path: ../core/error_reporter
   settings:
-    path: ../common/settings
+    path: ../core/settings
 
   # Utils
   path: 1.9.1

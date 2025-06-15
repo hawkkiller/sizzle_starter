@@ -10,10 +10,9 @@ dev_dependencies:
 
 workspace:
   - app
-  # Common
-  - common/analytics
-  - common/logger
-  - common/rest_client
-  - common/error_reporter
-  - common/settings
-  # Feature modules
+  # Core
+  - core/analytics
+  - core/logger
+  - core/rest_client
+  - core/error_reporter
+  - core/settings

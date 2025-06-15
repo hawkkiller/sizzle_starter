@@ -28,7 +28,7 @@ packages:
   app_database:
     dependency: transitive
     description:
-      path: "common/app_database"
+      path: "core/app_database"
       relative: true
     source: path
     version: "1.0.0"
