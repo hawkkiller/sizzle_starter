@@ -17,3 +17,4 @@ workspace:
   - core/error_reporter
   # Feature
   - feature/settings/settings_api
+  - feature/home

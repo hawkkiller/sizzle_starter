@@ -9,6 +9,13 @@ final class ThemeConfiguration {
   final ThemeModeVO themeMode;
   final Color seedColor;
 
+  ThemeConfiguration copyWith({ThemeModeVO? themeMode, Color? seedColor}) {
+    return ThemeConfiguration(
+      themeMode: themeMode ?? this.themeMode,
+      seedColor: seedColor ?? this.seedColor,
+    );
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||

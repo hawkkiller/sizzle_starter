@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:home/home.dart';
 import 'package:settings_api/settings_api.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/media_query_override.dart';
 
@@ -35,7 +36,7 @@ class MaterialContext extends StatelessWidget {
       darkTheme: darkTheme,
       themeMode: materialThemeMode,
       locale: settings.locale,
-      home: const Placeholder(),
+      home: const HomeScreen(),
       builder: (context, child) {
         return KeyedSubtree(
           key: _globalKey,

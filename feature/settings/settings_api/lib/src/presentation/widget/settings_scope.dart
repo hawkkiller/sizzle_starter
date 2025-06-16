@@ -27,28 +27,28 @@ class SettingsScope extends StatefulWidget {
   }
 
   /// Get the settings container from the settings scope.
-  static SettingsContainer containerOf(BuildContext context) {
-    final settingsScope = of(context);
+  static SettingsContainer containerOf(BuildContext context, {bool listen = true}) {
+    final settingsScope = of(context, listen: listen);
 
     return settingsScope.settingsContainer;
   }
 
   /// Get the settings bloc from the settings scope.
-  static SettingsBloc blocOf(BuildContext context) {
-    final settingsScope = of(context);
+  static SettingsBloc blocOf(BuildContext context, {bool listen = true}) {
+    final settingsScope = of(context, listen: listen);
 
     return settingsScope.settingsContainer.settingsBloc;
   }
 
   /// Get the settings state from the settings scope.
-  static SettingsState stateOf(BuildContext context) {
-    final settingsScope = of(context);
+  static SettingsState stateOf(BuildContext context, {bool listen = true}) {
+    final settingsScope = of(context, listen: listen);
     return settingsScope.state;
   }
 
   /// Get the settings from the settings scope.
-  static Settings settingsOf(BuildContext context) {
-    final settingsScope = of(context);
+  static Settings settingsOf(BuildContext context, {bool listen = true}) {
+    final settingsScope = of(context, listen: listen);
     return settingsScope.state.settings ?? Settings.initial;
   }
 
