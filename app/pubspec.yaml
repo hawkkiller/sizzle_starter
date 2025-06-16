@@ -69,7 +69,7 @@ dev_dependencies:
 
   # Utils
   flutter_gen_runner: 5.10.0
-  build_runner: 2.4.15
+  build_runner: 2.5.0
   intl_utils: ^2.8.10
 
 flutter:
