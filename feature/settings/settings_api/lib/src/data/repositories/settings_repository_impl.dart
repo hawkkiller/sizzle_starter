@@ -1,5 +1,5 @@
-import 'package:settings_domain/settings_domain.dart';
-import 'package:settings_impl/src/datasources/settings_local_datasource.dart';
+import 'package:settings_api/settings_api.dart';
+import 'package:settings_api/src/data/datasources/settings_local_datasource.dart';
 
 final class SettingsRepositoryImpl implements SettingsRepository {
   const SettingsRepositoryImpl({required this.settingsLocalDatasource});

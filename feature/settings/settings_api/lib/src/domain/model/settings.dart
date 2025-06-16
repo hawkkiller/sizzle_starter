@@ -1,6 +1,6 @@
 import 'dart:ui' show Locale;
 
-import 'package:settings_domain/src/model/theme_configuration.dart';
+import 'package:settings_api/src/domain/model/theme_configuration.dart';
 
 /// Settings for the app.
 class Settings {

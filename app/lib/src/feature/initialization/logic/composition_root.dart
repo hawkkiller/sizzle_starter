@@ -2,7 +2,6 @@ import 'package:clock/clock.dart';
 import 'package:error_reporter/error_reporter.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
-import 'package:settings/settings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/application_config.dart';
 import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';

@@ -51,8 +51,8 @@ dependencies:
     path: ../core/logger
   error_reporter:
     path: ../core/error_reporter
-  settings_domain:
-    path: ../feature/settings/settings_domain
+  settings_api:
+    path: ../feature/settings/settings_api
 
   # Utils
   path: 1.9.1

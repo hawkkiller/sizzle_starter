@@ -1,5 +1,5 @@
 import 'package:bloc/bloc.dart';
-import 'package:settings_domain/settings_domain.dart';
+import 'package:settings_api/settings_api.dart';
 
 /// A [Bloc] that handles [Settings].
 final class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {

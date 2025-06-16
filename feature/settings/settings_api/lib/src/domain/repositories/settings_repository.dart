@@ -1,4 +1,4 @@
-import 'package:settings_domain/src/model/settings.dart';
+import 'package:settings_api/src/domain/model/settings.dart';
 
 abstract interface class SettingsRepository {
   Stream<Settings?> watch();
