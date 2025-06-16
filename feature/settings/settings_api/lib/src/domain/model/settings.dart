@@ -1,5 +1,4 @@
-import 'dart:ui' show Locale;
-
+import 'package:flutter/material.dart';
 import 'package:settings_api/src/domain/model/theme_configuration.dart';
 
 /// Settings for the app.
@@ -9,6 +8,15 @@ class Settings {
   final ThemeConfiguration? themeConfiguration;
   final Locale? locale;
   final double? textScale;
+
+  static const initial = Settings(
+    themeConfiguration: ThemeConfiguration(
+      seedColor: Colors.blue,
+      themeMode: ThemeModeVO.system,
+    ),
+    locale: Locale('en'),
+    textScale: 1.0,
+  );
 
   Settings copyWith({
     ThemeConfiguration? themeConfiguration,

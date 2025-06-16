@@ -20,3 +20,24 @@ Future<SettingsBloc> createSettingsBloc(SettingsRepository settingsRepository) a
     settingsRepository: settingsRepository,
   );
 }
+
+/// Container with global settings state.
+class SettingsContainer {
+  const SettingsContainer({
+    required this.settingsRepository,
+    required this.settingsBloc,
+  });
+
+  final SettingsRepository settingsRepository;
+  final SettingsBloc settingsBloc;
+
+  static Future<SettingsContainer> create(SharedPreferencesAsync sharedPreferences) async {
+    final settingsRepository = createSettingsRepository(sharedPreferences);
+    final settingsBloc = await createSettingsBloc(settingsRepository);
+
+    return SettingsContainer(
+      settingsRepository: settingsRepository,
+      settingsBloc: settingsBloc,
+    );
+  }
+}

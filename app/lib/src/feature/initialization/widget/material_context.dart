@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:settings/settings.dart';
+import 'package:settings_api/settings_api.dart';
 import 'package:sizzle_starter/src/feature/initialization/widget/media_query_override.dart';
 
 /// {@template material_context}
