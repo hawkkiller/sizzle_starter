@@ -11,6 +11,7 @@ dev_dependencies:
 workspace:
   - app
   # Core
+  - core/common
   - core/analytics
   - core/logger
   - core/rest_client
