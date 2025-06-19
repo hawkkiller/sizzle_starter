@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:settings_api/settings_api.dart';
+import 'package:ui_library/ui_library.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -30,9 +31,7 @@ class _HomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: const Text('Welcome to Sizzle Starter!')),
-      body: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        mainAxisSize: MainAxisSize.min,
+      body: ListView(
         children: [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
@@ -52,6 +51,11 @@ class _HomeScreenState extends State<HomeScreen> {
               scrollDirection: Axis.horizontal,
             ),
           ),
+          const SizedBox(height: 16),
+          const Padding(
+            padding: EdgeInsets.symmetric(horizontal: 16),
+            child: _Dropdown(),
+          ),
         ],
       ),
     );
@@ -66,13 +70,58 @@ class _ColorItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final settings = SettingsScope.settingsOf(context);
+
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: () => onTap(color),
-      child: SizedBox(
-        height: 48,
-        width: 48,
-        child: Material(borderRadius: BorderRadius.circular(16), color: color),
+      child: SizedBox.square(
+        dimension: 48,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            border: Border.all(
+              width: 2,
+              color: settings.themeConfiguration?.seedColor == color
+                  ? Colors.black
+                  : Colors.transparent,
+            ),
+            borderRadius: BorderRadius.circular(16),
+            color: color,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _Dropdown extends StatefulWidget {
+  const _Dropdown();
+
+  @override
+  State<_Dropdown> createState() => _DropdownState();
+}
+
+class _DropdownState extends State<_Dropdown> {
+  Color? selectedValue;
+
+  final items = Colors.accents
+      .map((color) => UiDropdownItem(title: Text(color.hashCode.toString()), value: color))
+      .toList();
+
+  void _onChanged(Color? value) {
+    setState(() {
+      selectedValue = value;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: UiDropdown(
+        items: items,
+        onChanged: _onChanged,
+        selectedValue: selectedValue,
       ),
     );
   }

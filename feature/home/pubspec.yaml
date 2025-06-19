@@ -13,6 +13,8 @@ dependencies:
     sdk: flutter
   settings_api:
     path: ../settings/settings_api
+  ui_library:
+    path: ../../core/ui_library
 
 dev_dependencies:
   flutter_test:

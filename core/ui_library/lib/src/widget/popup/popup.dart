@@ -3,10 +3,6 @@ import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-/// A function that builds a widget with a controller.
-typedef PopupWidgetBuilder =
-    Widget Function(BuildContext context, OverlayPortalController controller);
-
 /// A widget that shows a follower widget relative to a target widget.
 ///
 /// Under the hood, it uses [OverlayPortal] that is a declarative version
@@ -25,7 +21,7 @@ class PopupBuilder extends StatefulWidget {
   const PopupBuilder({
     required this.followerBuilder,
     required this.targetBuilder,
-    this.controller,
+    required this.controller,
     this.followerAnchor = Alignment.topCenter,
     this.targetAnchor = Alignment.bottomCenter,
     this.flipWhenOverflow = true,
@@ -36,10 +32,10 @@ class PopupBuilder extends StatefulWidget {
   });
 
   /// The target widget that the follower widget [followerBuilder] is positioned relative to.
-  final PopupWidgetBuilder targetBuilder;
+  final WidgetBuilder targetBuilder;
 
   /// The widget that is positioned relative to the target widget [targetBuilder].
-  final PopupWidgetBuilder followerBuilder;
+  final WidgetBuilder followerBuilder;
 
   /// The alignment of the follower widget relative to the target widget.
   ///
@@ -54,7 +50,7 @@ class PopupBuilder extends StatefulWidget {
   /// The controller that is used to show/hide the overlay.
   ///
   /// If not provided, a controller is created automatically.
-  final OverlayPortalController? controller;
+  final OverlayPortalController controller;
 
   /// Whether to flip the follower widget when it overflows the screen.
   ///
@@ -101,23 +97,6 @@ class _PopupBuilderState extends State<PopupBuilder> {
   /// The link between the target widget and the follower widget.
   final _layerLink = LayerLink();
 
-  /// The controller that is used to show/hide the overlay.
-  late OverlayPortalController portalController;
-
-  @override
-  void initState() {
-    super.initState();
-    portalController = widget.controller ?? OverlayPortalController(debugLabel: 'Popup');
-  }
-
-  @override
-  void didUpdateWidget(covariant PopupBuilder oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (!identical(widget.controller, oldWidget.controller)) {
-      portalController = widget.controller ?? OverlayPortalController(debugLabel: 'Popup');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     final displayFeatureBounds = PopupBuilder.findDisplayFeatureBounds(
@@ -127,14 +106,14 @@ class _PopupBuilderState extends State<PopupBuilder> {
     return CompositedTransformTarget(
       link: _layerLink,
       child: OverlayPortal(
-        controller: portalController,
-        child: widget.targetBuilder(context, portalController),
+        controller: widget.controller,
+        child: widget.targetBuilder(context),
         overlayChildBuilder: (BuildContext context) => Center(
           child: CompositedTransformFollower(
             link: _layerLink,
             followerAnchor: widget.followerAnchor,
             targetAnchor: widget.targetAnchor,
-            child: widget.followerBuilder(context, portalController),
+            child: widget.followerBuilder(context),
           ),
         ),
       ),
