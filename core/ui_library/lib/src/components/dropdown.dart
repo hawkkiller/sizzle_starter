@@ -1,6 +1,7 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
-import 'package:ui_library/src/widget/popup/popup.dart';
+import 'package:ui_library/src/widget/popup/popup_builder.dart';
+import 'package:ui_library/src/widget/popup/popup_follower.dart';
 
 class UiDropdownItem<T> {
   const UiDropdownItem({
@@ -22,6 +23,7 @@ class UiDropdown<T> extends StatefulWidget {
     required this.onChanged,
     required this.selectedValue,
     this.enforceTargetWidth = false,
+    this.maxWidth = 200,
     super.key,
   });
 
@@ -29,6 +31,7 @@ class UiDropdown<T> extends StatefulWidget {
   final ValueChanged<T> onChanged;
   final bool enforceTargetWidth;
   final T? selectedValue;
+  final double? maxWidth;
 
   @override
   State<UiDropdown<T>> createState() => _UiDropdownState<T>();
@@ -71,9 +74,14 @@ class _UiDropdownState<T> extends State<UiDropdown<T>> {
         );
       },
       followerBuilder: (context) {
-        return _UiDropdownFollower(
-          items: widget.items,
-          onSelected: _onItemSelected,
+        final maxWidth = widget.maxWidth ?? MediaQuery.sizeOf(context).width;
+
+        return PopupFollower(
+          constraints: BoxConstraints(maxWidth: maxWidth),
+          child: _UiDropdownFollower(
+            items: widget.items,
+            onSelected: _onItemSelected,
+          ),
         );
       },
     );
@@ -95,13 +103,17 @@ class _UiDropdownTarget<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return InkWell(
+      borderRadius: BorderRadius.circular(8),
       onTap: onTap,
-      child: Row(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          selectedItem?.title ?? const Text('Select'),
-          if (isOpen) const Icon(Icons.arrow_drop_up) else const Icon(Icons.arrow_drop_down),
-        ],
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            selectedItem?.title ?? const Text('Select'),
+            if (isOpen) const Icon(Icons.arrow_drop_up) else const Icon(Icons.arrow_drop_down),
+          ],
+        ),
       ),
     );
   }
@@ -127,9 +139,12 @@ class _UiDropdownFollower<T> extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DecoratedBox(
-      decoration: BoxDecoration(borderRadius: BorderRadius.circular(8)),
-      child: Column(children: _buildItems()),
+    final colors = Theme.of(context).colorScheme;
+
+    return Material(
+      color: colors.surfaceContainer,
+      borderRadius: BorderRadius.circular(8),
+      child: Column(mainAxisSize: MainAxisSize.min, children: _buildItems()),
     );
   }
 }
@@ -147,6 +162,7 @@ class _UiDropdownItem<T> extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ListTile(
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(8)),
       title: item.title,
       leading: item.leading,
       trailing: item.trailing,
