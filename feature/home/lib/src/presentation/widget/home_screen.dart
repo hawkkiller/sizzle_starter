@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:settings_api/settings_api.dart';
-import 'package:ui_library/ui_library.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -52,10 +51,6 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 16),
-          const Padding(
-            padding: EdgeInsets.symmetric(horizontal: 16),
-            child: _Dropdown(),
-          ),
         ],
       ),
     );
@@ -89,39 +84,6 @@ class _ColorItem extends StatelessWidget {
             color: color,
           ),
         ),
-      ),
-    );
-  }
-}
-
-class _Dropdown extends StatefulWidget {
-  const _Dropdown();
-
-  @override
-  State<_Dropdown> createState() => _DropdownState();
-}
-
-class _DropdownState extends State<_Dropdown> {
-  Color? selectedValue;
-
-  final items = Colors.accents
-      .map((color) => UiDropdownItem(title: Text(color.hashCode.toString()), value: color))
-      .toList();
-
-  void _onChanged(Color? value) {
-    setState(() {
-      selectedValue = value;
-    });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Align(
-      alignment: Alignment.centerLeft,
-      child: UiDropdown(
-        items: items,
-        onChanged: _onChanged,
-        selectedValue: selectedValue,
       ),
     );
   }
