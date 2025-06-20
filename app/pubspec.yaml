@@ -2,12 +2,11 @@ name: sizzle_starter
 description: Production-ready template for Flutter applications.
 publish_to: "none"
 version: 0.0.1+1
+resolution: workspace
 
 environment:
   sdk: ">=3.8.0 <4.0.0"
   flutter: ">=3.32.0 <4.0.0"
-
-resolution: workspace
 
 dependencies:
   # Flutter SDK
@@ -20,8 +19,7 @@ dependencies:
   flutter_bloc: 9.1.1
 
   # Storage
-  shared_preferences:
-    2.5.3
+  shared_preferences: 2.5.3
 
   # Utils
   clock: 1.1.2
