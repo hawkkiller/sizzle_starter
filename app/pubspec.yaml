@@ -51,6 +51,10 @@ dependencies:
     path: ../core/logger
   error_reporter:
     path: ../core/error_reporter
+  common:
+    path: ../core/common
+  ui_library:
+    path: ../core/ui_library
   
   # Features
   settings_api:

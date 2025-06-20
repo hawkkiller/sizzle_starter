@@ -4,20 +4,13 @@ import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_api/settings_api.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:sizzle_starter/src/feature/initialization/model/application_config.dart';
-import 'package:sizzle_starter/src/feature/initialization/model/dependencies_container.dart';
+import 'package:sizzle_starter/src/model/application_config.dart';
+import 'package:sizzle_starter/src/model/dependencies_container.dart';
 
-/// {@template composition_root}
 /// A place where Application-Wide dependencies are initialized.
 ///
 /// Application-Wide dependencies are dependencies that have a global scope,
 /// used in the entire application and have a lifetime that is the same as the application.
-/// {@endtemplate}
-///
-/// {@template composition_process}
-/// Composition of dependencies is a process of creating and configuring
-/// instances of classes that are required for the application to work.
-/// {@endtemplate}
 /// Composes dependencies and returns the result of composition.
 Future<CompositionResult> composeDependencies({
   required ApplicationConfig config,
@@ -40,19 +33,10 @@ Future<CompositionResult> composeDependencies({
   );
 }
 
-/// {@template composition_result}
-/// Result of composition.
-///
-/// {@macro composition_process}
-/// {@endtemplate}
 final class CompositionResult {
-  /// {@macro composition_result}
   const CompositionResult({required this.dependencies, required this.millisecondsSpent});
 
-  /// The dependencies container.
   final DependenciesContainer dependencies;
-
-  /// The number of milliseconds spent composing dependencies.
   final int millisecondsSpent;
 
   @override
@@ -63,7 +47,7 @@ final class CompositionResult {
       ')';
 }
 
-/// Creates the full dependencies container.
+/// Creates the initialized [DependenciesContainer].
 Future<DependenciesContainer> createDependenciesContainer(
   ApplicationConfig config,
   Logger logger,
@@ -86,7 +70,7 @@ Future<DependenciesContainer> createDependenciesContainer(
   );
 }
 
-/// Creates an instance of [Logger] and attaches any provided observers.
+/// Creates the [Logger] instance and attaches any provided observers.
 Logger createAppLogger({List<LogObserver> observers = const []}) {
   final logger = Logger();
 
@@ -97,7 +81,7 @@ Logger createAppLogger({List<LogObserver> observers = const []}) {
   return logger;
 }
 
-/// Creates an instance of [ErrorReporter] (using Sentry) and initializes it if needed.
+/// Creates the [ErrorReporter] instance and initializes it if needed.
 Future<ErrorReporter> createErrorReporter(ApplicationConfig config) async {
   final errorReporter = SentryErrorReporter(
     sentryDsn: config.sentryDsn,

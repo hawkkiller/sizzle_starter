@@ -2,15 +2,10 @@ import 'package:error_reporter/error_reporter.dart';
 import 'package:logger/logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:settings_api/settings_api.dart';
-import 'package:sizzle_starter/src/feature/initialization/model/application_config.dart';
+import 'package:sizzle_starter/src/model/application_config.dart';
 
-/// {@template dependencies_container}
-/// Container used to reuse dependencies across the application.
-///
-/// {@macro composition_process}
-/// {@endtemplate}
+/// Container for global dependencies.
 class DependenciesContainer {
-  /// {@macro dependencies_container}
   const DependenciesContainer({
     required this.logger,
     required this.config,
@@ -26,14 +21,11 @@ class DependenciesContainer {
   final SettingsContainer settingsContainer;
 }
 
-/// {@template testing_dependencies_container}
 /// A special version of [DependenciesContainer] that is used in tests.
 ///
 /// In order to use [DependenciesContainer] in tests, it is needed to
 /// extend this class and provide the dependencies that are needed for the test.
-/// {@endtemplate}
 base class TestDependenciesContainer implements DependenciesContainer {
-  /// {@macro testing_dependencies_container}
   const TestDependenciesContainer();
 
   @override

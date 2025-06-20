@@ -1,19 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:home/home.dart';
 import 'package:settings_api/settings_api.dart';
-import 'package:sizzle_starter/src/feature/initialization/widget/media_query_override.dart';
+import 'package:sizzle_starter/src/widget/media_query_override.dart';
 
-/// {@template material_context}
-/// [MaterialContext] is an entry point to the material context.
-///
-/// This widget sets locales, themes and routing.
-/// {@endtemplate}
+/// Entry point for the application that uses [MaterialApp].
 class MaterialContext extends StatelessWidget {
-  /// {@macro material_context}
   const MaterialContext({super.key});
 
-  // This global key is needed for [MaterialApp]
-  // to work properly when Widgets Inspector is enabled.
+  /// This global key is needed for Flutter to work properly
+  /// when Widgets Inspector is enabled.
   static final _globalKey = GlobalKey(debugLabel: 'MaterialContext');
 
   @override

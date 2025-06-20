@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sizzle_starter/src/common/extensions/context_extension.dart';
 
 /// {@template window_size}
 /// Breakpoints for responsive design.
@@ -95,8 +94,17 @@ class WindowSizeScope extends StatelessWidget {
   final Widget child;
 
   /// Returns the [WindowSize] of the nearest [WindowSizeScope] ancestor.
-  static WindowSize of(BuildContext context, {bool listen = true}) =>
-      context.inhOf<_InheritedWindowSize>(listen: listen).windowSize;
+  static WindowSize of(BuildContext context, {bool listen = true}) {
+    final windowSize = listen
+        ? context.dependOnInheritedWidgetOfExactType<_InheritedWindowSize>()?.windowSize
+        : context.getInheritedWidgetOfExactType<_InheritedWindowSize>()?.windowSize;
+
+    if (windowSize == null) {
+      throw Exception('WindowSizeScope not found in context');
+    }
+
+    return windowSize;
+  }
 
   @override
   Widget build(BuildContext context) {

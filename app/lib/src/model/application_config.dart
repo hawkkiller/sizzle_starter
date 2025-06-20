@@ -1,4 +1,4 @@
-import 'package:sizzle_starter/src/feature/initialization/model/environment.dart';
+import 'package:sizzle_starter/src/model/environment.dart';
 
 /// Application configuration
 class ApplicationConfig {
@@ -25,14 +25,11 @@ class ApplicationConfig {
   bool get enableSentry => sentryDsn.isNotEmpty;
 }
 
-/// {@template testing_dependencies_container}
 /// A special version of [ApplicationConfig] that is used in tests.
 ///
 /// In order to use [ApplicationConfig] in tests, it is needed to
 /// extend this class and provide the dependencies that are needed for the test.
-/// {@endtemplate}
 base class TestConfig implements ApplicationConfig {
-  /// {@macro testing_dependencies_container}
   const TestConfig();
 
   @override
