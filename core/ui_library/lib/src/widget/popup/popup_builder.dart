@@ -1,8 +1,8 @@
 import 'dart:ui';
 
 import 'package:flutter/material.dart';
-import 'package:ui_library/src/widget/popup/low_level/popup_composited_transform_follower.dart';
-import 'package:ui_library/src/widget/popup/low_level/popup_composited_transform_target.dart';
+import 'package:ui_library/src/widget/popup/low_level/composited_transform_popup_follower.dart';
+import 'package:ui_library/src/widget/popup/low_level/composited_transform_popup_target.dart';
 import 'package:ui_library/src/widget/popup/low_level/popup_layer_link.dart';
 
 /// A widget that shows a follower widget relative to a target widget.
@@ -87,13 +87,13 @@ class _PopupBuilderState extends State<PopupBuilder> {
       MediaQuery.displayFeaturesOf(context),
     );
 
-    return PopupCompositedTransformTarget(
+    return CompositedTransformPopupTarget(
       link: _layerLink,
       child: OverlayPortal(
         controller: widget.controller,
         child: widget.targetBuilder(context),
         overlayChildBuilder: (BuildContext context) => Center(
-          child: PopupCompositedTransformFollower(
+          child: CompositedTransformPopupFollower(
             link: _layerLink,
             displayFeatureBounds: displayFeatureBounds,
             enforceLeaderHeight: widget.enforceLeaderHeight,

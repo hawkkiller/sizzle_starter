@@ -64,8 +64,8 @@ class _UiDropdownState<T> extends State<UiDropdown<T>> {
     return PopupBuilder(
       enforceLeaderWidth: widget.enforceTargetWidth,
       controller: controller,
+      targetAnchor: Alignment.topRight,
       followerAnchor: Alignment.topLeft,
-      targetAnchor: Alignment.bottomLeft,
       targetBuilder: (context) {
         return _UiDropdownTarget(
           selectedItem: selectedItem,

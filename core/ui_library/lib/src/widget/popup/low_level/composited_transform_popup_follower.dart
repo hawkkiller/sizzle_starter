@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:ui_library/src/widget/popup/low_level/popup_composited_transform_target.dart';
+import 'package:ui_library/src/widget/popup/low_level/composited_transform_popup_target.dart';
 import 'package:ui_library/src/widget/popup/low_level/popup_layer_link.dart';
 
-/// A widget that follows a [PopupCompositedTransformTarget].
+/// A widget that follows a [CompositedTransformPopupTarget].
 ///
 /// The only difference between this widget and [CompositedTransformFollower] is
 /// that this widget prevents the follower from overflowing the screen.
-class PopupCompositedTransformFollower extends SingleChildRenderObjectWidget {
-  const PopupCompositedTransformFollower({
+class CompositedTransformPopupFollower extends SingleChildRenderObjectWidget {
+  const CompositedTransformPopupFollower({
     required this.link,
     required this.displayFeatureBounds,
     this.targetAnchor = Alignment.topLeft,
@@ -33,8 +33,8 @@ class PopupCompositedTransformFollower extends SingleChildRenderObjectWidget {
   final Iterable<Rect> displayFeatureBounds;
 
   @override
-  EnhancedRenderFollowerLayer createRenderObject(BuildContext context) {
-    return EnhancedRenderFollowerLayer(
+  RenderPopupFollowerLayer createRenderObject(BuildContext context) {
+    return RenderPopupFollowerLayer(
       link: link,
       showWhenUnlinked: showWhenUnlinked,
       targetAnchor: targetAnchor,
@@ -48,7 +48,7 @@ class PopupCompositedTransformFollower extends SingleChildRenderObjectWidget {
   }
 
   @override
-  void updateRenderObject(BuildContext context, EnhancedRenderFollowerLayer renderObject) {
+  void updateRenderObject(BuildContext context, RenderPopupFollowerLayer renderObject) {
     renderObject
       ..link = link
       ..showWhenUnlinked = showWhenUnlinked
@@ -75,9 +75,9 @@ class PopupCompositedTransformFollower extends SingleChildRenderObjectWidget {
 ///
 ///  * [CompositedTransformFollower], the corresponding widget.
 ///  * [FollowerLayer], the layer that this render object creates.
-class EnhancedRenderFollowerLayer extends RenderProxyBox {
+class RenderPopupFollowerLayer extends RenderProxyBox {
   /// Creates a render object that uses a [FollowerLayer].
-  EnhancedRenderFollowerLayer({
+  RenderPopupFollowerLayer({
     required PopupLayerLink link,
     required Iterable<Rect> displayFeatureBounds,
     Alignment targetAnchor = Alignment.topLeft,
@@ -119,7 +119,7 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
     markNeedsPaint();
   }
 
-  /// The link object that connects this [EnhancedRenderFollowerLayer] with a
+  /// The link object that connects this [RenderPopupFollowerLayer] with a
   /// [RenderLeaderLayer] earlier in the paint order.
   PopupLayerLink get link => _link;
   PopupLayerLink _link;
@@ -348,67 +348,73 @@ class EnhancedRenderFollowerLayer extends RenderProxyBox {
     required bool flipWhenOverflow,
     required bool moveWhenOverflow,
   }) {
-    // Helper function to adjust for overflow
-    double adjust({
-      required double position,
-      required double size,
-      required double minBoundary,
-      required double maxBoundary,
-      required double altPosition,
-      required double altSize,
+    // Helper function to adjust position for overflow handling
+    double adjustPositionForOverflow({
+      required double followerPosition,
+      required double followerSize,
+      required double screenMinBoundary,
+      required double screenMaxBoundary,
+      required double targetPosition,
+      required double targetSize,
     }) {
-      var adjustedPosition = position;
+      var finalPosition = followerPosition;
 
       if (flipWhenOverflow) {
         // If `flipWhenOverflow` is true, try placing on the opposite side if there's an overflow
-        if (position + size > maxBoundary) {
-          if (altPosition - size >= minBoundary) {
-            adjustedPosition = altPosition - size;
+        if (followerPosition + followerSize > screenMaxBoundary) {
+          // Try flipping to the opposite side of the target
+          final flippedPosition = targetPosition - followerSize;
+          if (flippedPosition >= screenMinBoundary) {
+            finalPosition = flippedPosition;
           } else {
-            adjustedPosition = maxBoundary - size;
+            // Can't flip, clamp to screen boundary
+            finalPosition = screenMaxBoundary - followerSize;
           }
-        } else if (position < minBoundary) {
-          if (altPosition + altSize <= maxBoundary) {
-            adjustedPosition = altPosition + altSize;
+        } else if (followerPosition < screenMinBoundary) {
+          // Try flipping to the other side of the target
+          final flippedPosition = targetPosition + targetSize;
+          if (flippedPosition + followerSize <= screenMaxBoundary) {
+            finalPosition = flippedPosition;
           } else {
-            adjustedPosition = minBoundary;
+            // Can't flip, clamp to screen boundary
+            finalPosition = screenMinBoundary;
           }
         }
       }
 
-      // Handle moving when overflow
+      // Handle moving when overflow (after potential flipping)
       if (moveWhenOverflow) {
-        if (adjustedPosition + size > maxBoundary) {
-          adjustedPosition = maxBoundary - size;
-        } else if (adjustedPosition < minBoundary) {
-          adjustedPosition = minBoundary;
+        if (finalPosition + followerSize > screenMaxBoundary) {
+          finalPosition = screenMaxBoundary - followerSize;
+        } else if (finalPosition < screenMinBoundary) {
+          finalPosition = screenMinBoundary;
         }
       }
 
-      return adjustedPosition;
+      return finalPosition;
     }
 
     // Adjust horizontal position
-    final dx = adjust(
-      position: followerRect.left,
-      size: followerRect.width,
-      minBoundary: 0,
-      maxBoundary: screenSize.width,
-      altPosition: targetRect.left,
-      altSize: targetRect.width,
+    final adjustedX = adjustPositionForOverflow(
+      followerPosition: followerRect.left,
+      followerSize: followerRect.width,
+      screenMinBoundary: 0,
+      screenMaxBoundary: screenSize.width,
+      targetPosition: targetRect.left,
+      targetSize: targetRect.width,
     );
 
     // Adjust vertical position
-    final dy = adjust(
-      position: followerRect.top,
-      size: followerRect.height,
-      minBoundary: 0,
-      maxBoundary: screenSize.height,
-      altPosition: targetRect.top,
-      altSize: targetRect.height,
+    final adjustedY = adjustPositionForOverflow(
+      followerPosition: followerRect.top,
+      followerSize: followerRect.height,
+      screenMinBoundary: 0,
+      screenMaxBoundary: screenSize.height,
+      targetPosition: targetRect.top,
+      targetSize: targetRect.height,
     );
 
-    return Offset(dx, dy);
+    return Offset(adjustedX, adjustedY);
   }
 
   // Rect _closestScreen(Iterable<Rect> screens, Offset point) {
