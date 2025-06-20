@@ -17,6 +17,7 @@ workspace:
   - core/rest_client
   - core/error_reporter
   - core/ui_library
+  - core/database
   # Feature
   - feature/settings/settings_api
   - feature/home
