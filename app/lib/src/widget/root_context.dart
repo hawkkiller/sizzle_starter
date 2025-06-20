@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sentry_flutter/sentry_flutter.dart';
 import 'package:sizzle_starter/src/logic/composition_root.dart';
 import 'package:sizzle_starter/src/widget/dependencies_scope.dart';
 import 'package:sizzle_starter/src/widget/material_context.dart';
@@ -18,12 +17,9 @@ class RootContext extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return DefaultAssetBundle(
-      bundle: SentryAssetBundle(),
-      child: DependenciesScope(
-        dependencies: compositionResult.dependencies,
-        child: const WindowSizeScope(child: MaterialContext()),
-      ),
+    return DependenciesScope(
+      dependencies: compositionResult.dependencies,
+      child: const WindowSizeScope(child: MaterialContext()),
     );
   }
 }
