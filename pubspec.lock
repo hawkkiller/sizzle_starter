@@ -25,13 +25,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "7.4.5"
-  app_database:
-    dependency: transitive
-    description:
-      path: "core/app_database"
-      relative: true
-    source: path
-    version: "1.0.0"
   archive:
     dependency: transitive
     description:
@@ -232,6 +225,13 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.2.0"
+  database:
+    dependency: transitive
+    description:
+      path: "core/database"
+      relative: true
+    source: path
+    version: "1.0.0"
   drift:
     dependency: transitive
     description:

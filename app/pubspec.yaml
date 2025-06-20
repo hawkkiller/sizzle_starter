@@ -45,8 +45,8 @@ dependencies:
   # Core
   rest_client:
     path: ../core/rest_client
-  app_database:
-    path: ../core/app_database
+  database:
+    path: ../core/database
   logger:
     path: ../core/logger
   error_reporter:

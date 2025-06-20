@@ -1,17 +1,17 @@
 import 'package:drift/drift.dart';
 import 'package:drift_flutter/drift_flutter.dart';
 
-part 'app_database.g.dart';
+part 'database.g.dart';
 
-/// {@template app_database}
+/// {@template database}
 /// The drift-managed database configuration
 /// {@endtemplate}
 @DriftDatabase()
 class AppDatabase extends _$AppDatabase {
-  /// {@macro app_database}
+  /// {@macro database}
   AppDatabase(super.e);
 
-  /// {@macro app_database}
+  /// {@macro database}
   AppDatabase.defaults({required String name})
     : super(
         driftDatabase(

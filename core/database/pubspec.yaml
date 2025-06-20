@@ -1,4 +1,4 @@
-name: app_database
+name: database
 description: "Database for the app"
 version: 1.0.0
 publish_to: none
