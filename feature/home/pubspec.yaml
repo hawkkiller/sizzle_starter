@@ -1,0 +1,21 @@
+name: home
+description: "Home feature"
+version: 0.0.1
+publish_to: none
+resolution: workspace
+
+environment:
+  sdk: ">=3.8.0 <4.0.0"
+  flutter: ">=3.32.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  settings_api:
+    path: ../settings/settings_api
+  ui_library:
+    path: ../../core/ui_library
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter

@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Run dart format in all packages of the project that have a pubspec.yaml file
-find app packages -type f -name "pubspec.yaml" -exec dirname {} \; | while read -r dir; do
+find app core feature -type f -name "pubspec.yaml" -exec dirname {} \; | while read -r dir; do
   if [ -f "$dir/pubspec.yaml" ]; then
     pushd $dir
     printf "\nFormatting $dir\n"

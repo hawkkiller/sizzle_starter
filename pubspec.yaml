@@ -5,9 +5,19 @@ environment:
   sdk: ">=3.7.0 <4.0.0"
   flutter: ">=3.32.0 <4.0.0"
 
+dev_dependencies:
+  sizzle_lints: ^2.1.7
+
 workspace:
   - app
-  - common/analytics
-  - common/app_database
-  - common/logger
-  - common/rest_client
+  # Core
+  - core/common
+  - core/analytics
+  - core/logger
+  - core/rest_client
+  - core/error_reporter
+  - core/ui_library
+  - core/database
+  # Feature
+  - feature/settings/settings_api
+  - feature/home

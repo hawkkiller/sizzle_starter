@@ -12,6 +12,3 @@ find . -type f -name "pubspec.yaml" -exec grep -q build_runner {} \; -exec dirna
     popd
   fi
 done
-
-# Run l10n generation
-cd app && bash scripts/l10n.bash

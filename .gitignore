@@ -50,9 +50,6 @@ generated_*
 lib/src/core/constant/localization/generated/
 lib/src/core/constant/generated/
 
-pubspec.lock
-.metadata
-
 # FVM Version Cache
 .fvm/
 
