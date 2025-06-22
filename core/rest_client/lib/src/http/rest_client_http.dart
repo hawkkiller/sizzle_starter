@@ -1,10 +1,9 @@
 import 'dart:async';
-
-import 'package:cronet_http/cronet_http.dart' show CronetClient;
-import 'package:cupertino_http/cupertino_http.dart' show CupertinoClient;
-import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform;
+import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:http/http.dart' as http;
 import 'package:rest_client/rest_client.dart';
+import 'package:rest_client/src/http/custom_client_io.dart'
+    if (dart.library.js_interop) 'package:rest_client/src/http/custom_client_browser.dart';
 import 'package:rest_client/src/http/check_exception_io.dart'
     if (dart.library.js_interop) 'package:rest_client/src/http/check_exception_browser.dart';
 
@@ -19,11 +18,7 @@ http.Client createDefaultHttpClient() {
   final platform = defaultTargetPlatform;
 
   try {
-    client = switch (platform) {
-      TargetPlatform.android => CronetClient.defaultCronetEngine(),
-      TargetPlatform.iOS || TargetPlatform.macOS => CupertinoClient.defaultSessionConfiguration(),
-      _ => null,
-    };
+    client = createCustomClient();
   } on Object catch (e, stackTrace) {
     Zone.current.print(
       'Failed to create a default http client for platform $platform $e $stackTrace',
