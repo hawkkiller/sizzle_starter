@@ -10,10 +10,6 @@ import 'package:rest_client/src/http/custom_client_io.dart'
 
 // coverage:ignore-start
 /// Creates an [http.Client] based on the current platform.
-///
-/// For Android, it returns a [CronetClient] with the default Cronet engine.
-/// For iOS and macOS, it returns a [CupertinoClient]
-/// with the default session configuration.
 http.Client createDefaultHttpClient() {
   http.Client? client;
   final platform = defaultTargetPlatform;
