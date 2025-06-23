@@ -2,10 +2,11 @@ import 'dart:async';
 import 'package:flutter/foundation.dart' show defaultTargetPlatform;
 import 'package:http/http.dart' as http;
 import 'package:rest_client/rest_client.dart';
-import 'package:rest_client/src/http/custom_client_io.dart'
-    if (dart.library.js_interop) 'package:rest_client/src/http/custom_client_browser.dart';
+
 import 'package:rest_client/src/http/check_exception_io.dart'
     if (dart.library.js_interop) 'package:rest_client/src/http/check_exception_browser.dart';
+import 'package:rest_client/src/http/custom_client_io.dart'
+    if (dart.library.js_interop) 'package:rest_client/src/http/custom_client_browser.dart';
 
 // coverage:ignore-start
 /// Creates an [http.Client] based on the current platform.
