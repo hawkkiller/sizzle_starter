@@ -11,7 +11,7 @@ import 'package:http/http.dart' as http;
 /// For Android, it returns a [CronetClient] with the default Cronet engine.
 /// For iOS and macOS, it returns a [CupertinoClient]
 /// with the default session configuration.
-http.Client createCustomClient() {
+http.Client createPlatformHttpClient() {
   http.Client? client;
 
   final platform = defaultTargetPlatform;

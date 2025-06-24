@@ -9,7 +9,7 @@ import 'package:rest_client/src/http/custom_client_io.dart'
 
 // coverage:ignore-start
 /// Creates an [http.Client] based on the current platform.
-http.Client createDefaultHttpClient() => createCustomClient();
+http.Client createDefaultHttpClient() => createPlatformHttpClient();
 // coverage:ignore-end
 
 /// {@template rest_client_http}
