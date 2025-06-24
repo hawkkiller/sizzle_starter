@@ -17,7 +17,7 @@ http.Client createCustomClient() {
   final platform = defaultTargetPlatform;
 
   try {
-    client = switch (defaultTargetPlatform) {
+    client = switch (platform) {
       TargetPlatform.android => CronetClient.defaultCronetEngine(),
       TargetPlatform.iOS || TargetPlatform.macOS => CupertinoClient.defaultSessionConfiguration(),
       _ => null,
