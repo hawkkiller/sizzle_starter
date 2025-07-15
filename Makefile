@@ -20,6 +20,11 @@ get:
 bootstrap:
 	bash scripts/bootstrap.bash
 
+# Task: Bootstrap Project with PowerShell
+bootstrap-win:
+	@echo "Bootstrapping Project with PowerShell..."
+	powershell -ExecutionPolicy Bypass -File scripts/ps/bootstrap.ps1
+
 # Task: Generate Dart files
 gen:
 	@echo "Running Dart codegen..."
