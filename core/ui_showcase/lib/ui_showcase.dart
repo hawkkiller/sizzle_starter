@@ -1,3 +1,2 @@
-library ui_showcase;
-
 export 'src/core/showcase_node.dart';
+export 'src/widget/showcase_tree_view.dart';

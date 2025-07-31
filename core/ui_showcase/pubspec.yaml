@@ -10,6 +10,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  two_dimensional_scrollables: ^0.3.7
 
 dev_dependencies:
   flutter_test:
