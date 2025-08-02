@@ -29,9 +29,13 @@ abstract class ShowcaseNode {
   bool get isLeaf => children.isEmpty;
 
   /// Full path from root to this node
-  String get path {
+  String get fullPath {
     if (_parent == null) return _encodeNameToPath(name);
-    return '${_parent!.path}/${_encodeNameToPath(name)}';
+    return '${_parent!.fullPath}/${_encodeNameToPath(name)}';
+  }
+
+  String get path {
+    return _encodeNameToPath(name);
   }
 
   String _encodeNameToPath(String name) {
@@ -66,11 +70,21 @@ abstract class ShowcaseNode {
   // Navigation and search methods
   /// Find a node by path
   ShowcaseNode? findByPath(String path) {
-    if (this.path == path) return this;
+    if (fullPath == path) return this;
 
     ShowcaseNode? result;
     visitChildren((child) {
       result ??= child.findByPath(path);
+    });
+    return result;
+  }
+
+  ShowcaseNode? findByName(String name) {
+    if (this.name == name) return this;
+
+    ShowcaseNode? result;
+    visitChildren((child) {
+      result ??= child.findByName(name);
     });
     return result;
   }
@@ -97,11 +111,8 @@ class ShowcaseFolderNode extends ShowcaseNode {
     this.tags = const [],
     this.category,
     this.isDeprecated = false,
-  }) {
-    children.forEach(adoptChild);
-  }
+  });
 
-  // Override properties
   @override
   final String name;
 
@@ -131,6 +142,10 @@ class ShowcaseFolderNode extends ShowcaseNode {
   @override
   void visitChildren(void Function(ShowcaseNode child) visitor) {
     children.forEach(visitor);
+
+    for (final child in children) {
+      child.visitChildren(visitor);
+    }
   }
 }
 

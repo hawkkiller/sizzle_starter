@@ -9,9 +9,7 @@ class SomeButtonPreview extends StatelessWidget {
     final activeNode = ActiveNodeProvider.of(context).activeNode!;
 
     return Scaffold(
-      appBar: AppBar(
-        title: Text(activeNode.path),
-      ),
+      appBar: AppBar(title: Text(activeNode.fullPath)),
       body: Center(
         child: ElevatedButton(
           onPressed: () {},

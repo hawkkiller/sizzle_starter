@@ -20,6 +20,13 @@
       "type": "dart",
       "cwd": "${workspaceFolder}/app",
       "flutterMode": "release"
+    },
+    {
+      "name": "ui_library_showcase",
+      "request": "launch",
+      "type": "dart",
+      "cwd": "${workspaceFolder}/core/ui_library/example",
+      "program": "lib/main.dart"
     }
   ]
 }

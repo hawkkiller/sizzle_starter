@@ -38,6 +38,7 @@ class ShowcaseTreeView extends StatefulWidget {
                 switchOutCurve: animationCurve,
                 child: Icon(
                   node.isExpanded ? Icons.folder_open : Icons.folder,
+                  color: Theme.of(context).colorScheme.onSurfaceVariant,
                   key: ValueKey<bool>(node.isExpanded),
                 ),
               ),
@@ -72,19 +73,57 @@ class _ShowcaseTreeViewState extends State<ShowcaseTreeView> {
 
   @override
   Widget build(BuildContext context) {
-    return TreeView<ShowcaseNode>(
-      tree: _nodes,
-      treeRowBuilder: (node) => const TreeRow(extent: FixedTreeRowExtent(32)),
-      treeNodeBuilder: (context, node, style) => ShowcaseTreeView._nodeBuilder(
-        context: context,
-        node: node,
-        animationStyle: style,
-        onNodeSelected: (node) => _onNodeSelected(context, node),
+    return DecoratedBox(
+      decoration: BoxDecoration(
+        color: Theme.of(context).colorScheme.surfaceContainer,
+        border: Border(
+          right: BorderSide(
+            color: Theme.of(context).colorScheme.outlineVariant,
+          ),
+        ),
       ),
-      toggleAnimationStyle: const AnimationStyle(
-        duration: Duration(milliseconds: 100),
-        curve: Curves.easeInOut,
-        reverseCurve: Curves.easeInOut,
+      child: TreeView<ShowcaseNode>(
+        tree: [
+          TreeViewNode(
+            ShowcaseFolderNode(
+              name: 'Button',
+              children: widget.nodes,
+            ),
+            children: [
+              // TODO: Find out how tree view node hacked hot reload
+              TreeViewNode(
+                ShowcasePreviewNode(
+                  name: 'Variant 1',
+                  widget: SizedBox(),
+                ),
+              ),
+              TreeViewNode(
+                ShowcasePreviewNode(
+                  name: 'Variant 2',
+                  widget: SizedBox(),
+                ),
+              ),
+              TreeViewNode(
+                ShowcasePreviewNode(
+                  name: 'Variant 3',
+                  widget: SizedBox(),
+                ),
+              ),
+            ],
+          ),
+        ],
+        treeRowBuilder: (node) => const TreeRow(extent: FixedTreeRowExtent(32)),
+        treeNodeBuilder: (context, node, style) => ShowcaseTreeView._nodeBuilder(
+          context: context,
+          node: node,
+          animationStyle: style,
+          onNodeSelected: (node) => _onNodeSelected(context, node),
+        ),
+        toggleAnimationStyle: const AnimationStyle(
+          duration: Duration(milliseconds: 100),
+          curve: Curves.easeInOut,
+          reverseCurve: Curves.easeInOut,
+        ),
       ),
     );
   }
