@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:ui_showcase/ui_showcase.dart';
 
-class SomeButtonPreview extends StatefulWidget {
-  const SomeButtonPreview({super.key});
+class SomeCardPreview extends StatefulWidget {
+  const SomeCardPreview({super.key});
 
   @override
-  State<SomeButtonPreview> createState() => _SomeButtonPreviewState();
+  State<SomeCardPreview> createState() => _SomeCardPreviewState();
 }
 
-class _SomeButtonPreviewState extends State<SomeButtonPreview> {
-  final _controller = TextEditingController(text: 'Click Me!');
+class _SomeCardPreviewState extends State<SomeCardPreview> {
+  final _controller = TextEditingController(text: 'Card');
 
   @override
   Widget build(BuildContext context) {
@@ -23,9 +23,11 @@ class _SomeButtonPreviewState extends State<SomeButtonPreview> {
         ),
       ],
       builder: (context) {
-        return ElevatedButton(
-          onPressed: () {},
-          child: Text(_controller.text),
+        return Card(
+          child: Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(_controller.text),
+          ),
         );
       },
     );

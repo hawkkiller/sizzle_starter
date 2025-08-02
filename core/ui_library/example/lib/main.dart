@@ -1,4 +1,5 @@
 import 'package:example/src/previews/button_preview.dart';
+import 'package:example/src/previews/card_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui_showcase/ui_showcase.dart';
@@ -8,14 +9,8 @@ void main() {
 }
 
 final showcaseNodes = [
-  ShowcaseNode(
-    name: 'Button',
-    children: [
-      ShowcaseNode(name: 'Variant 1', widget: const SomeButtonPreview()),
-      ShowcaseNode(name: 'Variant 2', widget: const SomeButtonPreview()),
-      ShowcaseNode(name: 'Variant 3', widget: const SomeButtonPreview()),
-    ],
-  ),
+  ShowcaseNode(name: 'Button', widget: const SomeButtonPreview()),
+  ShowcaseNode(name: 'Card', widget: const SomeCardPreview()),
 ];
 
 class MyApp extends StatefulWidget {
@@ -47,6 +42,7 @@ class _MyAppState extends State<MyApp> {
       routerConfig: router,
       theme: lightTheme,
       darkTheme: darkTheme,
+      debugShowCheckedModeBanner: false,
     );
   }
 }
