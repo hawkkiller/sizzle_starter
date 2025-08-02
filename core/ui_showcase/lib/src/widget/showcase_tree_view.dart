@@ -19,6 +19,7 @@ class ShowcaseTreeView extends StatefulWidget {
     required TreeViewNode<ShowcaseNode> node,
     required AnimationStyle animationStyle,
     required ValueChanged<TreeViewNode<ShowcaseNode>> onNodeSelected,
+    required bool isSelected,
   }) {
     final animationDuration = animationStyle.duration ?? TreeView.defaultAnimationDuration;
     final animationCurve = animationStyle.curve ?? TreeView.defaultAnimationCurve;
@@ -42,7 +43,10 @@ class ShowcaseTreeView extends StatefulWidget {
                   key: ValueKey<bool>(node.isExpanded),
                 ),
               ),
-            Text(node.content.name),
+            Text(
+              node.content.name,
+              style: TextStyle(color: isSelected ? Theme.of(context).colorScheme.primary : null),
+            ),
           ],
         ),
       ),
@@ -58,9 +62,25 @@ class _ShowcaseTreeViewState extends State<ShowcaseTreeView> {
   final _treeViewController = TreeViewController();
 
   List<TreeViewNode<ShowcaseNode>> _buildTree(List<ShowcaseNode> nodes) {
-    return nodes
-        .map((node) => TreeViewNode(node, children: _buildTree(node.children)))
-        .toList(growable: false);
+    final treeViewNodes = <TreeViewNode<ShowcaseNode>>[];
+
+    for (final node in nodes) {
+      var isExpanded = false;
+
+      if (widget.selectedNode case final selectedNode?) {
+        isExpanded = selectedNode.findByName(selectedNode.name) != null;
+      }
+
+      final treeViewNode = TreeViewNode(
+        node,
+        children: _buildTree(node.children),
+        expanded: isExpanded,
+      );
+
+      treeViewNodes.add(treeViewNode);
+    }
+
+    return treeViewNodes;
   }
 
   void _onNodeSelected(TreeViewNode<ShowcaseNode> node) {
@@ -92,6 +112,7 @@ class _ShowcaseTreeViewState extends State<ShowcaseTreeView> {
           node: node,
           animationStyle: style,
           onNodeSelected: _onNodeSelected,
+          isSelected: node.content == widget.selectedNode,
         ),
         toggleAnimationStyle: const AnimationStyle(
           duration: Duration(milliseconds: 100),
