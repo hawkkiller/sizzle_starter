@@ -12,8 +12,11 @@ class ShowcaseTreeView extends StatefulWidget {
     required this.nodes,
     this.selectedNode,
     this.onNodeSelected,
+    this.width,
     super.key,
   });
+
+  final double? width;
 
   /// The root nodes to display in the tree
   final List<ShowcaseNode> nodes;
@@ -24,7 +27,7 @@ class ShowcaseTreeView extends StatefulWidget {
   /// Callback fired when a node is selected
   final ValueChanged<ShowcaseNode>? onNodeSelected;
 
-  static const double _nodeHeight = 36.0;
+  static const double _nodeHeight = 40.0;
   static const double _nodeIndentation = 8.0;
   static const double _iconSize = 18.0;
   static const Duration _animationDuration = Duration(milliseconds: 150);
@@ -98,6 +101,7 @@ class _ShowcaseTreeViewState extends State<ShowcaseTreeView> {
           animationStyle: animationStyle,
           onNodeSelected: _handleNodeSelection,
           isSelected: node.content == widget.selectedNode,
+          width: widget.width,
         ),
         toggleAnimationStyle: const AnimationStyle(
           duration: ShowcaseTreeView._animationDuration,
@@ -115,12 +119,14 @@ class _TreeNodeWidget extends StatefulWidget {
     required this.animationStyle,
     required this.onNodeSelected,
     required this.isSelected,
+    this.width,
   });
 
   final TreeViewNode<ShowcaseNode> node;
   final AnimationStyle animationStyle;
   final ValueChanged<TreeViewNode<ShowcaseNode>> onNodeSelected;
   final bool isSelected;
+  final double? width;
 
   @override
   State<_TreeNodeWidget> createState() => _TreeNodeWidgetState();
@@ -141,14 +147,15 @@ class _TreeNodeWidgetState extends State<_TreeNodeWidget> {
     final iconColor = _getIconColor(theme);
 
     return MouseRegion(
+      cursor: SystemMouseCursors.click,
       onEnter: (_) => _setHovered(true),
       onExit: (_) => _setHovered(false),
       child: GestureDetector(
         onTap: () => widget.onNodeSelected(node),
         child: ConstrainedBox(
-          constraints: const BoxConstraints(minWidth: 200),
+          constraints: BoxConstraints(minWidth: widget.width ?? 200),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+            padding: const EdgeInsets.only(left: 4, right: 4, top: 4),
             child: DecoratedBox(
               decoration: BoxDecoration(
                 color: backgroundColor,

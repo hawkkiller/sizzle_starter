@@ -79,9 +79,45 @@ class ShowcaseMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final activeNode = ActiveNodeProvider.of(context).activeNode;
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
-      body: navigator,
+      drawer: Drawer(
+        child: ShowcaseTreeView(
+          nodes: nodes,
+          selectedNode: activeNode,
+          width: 304,
+          onNodeSelected: (value) {
+            onNodeSelected(value);
+            Navigator.pop(context);
+          },
+        ),
+      ),
+      body: Builder(
+        builder: (context) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.all(4),
+                child: Row(
+                  children: [
+                    IconButton(
+                      icon: const Icon(Icons.menu_rounded),
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                    ),
+                    if (activeNode case final node?) _ActiveNodeMetadata(node: node),
+                  ],
+                ),
+              ),
+              Expanded(child: navigator),
+            ],
+          );
+        },
+      ),
     );
   }
 }
@@ -130,9 +166,7 @@ class ShowcaseDesktop extends StatelessWidget {
 }
 
 class _ActiveNodeMetadata extends StatelessWidget {
-  const _ActiveNodeMetadata({
-    required this.node,
-  });
+  const _ActiveNodeMetadata({required this.node});
 
   final ShowcaseNode node;
 
