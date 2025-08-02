@@ -118,11 +118,7 @@ class ShowcaseDesktop extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                if (activeNode != null)
-                  _ActiveNodeMetadata(
-                    node: activeNode,
-                    onBreadcrumbTap: onNodeSelected,
-                  ),
+                if (activeNode != null) _ActiveNodeMetadata(node: activeNode),
                 Expanded(child: navigator),
               ],
             ),
@@ -136,11 +132,9 @@ class ShowcaseDesktop extends StatelessWidget {
 class _ActiveNodeMetadata extends StatelessWidget {
   const _ActiveNodeMetadata({
     required this.node,
-    required this.onBreadcrumbTap,
   });
 
   final ShowcaseNode node;
-  final ValueChanged<ShowcaseNode> onBreadcrumbTap;
 
   @override
   Widget build(BuildContext context) {
@@ -149,7 +143,7 @@ class _ActiveNodeMetadata extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _Breadcrumbs(node: node, onBreadcrumbTap: onBreadcrumbTap),
+          _Breadcrumbs(node: node),
           if (node.description case final description?) Text(description),
         ],
       ),
@@ -160,28 +154,23 @@ class _ActiveNodeMetadata extends StatelessWidget {
 class _Breadcrumbs extends StatelessWidget {
   const _Breadcrumbs({
     required this.node,
-    required this.onBreadcrumbTap,
   });
 
   final ShowcaseNode node;
-  final ValueChanged<ShowcaseNode> onBreadcrumbTap;
 
   @override
   Widget build(BuildContext context) {
     final textTheme = Theme.of(context).textTheme;
     final colorScheme = Theme.of(context).colorScheme;
-    final textStyle = textTheme.bodyMedium?.copyWith(color: colorScheme.primary);
+    final textStyle = textTheme.bodyMedium?.copyWith(color: colorScheme.secondary);
 
     return Row(
       mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         for (final parent in node.getBreadcrumbs()) ...[
-          TextButton(
-            onPressed: () => onBreadcrumbTap(parent),
-            child: Text(parent.path, style: textStyle),
-          ),
-          if (parent != node) const Text('>'),
+          Text(parent.path, style: textStyle),
+          if (parent != node) Text('/', style: textStyle),
         ],
       ],
     );
