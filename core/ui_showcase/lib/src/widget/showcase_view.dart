@@ -100,6 +100,8 @@ class ShowcaseDesktop extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final activeNode = ActiveNodeProvider.of(context).activeNode;
+
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
       body: Row(
@@ -112,9 +114,76 @@ class ShowcaseDesktop extends StatelessWidget {
               selectedNode: ActiveNodeProvider.of(context).activeNode,
             ),
           ),
-          Expanded(child: navigator),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                if (activeNode != null)
+                  _ActiveNodeMetadata(
+                    node: activeNode,
+                    onBreadcrumbTap: onNodeSelected,
+                  ),
+                Expanded(child: navigator),
+              ],
+            ),
+          ),
         ],
       ),
+    );
+  }
+}
+
+class _ActiveNodeMetadata extends StatelessWidget {
+  const _ActiveNodeMetadata({
+    required this.node,
+    required this.onBreadcrumbTap,
+  });
+
+  final ShowcaseNode node;
+  final ValueChanged<ShowcaseNode> onBreadcrumbTap;
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.all(8),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          _Breadcrumbs(node: node, onBreadcrumbTap: onBreadcrumbTap),
+          if (node.description case final description?) Text(description),
+        ],
+      ),
+    );
+  }
+}
+
+class _Breadcrumbs extends StatelessWidget {
+  const _Breadcrumbs({
+    required this.node,
+    required this.onBreadcrumbTap,
+  });
+
+  final ShowcaseNode node;
+  final ValueChanged<ShowcaseNode> onBreadcrumbTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final textTheme = Theme.of(context).textTheme;
+    final colorScheme = Theme.of(context).colorScheme;
+    final textStyle = textTheme.bodyMedium?.copyWith(color: colorScheme.primary);
+
+    return Row(
+      mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        for (final parent in node.getBreadcrumbs()) ...[
+          TextButton(
+            onPressed: () => onBreadcrumbTap(parent),
+            child: Text(parent.path, style: textStyle),
+          ),
+          if (parent != node) const Text('>'),
+        ],
+      ],
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:example/src/previews/button_preview.dart';
 import 'package:flutter/material.dart';
+import 'package:go_router/go_router.dart';
 import 'package:ui_showcase/ui_showcase.dart';
 
 void main() {
@@ -13,13 +14,6 @@ final showcaseNodes = [
       ShowcaseNode(name: 'Variant 1', widget: const SomeButtonPreview()),
       ShowcaseNode(name: 'Variant 2', widget: const SomeButtonPreview()),
       ShowcaseNode(name: 'Variant 3', widget: const SomeButtonPreview()),
-      ShowcaseNode(
-        name: 'Folder',
-        children: [
-          ShowcaseNode(name: 'Variant 1', widget: const SomeButtonPreview()),
-          ShowcaseNode(name: 'Variant 2', widget: const SomeButtonPreview()),
-        ],
-      ),
     ],
   ),
 ];
@@ -37,7 +31,11 @@ class _MyAppState extends State<MyApp> {
   @override
   void initState() {
     super.initState();
-    router = createRouter(showcaseNodes);
+    router = GoRouter(
+      routes: [
+        createRootShowcaseRoute(showcaseNodes),
+      ],
+    );
   }
 
   @override

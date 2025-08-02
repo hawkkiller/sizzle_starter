@@ -2,34 +2,29 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui_showcase/ui_showcase.dart';
 
-GoRouter createRouter(List<ShowcaseNode> nodes) {
+RouteBase createRootShowcaseRoute(List<ShowcaseNode> nodes) {
   ShowcaseNodes(nodes).assignParents();
 
-  return GoRouter(
-    debugLogDiagnostics: true,
+  return ShellRoute(
     routes: [
-      ShellRoute(
-        routes: [
-          GoRoute(
-            path: '/',
-            builder: (context, state) => const SizedBox.shrink(),
-            routes: createRoutes(nodes),
-          ),
-        ],
-        builder: (context, state, child) => ShowcaseView(
-          nodes: nodes,
-          navigator: child,
-        ),
+      GoRoute(
+        path: '/',
+        builder: (context, state) => const SizedBox.shrink(),
+        routes: _createRoutes(nodes),
       ),
     ],
+    builder: (context, state, child) => ShowcaseView(
+      nodes: nodes,
+      navigator: child,
+    ),
   );
 }
 
-List<RouteBase> createRoutes(List<ShowcaseNode> nodes) {
+List<RouteBase> _createRoutes(List<ShowcaseNode> nodes) {
   final routes = <RouteBase>[];
 
   for (final node in nodes) {
-    final childrenRoutes = node.children.isEmpty ? <RouteBase>[] : createRoutes(node.children);
+    final childrenRoutes = node.children.isEmpty ? <RouteBase>[] : _createRoutes(node.children);
 
     routes.add(
       GoRoute(

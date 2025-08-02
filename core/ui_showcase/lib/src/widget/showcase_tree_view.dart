@@ -55,6 +55,7 @@ class ShowcaseTreeView extends StatefulWidget {
 
 class _ShowcaseTreeViewState extends State<ShowcaseTreeView> {
   late final _nodes = _buildTree(widget.nodes);
+  final _treeViewController = TreeViewController();
 
   List<TreeViewNode<ShowcaseNode>> _buildTree(List<ShowcaseNode> nodes) {
     return nodes
@@ -62,9 +63,9 @@ class _ShowcaseTreeViewState extends State<ShowcaseTreeView> {
         .toList(growable: false);
   }
 
-  void _onNodeSelected(BuildContext context, TreeViewNode<ShowcaseNode> node) {
+  void _onNodeSelected(TreeViewNode<ShowcaseNode> node) {
     if (node.children.isNotEmpty) {
-      TreeViewController.of(context).toggleNode(node);
+      _treeViewController.toggleNode(node);
       return;
     }
 
@@ -84,12 +85,13 @@ class _ShowcaseTreeViewState extends State<ShowcaseTreeView> {
       ),
       child: TreeView<ShowcaseNode>(
         tree: _nodes,
+        controller: _treeViewController,
         treeRowBuilder: (node) => const TreeRow(extent: FixedTreeRowExtent(32)),
         treeNodeBuilder: (context, node, style) => ShowcaseTreeView._nodeBuilder(
           context: context,
           node: node,
           animationStyle: style,
-          onNodeSelected: (node) => _onNodeSelected(context, node),
+          onNodeSelected: _onNodeSelected,
         ),
         toggleAnimationStyle: const AnimationStyle(
           duration: Duration(milliseconds: 100),
