@@ -83,35 +83,7 @@ class _ShowcaseTreeViewState extends State<ShowcaseTreeView> {
         ),
       ),
       child: TreeView<ShowcaseNode>(
-        tree: [
-          TreeViewNode(
-            ShowcaseFolderNode(
-              name: 'Button',
-              children: widget.nodes,
-            ),
-            children: [
-              // TODO: Find out how tree view node hacked hot reload
-              TreeViewNode(
-                ShowcasePreviewNode(
-                  name: 'Variant 1',
-                  widget: SizedBox(),
-                ),
-              ),
-              TreeViewNode(
-                ShowcasePreviewNode(
-                  name: 'Variant 2',
-                  widget: SizedBox(),
-                ),
-              ),
-              TreeViewNode(
-                ShowcasePreviewNode(
-                  name: 'Variant 3',
-                  widget: SizedBox(),
-                ),
-              ),
-            ],
-          ),
-        ],
+        tree: _nodes,
         treeRowBuilder: (node) => const TreeRow(extent: FixedTreeRowExtent(32)),
         treeNodeBuilder: (context, node, style) => ShowcaseTreeView._nodeBuilder(
           context: context,

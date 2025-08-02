@@ -7,17 +7,17 @@ void main() {
 }
 
 final showcaseNodes = [
-  ShowcaseFolderNode(
+  ShowcaseNode(
     name: 'Button',
     children: [
-      ShowcasePreviewNode(name: 'Variant 1', widget: const SomeButtonPreview()),
-      ShowcasePreviewNode(name: 'Variant 2', widget: const SomeButtonPreview()),
-      ShowcasePreviewNode(name: 'Variant 3', widget: const SomeButtonPreview()),
-      ShowcaseFolderNode(
+      ShowcaseNode(name: 'Variant 1', widget: const SomeButtonPreview()),
+      ShowcaseNode(name: 'Variant 2', widget: const SomeButtonPreview()),
+      ShowcaseNode(name: 'Variant 3', widget: const SomeButtonPreview()),
+      ShowcaseNode(
         name: 'Folder',
         children: [
-          ShowcasePreviewNode(name: 'Variant 1', widget: const SomeButtonPreview()),
-          ShowcasePreviewNode(name: 'Variant 2', widget: const SomeButtonPreview()),
+          ShowcaseNode(name: 'Variant 1', widget: const SomeButtonPreview()),
+          ShowcaseNode(name: 'Variant 2', widget: const SomeButtonPreview()),
         ],
       ),
     ],

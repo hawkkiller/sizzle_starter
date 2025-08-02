@@ -3,6 +3,8 @@ import 'package:go_router/go_router.dart';
 import 'package:ui_showcase/ui_showcase.dart';
 
 GoRouter createRouter(List<ShowcaseNode> nodes) {
+  ShowcaseNodes(nodes).assignParents();
+
   return GoRouter(
     debugLogDiagnostics: true,
     routes: [

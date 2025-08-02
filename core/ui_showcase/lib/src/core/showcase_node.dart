@@ -1,24 +1,30 @@
 import 'package:flutter/material.dart';
 
-abstract class ShowcaseNode {
+class ShowcaseNode {
+  ShowcaseNode({
+    required this.name,
+    this.description,
+    this.tags = const [],
+    this.category,
+    this.isDeprecated = false,
+    this.widget,
+    this.children = const [],
+  });
+
   // Private fields
   ShowcaseNode? _parent;
   int _depth = 0;
 
-  // Abstract getters (must be implemented by subclasses)
-  String get name;
-
-  // Virtual getters (can be overridden by subclasses)
-  String? get description => null;
-  List<String> get tags => const [];
-  String? get category => null;
-  bool get isDeprecated => false;
-  Widget? get widget => null;
+  // Public properties
+  final String name;
+  final String? description;
+  final List<String> tags;
+  final String? category;
+  final bool isDeprecated;
+  final Widget? widget;
+  final List<ShowcaseNode> children;
 
   // Computed getters
-  /// Get all children (empty for leaf nodes)
-  List<ShowcaseNode> get children => const [];
-
   /// Get parent node
   ShowcaseNode? get parent => _parent;
 
@@ -49,10 +55,6 @@ abstract class ShowcaseNode {
     redepthChild(child);
   }
 
-  void dropChild(ShowcaseNode child) {
-    child._parent = null;
-  }
-
   void redepthChild(ShowcaseNode child) {
     if (child._depth <= _depth) {
       child._depth = _depth + 1;
@@ -60,11 +62,18 @@ abstract class ShowcaseNode {
     }
   }
 
-  @protected
-  void redepthChildren() {}
+  void redepthChildren() {
+    for (final child in children) {
+      redepthChild(child);
+    }
+  }
 
   void visitChildren(void Function(ShowcaseNode child) visitor) {
     children.forEach(visitor);
+
+    for (final child in children) {
+      child.visitChildren(visitor);
+    }
   }
 
   // Navigation and search methods
@@ -101,80 +110,4 @@ abstract class ShowcaseNode {
 
     return breadcrumbs;
   }
-}
-
-class ShowcaseFolderNode extends ShowcaseNode {
-  ShowcaseFolderNode({
-    required this.name,
-    required this.children,
-    this.description,
-    this.tags = const [],
-    this.category,
-    this.isDeprecated = false,
-  });
-
-  @override
-  final String name;
-
-  @override
-  final String? description;
-
-  @override
-  final String? category;
-
-  @override
-  final List<String> tags;
-
-  @override
-  final bool isDeprecated;
-
-  @override
-  final List<ShowcaseNode> children;
-
-  // Override methods
-  @override
-  void redepthChildren() {
-    for (final child in children) {
-      redepthChild(child);
-    }
-  }
-
-  @override
-  void visitChildren(void Function(ShowcaseNode child) visitor) {
-    children.forEach(visitor);
-
-    for (final child in children) {
-      child.visitChildren(visitor);
-    }
-  }
-}
-
-class ShowcasePreviewNode extends ShowcaseNode {
-  ShowcasePreviewNode({
-    required this.name,
-    required this.widget,
-    this.description,
-    this.tags = const [],
-    this.category,
-    this.isDeprecated = false,
-  });
-
-  // Override properties
-  @override
-  final String name;
-
-  @override
-  final String? description;
-
-  @override
-  final String? category;
-
-  @override
-  final List<String> tags;
-
-  @override
-  final bool isDeprecated;
-
-  @override
-  final Widget widget;
 }

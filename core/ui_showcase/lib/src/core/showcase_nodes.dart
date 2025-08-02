@@ -24,7 +24,6 @@ extension type ShowcaseNodes(List<ShowcaseNode> nodes) {
       ShowcaseNode? found;
 
       node.visitChildren((child) {
-        print('child.fullPath: ${child.fullPath} path: $path');
         if (child.fullPath == path) {
           found = child;
         }
@@ -34,5 +33,25 @@ extension type ShowcaseNodes(List<ShowcaseNode> nodes) {
     }
 
     return null;
+  }
+
+  void assignParents({
+    int depth = 0,
+    List<ShowcaseNode>? nodes,
+    ShowcaseNode? parent,
+  }) {
+    nodes ??= this.nodes;
+
+    for (final node in nodes) {
+      parent?.adoptChild(node);
+
+      if (node.children.isNotEmpty) {
+        assignParents(
+          depth: depth + 1,
+          nodes: node.children,
+          parent: node,
+        );
+      }
+    }
   }
 }
