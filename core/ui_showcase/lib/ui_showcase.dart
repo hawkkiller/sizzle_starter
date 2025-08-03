@@ -1,6 +1,7 @@
 export 'src/core/showcase_node.dart';
 export 'src/core/showcase_nodes.dart';
 export 'src/routing/go_router.dart';
+export 'src/widget/inputs/input_widget.dart';
 export 'src/widget/inputs/integer_input.dart';
 export 'src/widget/inputs/string_input.dart';
 export 'src/widget/showcase/active_node_notifier.dart';

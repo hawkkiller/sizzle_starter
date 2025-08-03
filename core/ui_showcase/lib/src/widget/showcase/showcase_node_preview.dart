@@ -28,16 +28,10 @@ class ShowcaseNodePreview extends StatelessWidget {
     }
 
     if (size.width < 800) {
-      return _ComponentPreviewSmall(
-        sidebar: sidebar,
-        child: child,
-      );
+      return _ComponentPreviewSmall(sidebar: sidebar, child: child);
     }
 
-    return _ComponentPreviewStandard(
-      sidebar: sidebar,
-      child: child,
-    );
+    return _ComponentPreviewStandard(sidebar: sidebar, child: child);
   }
 }
 

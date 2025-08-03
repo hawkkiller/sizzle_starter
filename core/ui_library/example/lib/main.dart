@@ -1,5 +1,4 @@
 import 'package:example/src/previews/button_preview.dart';
-import 'package:example/src/widget/theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui_showcase/ui_showcase.dart';
@@ -33,13 +32,8 @@ class _MyAppState extends State<MyApp> {
   }
 
   @override
-  Widget build(BuildContext context) {
-    return ThemeOptionInherited(
-      builder: (context, theme) => MaterialApp.router(
-        routerConfig: router,
-        theme: theme,
-        debugShowCheckedModeBanner: false,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => MaterialApp.router(
+    routerConfig: router,
+    debugShowCheckedModeBanner: false,
+  );
 }

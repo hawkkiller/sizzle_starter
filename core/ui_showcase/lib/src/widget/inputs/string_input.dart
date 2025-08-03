@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ui_showcase/ui_showcase.dart';
 
-class StringInput extends StatelessWidget {
+class StringInput extends StatelessWidget with InputWidget {
   const StringInput({
     required this.label,
     required this.controller,
@@ -12,6 +13,9 @@ class StringInput extends StatelessWidget {
   final String label;
   final String? description;
   final String? hint;
+
+  @override
+  Listenable get listenable => controller;
 
   @override
   Widget build(BuildContext context) {

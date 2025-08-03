@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:ui_showcase/ui_showcase.dart';
 
-class IntegerInput extends StatelessWidget {
+class IntegerInput extends StatelessWidget with InputWidget {
   const IntegerInput({
     required this.notifier,
     required this.label,
@@ -14,6 +15,9 @@ class IntegerInput extends StatelessWidget {
   final int? min;
   final int? max;
   final String? description;
+
+  @override
+  Listenable get listenable => notifier;
 
   @override
   Widget build(BuildContext context) {

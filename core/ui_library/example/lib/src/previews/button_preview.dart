@@ -1,4 +1,4 @@
-import 'package:example/src/widget/sidebar.dart';
+import 'package:example/src/widget/component_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_showcase/ui_showcase.dart';
 
@@ -14,17 +14,14 @@ class _SomeButtonPreviewState extends State<SomeButtonPreview> {
 
   @override
   Widget build(BuildContext context) {
-    return ShowcaseNodePreview(
-      listenables: [_controller],
-      sidebar: Sidebar(
-        children: [
-          StringInput(
-            label: 'Label',
-            description: 'The label of the button',
-            controller: _controller,
-          ),
-        ],
-      ),
+    return ComponentPreview(
+      inputs: [
+        StringInput(
+          label: 'Label',
+          description: 'The label of the button',
+          controller: _controller,
+        ),
+      ],
       builder: (context) {
         return ElevatedButton(
           onPressed: () {},
