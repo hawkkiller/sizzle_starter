@@ -111,3 +111,7 @@ class ShowcaseNode {
     return breadcrumbs;
   }
 }
+
+mixin ShowcaseNodeMixin on Widget implements ShowcaseNode {
+  
+}
