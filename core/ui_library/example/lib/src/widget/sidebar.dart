@@ -17,7 +17,7 @@ class Sidebar extends StatelessWidget {
       padding: const EdgeInsets.all(8),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
-        spacing: 8,
+        spacing: 24,
         children: [
           if (includeThemeSwitcher) const ThemeOptionInput(),
           ...children,

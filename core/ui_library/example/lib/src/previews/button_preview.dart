@@ -10,7 +10,8 @@ class SomeButtonPreview extends StatefulWidget {
 }
 
 class _SomeButtonPreviewState extends State<SomeButtonPreview> {
-  final _controller = TextEditingController(text: 'Click Me!');
+  final _labelController = TextEditingController(text: 'Click Me!');
+  final _enabledController = ValueNotifier(true);
 
   @override
   Widget build(BuildContext context) {
@@ -19,13 +20,18 @@ class _SomeButtonPreviewState extends State<SomeButtonPreview> {
         StringInput(
           label: 'Label',
           description: 'The label of the button',
-          controller: _controller,
+          controller: _labelController,
+        ),
+        BooleanInput(
+          label: 'Enabled',
+          description: 'Whether the button is enabled',
+          notifier: _enabledController,
         ),
       ],
       builder: (context) {
         return ElevatedButton(
-          onPressed: () {},
-          child: Text(_controller.text),
+          onPressed: _enabledController.value ? () {} : null,
+          child: Text(_labelController.text),
         );
       },
     );
