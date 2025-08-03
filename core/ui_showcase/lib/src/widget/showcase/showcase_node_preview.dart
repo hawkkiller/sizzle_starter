@@ -1,35 +1,41 @@
 import 'package:flutter/material.dart';
 
-class ComponentPreview extends StatelessWidget {
-  ComponentPreview({
+class ShowcaseNodePreview extends StatelessWidget {
+  ShowcaseNodePreview({
     required this.builder,
     List<Listenable> listenables = const [],
-    this.inputs = const [],
+    this.sidebar,
+    this.wrapWith,
     super.key,
   }) : listenable = Listenable.merge(listenables);
 
-  final List<Widget> inputs;
+  final Widget? sidebar;
   final Listenable listenable;
   final WidgetBuilder builder;
+  final Widget Function(Widget child)? wrapWith;
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
 
-    final child = ListenableBuilder(
+    Widget child = ListenableBuilder(
       listenable: listenable,
-      builder: (context, child) => Center(child: builder(context)),
+      builder: (context, child) => builder(context),
     );
+
+    if (wrapWith != null) {
+      child = wrapWith!(child);
+    }
 
     if (size.width < 800) {
       return _ComponentPreviewSmall(
-        inputs: inputs,
+        sidebar: sidebar,
         child: child,
       );
     }
 
     return _ComponentPreviewStandard(
-      inputs: inputs,
+      sidebar: sidebar,
       child: child,
     );
   }
@@ -38,10 +44,10 @@ class ComponentPreview extends StatelessWidget {
 class _ComponentPreviewSmall extends StatelessWidget {
   const _ComponentPreviewSmall({
     required this.child,
-    required this.inputs,
+    required this.sidebar,
   });
 
-  final List<Widget> inputs;
+  final Widget? sidebar;
   final Widget child;
 
   @override
@@ -49,7 +55,7 @@ class _ComponentPreviewSmall extends StatelessWidget {
     return Stack(
       children: [
         child,
-        if (inputs.isNotEmpty)
+        if (sidebar != null)
           Positioned(
             right: 16,
             bottom: MediaQuery.paddingOf(context).bottom + 16,
@@ -66,11 +72,11 @@ class _ComponentPreviewSmall extends StatelessWidget {
 class _ComponentPreviewStandard extends StatelessWidget {
   const _ComponentPreviewStandard({
     required this.child,
-    required this.inputs,
+    required this.sidebar,
   });
 
   final Widget child;
-  final List<Widget> inputs;
+  final Widget? sidebar;
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +85,7 @@ class _ComponentPreviewStandard extends StatelessWidget {
     return Row(
       children: [
         Expanded(child: child),
-        if (inputs.isNotEmpty)
+        if (sidebar != null)
           DecoratedBox(
             decoration: BoxDecoration(
               color: theme.colorScheme.surfaceContainer,
@@ -89,10 +95,8 @@ class _ComponentPreviewStandard extends StatelessWidget {
             ),
             child: SizedBox(
               width: 200,
-              child: ListView(
-                padding: const EdgeInsets.all(8),
-                children: inputs,
-              ),
+              height: double.infinity,
+              child: sidebar,
             ),
           ),
       ],

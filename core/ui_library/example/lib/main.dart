@@ -1,5 +1,5 @@
 import 'package:example/src/previews/button_preview.dart';
-import 'package:example/src/previews/card_preview.dart';
+import 'package:example/src/widget/theme_switcher.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui_showcase/ui_showcase.dart';
@@ -10,7 +10,6 @@ void main() {
 
 final showcaseNodes = [
   ShowcaseNode(name: 'Button', widget: const SomeButtonPreview()),
-  ShowcaseNode(name: 'Card', widget: const SomeCardPreview()),
 ];
 
 class MyApp extends StatefulWidget {
@@ -35,14 +34,12 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    final darkTheme = ThemeData.dark();
-    final lightTheme = ThemeData.light();
-
-    return MaterialApp.router(
-      routerConfig: router,
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      debugShowCheckedModeBanner: false,
+    return ThemeOptionInherited(
+      builder: (context, theme) => MaterialApp.router(
+        routerConfig: router,
+        theme: theme,
+        debugShowCheckedModeBanner: false,
+      ),
     );
   }
 }

@@ -4,6 +4,6 @@ export 'src/routing/go_router.dart';
 export 'src/widget/inputs/integer_input.dart';
 export 'src/widget/inputs/string_input.dart';
 export 'src/widget/showcase/active_node_notifier.dart';
-export 'src/widget/showcase/component_preview.dart';
+export 'src/widget/showcase/showcase_node_preview.dart';
 export 'src/widget/showcase/showcase_tree_view.dart';
 export 'src/widget/showcase/showcase_view.dart';
