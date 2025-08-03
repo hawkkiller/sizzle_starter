@@ -2,7 +2,7 @@ import 'package:example/src/widget/component_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_showcase/ui_showcase.dart';
 
-class CardPreview extends StatefulWidget with ShowcaseNodeMixin {
+class CardPreview extends StatefulWidget {
   const CardPreview({super.key});
 
   @override
