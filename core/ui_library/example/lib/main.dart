@@ -1,5 +1,6 @@
 import 'package:example/src/previews/button_preview.dart';
 import 'package:example/src/previews/card_preview.dart';
+import 'package:example/src/previews/checkbox_preview.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui_showcase/ui_showcase.dart';
@@ -11,6 +12,7 @@ void main() {
 final showcaseNodes = [
   ShowcaseNode(name: 'Button', widget: const SomeButtonPreview()),
   ShowcaseNode(name: 'Card', widget: const CardPreview()),
+  ShowcaseNode(name: 'Checkbox', widget: const CheckboxPreview()),
 ];
 
 class MyApp extends StatefulWidget {
