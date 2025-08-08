@@ -2,7 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:ui_showcase/src/widget/showcase/active_node_metadata.dart';
 import 'package:ui_showcase/ui_showcase.dart';
 
-class ShowcaseView extends StatelessWidget {
+/// A view that displays a list of showcase nodes.
+///
+/// See more:
+/// - [ShowcaseMobile]
+/// - [ShowcaseDesktop]
+class ShowcaseView extends StatefulWidget {
   const ShowcaseView({
     required this.nodes,
     required this.navigator,
@@ -12,35 +17,12 @@ class ShowcaseView extends StatelessWidget {
   final Widget navigator;
 
   @override
-  Widget build(BuildContext context) {
-    return ActiveNodeProvider(
-      nodes: nodes,
-      child: _ShowcaseView(nodes: nodes, navigator: navigator),
-    );
-  }
+  State<ShowcaseView> createState() => _ShowcaseViewState();
 }
 
-/// A view that displays a list of showcase nodes.
-///
-/// See more:
-/// - [ShowcaseMobile]
-/// - [ShowcaseDesktop]
-class _ShowcaseView extends StatefulWidget {
-  const _ShowcaseView({
-    required this.nodes,
-    required this.navigator,
-  });
-
-  final List<ShowcaseNode> nodes;
-  final Widget navigator;
-
-  @override
-  State<_ShowcaseView> createState() => _ShowcaseViewState();
-}
-
-class _ShowcaseViewState extends State<_ShowcaseView> {
+class _ShowcaseViewState extends State<ShowcaseView> {
   void _onNodeSelected(ShowcaseNode node) {
-    ActiveNodeProvider.of(context, listen: false).updateActiveNode(node);
+    ActiveNodeNotifier.of(context, listen: false).updateActiveNode(node);
   }
 
   @override
@@ -80,7 +62,7 @@ class ShowcaseMobile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final activeNode = ActiveNodeProvider.of(context).activeNode;
+    final activeNode = ActiveNodeNotifier.of(context).activeNode;
 
     return Scaffold(
       backgroundColor: Theme.of(context).colorScheme.surface,
@@ -146,7 +128,7 @@ class ShowcaseDesktop extends StatelessWidget {
             child: ShowcaseTreeView(
               nodes: nodes,
               onNodeSelected: onNodeSelected,
-              selectedNode: ActiveNodeProvider.of(context).activeNode,
+              selectedNode: ActiveNodeNotifier.of(context).activeNode,
             ),
           ),
           Expanded(child: navigator),

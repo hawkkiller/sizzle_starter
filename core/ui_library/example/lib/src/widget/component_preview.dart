@@ -1,4 +1,3 @@
-import 'package:device_preview/device_preview.dart';
 import 'package:example/src/widget/sidebar.dart';
 import 'package:example/src/widget/theme_switcher.dart';
 import 'package:flutter/material.dart';
@@ -22,17 +21,9 @@ class ComponentPreview extends StatelessWidget {
         listenables: inputs.map((e) => e.listenable).toList(growable: false),
         sidebar: Sidebar(children: inputs),
         wrapWith: (child) {
-          return DevicePreview(
-            isToolbarVisible: false,
-            builder: (context) {
-              return MaterialApp(
-                theme: theme,
-                // ignore: deprecated_member_use
-                useInheritedMediaQuery: true,
-                home: Scaffold(body: Center(child: child)),
-                builder: DevicePreview.appBuilder,
-              );
-            },
+          return MaterialApp(
+            theme: theme,
+            home: Scaffold(body: Center(child: child)),
           );
         },
       );
