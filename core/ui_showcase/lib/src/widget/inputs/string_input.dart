@@ -36,6 +36,9 @@ class _StringInputState extends State<StringInput> with PageStorageReader<String
   }
 
   @override
+  String getCurrentValue() => widget.controller.text;
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
@@ -47,7 +50,6 @@ class _StringInputState extends State<StringInput> with PageStorageReader<String
       children: [
         TextField(
           controller: widget.controller,
-          onChanged: writeStoredData,
           decoration: InputDecoration(
             labelText: widget.label,
             hintText: widget.hint,

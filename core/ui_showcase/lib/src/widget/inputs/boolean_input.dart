@@ -34,10 +34,8 @@ class _BooleanInputState extends State<BooleanInput> with PageStorageReader<Bool
     widget.notifier.value = data;
   }
 
-  void _onChanged(bool value) {
-    widget.notifier.value = value;
-    writeStoredData(value);
-  }
+  @override
+  bool getCurrentValue() => widget.notifier.value;
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +51,10 @@ class _BooleanInputState extends State<BooleanInput> with PageStorageReader<Bool
         ValueListenableBuilder(
           valueListenable: widget.notifier,
           builder: (context, value, child) {
-            return Switch(value: value, onChanged: _onChanged);
+            return Switch(
+              value: value,
+              onChanged: (value) => widget.notifier.value = value,
+            );
           },
         ),
         if (widget.description case final description?)

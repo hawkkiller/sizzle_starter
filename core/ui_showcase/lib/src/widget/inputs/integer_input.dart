@@ -37,10 +37,8 @@ class _IntegerInputState extends State<IntegerInput> with PageStorageReader<Inte
     widget.notifier.value = data;
   }
 
-  void _onChange(double value) {
-    widget.notifier.value = value.toInt();
-    writeStoredData(value.toInt());
-  }
+  @override
+  int getCurrentValue() => widget.notifier.value;
 
   @override
   Widget build(BuildContext context) {
@@ -66,8 +64,7 @@ class _IntegerInputState extends State<IntegerInput> with PageStorageReader<Inte
                 min: widget.min?.toDouble() ?? 0,
                 max: widget.max?.toDouble() ?? 100,
                 label: value.toString(),
-                onChanged: _onChange,
-                onChangeEnd: _onChange,
+                onChanged: (value) => widget.notifier.value = value.toInt(),
               ),
             );
           },

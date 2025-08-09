@@ -1,5 +1,5 @@
 import 'package:flutter/widgets.dart';
 
-mixin InputWidget on Widget {
+mixin InputWidget on StatefulWidget {
   Listenable get listenable;
 }
