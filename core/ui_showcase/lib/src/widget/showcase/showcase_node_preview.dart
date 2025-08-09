@@ -35,34 +35,6 @@ class ShowcaseNodePreview extends StatelessWidget {
   }
 }
 
-class _ComponentPreviewSmall extends StatelessWidget {
-  const _ComponentPreviewSmall({
-    required this.child,
-    required this.sidebar,
-  });
-
-  final Widget? sidebar;
-  final Widget child;
-
-  @override
-  Widget build(BuildContext context) {
-    return Stack(
-      children: [
-        child,
-        if (sidebar != null)
-          Positioned(
-            right: 16,
-            bottom: MediaQuery.paddingOf(context).bottom + 16,
-            child: FloatingActionButton(
-              onPressed: () {},
-              child: const Icon(Icons.edit_rounded),
-            ),
-          ),
-      ],
-    );
-  }
-}
-
 class _ComponentPreviewStandard extends StatelessWidget {
   const _ComponentPreviewStandard({
     required this.child,
@@ -94,6 +66,68 @@ class _ComponentPreviewStandard extends StatelessWidget {
             ),
           ),
       ],
+    );
+  }
+}
+
+class _ComponentPreviewSmall extends StatelessWidget {
+  const _ComponentPreviewSmall({
+    required this.child,
+    required this.sidebar,
+  });
+
+  final Widget? sidebar;
+  final Widget child;
+
+  void _openSidebar(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      useRootNavigator: false,
+      builder: (context) {
+        return _SidebarFullscreenDialog(sidebar: sidebar!);
+      },
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Stack(
+      children: [
+        child,
+        if (sidebar != null)
+          Positioned(
+            right: 16,
+            bottom: MediaQuery.paddingOf(context).bottom + 16,
+            child: FloatingActionButton(
+              onPressed: () => _openSidebar(context),
+              child: const Icon(Icons.edit_rounded),
+            ),
+          ),
+      ],
+    );
+  }
+}
+
+class _SidebarFullscreenDialog extends StatelessWidget {
+  const _SidebarFullscreenDialog({
+    required this.sidebar,
+  });
+
+  final Widget sidebar;
+
+  @override
+  Widget build(BuildContext context) {
+    return Dialog.fullscreen(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          IconButton(
+            onPressed: () => Navigator.of(context).pop(),
+            icon: const Icon(Icons.close_rounded),
+          ),
+          Expanded(child: sidebar),
+        ],
+      ),
     );
   }
 }

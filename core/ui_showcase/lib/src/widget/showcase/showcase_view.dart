@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:ui_showcase/src/widget/showcase/active_node_metadata.dart';
 import 'package:ui_showcase/ui_showcase.dart';
 
 /// A view that displays a list of showcase nodes.
@@ -77,30 +76,31 @@ class ShowcaseMobile extends StatelessWidget {
           },
         ),
       ),
-      body: Builder(
-        builder: (context) {
-          return Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Padding(
-                padding: const EdgeInsets.all(4),
-                child: Row(
-                  children: [
-                    IconButton(
-                      icon: const Icon(Icons.menu_rounded),
-                      onPressed: () {
-                        Scaffold.of(context).openDrawer();
-                      },
-                    ),
-                    if (activeNode case final activeNode?) ActiveNodeMetadata(node: activeNode),
-                  ],
-                ),
-              ),
-              Expanded(child: navigator),
-            ],
-          );
-        },
-      ),
+      body: navigator,
+      // body: Builder(
+      //   builder: (context) {
+      //     return Column(
+      //       crossAxisAlignment: CrossAxisAlignment.start,
+      //       children: [
+      //         Padding(
+      //           padding: const EdgeInsets.all(4),
+      //           child: Row(
+      //             children: [
+      //               IconButton(
+      //                 icon: const Icon(Icons.menu_rounded),
+      //                 onPressed: () {
+      //                   Scaffold.of(context).openDrawer();
+      //                 },
+      //               ),
+      //               if (activeNode case final activeNode?) ActiveNodeMetadata(node: activeNode),
+      //             ],
+      //           ),
+      //         ),
+      //         Expanded(child: navigator),
+      //       ],
+      //     );
+      //   },
+      // ),
     );
   }
 }
