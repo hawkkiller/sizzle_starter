@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ui_showcase/src/widget/restoration/page_storage_reader.dart';
 import 'package:ui_showcase/ui_showcase.dart';
 
-class BooleanInput extends StatelessWidget with InputWidget {
+class BooleanInput extends StatefulWidget with InputWidget {
   const BooleanInput({
     required this.label,
     required this.notifier,
@@ -17,6 +18,28 @@ class BooleanInput extends StatelessWidget with InputWidget {
   Listenable get listenable => notifier;
 
   @override
+  State<BooleanInput> createState() => _BooleanInputState();
+}
+
+class _BooleanInputState extends State<BooleanInput> with PageStorageReader<BooleanInput, bool> {
+  @override
+  Object? obtainPageStorageIdentifier() {
+    final node = ActiveNodeNotifier.of(context, listen: false).activeNode;
+
+    return '${node?.fullPath}-${widget.label}-boolean-input';
+  }
+
+  @override
+  void restoreState(bool data) {
+    widget.notifier.value = data;
+  }
+
+  void _onChanged(bool value) {
+    widget.notifier.value = value;
+    writeStoredData(value);
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
@@ -26,17 +49,14 @@ class BooleanInput extends StatelessWidget with InputWidget {
       mainAxisSize: MainAxisSize.min,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text(label, style: textTheme.labelLarge),
+        Text(widget.label, style: textTheme.labelLarge),
         ValueListenableBuilder(
-          valueListenable: notifier,
+          valueListenable: widget.notifier,
           builder: (context, value, child) {
-            return Switch(
-              value: value,
-              onChanged: (value) => notifier.value = value,
-            );
+            return Switch(value: value, onChanged: _onChanged);
           },
         ),
-        if (description case final description?)
+        if (widget.description case final description?)
           Text(
             description,
             style: textTheme.bodySmall?.copyWith(color: colorScheme.secondary),

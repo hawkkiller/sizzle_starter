@@ -1,5 +1,5 @@
-import 'package:example/src/widget/theme_switcher.dart';
 import 'package:flutter/material.dart';
+import 'package:ui_showcase/ui_showcase.dart';
 
 class Sidebar extends StatelessWidget {
   const Sidebar({

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ui_showcase/src/widget/restoration/page_storage_reader.dart';
 import 'package:ui_showcase/ui_showcase.dart';
 
-class IntegerInput extends StatelessWidget with InputWidget {
+class IntegerInput extends StatefulWidget with InputWidget {
   const IntegerInput({
     required this.notifier,
     required this.label,
@@ -20,6 +21,28 @@ class IntegerInput extends StatelessWidget with InputWidget {
   Listenable get listenable => notifier;
 
   @override
+  State<IntegerInput> createState() => _IntegerInputState();
+}
+
+class _IntegerInputState extends State<IntegerInput> with PageStorageReader<IntegerInput, int> {
+  @override
+  Object? obtainPageStorageIdentifier() {
+    final node = ActiveNodeNotifier.of(context, listen: false).activeNode;
+
+    return '${node?.fullPath}-${widget.label}-integer-input';
+  }
+
+  @override
+  void restoreState(int data) {
+    widget.notifier.value = data;
+  }
+
+  void _onChange(double value) {
+    widget.notifier.value = value.toInt();
+    writeStoredData(value.toInt());
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
@@ -30,25 +53,26 @@ class IntegerInput extends StatelessWidget with InputWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          label,
+          widget.label,
           style: textTheme.labelLarge?.copyWith(color: colorScheme.onSurface),
         ),
         ValueListenableBuilder(
-          valueListenable: notifier,
+          valueListenable: widget.notifier,
           builder: (context, value, child) {
             return SliderTheme(
               data: const SliderThemeData(showValueIndicator: ShowValueIndicator.always),
               child: Slider(
                 value: value.toDouble(),
-                min: min?.toDouble() ?? 0,
-                max: max?.toDouble() ?? 100,
+                min: widget.min?.toDouble() ?? 0,
+                max: widget.max?.toDouble() ?? 100,
                 label: value.toString(),
-                onChanged: (value) => notifier.value = value.toInt(),
+                onChanged: _onChange,
+                onChangeEnd: _onChange,
               ),
             );
           },
         ),
-        if (description case final description?)
+        if (widget.description case final description?)
           Text(
             description,
             style: textTheme.bodySmall?.copyWith(color: colorScheme.outline),

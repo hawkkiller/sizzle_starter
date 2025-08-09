@@ -2,7 +2,10 @@ import 'package:flutter/widgets.dart';
 import 'package:go_router/go_router.dart';
 import 'package:ui_showcase/ui_showcase.dart';
 
-RouteBase createRootShowcaseRoute(List<ShowcaseNode> nodes) {
+RouteBase createRootShowcaseRoute({
+  required List<ShowcaseNode> nodes,
+  Widget Function(BuildContext context, Widget child)? builder,
+}) {
   ShowcaseNodes(nodes).assignParents();
 
   return ShellRoute(
@@ -13,10 +16,18 @@ RouteBase createRootShowcaseRoute(List<ShowcaseNode> nodes) {
         routes: _createRoutes(nodes),
       ),
     ],
-    builder: (context, state, child) => GoRouterNotifier(
-      nodes: nodes,
-      child: ShowcaseView(nodes: nodes, navigator: child),
-    ),
+    builder: (context, state, child) {
+      return GoRouterNotifier(
+        nodes: nodes,
+        child: Builder(
+          builder: (context) {
+            final showcaseView = ShowcaseView(nodes: nodes, navigator: child);
+
+            return builder?.call(context, showcaseView) ?? showcaseView;
+          },
+        ),
+      );
+    },
   );
 }
 
@@ -53,7 +64,7 @@ class NodeRouterGoRouter extends ValueNotifier<ShowcaseNode?> implements NodeRou
 
   void _onLocationChanged() {
     final path = _router.state.fullPath ?? '';
-    final node = ShowcaseNodes(_nodes).findNodeByPath(path);
+    final node = ShowcaseNodes(_nodes).findNodeByPath(path.replaceFirst('/', ''));
 
     value = node;
   }

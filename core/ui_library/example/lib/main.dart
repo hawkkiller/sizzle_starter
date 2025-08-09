@@ -30,7 +30,16 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     router = GoRouter(
       routes: [
-        createRootShowcaseRoute(showcaseNodes),
+        createRootShowcaseRoute(
+          nodes: showcaseNodes,
+          builder: (context, child) => ThemeOptionProvider(
+            options: [
+              ThemeOption(name: 'Light', theme: ThemeData.light()),
+              ThemeOption(name: 'Dark', theme: ThemeData.dark()),
+            ],
+            child: child,
+          ),
+        ),
       ],
     );
   }

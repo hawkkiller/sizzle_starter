@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:ui_showcase/src/widget/restoration/page_storage_reader.dart';
 import 'package:ui_showcase/ui_showcase.dart';
 
-class StringInput extends StatelessWidget with InputWidget {
+class StringInput extends StatefulWidget with InputWidget {
   const StringInput({
     required this.label,
     required this.controller,
@@ -18,6 +19,23 @@ class StringInput extends StatelessWidget with InputWidget {
   Listenable get listenable => controller;
 
   @override
+  State<StringInput> createState() => _StringInputState();
+}
+
+class _StringInputState extends State<StringInput> with PageStorageReader<StringInput, String> {
+  @override
+  Object? obtainPageStorageIdentifier() {
+    final node = ActiveNodeNotifier.of(context, listen: false).activeNode;
+
+    return '${node?.fullPath}-${widget.label}-string-input';
+  }
+
+  @override
+  void restoreState(String data) {
+    widget.controller.text = data;
+  }
+
+  @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final textTheme = theme.textTheme;
@@ -28,13 +46,14 @@ class StringInput extends StatelessWidget with InputWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         TextField(
-          controller: controller,
+          controller: widget.controller,
+          onChanged: writeStoredData,
           decoration: InputDecoration(
-            labelText: label,
-            hintText: hint,
+            labelText: widget.label,
+            hintText: widget.hint,
           ),
         ),
-        if (description case final description?)
+        if (widget.description case final description?)
           Text(
             description,
             style: textTheme.bodySmall?.copyWith(color: colorScheme.secondary),
