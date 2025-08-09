@@ -1,5 +1,4 @@
 import 'package:example/src/widget/sidebar.dart';
-import 'package:ui_showcase/src/widget/inputs/theme_input.dart';
 import 'package:flutter/material.dart';
 import 'package:ui_showcase/ui_showcase.dart';
 
