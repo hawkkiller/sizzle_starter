@@ -1,6 +1,6 @@
 import 'package:flutter/rendering.dart';
 import 'package:flutter/widgets.dart';
-import 'package:ui_library/src/widget/popup/low_level/popup_layer_link.dart';
+import 'package:ui_library/src/widget/popup/popup_layer_link.dart';
 
 /// [CompositedTransformTarget] that also stores the render object of the leader.
 class CompositedTransformPopupTarget extends SingleChildRenderObjectWidget {

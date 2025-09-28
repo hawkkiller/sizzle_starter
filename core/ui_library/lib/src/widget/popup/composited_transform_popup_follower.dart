@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
-import 'package:ui_library/src/widget/popup/low_level/composited_transform_popup_target.dart';
-import 'package:ui_library/src/widget/popup/low_level/popup_layer_link.dart';
+import 'package:ui_library/src/widget/popup/composited_transform_popup_target.dart';
+import 'package:ui_library/src/widget/popup/popup_layer_link.dart';
 
 /// A widget that follows a [CompositedTransformPopupTarget].
 ///
