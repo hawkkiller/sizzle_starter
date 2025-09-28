@@ -23,9 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
     SettingsScope.of(context).settingsBloc.add(
       SettingsEventUpdate(
         onUpdate: (settings) => settings.copyWith(
-          themeConfiguration: settings.themeConfiguration.copyWith(
-            seedColor: color,
-          ),
+          theme: settings.theme.copyWith(seedColor: color),
         ),
       ),
     );
@@ -45,21 +43,21 @@ class _HomeScreenState extends State<HomeScreen> {
             ),
           ),
           const SizedBox(height: 8),
-          SettingsBuilder(
-            builder: (context, data) {
-              return SizedBox(
-                height: 48,
-                child: ListView.separated(
+          SizedBox(
+            height: 48,
+            child: SettingsBuilder(
+              builder: (context, data) {
+                return ListView.separated(
                   separatorBuilder: (context, index) => const SizedBox(width: 8),
                   padding: const EdgeInsets.symmetric(horizontal: 16),
                   itemCount: Colors.accents.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return _buildColorItem(index, data.themeConfiguration.seedColor);
+                    return _buildColorItem(index, data.theme.seedColor);
                   },
-                ),
-              );
-            },
+                );
+              },
+            ),
           ),
           const SizedBox(height: 16),
         ],
@@ -86,7 +84,7 @@ class _ColorItem extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(
               width: 2,
-              color: seedColor == color ? Colors.black : Colors.transparent,
+              color: seedColor?.toARGB32() == color.toARGB32() ? Colors.black : Colors.transparent,
             ),
             borderRadius: BorderRadius.circular(16),
             color: color,

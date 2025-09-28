@@ -1,10 +1,9 @@
 import 'dart:convert';
-import 'dart:ui' show Locale;
 
 import 'package:settings_api/settings_api.dart';
+import 'package:settings_api/src/data/mappers/general_configuration_codec.dart';
 import 'package:settings_api/src/data/mappers/theme_configuration_codec.dart';
-
-const _kConfigurationCodec = ThemeConfigurationCodec();
+import 'package:settings_api/src/domain/model/general_configuration.dart';
 
 class SettingsCodec extends Codec<Settings, Map<String, Object?>> {
   const SettingsCodec();
@@ -22,9 +21,8 @@ class _SettingsEncoder extends Converter<Settings, Map<String, Object?>> {
   @override
   Map<String, Object?> convert(Settings input) {
     return {
-      'locale': input.locale?.languageCode,
-      'textScale': input.textScale,
-      'themeConfiguration': _kConfigurationCodec.encode(input.themeConfiguration),
+      'general': generalConfigurationCodec.encode(input.general),
+      'theme': themeConfigurationCodec.encode(input.theme),
     };
   }
 }
@@ -34,19 +32,23 @@ class _SettingsDecoder extends Converter<Map<String, Object?>, Settings> {
 
   @override
   Settings convert(Map<String, Object?> input) {
-    final locale = input['locale'] as String?;
-    final textScale = input['textScale'] as double?;
-    final themeConfigurationMap = input['themeConfiguration'] as Map<String, Object?>?;
+    final generalMap = input['general'] as Map<String, Object?>?;
+    final themeMap = input['themeConfiguration'] as Map<String, Object?>?;
 
-    ThemeConfiguration? themeConfiguration;
-    if (themeConfigurationMap != null) {
-      themeConfiguration = _kConfigurationCodec.decode(themeConfigurationMap);
+    ThemeConfiguration? theme;
+    GeneralConfiguration? general;
+
+    if (themeMap != null) {
+      theme = themeConfigurationCodec.decode(themeMap);
+    }
+
+    if (generalMap != null) {
+      general = generalConfigurationCodec.decode(generalMap);
     }
 
     return Settings(
-      locale: locale != null ? Locale(locale) : null,
-      textScale: textScale,
-      themeConfiguration: themeConfiguration ?? const ThemeConfiguration(),
+      general: general ?? const GeneralConfiguration(),
+      theme: theme ?? const ThemeConfiguration(),
     );
   }
 }

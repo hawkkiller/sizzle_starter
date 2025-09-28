@@ -1,39 +1,31 @@
-import 'package:flutter/material.dart';
+import 'package:settings_api/src/domain/model/general_configuration.dart';
 import 'package:settings_api/src/domain/model/theme_configuration.dart';
 
 /// Settings for the app.
 class Settings {
   const Settings({
-    this.themeConfiguration = const ThemeConfiguration(),
-    this.locale,
-    this.textScale,
+    this.theme = const ThemeConfiguration(),
+    this.general = const GeneralConfiguration(),
   });
 
-  final ThemeConfiguration themeConfiguration;
-  // TODO(Michael): Move these two to a separate model "GeneralSettings" or similar.
-  final Locale? locale;
-  final double? textScale;
+  final ThemeConfiguration theme;
+  final GeneralConfiguration general;
 
   Settings copyWith({
-    ThemeConfiguration? themeConfiguration,
-    Locale? locale,
-    double? textScale,
+    ThemeConfiguration? theme,
+    GeneralConfiguration? general,
   }) => Settings(
-    themeConfiguration: themeConfiguration ?? this.themeConfiguration,
-    locale: locale ?? this.locale,
-    textScale: textScale ?? this.textScale,
+    theme: theme ?? this.theme,
+    general: general ?? this.general,
   );
 
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is Settings &&
-        other.themeConfiguration == themeConfiguration &&
-        other.locale == locale &&
-        other.textScale == textScale;
+    return other is Settings && other.theme == theme && other.general == general;
   }
 
   @override
-  int get hashCode => Object.hash(themeConfiguration, locale, textScale);
+  int get hashCode => Object.hash(theme, general);
 }

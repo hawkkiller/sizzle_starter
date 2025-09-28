@@ -20,9 +20,9 @@ class _MaterialContextState extends State<MaterialContext> {
   Widget build(BuildContext context) {
     return SettingsBuilder(
       builder: (context, settings) {
-        final themeMode = settings.themeConfiguration.themeMode;
-        final seedColor = settings.themeConfiguration.seedColor;
-        final locale = settings.locale;
+        final themeMode = settings.theme.themeMode;
+        final seedColor = settings.theme.seedColor;
+        final locale = settings.general.locale;
 
         final materialThemeMode = switch (themeMode) {
           ThemeModeVO.system => ThemeMode.system,
