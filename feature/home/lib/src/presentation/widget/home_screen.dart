@@ -9,18 +9,7 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  void _onColorSelected(Color color) {
-    final bloc = SettingsScope.blocOf(context);
-    final settings = SettingsScope.settingsOf(context);
-
-    bloc.add(
-      SettingsEvent.updateSettings(
-        settings: settings.copyWith(
-          themeConfiguration: settings.themeConfiguration?.copyWith(seedColor: color),
-        ),
-      ),
-    );
-  }
+  final _themeConfigBloc;
 
   Widget _buildColorItem(BuildContext context, int index) {
     return _ColorItem(color: Colors.accents[index], onTap: _onColorSelected);

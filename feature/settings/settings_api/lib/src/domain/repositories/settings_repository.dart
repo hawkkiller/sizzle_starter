@@ -5,5 +5,5 @@ abstract interface class SettingsRepository {
 
   Stream<Settings> watch();
 
-  Future<void> save(Settings Function(Settings settings) fn);
+  Future<Settings> save(Settings Function(Settings settings) fn);
 }

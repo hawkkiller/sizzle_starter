@@ -4,10 +4,10 @@ enum ThemeModeVO { light, dark, system }
 
 /// Class that holds values used for constructing a theme for the app.
 final class ThemeConfiguration {
-  const ThemeConfiguration({required this.themeMode, required this.seedColor});
+  const ThemeConfiguration({this.themeMode, this.seedColor});
 
-  final ThemeModeVO themeMode;
-  final Color seedColor;
+  final ThemeModeVO? themeMode;
+  final Color? seedColor;
 
   ThemeConfiguration copyWith({ThemeModeVO? themeMode, Color? seedColor}) {
     return ThemeConfiguration(

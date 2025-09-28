@@ -24,9 +24,7 @@ class _SettingsEncoder extends Converter<Settings, Map<String, Object?>> {
     return {
       'locale': input.locale?.languageCode,
       'textScale': input.textScale,
-      'themeConfiguration': input.themeConfiguration != null
-          ? _themeConfigurationCodec.encode(input.themeConfiguration!)
-          : null,
+      'themeConfiguration':  _themeConfigurationCodec.encode(input.themeConfiguration),
     };
   }
 }
@@ -50,7 +48,7 @@ class _SettingsDecoder extends Converter<Map<String, Object?>, Settings> {
     return Settings(
       locale: locale != null ? Locale(locale) : null,
       textScale: textScale,
-      themeConfiguration: themeConfiguration,
+      themeConfiguration: themeConfiguration ?? const ThemeConfiguration(),
     );
   }
 }

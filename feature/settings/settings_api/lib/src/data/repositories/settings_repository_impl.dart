@@ -25,12 +25,14 @@ final class SettingsRepositoryImpl implements SettingsRepository {
   final _mutex = Mutext();
 
   @override
-  Future<void> save(Settings Function(Settings settings) fn) => _mutex.runLocked(() async {
+  Future<Settings> save(Settings Function(Settings settings) fn) => _mutex.runLocked(() async {
     final newSettings = fn(current);
 
     await localDatasource.save(newSettings);
     current = newSettings;
     _controller.add(current);
+
+    return current;
   });
 
   @override

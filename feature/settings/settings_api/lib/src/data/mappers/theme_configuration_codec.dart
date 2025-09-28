@@ -25,8 +25,8 @@ class _ThemeConfigurationEncoder extends Converter<ThemeConfiguration, Map<Strin
   @override
   Map<String, Object?> convert(ThemeConfiguration input) {
     return {
-      'themeMode': input.themeMode.name,
-      'seedColor': input.seedColor.toARGB32(),
+      'themeMode': input.themeMode?.name,
+      'seedColor': input.seedColor?.toARGB32(),
     };
   }
 }

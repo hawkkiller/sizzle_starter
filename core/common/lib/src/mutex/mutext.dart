@@ -37,11 +37,11 @@ class Mutext {
 
   /// Synchronizes the execution of a function, ensuring that only one
   /// task can execute the function at a time.
-  Future<void> runLocked<T>(FutureOr<T> Function() fn) async {
+  Future<T> runLocked<T>(FutureOr<T> Function() fn) async {
     await lock();
 
     try {
-      await fn();
+      return await fn();
     } finally {
       unlock();
     }
