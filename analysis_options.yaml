@@ -5,7 +5,7 @@ formatter:
   trailing_commas: preserve
 
 analyzer:
-  exclude: 
+  exclude:
     - "lib/src/core/localization/generated/**"
     - "**/*.*.dart"
     - "**/generated/**"
