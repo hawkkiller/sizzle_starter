@@ -4,7 +4,7 @@ import 'package:settings_api/settings_api.dart';
 import 'package:sizzle_starter/src/widget/media_query_override.dart';
 
 /// Entry point for the application that uses [MaterialApp].
-class MaterialContext extends StatelessWidget {
+class MaterialContext extends StatefulWidget {
   const MaterialContext({super.key});
 
   /// This global key is needed for Flutter to work properly
@@ -12,30 +12,38 @@ class MaterialContext extends StatelessWidget {
   static final _globalKey = GlobalKey(debugLabel: 'MaterialContext');
 
   @override
+  State<MaterialContext> createState() => _MaterialContextState();
+}
+
+class _MaterialContextState extends State<MaterialContext> {
+  @override
   Widget build(BuildContext context) {
-    final settings = SettingsScope.settingsOf(context);
-    final themeMode = settings.themeConfiguration?.themeMode ?? ThemeModeVO.system;
-    final seedColor = settings.themeConfiguration?.seedColor ?? Colors.blue;
+    return SettingsBuilder(
+      builder: (context, settings) {
+        final themeMode = settings.themeConfiguration.themeMode;
+        final seedColor = settings.themeConfiguration.seedColor;
+        final locale = settings.locale;
 
-    final materialThemeMode = switch (themeMode) {
-      ThemeModeVO.system => ThemeMode.system,
-      ThemeModeVO.light => ThemeMode.light,
-      ThemeModeVO.dark => ThemeMode.dark,
-    };
+        final materialThemeMode = switch (themeMode) {
+          ThemeModeVO.system => ThemeMode.system,
+          ThemeModeVO.light => ThemeMode.light,
+          ThemeModeVO.dark => ThemeMode.dark,
+        };
 
-    final darkTheme = ThemeData(colorSchemeSeed: seedColor, brightness: Brightness.dark);
-    final lightTheme = ThemeData(colorSchemeSeed: seedColor, brightness: Brightness.light);
-
-    return MaterialApp(
-      theme: lightTheme,
-      darkTheme: darkTheme,
-      themeMode: materialThemeMode,
-      locale: settings.locale,
-      home: const HomeScreen(),
-      builder: (context, child) {
-        return KeyedSubtree(
-          key: _globalKey,
-          child: MediaQueryRootOverride(child: child!),
+        final darkTheme = ThemeData(colorSchemeSeed: seedColor, brightness: Brightness.dark);
+        final lightTheme = ThemeData(colorSchemeSeed: seedColor, brightness: Brightness.light);
+        return MaterialApp(
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: materialThemeMode,
+          locale: locale,
+          home: const HomeScreen(),
+          builder: (context, child) {
+            return KeyedSubtree(
+              key: MaterialContext._globalKey,
+              child: MediaQueryRootOverride(child: child!),
+            );
+          },
         );
       },
     );

@@ -3,21 +3,16 @@ import 'package:settings_api/src/domain/model/theme_configuration.dart';
 
 /// Settings for the app.
 class Settings {
-  const Settings({this.themeConfiguration = const ThemeConfiguration(), this.locale, this.textScale});
+  const Settings({
+    this.themeConfiguration = const ThemeConfiguration(),
+    this.locale,
+    this.textScale,
+  });
 
   final ThemeConfiguration themeConfiguration;
   // TODO(Michael): Move these two to a separate model "GeneralSettings" or similar.
   final Locale? locale;
   final double? textScale;
-
-  static const initial = Settings(
-    themeConfiguration: ThemeConfiguration(
-      seedColor: Colors.blue,
-      themeMode: ThemeModeVO.system,
-    ),
-    locale: Locale('en'),
-    textScale: 1.0,
-  );
 
   Settings copyWith({
     ThemeConfiguration? themeConfiguration,

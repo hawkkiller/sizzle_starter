@@ -4,6 +4,8 @@ import 'dart:ui' show Locale;
 import 'package:settings_api/settings_api.dart';
 import 'package:settings_api/src/data/mappers/theme_configuration_codec.dart';
 
+const _kConfigurationCodec = ThemeConfigurationCodec();
+
 class SettingsCodec extends Codec<Settings, Map<String, Object?>> {
   const SettingsCodec();
 
@@ -17,22 +19,18 @@ class SettingsCodec extends Codec<Settings, Map<String, Object?>> {
 class _SettingsEncoder extends Converter<Settings, Map<String, Object?>> {
   const _SettingsEncoder();
 
-  static const _themeConfigurationCodec = ThemeConfigurationCodec();
-
   @override
   Map<String, Object?> convert(Settings input) {
     return {
       'locale': input.locale?.languageCode,
       'textScale': input.textScale,
-      'themeConfiguration':  _themeConfigurationCodec.encode(input.themeConfiguration),
+      'themeConfiguration': _kConfigurationCodec.encode(input.themeConfiguration),
     };
   }
 }
 
 class _SettingsDecoder extends Converter<Map<String, Object?>, Settings> {
   const _SettingsDecoder();
-
-  static const _themeConfigurationCodec = ThemeConfigurationCodec();
 
   @override
   Settings convert(Map<String, Object?> input) {
@@ -42,7 +40,7 @@ class _SettingsDecoder extends Converter<Map<String, Object?>, Settings> {
 
     ThemeConfiguration? themeConfiguration;
     if (themeConfigurationMap != null) {
-      themeConfiguration = _themeConfigurationCodec.decode(themeConfigurationMap);
+      themeConfiguration = _kConfigurationCodec.decode(themeConfigurationMap);
     }
 
     return Settings(
