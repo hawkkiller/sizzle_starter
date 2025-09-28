@@ -22,11 +22,10 @@ final class PrintingLogObserver with LogObserver {
         stack = Trace.from(stackTrace).terse;
       }
 
-      final builder =
-          StringBuffer()
-            ..write(DateFormat('MM-dd HH:mm:ss').format(logMessage.timestamp))
-            ..write(' [${logMessage.level.toShortName()}]')
-            ..write(' ${logMessage.message}');
+      final builder = StringBuffer()
+        ..write(DateFormat('MM-dd HH:mm:ss').format(logMessage.timestamp))
+        ..write(' [${logMessage.level.toShortName()}]')
+        ..write(' ${logMessage.message}');
 
       if (logMessage.error case final error?) {
         builder.write('\n$error');
