@@ -23,7 +23,7 @@ dependencies:
 
   # Utils
   clock: 1.1.2
-  package_info_plus: 8.3.0
+  package_info_plus: 9.0.0
 
   # Core
   rest_client:
