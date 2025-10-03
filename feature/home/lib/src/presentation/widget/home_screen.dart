@@ -9,21 +9,24 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  void _onColorSelected(Color color) {
-    final bloc = SettingsScope.blocOf(context);
-    final settings = SettingsScope.settingsOf(context);
+  Widget _buildColorItem(int index, Color? seedColor) {
+    final itemColor = Colors.accents[index];
 
-    bloc.add(
-      SettingsEvent.updateSettings(
-        settings: settings.copyWith(
-          themeConfiguration: settings.themeConfiguration?.copyWith(seedColor: color),
-        ),
-      ),
+    return _ColorItem(
+      color: itemColor,
+      seedColor: seedColor,
+      onTap: _onSeedColorChanged,
     );
   }
 
-  Widget _buildColorItem(BuildContext context, int index) {
-    return _ColorItem(color: Colors.accents[index], onTap: _onColorSelected);
+  void _onSeedColorChanged(Color color) {
+    SettingsScope.of(context).settingsBloc.add(
+      SettingsEventUpdate(
+        onUpdate: (settings) => settings.copyWith(
+          theme: settings.theme.copyWith(seedColor: color),
+        ),
+      ),
+    );
   }
 
   @override
@@ -42,12 +45,18 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 8),
           SizedBox(
             height: 48,
-            child: ListView.separated(
-              separatorBuilder: (context, index) => const SizedBox(width: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemBuilder: _buildColorItem,
-              itemCount: Colors.accents.length,
-              scrollDirection: Axis.horizontal,
+            child: SettingsBuilder(
+              builder: (context, data) {
+                return ListView.separated(
+                  separatorBuilder: (context, index) => const SizedBox(width: 8),
+                  padding: const EdgeInsets.symmetric(horizontal: 16),
+                  itemCount: Colors.accents.length,
+                  scrollDirection: Axis.horizontal,
+                  itemBuilder: (context, index) {
+                    return _buildColorItem(index, data.theme.seedColor);
+                  },
+                );
+              },
             ),
           ),
           const SizedBox(height: 16),
@@ -58,15 +67,14 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _ColorItem extends StatelessWidget {
-  const _ColorItem({required this.color, required this.onTap});
+  const _ColorItem({required this.color, required this.seedColor, required this.onTap});
 
   final ValueChanged<Color> onTap;
+  final Color? seedColor;
   final Color color;
 
   @override
   Widget build(BuildContext context) {
-    final settings = SettingsScope.settingsOf(context);
-
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: () => onTap(color),
@@ -76,9 +84,7 @@ class _ColorItem extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(
               width: 2,
-              color: settings.themeConfiguration?.seedColor == color
-                  ? Colors.black
-                  : Colors.transparent,
+              color: seedColor?.toARGB32() == color.toARGB32() ? Colors.black : Colors.transparent,
             ),
             borderRadius: BorderRadius.circular(16),
             color: color,

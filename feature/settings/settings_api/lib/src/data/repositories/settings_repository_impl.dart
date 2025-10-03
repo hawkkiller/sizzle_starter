@@ -1,23 +1,43 @@
+import 'dart:async';
+
+import 'package:common/common.dart';
 import 'package:settings_api/settings_api.dart';
 import 'package:settings_api/src/data/datasources/settings_local_datasource.dart';
 
 final class SettingsRepositoryImpl implements SettingsRepository {
-  const SettingsRepositoryImpl({required this.settingsLocalDatasource});
+  SettingsRepositoryImpl({
+    required this.localDatasource,
+    required this.current,
+  });
 
-  final SettingsLocalDatasource settingsLocalDatasource;
+  final _controller = StreamController<Settings>.broadcast();
 
-  @override
-  Future<void> save(Settings settings) {
-    return settingsLocalDatasource.saveSettings(settings);
+  static Future<SettingsRepositoryImpl> init(SettingsLocalDatasource localDatasource) async {
+    final currentSettings = await localDatasource.read();
+
+    return SettingsRepositoryImpl(
+      localDatasource: localDatasource,
+      current: currentSettings,
+    );
   }
 
+  final SettingsLocalDatasource localDatasource;
+  final _mutex = Mutext();
+
   @override
-  Future<Settings?> read() {
-    return settingsLocalDatasource.readSettings();
-  }
-  
+  Future<Settings> save(Settings Function(Settings settings) fn) => _mutex.runLocked(() async {
+    final newSettings = fn(current);
+
+    await localDatasource.save(newSettings);
+    current = newSettings;
+    _controller.add(current);
+
+    return current;
+  });
+
   @override
-  Stream<Settings?> watch() {
-    return settingsLocalDatasource.watchSettings();
-  }
+  Stream<Settings> watch() => _controller.stream;
+
+  @override
+  Settings current;
 }
