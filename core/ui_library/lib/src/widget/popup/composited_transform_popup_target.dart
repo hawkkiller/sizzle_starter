@@ -13,6 +13,7 @@ class CompositedTransformPopupTarget extends SingleChildRenderObjectWidget {
       RenderPopupLeaderLayer(link: link);
 
   @override
+  // ignore: consistent-update-render-object
   void updateRenderObject(BuildContext context, RenderPopupLeaderLayer renderObject) {
     renderObject.link = link;
   }
