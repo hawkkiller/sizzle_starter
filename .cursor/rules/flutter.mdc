@@ -1,0 +1,8 @@
+---
+globs: app/**/*.dart,core/**/*.dart
+alwaysApply: false
+---
+
+## Widgets
+
+- Use SizedBox, DecoratedBox, Padding, etc. instead of Container.

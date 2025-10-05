@@ -1,0 +1,19 @@
+name: ui_showcase
+description: "A new Flutter package project."
+version: 0.0.1
+resolution: workspace
+
+environment:
+  sdk: ^3.8.0
+  flutter: ">=1.17.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  two_dimensional_scrollables: ^0.3.7
+  go_router: ^16.0.0
+  collection: ^1.19.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
