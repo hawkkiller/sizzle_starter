@@ -108,9 +108,9 @@ abstract base class RestClientBase implements RestClient {
 
     try {
       final decodedBody = switch (body) {
-        MapResponseBody(:final Map<String, Object?> data) => data,
-        StringResponseBody(:final String data) => await _decodeString(data),
-        BytesResponseBody(:final List<int> data) => await _decodeBytes(data),
+        MapResponseBody(:final data) => data,
+        StringResponseBody(:final data) => await _decodeString(data),
+        BytesResponseBody(:final data) => await _decodeBytes(data),
       };
 
       if (decodedBody case {'error': final Map<String, Object?> error}) {

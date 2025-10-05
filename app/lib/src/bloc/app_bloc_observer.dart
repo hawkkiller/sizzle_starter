@@ -12,15 +12,14 @@ class AppBlocObserver extends BlocObserver {
 
   @override
   void onTransition(Bloc<Object?, Object?> bloc, Transition<Object?, Object?> transition) {
-    final logMessage =
-        StringBuffer()
-          ..writeln('Bloc: ${bloc.runtimeType}')
-          ..writeln('Event: ${transition.event.runtimeType}')
-          ..writeln(
-            'Transition: ${transition.currentState.runtimeType} => '
-            '${transition.nextState.runtimeType}',
-          )
-          ..write('New State: ${transition.nextState?.toString().limit(100)}');
+    final logMessage = StringBuffer()
+      ..writeln('Bloc: ${bloc.runtimeType}')
+      ..writeln('Event: ${transition.event.runtimeType}')
+      ..writeln(
+        'Transition: ${transition.currentState.runtimeType} => '
+        '${transition.nextState.runtimeType}',
+      )
+      ..write('New State: ${transition.nextState?.toString().limit(100)}');
 
     logger.info(logMessage.toString());
     super.onTransition(bloc, transition);
@@ -28,11 +27,10 @@ class AppBlocObserver extends BlocObserver {
 
   @override
   void onEvent(Bloc<Object?, Object?> bloc, Object? event) {
-    final logMessage =
-        StringBuffer()
-          ..writeln('Bloc: ${bloc.runtimeType}')
-          ..writeln('Event: ${event.runtimeType}')
-          ..write('Details: ${event?.toString().limit(200)}');
+    final logMessage = StringBuffer()
+      ..writeln('Bloc: ${bloc.runtimeType}')
+      ..writeln('Event: ${event.runtimeType}')
+      ..write('Details: ${event?.toString().limit(200)}');
 
     logger.info(logMessage.toString());
     super.onEvent(bloc, event);
@@ -40,10 +38,9 @@ class AppBlocObserver extends BlocObserver {
 
   @override
   void onError(BlocBase<Object?> bloc, Object error, StackTrace stackTrace) {
-    final logMessage =
-        StringBuffer()
-          ..writeln('Bloc: ${bloc.runtimeType}')
-          ..writeln(error.toString());
+    final logMessage = StringBuffer()
+      ..writeln('Bloc: ${bloc.runtimeType}')
+      ..writeln(error.toString());
 
     logger.error(logMessage.toString(), error: error, stackTrace: stackTrace);
     super.onError(bloc, error, stackTrace);

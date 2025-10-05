@@ -1,10 +1,14 @@
 import 'dart:ui' show Color;
 
+/// Possible theme modes for the application.
 enum ThemeModeVO { light, dark, system }
 
 /// Class that holds values used for constructing a theme for the app.
 final class ThemeConfiguration {
-  const ThemeConfiguration({required this.themeMode, required this.seedColor});
+  const ThemeConfiguration({
+    this.themeMode = ThemeModeVO.system,
+    this.seedColor = const Color(0xFF6200EE),
+  });
 
   final ThemeModeVO themeMode;
   final Color seedColor;

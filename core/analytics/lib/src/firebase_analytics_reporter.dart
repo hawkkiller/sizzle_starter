@@ -22,10 +22,9 @@ final class FirebaseAnalyticsReporter implements AnalyticsReporter {
 
     await analytics.logEvent(
       name: event.name,
-      parameters:
-          event.parameters.isEmpty
-              ? null
-              : {for (final parameter in event.parameters) parameter.name: parameter.value},
+      parameters: event.parameters.isEmpty
+          ? null
+          : {for (final parameter in event.parameters) parameter.name: parameter.value},
     );
   }
 }

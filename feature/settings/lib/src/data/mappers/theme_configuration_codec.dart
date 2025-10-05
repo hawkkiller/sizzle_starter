@@ -1,7 +1,11 @@
 import 'dart:convert';
 import 'dart:ui' show Color;
 
-import 'package:settings_api/settings_api.dart';
+import 'package:settings/settings.dart';
+
+// TODO(Michael): update sizzle_lints to remove this lint
+// ignore: prefer-prefixed-global-constants
+const themeConfigurationCodec = ThemeConfigurationCodec();
 
 /// {@template theme_configuration_codec}
 /// Codec for [ThemeConfiguration]
