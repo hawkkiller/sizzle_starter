@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:ui' show Locale;
 
-import 'package:settings_api/src/domain/model/general_configuration.dart';
+import 'package:settings/src/domain/model/general_configuration.dart';
 
 // TODO(Michael): update sizzle_lints to remove this lint
 // ignore: prefer-prefixed-global-constants

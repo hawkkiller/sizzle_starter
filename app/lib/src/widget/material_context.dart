@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:home/home.dart';
-import 'package:settings_api/settings_api.dart';
+import 'package:settings/settings.dart';
 import 'package:sizzle_starter/src/widget/media_query_override.dart';
 
 /// Entry point for the application that uses [MaterialApp].

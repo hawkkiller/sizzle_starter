@@ -19,5 +19,5 @@ workspace:
   - core/ui_library
   - core/database
   # Feature
-  - feature/settings/settings_api
+  - feature/settings
   - feature/home

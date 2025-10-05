@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:settings_api/settings_api.dart';
+import 'package:settings/settings.dart';
 
 /// Widget that rebuilds when settings change.
 class SettingsBuilder extends StatelessWidget {

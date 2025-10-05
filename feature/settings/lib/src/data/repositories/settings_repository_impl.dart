@@ -1,8 +1,8 @@
 import 'dart:async';
 
 import 'package:common/common.dart';
-import 'package:settings_api/settings_api.dart';
-import 'package:settings_api/src/data/datasources/settings_local_datasource.dart';
+import 'package:settings/settings.dart';
+import 'package:settings/src/data/datasources/settings_local_datasource.dart';
 
 final class SettingsRepositoryImpl implements SettingsRepository {
   SettingsRepositoryImpl({

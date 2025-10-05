@@ -1,5 +1,5 @@
-import 'package:settings_api/src/domain/model/general_configuration.dart';
-import 'package:settings_api/src/domain/model/theme_configuration.dart';
+import 'package:settings/src/domain/model/general_configuration.dart';
+import 'package:settings/src/domain/model/theme_configuration.dart';
 
 /// Settings for the app.
 class Settings {

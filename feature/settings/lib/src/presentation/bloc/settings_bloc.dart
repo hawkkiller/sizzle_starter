@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:settings_api/settings_api.dart';
+import 'package:settings/settings.dart';
 
 sealed class SettingsEvent {
   const SettingsEvent();

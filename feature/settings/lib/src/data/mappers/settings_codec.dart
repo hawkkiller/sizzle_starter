@@ -1,9 +1,9 @@
 import 'dart:convert';
 
-import 'package:settings_api/settings_api.dart';
-import 'package:settings_api/src/data/mappers/general_configuration_codec.dart';
-import 'package:settings_api/src/data/mappers/theme_configuration_codec.dart';
-import 'package:settings_api/src/domain/model/general_configuration.dart';
+import 'package:settings/settings.dart';
+import 'package:settings/src/data/mappers/general_configuration_codec.dart';
+import 'package:settings/src/data/mappers/theme_configuration_codec.dart';
+import 'package:settings/src/domain/model/general_configuration.dart';
 
 class SettingsCodec extends Codec<Settings, Map<String, Object?>> {
   const SettingsCodec();
