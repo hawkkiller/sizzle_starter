@@ -1,6 +1,7 @@
 name: ui_showcase
 description: "A new Flutter package project."
 version: 0.0.1
+resolution: workspace
 
 environment:
   sdk: ^3.8.0
