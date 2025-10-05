@@ -1,4 +1,4 @@
-import 'package:settings_api/src/domain/model/settings.dart';
+import 'package:settings/settings.dart';
 
 abstract interface class SettingsRepository {
   Settings get current;

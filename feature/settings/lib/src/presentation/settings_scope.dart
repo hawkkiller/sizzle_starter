@@ -1,6 +1,6 @@
 import 'package:common/common.dart';
 import 'package:flutter/widgets.dart';
-import 'package:settings_api/settings_api.dart';
+import 'package:settings/settings.dart';
 
 /// A scope that provides [SettingsContainer] to its widget subtree.
 class SettingsScope extends InheritedWidget {

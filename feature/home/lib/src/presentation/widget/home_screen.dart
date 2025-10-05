@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:settings_api/settings_api.dart';
+import 'package:settings/settings.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});

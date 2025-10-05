@@ -12,8 +12,8 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^9.1.1
-  settings_api:
-    path: ../settings/settings_api
+  settings:
+    path: ../settings
   ui_library:
     path: ../../core/ui_library
 

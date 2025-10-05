@@ -1,4 +1,4 @@
-name: settings_api
+name: settings
 description: "Settings domain module"
 version: 0.0.1
 publish_to: none
@@ -14,7 +14,7 @@ dependencies:
   shared_preferences: ^2.5.3
   flutter_bloc: ^9.1.1
   common:
-    path: '../../../core/common'
+    path: '../../core/common'
 
 dev_dependencies:
   flutter_test:
