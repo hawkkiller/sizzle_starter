@@ -12,7 +12,7 @@ resolution: workspace
 dependencies:
   flutter:
     sdk: flutter
-  drift: ^2.27.0
+  drift: ^2.29.0
   drift_flutter: ^0.2.7
 
 dev_dependencies:
