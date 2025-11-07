@@ -76,6 +76,8 @@ class _ColorItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return InkWell(
       borderRadius: BorderRadius.circular(16),
       onTap: () => onTap(color),
@@ -83,13 +85,10 @@ class _ColorItem extends StatelessWidget {
         dimension: 48,
         child: DecoratedBox(
           decoration: BoxDecoration(
-            border: Border.all(
-              width: 2,
-              color: isSelected ? Colors.black : Colors.transparent,
-            ),
-            borderRadius: BorderRadius.circular(16),
             color: color,
+            borderRadius: BorderRadius.circular(16),
           ),
+          child: isSelected ? Icon(Icons.check, color: colorScheme.onPrimaryFixed) : null,
         ),
       ),
     );
