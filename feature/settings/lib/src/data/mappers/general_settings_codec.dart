@@ -16,8 +16,6 @@ class GeneralSettingsCodec extends JsonMapCodec<GeneralSettings> {
     final themeMode = input['themeMode'] as String?;
     final seedColor = input['seedColor'] as Map<String, Object?>?;
 
-    const defaults = GeneralSettings();
-
     Color? seedColorValue;
 
     if (seedColor case {
@@ -28,6 +26,8 @@ class GeneralSettingsCodec extends JsonMapCodec<GeneralSettings> {
     }) {
       seedColorValue = Color.from(alpha: a, red: r, green: g, blue: b);
     }
+
+    const defaults = GeneralSettings();
 
     return GeneralSettings(
       themeMode: themeMode != null ? ThemeModeVO.values.byName(themeMode) : defaults.themeMode,

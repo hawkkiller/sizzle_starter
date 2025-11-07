@@ -4,8 +4,8 @@ import 'dart:collection';
 /// A simple mutex implementation using a queue of completers.
 /// This allows for synchronizing access to a critical section of code,
 /// ensuring that only one task can execute the critical section at a time.
-class Mutext {
-  Mutext();
+class MutexLock {
+  MutexLock();
 
   final _queue = DoubleLinkedQueue<Completer<void>>();
 

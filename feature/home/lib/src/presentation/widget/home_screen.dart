@@ -18,11 +18,9 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onSeedColorChanged(Color color) {
-    SettingsScope.of(context).settingsBloc.add(
-      SettingsEventUpdate(
-        onUpdate: (settings) => settings.copyWith(
-          general: settings.general.copyWith(seedColor: color),
-        ),
+    SettingsScope.of(context).settingsService.update(
+      (settings) => settings.copyWith(
+        general: settings.general.copyWith(seedColor: color),
       ),
     );
   }

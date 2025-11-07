@@ -58,8 +58,7 @@ Future<DependenciesContainer> createDependenciesContainer(
 
   // Get package info.
   final packageInfo = await PackageInfo.fromPlatform();
-
-  final settingsContainer = await SettingsContainer.create(sharedPreferences);
+  final settingsContainer = await SettingsContainer.create(sharedPreferences: sharedPreferences);
 
   return DependenciesContainer(
     logger: logger,
