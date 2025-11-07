@@ -1,21 +1,12 @@
-import 'package:settings/src/domain/model/general_configuration.dart';
-import 'package:settings/src/domain/model/theme_configuration.dart';
+import 'package:settings/src/domain/model/general.dart';
 
 /// Settings for the app.
 class Settings {
-  const Settings({
-    this.theme = const ThemeConfiguration(),
-    this.general = const GeneralConfiguration(),
-  });
+  const Settings({this.general = const GeneralSettings()});
 
-  final ThemeConfiguration theme;
-  final GeneralConfiguration general;
+  final GeneralSettings general;
 
-  Settings copyWith({
-    ThemeConfiguration? theme,
-    GeneralConfiguration? general,
-  }) => Settings(
-    theme: theme ?? this.theme,
+  Settings copyWith({GeneralSettings? general}) => Settings(
     general: general ?? this.general,
   );
 
@@ -23,9 +14,9 @@ class Settings {
   bool operator ==(Object other) {
     if (identical(this, other)) return true;
 
-    return other is Settings && other.theme == theme && other.general == general;
+    return other is Settings && other.general == general;
   }
 
   @override
-  int get hashCode => Object.hash(theme, general);
+  int get hashCode => general.hashCode;
 }

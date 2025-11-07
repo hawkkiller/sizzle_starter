@@ -15,8 +15,8 @@ class MaterialContext extends StatelessWidget {
   Widget build(BuildContext context) {
     return SettingsBuilder(
       builder: (context, settings) {
-        final themeMode = settings.theme.themeMode;
-        final seedColor = settings.theme.seedColor;
+        final themeMode = settings.general.themeMode;
+        final seedColor = settings.general.seedColor;
         final locale = settings.general.locale;
 
         final materialThemeMode = switch (themeMode) {

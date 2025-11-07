@@ -9,12 +9,10 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _HomeScreenState extends State<HomeScreen> {
-  Widget _buildColorItem(int index, Color? seedColor) {
-    final itemColor = Colors.accents[index];
-
+  Widget _buildColorItem(Color color, bool isSelected) {
     return _ColorItem(
-      color: itemColor,
-      seedColor: seedColor,
+      color: color,
+      isSelected: isSelected,
       onTap: _onSeedColorChanged,
     );
   }
@@ -23,7 +21,7 @@ class _HomeScreenState extends State<HomeScreen> {
     SettingsScope.of(context).settingsBloc.add(
       SettingsEventUpdate(
         onUpdate: (settings) => settings.copyWith(
-          theme: settings.theme.copyWith(seedColor: color),
+          general: settings.general.copyWith(seedColor: color),
         ),
       ),
     );
@@ -53,7 +51,12 @@ class _HomeScreenState extends State<HomeScreen> {
                   itemCount: Colors.accents.length,
                   scrollDirection: Axis.horizontal,
                   itemBuilder: (context, index) {
-                    return _buildColorItem(index, data.theme.seedColor);
+                    final color = Colors.accents[index];
+
+                    return _buildColorItem(
+                      color,
+                      data.general.seedColor.toARGB32() == color.toARGB32(),
+                    );
                   },
                 );
               },
@@ -67,10 +70,10 @@ class _HomeScreenState extends State<HomeScreen> {
 }
 
 class _ColorItem extends StatelessWidget {
-  const _ColorItem({required this.color, required this.seedColor, required this.onTap});
+  const _ColorItem({required this.color, required this.isSelected, required this.onTap});
 
   final ValueChanged<Color> onTap;
-  final Color? seedColor;
+  final bool isSelected;
   final Color color;
 
   @override
@@ -84,7 +87,7 @@ class _ColorItem extends StatelessWidget {
           decoration: BoxDecoration(
             border: Border.all(
               width: 2,
-              color: seedColor?.toARGB32() == color.toARGB32() ? Colors.black : Colors.transparent,
+              color: isSelected ? Colors.black : Colors.transparent,
             ),
             borderRadius: BorderRadius.circular(16),
             color: color,
