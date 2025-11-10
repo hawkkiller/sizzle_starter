@@ -16,7 +16,7 @@ dependencies:
   collection: 1.19.1
 
   # Firebase
-  firebase_analytics: ^12.0.2
+  firebase_analytics: ^12.0.3
 
   # Local Packages
   logger:
