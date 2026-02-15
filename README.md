@@ -1,5 +1,5 @@
 # Sizzle Starter
 
-Sizzle is a template for Flutter projects with a focus on simplicity, scalability and testability. It features a solid layered architecture, efficient dependencies management, set of useful utilities and a bunch of other goodies.
+Sizzle is a structured, production-ready template for Flutter projects. It comes with a pragmatic layered architecture, reliable dependencies management, packages for logging, error reporting, analytics, database, and more.
 
-For documentation and more details, please visit [sizzle.lazebny.io](https://sizzle.lazebny.io).
+Read full documentation on [sizzle.lazebny.io](https://sizzle.lazebny.io).
