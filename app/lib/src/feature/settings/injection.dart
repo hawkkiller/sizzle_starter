@@ -1,7 +1,6 @@
 import 'package:shared_preferences/shared_preferences.dart';
 
 import 'package:sizzle_starter/src/feature/settings/application/settings_service.dart';
-import 'package:sizzle_starter/src/feature/settings/data/datasources/settings_local_datasource.dart';
 import 'package:sizzle_starter/src/feature/settings/data/repositories/settings_repository_impl.dart';
 
 /// Container with global settings state.
@@ -16,9 +15,7 @@ class SettingsContainer {
     required SharedPreferencesAsync sharedPreferences,
   }) async {
     final settingsRepository = SettingsRepositoryImpl(
-      localDatasource: SettingsLocalDatasourceSharedPreferences(
-        sharedPreferences: sharedPreferences,
-      ),
+      sharedPreferences: sharedPreferences,
     );
 
     final settingsService = await SettingsServiceImpl.create(repository: settingsRepository);

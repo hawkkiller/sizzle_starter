@@ -1,36 +1,28 @@
 import 'dart:ui' show Color, Locale;
 
+import 'package:freezed_annotation/freezed_annotation.dart';
+
+part 'general.freezed.dart';
+part 'general.g.dart';
+
 /// Possible theme modes for the application.
 enum ThemeModeVO { light, dark, system }
 
 /// Class that holds values used for constructing a theme for the app.
-final class GeneralSettings {
-  const GeneralSettings({
-    this.locale = const Locale('en'),
-    this.themeMode = ThemeModeVO.system,
-    this.seedColor = const Color(0xFF6200EE),
-  });
+@freezed
+abstract class GeneralSettings with _$GeneralSettings {
+  const factory GeneralSettings({
+    @Default(Locale('en')) @JsonKey(toJson: _localeToJson, fromJson: _localeFromJson) Locale locale,
+    @Default(ThemeModeVO.system) ThemeModeVO themeMode,
+    @Default(Color(0xFF6200EE))
+    @JsonKey(toJson: _colorToARGB32, fromJson: _colorFromARGB32)
+    Color seedColor,
+  }) = _GeneralSettings;
 
-  final ThemeModeVO themeMode;
-  final Color seedColor;
-  final Locale locale;
-
-  GeneralSettings copyWith({ThemeModeVO? themeMode, Color? seedColor, Locale? locale}) {
-    return GeneralSettings(
-      themeMode: themeMode ?? this.themeMode,
-      seedColor: seedColor ?? this.seedColor,
-      locale: locale ?? this.locale,
-    );
-  }
-
-  @override
-  bool operator ==(Object other) =>
-      identical(this, other) ||
-      other is GeneralSettings &&
-          seedColor == other.seedColor &&
-          themeMode == other.themeMode &&
-          locale == other.locale;
-
-  @override
-  int get hashCode => Object.hash(seedColor, themeMode, locale);
+  factory GeneralSettings.fromJson(Map<String, Object?> json) => _$GeneralSettingsFromJson(json);
 }
+
+String _localeToJson(Locale locale) => locale.toString();
+Locale _localeFromJson(String json) => Locale(json);
+int _colorToARGB32(Color color) => color.toARGB32();
+Color _colorFromARGB32(int argb32) => Color(argb32);

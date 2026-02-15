@@ -1,21 +1,31 @@
 import 'dart:async';
 
-import 'package:sizzle_starter/src/feature/settings/data/datasources/settings_local_datasource.dart';
+import 'package:common/common.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:sizzle_starter/src/feature/settings/domain/model/settings.dart';
 import 'package:sizzle_starter/src/feature/settings/domain/repositories/settings_repository.dart';
 
 final class SettingsRepositoryImpl implements SettingsRepository {
-  const SettingsRepositoryImpl({required this.localDatasource});
+  const SettingsRepositoryImpl({required this.sharedPreferences});
 
-  final SettingsLocalDatasource localDatasource;
+  final SharedPreferencesAsync sharedPreferences;
+
+  SharedPreferencesColumnJson get _column => SharedPreferencesColumnJson(
+    sharedPreferences: sharedPreferences,
+    key: 'settings',
+  );
 
   @override
   Future<void> save(Settings settings) async {
-    await localDatasource.save(settings);
+    await _column.set(settings.toJson());
   }
 
   @override
   Future<Settings> read() async {
-    return await localDatasource.read();
+    final settingsMap = await _column.read();
+    if (settingsMap == null) return const Settings();
+
+    return Settings.fromJson(settingsMap);
   }
 }

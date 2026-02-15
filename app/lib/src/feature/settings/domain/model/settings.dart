@@ -1,22 +1,13 @@
+import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:sizzle_starter/src/feature/settings/domain/model/general.dart';
 
+part 'settings.freezed.dart';
+part 'settings.g.dart';
+
 /// Settings for the app.
-class Settings {
-  const Settings({this.general = const GeneralSettings()});
+@freezed
+abstract class Settings with _$Settings {
+  const factory Settings({@Default(GeneralSettings()) GeneralSettings general}) = _Settings;
 
-  final GeneralSettings general;
-
-  Settings copyWith({GeneralSettings? general}) => Settings(
-    general: general ?? this.general,
-  );
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    return other is Settings && other.general == general;
-  }
-
-  @override
-  int get hashCode => general.hashCode;
+  factory Settings.fromJson(Map<String, Object?> json) => _$SettingsFromJson(json);
 }
