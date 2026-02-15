@@ -11,10 +11,10 @@ dev_dependencies:
 workspace:
   - app
   # Core
-  - core/common
-  - core/analytics
-  - core/logger
-  - core/rest_client
-  - core/error_reporter
-  - core/ui_library
-  - core/database
+  - core/common_utils
+  - core/common_analytics
+  - core/common_logger
+  - core/common_rest_client
+  - core/common_error_reporter
+  - core/common_ui_library
+  - core/common_database

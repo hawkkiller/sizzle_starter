@@ -1,4 +1,4 @@
-import 'package:common/common.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sizzle_starter/src/feature/settings/domain/model/settings.dart';
 import 'package:sizzle_starter/src/widget/dependencies_scope.dart';

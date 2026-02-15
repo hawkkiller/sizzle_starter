@@ -1,4 +1,4 @@
-import 'package:common/common.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:sizzle_starter/src/feature/settings/presentation/settings_scope.dart';

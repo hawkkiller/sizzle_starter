@@ -1,0 +1,21 @@
+name: common_logger
+description: Simple logging library for Flutter applications.
+version: 1.0.0
+publish_to: none
+
+environment:
+  sdk: ">=3.9.2 <4.0.0"
+  flutter: ">=3.35.3 <4.0.0"
+
+resolution: workspace
+
+dependencies:
+  flutter:
+    sdk: flutter
+  stack_trace: 1.12.1
+  clock: 1.1.2
+  meta: ^1.17.0
+  intl: 0.20.2
+
+flutter:
+  uses-material-design: true

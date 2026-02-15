@@ -1,6 +1,6 @@
-import 'package:common/common.dart';
+import 'package:common_logger/common_logger.dart';
+import 'package:common_utils/common_utils.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:logger/logger.dart';
 
 /// [BlocObserver] which logs all bloc state changes, errors and events.
 class AppBlocObserver extends BlocObserver {

@@ -30,18 +30,18 @@ dependencies:
   freezed_annotation: ^3.1.0
 
   # Core
-  rest_client:
-    path: ../core/rest_client
-  database:
-    path: ../core/database
-  logger:
-    path: ../core/logger
-  error_reporter:
-    path: ../core/error_reporter
-  common:
-    path: ../core/common
-  ui_library:
-    path: ../core/ui_library
+  common_rest_client:
+    path: ../core/common_rest_client
+  common_database:
+    path: ../core/common_database
+  common_logger:
+    path: ../core/common_logger
+  common_error_reporter:
+    path: ../core/common_error_reporter
+  common_utils:
+    path: ../core/common_utils
+  common_ui_library:
+    path: ../core/common_ui_library
 
 dev_dependencies:
   # Testing

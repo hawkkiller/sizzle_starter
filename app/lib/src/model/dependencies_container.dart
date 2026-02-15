@@ -1,5 +1,5 @@
-import 'package:error_reporter/error_reporter.dart';
-import 'package:logger/logger.dart';
+import 'package:common_error_reporter/common_error_reporter.dart';
+import 'package:common_logger/common_logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sizzle_starter/src/feature/settings/injection.dart';
 import 'package:sizzle_starter/src/model/application_config.dart';

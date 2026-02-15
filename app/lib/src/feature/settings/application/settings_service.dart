@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:common/common.dart';
+import 'package:common_utils/common_utils.dart';
 
 import 'package:sizzle_starter/src/feature/settings/domain/model/settings.dart';
 import 'package:sizzle_starter/src/feature/settings/domain/repositories/settings_repository.dart';
