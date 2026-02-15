@@ -1,23 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/feature/settings/presentation/settings_scope.dart';
 
-class HomeScreen extends StatefulWidget {
+class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
-  @override
-  State<HomeScreen> createState() => _HomeScreenState();
-}
-
-class _HomeScreenState extends State<HomeScreen> {
-  Widget _buildColorItem(Color color, bool isSelected) {
-    return _ColorItem(
-      color: color,
-      isSelected: isSelected,
-      onTap: _onSeedColorChanged,
-    );
-  }
-
-  void _onSeedColorChanged(Color color) {
+  void _onSeedColorChanged(BuildContext context, Color color) {
     SettingsScope.update(
       context,
       (settings) => settings.copyWith(
@@ -53,7 +40,11 @@ class _HomeScreenState extends State<HomeScreen> {
                 final color = Colors.accents[index];
                 final isSelected = settings.general.seedColor.toARGB32() == color.toARGB32();
 
-                return _buildColorItem(color, isSelected);
+                return _ColorItem(
+                  color: color,
+                  isSelected: isSelected,
+                  onTap: (color) => _onSeedColorChanged(context, color),
+                );
               },
             ),
           ),
