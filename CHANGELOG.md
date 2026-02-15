@@ -14,6 +14,7 @@ Version format: `major.minor`. Major version is incremented for brea
 
 - Update Flutter SDK to 3.41 (stable channel)
 - Move `home` and `settings` feature packages to `app`
+- Rename common packages to have `common` prefix
 
 ## [3.10] - Jan 4, 2025
 

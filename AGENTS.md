@@ -5,7 +5,7 @@
 This is a Flutter workspace:
 
 - [app](app) — entry point; features and wiring.
-- [core](core) — reusable, app-independent, pub.dev-publishable; use `common` prefix.
+- [common](common) — reusable, app-independent, pub.dev-publishable; use `common` prefix.
 
 ## Architecture
 
