@@ -14,7 +14,7 @@ dependencies:
     sdk: flutter
   stack_trace: 1.12.1
   clock: 1.1.2
-  meta: 1.16.0
+  meta: ^1.17.0
   intl: 0.20.2
 
 flutter:

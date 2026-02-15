@@ -19,7 +19,7 @@ dependencies:
   flutter_bloc: 9.1.1
 
   # Storage
-  shared_preferences: 2.5.3
+  shared_preferences: ^2.5.4
 
   # Utils
   clock: 1.1.2
