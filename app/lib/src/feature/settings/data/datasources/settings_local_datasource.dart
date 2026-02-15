@@ -1,9 +1,10 @@
 import 'dart:async';
 
 import 'package:common/common.dart';
-import 'package:settings/settings.dart';
-import 'package:settings/src/data/mappers/settings_codec.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:sizzle_starter/src/feature/settings/data/mappers/settings_codec.dart';
+import 'package:sizzle_starter/src/feature/settings/domain/model/settings.dart';
 
 abstract interface class SettingsLocalDatasource {
   Future<Settings> read();

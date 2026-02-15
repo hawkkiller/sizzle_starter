@@ -1,7 +1,8 @@
-import 'package:settings/src/application/settings_service.dart';
-import 'package:settings/src/data/datasources/settings_local_datasource.dart';
-import 'package:settings/src/data/repositories/settings_repository_impl.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
+import 'package:sizzle_starter/src/feature/settings/application/settings_service.dart';
+import 'package:sizzle_starter/src/feature/settings/data/datasources/settings_local_datasource.dart';
+import 'package:sizzle_starter/src/feature/settings/data/repositories/settings_repository_impl.dart';
 
 /// Container with global settings state.
 class SettingsContainer {

@@ -2,8 +2,8 @@ name: root
 description: "Workspace root"
 
 environment:
-  sdk: ">=3.9.2 <4.0.0"
-  flutter: ">=3.35.3 <4.0.0"
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.41.0 <4.0.0"
 
 dev_dependencies:
   sizzle_lints: ^2.1.7
@@ -18,6 +18,3 @@ workspace:
   - core/error_reporter
   - core/ui_library
   - core/database
-  # Feature
-  - feature/settings
-  - feature/home

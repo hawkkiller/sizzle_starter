@@ -1,4 +1,4 @@
-import 'package:settings/src/domain/model/general.dart';
+import 'package:sizzle_starter/src/feature/settings/domain/model/general.dart';
 
 /// Settings for the app.
 class Settings {

@@ -4,7 +4,8 @@
 import 'dart:ui' show Color;
 
 import 'package:common/common.dart';
-import 'package:settings/settings.dart';
+
+import 'package:sizzle_starter/src/feature/settings/domain/model/general.dart';
 
 const generalSettingsCodec = GeneralSettingsCodec();
 

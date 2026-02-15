@@ -1,7 +1,9 @@
 import 'dart:async';
 
 import 'package:common/common.dart';
-import 'package:settings/settings.dart';
+
+import 'package:sizzle_starter/src/feature/settings/domain/model/settings.dart';
+import 'package:sizzle_starter/src/feature/settings/domain/repositories/settings_repository.dart';
 
 abstract interface class SettingsService {
   /// Emits settings whenever they change.

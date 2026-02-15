@@ -1,6 +1,8 @@
 import 'package:common/common.dart';
-import 'package:settings/settings.dart';
-import 'package:settings/src/data/mappers/general_settings_codec.dart';
+
+import 'package:sizzle_starter/src/feature/settings/data/mappers/general_settings_codec.dart';
+import 'package:sizzle_starter/src/feature/settings/domain/model/general.dart';
+import 'package:sizzle_starter/src/feature/settings/domain/model/settings.dart';
 
 class SettingsCodec extends JsonMapCodec<Settings> {
   const SettingsCodec();

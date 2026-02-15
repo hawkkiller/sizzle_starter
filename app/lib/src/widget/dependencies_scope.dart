@@ -1,10 +1,10 @@
 import 'package:common/common.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
-import 'package:settings/settings.dart';
+import 'package:sizzle_starter/src/feature/settings/presentation/settings_scope.dart';
 import 'package:sizzle_starter/src/model/dependencies_container.dart';
 
+/// A scope that provides [DependenciesContainer] to the application.
 class DependenciesScope extends StatelessWidget {
   const DependenciesScope({
     required this.dependencies,
@@ -12,7 +12,10 @@ class DependenciesScope extends StatelessWidget {
     super.key,
   });
 
+  /// Container with dependencies.
   final DependenciesContainer dependencies;
+
+  /// The widget below this widget in the tree.
   final Widget child;
 
   /// Get the dependencies from the [context].
@@ -23,10 +26,7 @@ class DependenciesScope extends StatelessWidget {
   Widget build(BuildContext context) {
     return _DependenciesInherited(
       dependencies: dependencies,
-      child: SettingsScope(
-        settingsContainer: dependencies.settingsContainer,
-        child: child,
-      ),
+      child: SettingsScope(child: child),
     );
   }
 }
@@ -37,12 +37,6 @@ class _DependenciesInherited extends InheritedWidget {
 
   /// Container with dependencies.
   final DependenciesContainer dependencies;
-
-  @override
-  void debugFillProperties(DiagnosticPropertiesBuilder properties) {
-    super.debugFillProperties(properties);
-    properties.add(DiagnosticsProperty<DependenciesContainer>('dependencies', dependencies));
-  }
 
   @override
   bool updateShouldNotify(_DependenciesInherited oldWidget) {

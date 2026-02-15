@@ -39,11 +39,6 @@ dependencies:
   ui_library:
     path: ../core/ui_library
 
-  # Features
-  settings:
-    path: ../feature/settings
-  home:
-    path: ../feature/home
 
 dev_dependencies:
   # Testing

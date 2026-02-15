@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:settings/settings.dart';
+import 'package:sizzle_starter/src/feature/settings/presentation/settings_scope.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -18,7 +18,8 @@ class _HomeScreenState extends State<HomeScreen> {
   }
 
   void _onSeedColorChanged(Color color) {
-    SettingsScope.of(context).settingsService.update(
+    SettingsScope.update(
+      context,
       (settings) => settings.copyWith(
         general: settings.general.copyWith(seedColor: color),
       ),
@@ -27,6 +28,8 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final settings = SettingsScope.of(context);
+
     return Scaffold(
       appBar: AppBar(title: const Text('Welcome to Sizzle Starter!')),
       body: ListView(
@@ -41,22 +44,16 @@ class _HomeScreenState extends State<HomeScreen> {
           const SizedBox(height: 8),
           SizedBox(
             height: 48,
-            child: SettingsBuilder(
-              builder: (context, data) {
-                return ListView.separated(
-                  separatorBuilder: (context, index) => const SizedBox(width: 8),
-                  padding: const EdgeInsets.symmetric(horizontal: 16),
-                  itemCount: Colors.accents.length,
-                  scrollDirection: Axis.horizontal,
-                  itemBuilder: (context, index) {
-                    final color = Colors.accents[index];
+            child: ListView.separated(
+              separatorBuilder: (context, index) => const SizedBox(width: 8),
+              padding: const EdgeInsets.symmetric(horizontal: 16),
+              itemCount: Colors.accents.length,
+              scrollDirection: Axis.horizontal,
+              itemBuilder: (context, index) {
+                final color = Colors.accents[index];
+                final isSelected = settings.general.seedColor.toARGB32() == color.toARGB32();
 
-                    return _buildColorItem(
-                      color,
-                      data.general.seedColor.toARGB32() == color.toARGB32(),
-                    );
-                  },
-                );
+                return _buildColorItem(color, isSelected);
               },
             ),
           ),
