@@ -1,9 +1,9 @@
 import 'dart:ui';
 
+import 'package:common_ui/src/widget/popup/composited_transform_popup_follower.dart';
+import 'package:common_ui/src/widget/popup/composited_transform_popup_target.dart';
+import 'package:common_ui/src/widget/popup/popup_layer_link.dart';
 import 'package:flutter/material.dart';
-import 'package:common_ui_library/src/widget/popup/composited_transform_popup_follower.dart';
-import 'package:common_ui_library/src/widget/popup/composited_transform_popup_target.dart';
-import 'package:common_ui_library/src/widget/popup/popup_layer_link.dart';
 
 /// A widget that shows a follower widget relative to a target widget.
 ///

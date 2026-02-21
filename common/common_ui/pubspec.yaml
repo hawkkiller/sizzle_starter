@@ -1,4 +1,4 @@
-name: common_ui_library
+name: common_ui
 description: "A library of UI components and utilities for Flutter."
 version: 0.0.1
 publish_to: none

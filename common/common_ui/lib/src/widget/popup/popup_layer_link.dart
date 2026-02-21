@@ -1,6 +1,6 @@
+import 'package:common_ui/src/widget/popup/composited_transform_popup_follower.dart';
+import 'package:common_ui/src/widget/popup/composited_transform_popup_target.dart';
 import 'package:flutter/material.dart';
-import 'package:common_ui_library/src/widget/popup/composited_transform_popup_follower.dart';
-import 'package:common_ui_library/src/widget/popup/composited_transform_popup_target.dart';
 
 /// A link that can be established between a [CompositedTransformPopupTarget] and a
 /// [CompositedTransformPopupFollower].

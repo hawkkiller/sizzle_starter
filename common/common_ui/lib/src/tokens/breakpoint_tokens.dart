@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
-/// {@template window_size}
+/// {@template ui_breakpoint}
 /// Breakpoints for responsive design.
 ///
-/// The [WindowSize] class represents a breakpoint for responsive design.
+/// The [UiBreakpoint] class represents a breakpoint for responsive design.
 /// {@endtemplate}
-extension type const WindowSize(Size _size) implements Size {
+extension type const UiBreakpoint(Size _size) implements Size {
   static const _medium = 600.0;
   static const _expanded = 840.0;
   static const _large = 1200.0;
@@ -37,7 +37,7 @@ extension type const WindowSize(Size _size) implements Size {
   /// Returns true if the window size is extra large.
   bool get isExtraLarge => maybeMap(orElse: () => false, extraLarge: () => true);
 
-  /// Maps the [WindowSize] to a value of type [T].
+  /// Maps the [UiBreakpoint] to a value of type [T].
   T map<T>({
     required T Function() compact,
     required T Function() medium,
@@ -68,7 +68,7 @@ extension type const WindowSize(Size _size) implements Size {
     extraLarge: extraLarge ?? orElse,
   );
 
-  /// Returns values based on the [WindowSize] with a fallback to the lower size,
+  /// Returns values based on the [UiBreakpoint] with a fallback to the lower size,
   /// if the value is not provided.
   T mapWithLowerFallback<T>({
     required T Function() compact,
@@ -85,40 +85,40 @@ extension type const WindowSize(Size _size) implements Size {
   );
 }
 
-/// Scope that provides [WindowSize] to its descendants.
-class WindowSizeScope extends StatelessWidget {
-  /// Creates a [WindowSizeScope] that provides [WindowSize] to its descendants.
-  const WindowSizeScope({required this.child, super.key});
+/// Scope that provides [UiBreakpoint] to its descendants.
+class UiBreakpointScope extends StatelessWidget {
+  /// Creates a [UiBreakpointScope] that provides [UiBreakpoint] to its descendants.
+  const UiBreakpointScope({required this.child, super.key});
 
   /// The widget below this widget in the tree.
   final Widget child;
 
-  /// Returns the [WindowSize] of the nearest [WindowSizeScope] ancestor.
-  static WindowSize of(BuildContext context, {bool listen = true}) {
-    final windowSize = listen
-        ? context.dependOnInheritedWidgetOfExactType<_InheritedWindowSize>()?.windowSize
-        : context.getInheritedWidgetOfExactType<_InheritedWindowSize>()?.windowSize;
+  /// Returns the [UiBreakpoint] of the nearest [UiBreakpointScope] ancestor.
+  static UiBreakpoint of(BuildContext context, {bool listen = true}) {
+    final breakpoint = listen
+        ? context.dependOnInheritedWidgetOfExactType<_InheritedUiBreakpoint>()?.breakpoint
+        : context.getInheritedWidgetOfExactType<_InheritedUiBreakpoint>()?.breakpoint;
 
-    if (windowSize == null) {
-      throw Exception('WindowSizeScope not found in context');
+    if (breakpoint == null) {
+      throw Exception('UiBreakpointScope not found in context');
     }
 
-    return windowSize;
+    return breakpoint;
   }
 
   @override
   Widget build(BuildContext context) {
     final size = MediaQuery.sizeOf(context);
-    return _InheritedWindowSize(windowSize: WindowSize(size), child: child);
+    return _InheritedUiBreakpoint(breakpoint: UiBreakpoint(size), child: child);
   }
 }
 
-class _InheritedWindowSize extends InheritedWidget {
-  const _InheritedWindowSize({required this.windowSize, required super.child});
+class _InheritedUiBreakpoint extends InheritedWidget {
+  const _InheritedUiBreakpoint({required this.breakpoint, required super.child});
 
-  /// The [WindowSize] provided by this scope.
-  final WindowSize windowSize;
+  /// The [UiBreakpoint] provided by this scope.
+  final UiBreakpoint breakpoint;
 
   @override
-  bool updateShouldNotify(_InheritedWindowSize oldWidget) => windowSize != oldWidget.windowSize;
+  bool updateShouldNotify(_InheritedUiBreakpoint oldWidget) => breakpoint != oldWidget.breakpoint;
 }
