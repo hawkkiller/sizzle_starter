@@ -565,6 +565,22 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "9.3.0"
+  oklab:
+    dependency: transitive
+    description:
+      name: oklab
+      sha256: "8dbeadf386d14eb0762755bdc8518280241204387531de4c2888ebc0b8eeea3d"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
+  oklab_flutter:
+    dependency: transitive
+    description:
+      name: oklab_flutter
+      sha256: "197a543b2fb3fd5b2285642282581064a4e43e2fa9ad74382c8ff7fc7a7781f8"
+      url: "https://pub.dev"
+    source: hosted
+    version: "0.0.1"
   package_config:
     dependency: transitive
     description:

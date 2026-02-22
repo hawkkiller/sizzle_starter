@@ -12,6 +12,7 @@ dependencies:
   flutter:
     sdk: flutter
   collection: ^1.19.1
+  oklab_flutter: ^0.0.1 
 
 dev_dependencies:
   flutter_test:
