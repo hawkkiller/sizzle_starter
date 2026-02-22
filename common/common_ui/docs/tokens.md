@@ -10,3 +10,13 @@ Here is a list of technical requirements to take into account when creating toke
 - Each token should include a recommended default use. For example, the background color token is for app backgrounds, not card backgrounds.
 - Components should not use hardcoded visual values (color, radius, spacing, elevation, opacity).
 - Token naming should be semantic and stable (avoid names tied to raw values like blue500 in app-facing APIs). The only exception right now is spacing tokens, which are named `sN` where `N` is the pixel value at default base. This makes it easier to understand the relationship between the token and the visual value and doesn't break customizations.
+
+## Available Tokens
+
+- Spacing
+- Color
+- Typography
+- Breakpoints
+- Radii
+- Border Width
+- Opacity
