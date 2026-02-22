@@ -20,3 +20,98 @@ Here is a list of technical requirements to take into account when creating toke
 - Radii
 - Border Width
 - Opacity
+- Elevation
+
+## V1 Token Contract
+
+### Color (`UiColorTokens`)
+
+- `background`
+- `surface`
+- `surfaceRaised`
+- `onSurface`
+- `onSurfaceMuted`
+- `outline`
+- `focus`
+- `primary`
+- `onPrimary`
+- `success`
+- `onSuccess`
+- `successContainer`
+- `onSuccessContainer`
+- `warning`
+- `onWarning`
+- `warningContainer`
+- `onWarningContainer`
+- `error`
+- `onError`
+- `errorContainer`
+- `onErrorContainer`
+- `info`
+- `onInfo`
+- `infoContainer`
+- `onInfoContainer`
+- `scrim`
+
+### Typography (`UiTypographyTokens`)
+
+- `displayLarge`
+- `displayMedium`
+- `displaySmall`
+- `headlineLarge`
+- `headlineMedium`
+- `headlineSmall`
+- `titleLarge`
+- `titleMedium`
+- `titleSmall`
+- `bodyLarge`
+- `bodyMedium`
+- `bodySmall`
+- `labelLarge`
+- `labelMedium`
+- `labelSmall`
+
+### Spacing (`UiSpacing`)
+
+- `s4`, `s8`, `s12`, `s16`, `s24`, `s32`, `s48`, `s64`, `s96`, `s128`, `s192`, `s256`, `s384`, `s512`, `s640`, `s768`
+
+### Radii (`UiRadiusTokens`)
+
+- `none`
+- `interactive`
+- `container`
+- `dialog`
+- `full`
+
+### Border Width (`UiBorderWidthTokens`)
+
+- `none`
+- `hairline`
+- `subtle`
+- `strong`
+- `focus`
+
+### Opacity (`UiOpacityTokens`)
+
+- `disabled`
+- `hover`
+- `pressed`
+- `dragged`
+- `focus`
+- `scrim`
+
+### Elevation (`UiElevationTokens`)
+
+- `none`
+- `raised`
+- `floating`
+- `overlay`
+- `modal`
+
+V1 elevation tokens represent semantic depth values (`double`) only. A dedicated shadow-recipe system is out of scope for V1.
+
+## Component Theme Layer
+
+`UiComponentThemes` is a separate base `ThemeExtension` scaffold for future component-specific styling overrides.
+
+V1 includes only this base scaffold and no component-specific theme models yet.

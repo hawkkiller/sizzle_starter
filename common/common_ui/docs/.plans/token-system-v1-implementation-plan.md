@@ -137,21 +137,21 @@ This plan intentionally excludes app adoption, migration, and test implementatio
 
 ## Implementation Steps (Decision-Complete)
 
-- [ ] Freeze V1 token contract names and meanings for all groups (`color`, `typography`, `spacing`, `radius`, `borderWidth`, `opacity`, `elevation`) and confirm no extra slots are introduced during implementation.
-- [ ] Define concrete token value types for each group (`Color`, `TextStyle`, `double`) and enforce non-null slot values in constructors.
-- [ ] Implement immutable, models for each token group so all slots can be instantiated as stable design-system data.
-- [ ] Establish V1 default token payloads for each group (single baseline theme payload) so consumers can use tokens immediately.
-- [ ] Implement `UiTokens` as the canonical composition object containing all token groups, including the new `elevation` group.
-- [ ] Implement deterministic `copyWith` for `UiTokens` with partial overrides and unchanged-slot preservation.
-- [ ] Implement deterministic `lerp` for `UiTokens` with defined interpolation behavior for numeric, color, and text-style values.
-- [ ] Define elevation usage behavior in code comments/docs: tokens provide semantic depth values only, without a shadow-recipe abstraction in V1.
-- [ ] Implement base `UiComponentThemes` as a separate empty scaffold extension (no component-specific fields) for future divergence support.
-- [ ] Implement deterministic `copyWith`/`lerp` for `UiComponentThemes` even in empty-base form, so future fields can be added without API redesign.
-- [ ] Add `BuildContext` accessors for `UiTokens` and `UiComponentThemes` with predictable behavior when extensions are missing.
-- [ ] Ensure public exports expose all V1 token and component-theme foundation APIs while keeping internals private.
-- [ ] Add concise dartdoc for every public type/getter with recommended usage intent for each semantic slot.
-- [ ] Update documentation so `tokens.md` and this plan describe the same final V1 contract and component-theme base approach.
-- [ ] Run `flutter analyze` and resolve all issues introduced by token foundation changes.
+- [x] Freeze V1 token contract names and meanings for all groups (`color`, `typography`, `spacing`, `radius`, `borderWidth`, `opacity`, `elevation`) and confirm no extra slots are introduced during implementation.
+- [x] Define concrete token value types for each group (`Color`, `TextStyle`, `double`) and enforce non-null slot values in constructors.
+- [x] Implement immutable, const-friendly models for each token group so all slots can be instantiated as stable design-system data.
+- [x] Establish V1 default token payloads for each group (single baseline theme payload) so consumers can use tokens immediately.
+- [x] Implement `UiTokens` as the canonical composition object containing all token groups, including the new `elevation` group.
+- [x] Implement deterministic `copyWith` for `UiTokens` with partial overrides and unchanged-slot preservation.
+- [x] Implement deterministic `lerp` for `UiTokens` with defined interpolation behavior for numeric, color, and text-style values.
+- [x] Define elevation usage behavior in code comments/docs: tokens provide semantic depth values only, without a shadow-recipe abstraction in V1.
+- [x] Implement base `UiComponentThemes` as a separate empty scaffold extension (no component-specific fields) for future divergence support.
+- [x] Implement deterministic `copyWith`/`lerp` for `UiComponentThemes` even in empty-base form, so future fields can be added without API redesign.
+- [x] Add `BuildContext` accessors for `UiTokens` and `UiComponentThemes` with predictable behavior when extensions are missing.
+- [x] Ensure public exports expose all V1 token and component-theme foundation APIs while keeping internals private.
+- [x] Add concise dartdoc for every public type/getter with recommended usage intent for each semantic slot.
+- [x] Update documentation so `tokens.md` and this plan describe the same final V1 contract and component-theme base approach.
+- [x] Run `flutter analyze` and resolve all issues introduced by token foundation changes.
 
 ## Non-Goals (Out of Scope)
 - No app-level migration or replacement of existing hardcoded values.
