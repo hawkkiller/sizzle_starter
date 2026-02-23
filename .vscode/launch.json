@@ -8,18 +8,10 @@
       "cwd": "${workspaceFolder}/app",
     },
     {
-      "name": "sizzle_starter (profile mode)",
+      "name": "common_ui",
       "request": "launch",
       "type": "dart",
-      "cwd": "${workspaceFolder}/app",
-      "flutterMode": "profile"
-    },
-    {
-      "name": "sizzle_starter (release mode)",
-      "request": "launch",
-      "type": "dart",
-      "cwd": "${workspaceFolder}/app",
-      "flutterMode": "release"
+      "cwd": "${workspaceFolder}/common/common_ui",
     }
   ]
 }
