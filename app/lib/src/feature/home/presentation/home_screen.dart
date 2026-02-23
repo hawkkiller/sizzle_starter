@@ -1,4 +1,3 @@
-import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/feature/settings/presentation/settings_scope.dart';
 
@@ -49,21 +48,6 @@ class HomeScreen extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 16),
-          ColorScalePreview(title: 'Neutrals', colorScale: uiGray),
-          ColorScalePreview(title: 'Warm Gray', colorScale: uiWarmGray),
-          ColorScalePreview(title: 'Red', colorScale: uiRed),
-          ColorScalePreview(title: 'Rose', colorScale: uiRose),
-          ColorScalePreview(title: 'Pink', colorScale: uiPink),
-          ColorScalePreview(title: 'Orange', colorScale: uiOrange),
-          ColorScalePreview(title: 'Amber', colorScale: uiAmber),
-          ColorScalePreview(title: 'Yellow', colorScale: uiYellow),
-          ColorScalePreview(title: 'Lime', colorScale: uiLime),
-          ColorScalePreview(title: 'Green', colorScale: uiGreen),
-          ColorScalePreview(title: 'Teal', colorScale: uiTeal),
-          ColorScalePreview(title: 'Cyan', colorScale: uiCyan),
-          ColorScalePreview(title: 'Blue', colorScale: uiBlue),
-          ColorScalePreview(title: 'Violet', colorScale: uiViolet),
-          ColorScalePreview(title: 'Purple', colorScale: uiPurple),
         ],
       ),
     );

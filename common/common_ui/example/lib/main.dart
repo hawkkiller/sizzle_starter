@@ -1,3 +1,5 @@
+import 'package:common_ui/common_ui.dart';
+import 'package:example/ds_preview_screen.dart';
 import 'package:flutter/material.dart';
 
 void main() {
@@ -9,12 +11,9 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      home: Scaffold(
-        body: Center(
-          child: Text('Hello World!'),
-        ),
-      ),
+    return MaterialApp(
+      theme: FjordMossTheme().buildThemeData(),
+      home: const DsPreviewScreen()
     );
   }
 }

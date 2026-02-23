@@ -127,7 +127,7 @@ class FjordMossTheme extends UiTheme {
         spacing: const UiSpacing(),
         radius: const UiRadiusTokens(
           none: 0,
-          interactive: 8,
+          interactive: 9999,
           container: 12,
           dialog: 16,
           full: 9999,
