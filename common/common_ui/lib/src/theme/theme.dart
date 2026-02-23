@@ -1,27 +1,44 @@
-import 'package:common_ui/src/tokens/border_width_tokens.dart';
-import 'package:common_ui/src/tokens/color_tokens.dart';
-import 'package:common_ui/src/tokens/elevation_tokens.dart';
-import 'package:common_ui/src/tokens/opacity_tokens.dart';
-import 'package:common_ui/src/tokens/radius_tokens.dart';
-import 'package:common_ui/src/tokens/spacing_tokens.dart';
-import 'package:common_ui/src/tokens/typography_tokens.dart';
+import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
+
+export 'component_themes.dart';
+export 'themes/fjord_moss_theme.dart';
 
 /// Aggregated design theme used by UI components.
 class UiTheme extends ThemeExtension<UiTheme> {
   /// Creates a full theme.
   const UiTheme({
     required this.color,
+    required this.brightness,
     required this.typography,
     required this.spacing,
     required this.radius,
     required this.borderWidth,
     required this.opacity,
     required this.elevation,
+    required this.component,
   });
+
+  /// Retrieves the [UiTheme] from the nearest [Theme] ancestor.
+  static UiTheme of(BuildContext context) {
+    final theme = Theme.of(context).extension<UiTheme>();
+    assert(theme != null, 'No UiTheme found. Did you forget to add it to ThemeData.extensions?');
+    return theme!;
+  }
+
+  /// Builds a [ThemeData] from the theme.
+  ThemeData buildThemeData() {
+    return ThemeData(
+      brightness: brightness,
+      extensions: [this],
+    );
+  }
 
   /// Semantic color tokens.
   final UiColorTokens color;
+
+  /// Brightness of the theme.
+  final Brightness brightness;
 
   /// Semantic typography tokens.
   final UiTypographyTokens typography;
@@ -41,6 +58,9 @@ class UiTheme extends ThemeExtension<UiTheme> {
   /// Semantic elevation tokens.
   final UiElevationTokens elevation;
 
+  /// Semantic component themes.
+  final UiComponentThemes component;
+
   @override
   UiTheme copyWith({
     UiColorTokens? color,
@@ -50,6 +70,8 @@ class UiTheme extends ThemeExtension<UiTheme> {
     UiBorderWidthTokens? borderWidth,
     UiOpacityTokens? opacity,
     UiElevationTokens? elevation,
+    UiComponentThemes? component,
+    Brightness? brightness,
   }) {
     return UiTheme(
       color: color ?? this.color,
@@ -59,6 +81,8 @@ class UiTheme extends ThemeExtension<UiTheme> {
       borderWidth: borderWidth ?? this.borderWidth,
       opacity: opacity ?? this.opacity,
       elevation: elevation ?? this.elevation,
+      component: component ?? this.component,
+      brightness: brightness ?? this.brightness,
     );
   }
 
@@ -76,6 +100,8 @@ class UiTheme extends ThemeExtension<UiTheme> {
       borderWidth: borderWidth.lerp(other.borderWidth, t),
       opacity: opacity.lerp(other.opacity, t),
       elevation: elevation.lerp(other.elevation, t),
+      component: component.lerp(other.component, t),
+      brightness: other.brightness,
     );
   }
 }

@@ -1,5 +1,6 @@
 import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:sizzle_starter/src/feature/home/presentation/theme_preview_page.dart';
 import 'package:sizzle_starter/src/feature/settings/presentation/settings_scope.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -19,7 +20,18 @@ class HomeScreen extends StatelessWidget {
     final settings = SettingsScope.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Welcome to Sizzle Starter!')),
+      appBar: AppBar(
+        title: const Text('Welcome to Sizzle Starter!'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.palette),
+            tooltip: 'Theme Preview',
+            onPressed: () => Navigator.of(context).push(
+              MaterialPageRoute<void>(builder: (_) => const ThemePreviewPage()),
+            ),
+          ),
+        ],
+      ),
       body: ListView(
         children: [
           Padding(

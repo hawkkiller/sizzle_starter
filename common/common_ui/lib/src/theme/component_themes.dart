@@ -13,11 +13,3 @@ class UiComponentThemes extends ThemeExtension<UiComponentThemes> {
     return this;
   }
 }
-
-/// Accesses [UiComponentThemes] from [BuildContext].
-extension UiComponentThemesBuildContextX on BuildContext {
-  /// Returns configured [UiComponentThemes] or an empty scaffold if missing.
-  UiComponentThemes get uiComponentThemes {
-    return Theme.of(this).extension<UiComponentThemes>() ?? const UiComponentThemes();
-  }
-}
