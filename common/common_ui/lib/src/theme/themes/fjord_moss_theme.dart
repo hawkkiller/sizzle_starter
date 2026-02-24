@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 
 /// A nature-inspired theme evoking Nordic fjord waters and mossy landscapes.
 ///
-/// Uses teal as the primary accent (fjord water) with warm gray neutrals
-/// for an organic, earthy feel.
+/// Uses warm blue as the primary accent (deep fjord water) with warm gray
+/// neutrals for an organic, earthy feel.
 class FjordMossTheme extends UiTheme {
   /// Creates a Fjord Moss theme instance.
   FjordMossTheme()
@@ -15,19 +15,19 @@ class FjordMossTheme extends UiTheme {
           surface: uiWarmGray.shade100,
           surfaceRaised: const Color(0xFFFFFFFF),
           onSurface: uiWarmGray.shade900,
-          onSurfaceMuted: uiWarmGray.shade500,
+          onSurfaceMuted: uiWarmGray.shade600,
           outline: uiWarmGray.shade300,
-          focus: uiTeal.shade500,
-          primary: uiTeal.shade500,
+          focus: uiWarmBlue.shade500,
+          primary: uiWarmBlue.shade500,
           onPrimary: const Color(0xFFFFFFFF),
           success: uiGreen.shade600,
           onSuccess: const Color(0xFFFFFFFF),
           successContainer: uiGreen.shade100,
-          onSuccessContainer: uiGreen.shade800,
+          onSuccessContainer: uiGreen.shade600,
           warning: uiAmber.shade600,
           onWarning: const Color(0xFFFFFFFF),
           warningContainer: uiAmber.shade100,
-          onWarningContainer: uiAmber.shade800,
+          onWarningContainer: uiAmber.shade600,
           error: uiRed.shade600,
           onError: const Color(0xFFFFFFFF),
           errorContainer: uiRed.shade100,
@@ -35,7 +35,7 @@ class FjordMossTheme extends UiTheme {
           info: uiBlue.shade600,
           onInfo: const Color(0xFFFFFFFF),
           infoContainer: uiBlue.shade100,
-          onInfoContainer: uiBlue.shade800,
+          onInfoContainer: uiBlue.shade600,
           scrim: uiWarmGray.shade950,
         ),
         typography: const UiTypographyTokens(

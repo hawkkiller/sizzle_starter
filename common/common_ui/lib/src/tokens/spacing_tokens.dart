@@ -14,6 +14,9 @@ class UiSpacing {
 
   final double _base;
 
+  /// Spacing step equal to 2 px in the default profile.
+  double get s2 => _base * 0.125;
+
   /// Spacing step equal to 4 px in the default profile.
   double get s4 => _base * .25;
 
