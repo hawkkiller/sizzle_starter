@@ -26,6 +26,8 @@ class DsPreviewScreen extends StatelessWidget {
           const BadgesPreview(spacious: true),
           SizedBox(height: theme.spacing.s8),
           const InputPreview(),
+          SizedBox(height: theme.spacing.s8),
+          const CardPreview(),
         ],
       ),
     );
@@ -169,6 +171,29 @@ class InputPreview extends StatelessWidget {
               keyboardType: TextInputType.emailAddress,
             ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class CardPreview extends StatelessWidget {
+  const CardPreview({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = UiTheme.of(context);
+
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: UiCard(
+        width: 300,
+        height: 200,
+        child: Center(
+          child: Text(
+            'Card',
+            style: theme.typography.labelLarge,
+          ),
         ),
       ),
     );
