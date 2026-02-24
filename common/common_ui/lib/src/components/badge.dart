@@ -50,7 +50,7 @@ class UiBadge extends StatelessWidget {
     return DecoratedBox(
       decoration: ShapeDecoration(
         shape: RoundedSuperellipseBorder(
-          borderRadius: BorderRadius.circular(theme.radius.full),
+          borderRadius: BorderRadius.circular(theme.radius.component),
         ),
         color: backgroundColor,
       ),

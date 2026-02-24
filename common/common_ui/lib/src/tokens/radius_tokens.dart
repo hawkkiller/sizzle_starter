@@ -5,7 +5,7 @@ class UiRadiusTokens {
   /// Creates semantic radius tokens.
   const UiRadiusTokens({
     required this.none,
-    required this.interactive,
+    required this.component,
     required this.container,
     required this.dialog,
     required this.full,
@@ -15,7 +15,7 @@ class UiRadiusTokens {
   final double none;
 
   /// Radius for controls such as buttons and inputs.
-  final double interactive;
+  final double component;
 
   /// Radius for cards and panel-like surfaces.
   final double container;
@@ -36,7 +36,7 @@ class UiRadiusTokens {
   }) {
     return UiRadiusTokens(
       none: none ?? this.none,
-      interactive: interactive ?? this.interactive,
+      component: interactive ?? this.component,
       container: container ?? this.container,
       dialog: dialog ?? this.dialog,
       full: full ?? this.full,
@@ -47,7 +47,7 @@ class UiRadiusTokens {
   UiRadiusTokens lerp(UiRadiusTokens other, double t) {
     return UiRadiusTokens(
       none: lerpDouble(none, other.none, t) ?? none,
-      interactive: lerpDouble(interactive, other.interactive, t) ?? interactive,
+      component: lerpDouble(component, other.component, t) ?? component,
       container: lerpDouble(container, other.container, t) ?? container,
       dialog: lerpDouble(dialog, other.dialog, t) ?? dialog,
       full: lerpDouble(full, other.full, t) ?? full,

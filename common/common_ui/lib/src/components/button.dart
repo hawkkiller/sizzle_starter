@@ -307,7 +307,7 @@ class UiButton extends StatelessWidget {
     ({Color bg, Color fg, Color? border, Color overlay, Color shadow, double elevation}) colors,
   ) {
     final shape = RoundedSuperellipseBorder(
-      borderRadius: BorderRadius.circular(theme.radius.interactive),
+      borderRadius: BorderRadius.circular(theme.radius.component),
       side: colors.border != null
           ? BorderSide(color: colors.border!, width: theme.borderWidth.subtle)
           : BorderSide.none,
@@ -385,7 +385,7 @@ class UiButton extends StatelessWidget {
         elevation: colors.elevation,
         alignment: alignment,
         shape: RoundedSuperellipseBorder(
-          borderRadius: BorderRadius.circular(theme.radius.interactive),
+          borderRadius: BorderRadius.circular(theme.radius.component),
           side: colors.border != null
               ? BorderSide(color: colors.border!, width: theme.borderWidth.subtle)
               : BorderSide.none,
