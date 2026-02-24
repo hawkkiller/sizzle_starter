@@ -31,7 +31,7 @@ class FjordMossTheme extends UiTheme {
           error: uiRed.shade600,
           onError: const Color(0xFFFFFFFF),
           errorContainer: uiRed.shade100,
-          onErrorContainer: uiRed.shade800,
+          onErrorContainer: uiRed.shade600,
           info: uiBlue.shade600,
           onInfo: const Color(0xFFFFFFFF),
           infoContainer: uiBlue.shade100,
@@ -127,7 +127,7 @@ class FjordMossTheme extends UiTheme {
         spacing: const UiSpacing(),
         radius: const UiRadiusTokens(
           none: 0,
-          component: 9999,
+          component: 12,
           container: 12,
           dialog: 16,
           full: 9999,

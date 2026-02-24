@@ -31,6 +31,11 @@ class UiTheme extends ThemeExtension<UiTheme> {
     return ThemeData(
       brightness: brightness,
       extensions: [this],
+      textSelectionTheme: TextSelectionThemeData(
+        cursorColor: color.focus,
+        selectionColor: color.focus.withValues(alpha: opacity.focus),
+        selectionHandleColor: color.focus,
+      )
     );
   }
 

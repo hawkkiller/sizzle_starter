@@ -24,6 +24,8 @@ class DsPreviewScreen extends StatelessWidget {
           const BadgesPreview(),
           SizedBox(height: theme.spacing.s8),
           const BadgesPreview(spacious: true),
+          SizedBox(height: theme.spacing.s8),
+          const InputPreview(),
         ],
       ),
     );
@@ -131,9 +133,44 @@ class BadgesPreview extends StatelessWidget {
       children: [
         UiBadge(label: 'Info', spacious: spacious),
         UiBadge(label: 'Warning', variant: UiBadgeVariant.warning, spacious: spacious),
+        UiBadge(label: 'Error', variant: UiBadgeVariant.error, spacious: spacious),
         UiBadge(label: 'Success', variant: UiBadgeVariant.success, spacious: spacious),
         UiBadge(label: 'Neutral', variant: UiBadgeVariant.neutral, spacious: spacious),
       ],
+    );
+  }
+}
+
+class InputPreview extends StatelessWidget {
+  const InputPreview({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = UiTheme.of(context);
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 300),
+        child: Column(
+          mainAxisSize: .min,
+          children: [
+            const UiInput(
+              labelText: 'Label',
+              hintText: 'Hint',
+              prefixIcon: Icon(Icons.person),
+              keyboardType: TextInputType.emailAddress,
+            ),
+            SizedBox(height: theme.spacing.s8),
+            const UiInput(
+              labelText: 'Disabled',
+              hintText: 'Hint',
+              prefixIcon: Icon(Icons.person),
+              enabled: false,
+              keyboardType: TextInputType.emailAddress,
+            ),
+          ],
+        ),
+      ),
     );
   }
 }

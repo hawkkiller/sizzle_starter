@@ -1,7 +1,7 @@
 import 'package:common_ui/common_ui.dart';
 import 'package:flutter/widgets.dart';
 
-enum UiBadgeVariant { neutral, info, warning, success }
+enum UiBadgeVariant { neutral, info, warning, success, error }
 
 class UiBadge extends StatelessWidget {
   const UiBadge({
@@ -22,6 +22,7 @@ class UiBadge extends StatelessWidget {
     UiBadgeVariant.info => theme.color.infoContainer,
     UiBadgeVariant.warning => theme.color.warningContainer,
     UiBadgeVariant.success => theme.color.successContainer,
+    UiBadgeVariant.error => theme.color.errorContainer,
   };
 
   Color _getForegroundColor(UiTheme theme) => switch (variant) {
@@ -29,12 +30,11 @@ class UiBadge extends StatelessWidget {
     UiBadgeVariant.info => theme.color.onInfoContainer,
     UiBadgeVariant.warning => theme.color.onWarningContainer,
     UiBadgeVariant.success => theme.color.onSuccessContainer,
+    UiBadgeVariant.error => theme.color.onErrorContainer,
   };
 
-  EdgeInsets _getPadding(UiTheme theme) => EdgeInsets.symmetric(
-    horizontal: spacious ? theme.spacing.s8 : theme.spacing.s4,
-    vertical: theme.spacing.s2,
-  );
+  EdgeInsets _getPadding(UiTheme theme) =>
+      EdgeInsets.symmetric(horizontal: theme.spacing.s8, vertical: theme.spacing.s2);
 
   Widget _buildLabel(UiTheme theme, Color foregroundColor) => spacious
       ? Text(label, style: theme.typography.labelLarge.copyWith(color: foregroundColor))

@@ -229,6 +229,8 @@ class UiButton extends StatelessWidget {
   ({Color bg, Color fg, Color? border, Color overlay, Color shadow, double elevation})
   _resolveColors(UiTheme theme) {
     final c = theme.color;
+    final o = theme.opacity;
+    final e = theme.elevation;
 
     return switch ((style, role)) {
       // Primary
@@ -236,68 +238,68 @@ class UiButton extends StatelessWidget {
         bg: c.primary,
         fg: c.onPrimary,
         border: null,
-        overlay: c.onPrimary.withValues(alpha: .1),
-        shadow: c.primary.withValues(alpha: .3),
-        elevation: _enabled ? 2.0 : 0.0,
+        overlay: c.onPrimary.withValues(alpha: o.hover),
+        shadow: c.primary.withValues(alpha: o.scrim),
+        elevation: _enabled ? e.raised : e.none,
       ),
       (UiButtonStyle.primary, UiButtonRole.destructive) => (
         bg: c.error,
         fg: c.onError,
         border: null,
-        overlay: c.onError.withValues(alpha: .1),
-        shadow: c.error.withValues(alpha: .3),
-        elevation: _enabled ? 2.0 : 0.0,
+        overlay: c.onError.withValues(alpha: o.hover),
+        shadow: c.error.withValues(alpha: o.scrim),
+        elevation: _enabled ? e.raised : e.none,
       ),
       // Secondary
       (UiButtonStyle.secondary, UiButtonRole.normal) => (
         bg: c.surface,
         fg: c.onSurface,
         border: null,
-        overlay: c.onSurface.withValues(alpha: .1),
-        shadow: c.onSurface.withValues(alpha: .1),
-        elevation: 0,
+        overlay: c.onSurface.withValues(alpha: o.hover),
+        shadow: c.onSurface.withValues(alpha: o.scrim),
+        elevation: e.none,
       ),
       (UiButtonStyle.secondary, UiButtonRole.destructive) => (
         bg: c.surface,
         fg: c.error,
         border: null,
-        overlay: c.error.withValues(alpha: .1),
-        shadow: c.onSurface.withValues(alpha: .1),
-        elevation: 0,
+        overlay: c.error.withValues(alpha: o.hover),
+        shadow: c.onSurface.withValues(alpha: o.scrim),
+        elevation: e.none,
       ),
       // Outline
       (UiButtonStyle.outline, UiButtonRole.normal) => (
         bg: Colors.transparent,
         fg: c.onSurface,
         border: c.outline,
-        overlay: c.onSurface.withValues(alpha: .1),
+        overlay: c.onSurface.withValues(alpha: o.hover),
         shadow: Colors.transparent,
-        elevation: 0.0,
+        elevation: e.none,
       ),
       (UiButtonStyle.outline, UiButtonRole.destructive) => (
         bg: Colors.transparent,
         fg: c.error,
         border: c.error,
-        overlay: c.error.withValues(alpha: .1),
+        overlay: c.error.withValues(alpha: o.hover),
         shadow: Colors.transparent,
-        elevation: 0.0,
+        elevation: e.none,
       ),
       // Ghost
       (UiButtonStyle.ghost, UiButtonRole.normal) => (
         bg: Colors.transparent,
         fg: c.onSurface,
         border: null,
-        overlay: c.onSurface.withValues(alpha: .1),
+        overlay: c.onSurface.withValues(alpha: o.hover),
         shadow: Colors.transparent,
-        elevation: 0.0,
+        elevation: e.none,
       ),
       (UiButtonStyle.ghost, UiButtonRole.destructive) => (
         bg: Colors.transparent,
         fg: c.error,
         border: null,
-        overlay: c.error.withValues(alpha: .1),
+        overlay: c.error.withValues(alpha: o.hover),
         shadow: Colors.transparent,
-        elevation: 0.0,
+        elevation: e.none,
       ),
     };
   }
