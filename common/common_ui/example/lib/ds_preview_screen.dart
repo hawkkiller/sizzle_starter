@@ -1,5 +1,6 @@
 import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 class DsPreviewScreen extends StatelessWidget {
   const DsPreviewScreen({super.key});
@@ -187,13 +188,49 @@ class CardPreview extends StatelessWidget {
     return Align(
       alignment: Alignment.centerLeft,
       child: UiCard(
-        width: 300,
-        height: 200,
-        child: Center(
-          child: Text(
-            'Card',
-            style: theme.typography.labelLarge,
-          ),
+        width: 150,
+        height: 150,
+        child: Column(
+          crossAxisAlignment: .start,
+          children: [
+            Row(
+              mainAxisSize: .min,
+              spacing: theme.spacing.s8,
+              children: [
+                SizedBox(
+                  width: 32,
+                  height: 32,
+                  child: ClipOval(
+                    child: SvgPicture.asset(
+                      'assets/euflag.svg',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
+                ),
+                Text(
+                  'EUR',
+                  style: theme.typography.titleMedium.copyWith(color: theme.color.onSurfaceMuted),
+                ),
+              ],
+            ),
+            const Spacer(),
+            Row(
+              mainAxisSize: .min,
+              spacing: theme.spacing.s4,
+              children: [
+                Icon(Icons.account_balance_wallet, size: 16, color: theme.color.onSurfaceMuted),
+                Text(
+                  '**61305',
+                  style: theme.typography.bodyMedium.copyWith(color: theme.color.onSurfaceMuted),
+                ),
+              ],
+            ),
+            SizedBox(height: theme.spacing.s4),
+            Text(
+              '1,000.00',
+              style: theme.typography.titleLarge.copyWith(color: theme.color.onSurface),
+            ),
+          ],
         ),
       ),
     );
