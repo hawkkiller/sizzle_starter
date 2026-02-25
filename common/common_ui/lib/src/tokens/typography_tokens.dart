@@ -21,6 +21,27 @@ class UiTypographyTokens {
     required this.labelSmall,
   });
 
+  /// Gets the text style for the given size.
+  TextStyle getTextStyle(UiTypographySize size) {
+    return switch (size) {
+      UiTypographySize.displayLarge => displayLarge,
+      UiTypographySize.displayMedium => displayMedium,
+      UiTypographySize.displaySmall => displaySmall,
+      UiTypographySize.headlineLarge => headlineLarge,
+      UiTypographySize.headlineMedium => headlineMedium,
+      UiTypographySize.headlineSmall => headlineSmall,
+      UiTypographySize.titleLarge => titleLarge,
+      UiTypographySize.titleMedium => titleMedium,
+      UiTypographySize.titleSmall => titleSmall,
+      UiTypographySize.bodyLarge => bodyLarge,
+      UiTypographySize.bodyMedium => bodyMedium,
+      UiTypographySize.bodySmall => bodySmall,
+      UiTypographySize.labelLarge => labelLarge,
+      UiTypographySize.labelMedium => labelMedium,
+      UiTypographySize.labelSmall => labelSmall,
+    };
+  }
+
   /// Largest hero/prominent display style.
   final TextStyle displayLarge;
 
@@ -123,4 +144,22 @@ class UiTypographyTokens {
       labelSmall: TextStyle.lerp(labelSmall, other.labelSmall, t) ?? labelSmall,
     );
   }
+}
+
+enum UiTypographySize {
+  displayLarge,
+  displayMedium,
+  displaySmall,
+  headlineLarge,
+  headlineMedium,
+  headlineSmall,
+  titleLarge,
+  titleMedium,
+  titleSmall,
+  bodyLarge,
+  bodyMedium,
+  bodySmall,
+  labelLarge,
+  labelMedium,
+  labelSmall,
 }

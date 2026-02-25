@@ -49,7 +49,10 @@ class UiInput extends StatelessWidget {
         children: [
           if (labelText != null)
             ExcludeSemantics(
-              child: Text(labelText!, style: theme.typography.labelLarge),
+              child: UiText.labelLarge(
+                labelText!,
+                color: enabled ? theme.color.onSurface : theme.color.onSurfaceMuted,
+              ),
             ),
           TextField(
             controller: controller,
@@ -114,12 +117,7 @@ class UiInput extends StatelessWidget {
           if (descriptionText != null)
             Semantics(
               container: true,
-              child: Text(
-                descriptionText!,
-                style: theme.typography.bodySmall.copyWith(
-                  color: theme.color.onSurface,
-                ),
-              ),
+              child: UiText.bodySmall(descriptionText!, color: theme.color.onSurface),
             ),
         ],
       ),

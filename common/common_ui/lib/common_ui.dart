@@ -4,6 +4,7 @@ export 'src/components/card.dart';
 export 'src/components/color_scale_preview.dart';
 export 'src/components/input.dart';
 export 'src/components/loader.dart';
+export 'src/components/text.dart';
 export 'src/primitives/color_primitives.dart';
 export 'src/primitives/color_scale.dart';
 export 'src/theme/component_themes.dart';

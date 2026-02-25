@@ -207,10 +207,7 @@ class CardPreview extends StatelessWidget {
                     ),
                   ),
                 ),
-                Text(
-                  'EUR',
-                  style: theme.typography.titleMedium.copyWith(color: theme.color.onSurfaceMuted),
-                ),
+                UiText.titleMedium('EUR', color: theme.color.onSurfaceMuted),
               ],
             ),
             const Spacer(),
@@ -219,17 +216,11 @@ class CardPreview extends StatelessWidget {
               spacing: theme.spacing.s4,
               children: [
                 Icon(Icons.account_balance_wallet, size: 16, color: theme.color.onSurfaceMuted),
-                Text(
-                  '**61305',
-                  style: theme.typography.bodyMedium.copyWith(color: theme.color.onSurfaceMuted),
-                ),
+                UiText.bodyMedium('**61305', color: theme.color.onSurfaceMuted),
               ],
             ),
             SizedBox(height: theme.spacing.s4),
-            Text(
-              '1,000.00',
-              style: theme.typography.titleLarge.copyWith(color: theme.color.onSurface),
-            ),
+            UiText.titleLarge('1,000.00', color: theme.color.onSurface),
           ],
         ),
       ),
