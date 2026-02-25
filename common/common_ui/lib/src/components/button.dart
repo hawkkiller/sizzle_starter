@@ -375,7 +375,7 @@ class UiButton extends StatelessWidget {
     return IconButton(
       onPressed: _enabled ? onPressed : null,
       icon: isLoading
-          ? const UiLoader(size: UiLoaderSize.small, color: UiLoaderColor.secondary)
+          ? UiLoader(size: UiLoaderSize.small, color: theme.color.onSurfaceMuted)
           : (icon ?? const SizedBox.shrink()),
       style: IconButton.styleFrom(
         splashFactory: NoSplash.splashFactory,
