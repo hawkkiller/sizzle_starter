@@ -10,11 +10,4 @@ dev_dependencies:
 
 workspace:
   - app
-  # Common
-  - common/common_utils
-  - common/common_analytics
-  - common/common_logger
-  - common/common_rest_client
-  - common/common_error_reporter
-  - common/common_ui
-  - common/common_database
+  - common/*
