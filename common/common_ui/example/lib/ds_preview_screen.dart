@@ -29,6 +29,8 @@ class DsPreviewScreen extends StatelessWidget {
           const InputPreview(),
           SizedBox(height: theme.spacing.s8),
           const CardPreview(),
+          SizedBox(height: theme.spacing.s8),
+          const LoaderPreview(),
         ],
       ),
     );
@@ -224,6 +226,18 @@ class CardPreview extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class LoaderPreview extends StatelessWidget {
+  const LoaderPreview({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return const Align(
+      alignment: Alignment.centerLeft,
+      child: UiLoader(),
     );
   }
 }
