@@ -9,6 +9,7 @@ Version format: `major.minor`. Major version is incremented for brea
 ### Added
 
 - Add `AGENTS.md` & `CLAUDE.md`
+- Add `common_ui` package with foundation tokens and base components
 
 ### Changed
 
