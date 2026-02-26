@@ -31,20 +31,11 @@ jobs:
       - name: 🦄 Bootstrap
         run: bash ./scripts/bootstrap.bash
 
-      - name: Install DCM
-        uses: CQLabs/setup-dcm@v2
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-
       - name: ✨ Check Formatting
         run: bash ./scripts/format.bash
 
       - name: 🕵️ Analyze
         run: bash ./scripts/analyze.bash
-
-      # Remove this step if you don't use Dart Code Metrics
-      - name: 🕵️ Analyze with DCM
-        run: dcm analyze . -r github
 
       # ———————————————————————————————————————————————————————
       #   RUN TESTS + COVERAGE
