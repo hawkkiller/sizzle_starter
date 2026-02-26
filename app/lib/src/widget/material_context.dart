@@ -1,3 +1,4 @@
+import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/feature/home/presentation/home_screen.dart';
 import 'package:sizzle_starter/src/feature/settings/domain/model/general.dart';
@@ -16,7 +17,6 @@ class MaterialContext extends StatelessWidget {
   Widget build(BuildContext context) {
     final settings = SettingsScope.of(context);
     final themeMode = settings.general.themeMode;
-    final seedColor = settings.general.seedColor;
     final locale = settings.general.locale;
 
     final materialThemeMode = switch (themeMode) {
@@ -25,12 +25,10 @@ class MaterialContext extends StatelessWidget {
       ThemeModeVO.dark => ThemeMode.dark,
     };
 
-    final darkTheme = ThemeData(colorSchemeSeed: seedColor, brightness: Brightness.dark);
-    final lightTheme = ThemeData(colorSchemeSeed: seedColor, brightness: Brightness.light);
+    final lightTheme = SandgoldTheme().buildThemeData();
 
     return MaterialApp(
       theme: lightTheme,
-      darkTheme: darkTheme,
       themeMode: materialThemeMode,
       locale: locale,
       home: const HomeScreen(),

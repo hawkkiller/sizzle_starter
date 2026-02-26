@@ -1,4 +1,4 @@
-import 'package:common_ui_library/common_ui_library.dart';
+import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/logic/composition_root.dart';
 import 'package:sizzle_starter/src/widget/dependencies_scope.dart';
@@ -19,7 +19,7 @@ class RootContext extends StatelessWidget {
   Widget build(BuildContext context) {
     return DependenciesScope(
       dependencies: compositionResult.dependencies,
-      child: const WindowSizeScope(child: MaterialContext()),
+      child: const UiBreakpointScope(child: MaterialContext()),
     );
   }
 }

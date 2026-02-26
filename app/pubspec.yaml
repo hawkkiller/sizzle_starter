@@ -5,8 +5,8 @@ version: 0.0.1+1
 resolution: workspace
 
 environment:
-  sdk: ">=3.9.2 <4.0.0"
-  flutter: ">=3.35.3 <4.0.0"
+  sdk: ">=3.11.0 <4.0.0"
+  flutter: ">=3.41.1 <4.0.0"
 
 dependencies:
   # Flutter SDK
@@ -40,8 +40,8 @@ dependencies:
     path: ../common/common_error_reporter
   common_utils:
     path: ../common/common_utils
-  common_ui_library:
-    path: ../common/common_ui_library
+  common_ui:
+    path: ../common/common_ui
 
 dev_dependencies:
   # Testing

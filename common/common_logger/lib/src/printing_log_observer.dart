@@ -1,6 +1,6 @@
+import 'package:common_logger/common_logger.dart';
 import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
-import 'package:common_logger/common_logger.dart';
 import 'package:stack_trace/stack_trace.dart';
 
 /// {@template printing_log_observer}

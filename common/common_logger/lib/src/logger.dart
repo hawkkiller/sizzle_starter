@@ -1,6 +1,6 @@
 import 'package:clock/clock.dart';
-import 'package:flutter/foundation.dart';
 import 'package:common_logger/common_logger.dart';
+import 'package:flutter/foundation.dart';
 
 /// {@template logger}
 /// Base class for logging.

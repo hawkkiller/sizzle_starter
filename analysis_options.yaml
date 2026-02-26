@@ -9,7 +9,3 @@ analyzer:
     - "lib/src/core/localization/generated/**"
     - "**/*.*.dart"
     - "**/generated/**"
-
-dart_code_metrics:
-  extends:
-    - package:sizzle_lints/dcm.yaml

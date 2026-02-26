@@ -1,5 +1,5 @@
-import 'package:common_analytics/common_analytics.dart';
 import 'package:collection/collection.dart';
+import 'package:common_analytics/common_analytics.dart';
 
 /// {@template analytics_reporter}
 /// Interface for reporting analytics events.

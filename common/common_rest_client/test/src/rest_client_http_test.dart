@@ -1,7 +1,7 @@
+import 'package:common_rest_client/common_rest_client.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:http/http.dart' as http;
 import 'package:http/testing.dart' as http_testing;
-import 'package:common_rest_client/common_rest_client.dart';
 
 void main() {
   group('RestClientHttp', () {

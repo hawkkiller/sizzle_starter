@@ -18,7 +18,6 @@ class HomeScreen extends StatelessWidget {
     final settings = SettingsScope.of(context);
 
     return Scaffold(
-      appBar: AppBar(title: const Text('Welcome to Sizzle Starter!')),
       body: ListView(
         children: [
           Padding(
