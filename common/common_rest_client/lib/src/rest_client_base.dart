@@ -1,9 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
+import 'package:common_rest_client/common_rest_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
-import 'package:common_rest_client/common_rest_client.dart';
 
 /// {@macro rest_client}
 @immutable

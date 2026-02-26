@@ -36,7 +36,7 @@ class UiRadiusTokens {
   }) {
     return UiRadiusTokens(
       none: none ?? this.none,
-      component: interactive ?? this.component,
+      component: interactive ?? component,
       container: container ?? this.container,
       dialog: dialog ?? this.dialog,
       full: full ?? this.full,

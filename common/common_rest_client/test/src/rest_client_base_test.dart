@@ -1,7 +1,7 @@
 import 'dart:convert';
 
-import 'package:flutter_test/flutter_test.dart';
 import 'package:common_rest_client/common_rest_client.dart';
+import 'package:flutter_test/flutter_test.dart';
 
 final jsonUtf8 = const JsonCodec().fuse(utf8);
 

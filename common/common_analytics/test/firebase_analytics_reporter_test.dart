@@ -1,7 +1,7 @@
 import 'package:common_analytics/common_analytics.dart';
+import 'package:common_logger/common_logger.dart';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:common_logger/common_logger.dart';
 import 'package:mockito/annotations.dart';
 import 'package:mockito/mockito.dart';
 

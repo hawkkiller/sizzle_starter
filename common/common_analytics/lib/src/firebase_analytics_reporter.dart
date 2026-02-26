@@ -1,6 +1,6 @@
 import 'package:common_analytics/common_analytics.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:common_logger/common_logger.dart';
+import 'package:firebase_analytics/firebase_analytics.dart';
 
 /// {@template firebase_analytics_reporter}
 /// An implementation of [AnalyticsReporter] that reports events to Firebase
