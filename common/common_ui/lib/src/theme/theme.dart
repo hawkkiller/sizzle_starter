@@ -2,7 +2,7 @@ import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
 
 export 'component_themes.dart';
-export 'themes/sandgold.dart';
+export 'themes/sandgold_theme.dart';
 
 /// Aggregated design theme used by UI components.
 class UiTheme extends ThemeExtension<UiTheme> {
