@@ -12,7 +12,7 @@ class MainApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      theme: FjordMossTheme().buildThemeData(),
+      theme: SandgoldTheme().buildThemeData(),
       home: const DsPreviewScreen()
     );
   }

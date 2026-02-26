@@ -25,7 +25,7 @@ class MaterialContext extends StatelessWidget {
       ThemeModeVO.dark => ThemeMode.dark,
     };
 
-    final lightTheme = FjordMossTheme().buildThemeData();
+    final lightTheme = SandgoldTheme().buildThemeData();
 
     return MaterialApp(
       theme: lightTheme,

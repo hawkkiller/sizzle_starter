@@ -1,13 +1,13 @@
 import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
 
-/// A nature-inspired theme evoking Nordic fjord waters and mossy landscapes.
+/// A warm, earthy light theme with sandy golden undertones.
 ///
-/// Uses warm blue as the primary accent (deep fjord water) with warm gray
-/// neutrals for an organic, earthy feel.
-class FjordMossTheme extends UiTheme {
-  /// Creates a Fjord Moss theme instance.
-  FjordMossTheme()
+/// Uses warm blue as the primary accent with warm gray neutrals
+/// for an organic, inviting feel.
+class SandgoldTheme extends UiTheme {
+  /// Creates a Sandgold theme instance.
+  SandgoldTheme()
     : super(
         brightness: Brightness.light,
         color: UiColorTokens(
