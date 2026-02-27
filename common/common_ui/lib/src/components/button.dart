@@ -115,6 +115,13 @@ enum UiButtonSize {
     UiButtonSize.medium => 44,
     UiButtonSize.large => 52,
   };
+
+  /// The loader size that matches this button size.
+  UiLoaderSize get loaderSize => switch (this) {
+    UiButtonSize.standard => UiLoaderSize.small,
+    UiButtonSize.medium => UiLoaderSize.small,
+    UiButtonSize.large => UiLoaderSize.medium,
+  };
 }
 
 enum UiButtonWidth {
@@ -226,17 +233,30 @@ class UiButton extends StatelessWidget {
   }
 
   /// Resolves colors based on style and role combination.
-  ({Color bg, Color fg, Color? border, Color overlay, Color shadow, double elevation})
+  ({
+    Color bg,
+    Color disabledBg,
+    Color fg,
+    Color disabledFg,
+    Color? border,
+    Color overlay,
+    Color shadow,
+    double elevation,
+  })
   _resolveColors(UiTheme theme) {
     final c = theme.color;
     final o = theme.opacity;
     final e = theme.elevation;
 
+    Color dim(Color color) => color.withValues(alpha: color.a * o.disabled);
+
     return switch ((style, role)) {
       // Primary
       (UiButtonStyle.primary, UiButtonRole.normal) => (
         bg: c.primary,
+        disabledBg: dim(c.primary),
         fg: c.onPrimary,
+        disabledFg: dim(c.onPrimary),
         border: null,
         overlay: c.onPrimary.withValues(alpha: o.hover),
         shadow: c.primary.withValues(alpha: o.scrim),
@@ -244,7 +264,9 @@ class UiButton extends StatelessWidget {
       ),
       (UiButtonStyle.primary, UiButtonRole.destructive) => (
         bg: c.error,
+        disabledBg: dim(c.error),
         fg: c.onError,
+        disabledFg: dim(c.onError),
         border: null,
         overlay: c.onError.withValues(alpha: o.hover),
         shadow: c.error.withValues(alpha: o.scrim),
@@ -253,7 +275,9 @@ class UiButton extends StatelessWidget {
       // Secondary
       (UiButtonStyle.secondary, UiButtonRole.normal) => (
         bg: c.surface,
+        disabledBg: dim(c.surface),
         fg: c.onSurface,
+        disabledFg: dim(c.onSurface),
         border: null,
         overlay: c.onSurface.withValues(alpha: o.hover),
         shadow: c.onSurface.withValues(alpha: o.scrim),
@@ -261,7 +285,9 @@ class UiButton extends StatelessWidget {
       ),
       (UiButtonStyle.secondary, UiButtonRole.destructive) => (
         bg: c.surface,
+        disabledBg: dim(c.surface),
         fg: c.error,
+        disabledFg: dim(c.error),
         border: null,
         overlay: c.error.withValues(alpha: o.hover),
         shadow: c.onSurface.withValues(alpha: o.scrim),
@@ -270,7 +296,9 @@ class UiButton extends StatelessWidget {
       // Outline
       (UiButtonStyle.outline, UiButtonRole.normal) => (
         bg: Colors.transparent,
+        disabledBg: Colors.transparent,
         fg: c.onSurface,
+        disabledFg: dim(c.onSurface),
         border: c.outline,
         overlay: c.onSurface.withValues(alpha: o.hover),
         shadow: Colors.transparent,
@@ -278,7 +306,9 @@ class UiButton extends StatelessWidget {
       ),
       (UiButtonStyle.outline, UiButtonRole.destructive) => (
         bg: Colors.transparent,
+        disabledBg: Colors.transparent,
         fg: c.error,
+        disabledFg: dim(c.error),
         border: c.error,
         overlay: c.error.withValues(alpha: o.hover),
         shadow: Colors.transparent,
@@ -287,7 +317,9 @@ class UiButton extends StatelessWidget {
       // Ghost
       (UiButtonStyle.ghost, UiButtonRole.normal) => (
         bg: Colors.transparent,
+        disabledBg: Colors.transparent,
         fg: c.onSurface,
+        disabledFg: dim(c.onSurface),
         border: null,
         overlay: c.onSurface.withValues(alpha: o.hover),
         shadow: Colors.transparent,
@@ -295,7 +327,9 @@ class UiButton extends StatelessWidget {
       ),
       (UiButtonStyle.ghost, UiButtonRole.destructive) => (
         bg: Colors.transparent,
+        disabledBg: Colors.transparent,
         fg: c.error,
+        disabledFg: dim(c.error),
         border: null,
         overlay: c.error.withValues(alpha: o.hover),
         shadow: Colors.transparent,
@@ -306,7 +340,7 @@ class UiButton extends StatelessWidget {
 
   Widget _buildLabelButton(
     UiTheme theme,
-    ({Color bg, Color fg, Color? border, Color overlay, Color shadow, double elevation}) colors,
+    ({Color bg, Color disabledBg, Color fg, Color disabledFg, Color? border, Color overlay, Color shadow, double elevation}) colors,
   ) {
     final shape = RoundedSuperellipseBorder(
       borderRadius: BorderRadius.circular(theme.radius.component),
@@ -320,7 +354,9 @@ class UiButton extends StatelessWidget {
       shadowColor: colors.shadow,
       splashFactory: NoSplash.splashFactory,
       backgroundColor: colors.bg,
+      disabledBackgroundColor: colors.disabledBg,
       foregroundColor: colors.fg,
+      disabledForegroundColor: colors.disabledFg,
       overlayColor: colors.overlay,
       shape: shape,
       alignment: alignment,
@@ -355,7 +391,7 @@ class UiButton extends StatelessWidget {
               ),
             ),
             // Show loader centered on top
-            if (isLoading) const UiLoader(size: UiLoaderSize.small),
+            if (isLoading) UiLoader(size: size.loaderSize),
           ],
         ),
       ),
@@ -364,24 +400,23 @@ class UiButton extends StatelessWidget {
 
   Widget _buildIconButton(
     UiTheme theme,
-    ({Color bg, Color fg, Color? border, Color overlay, Color shadow, double elevation}) colors,
+    ({Color bg, Color disabledBg, Color fg, Color disabledFg, Color? border, Color overlay, Color shadow, double elevation}) colors,
   ) {
-    final iconSize = switch (size) {
-      UiButtonSize.standard => const Size(40, 40),
-      UiButtonSize.medium => const Size(56, 56),
-      UiButtonSize.large => const Size(64, 64),
-    };
+    final dimension = size.height;
+    final iconSize = Size(dimension, dimension);
 
     return IconButton(
       onPressed: _enabled ? onPressed : null,
       icon: isLoading
-          ? UiLoader(size: UiLoaderSize.small, color: theme.color.onSurfaceMuted)
+          ? UiLoader(size: size.loaderSize, color: theme.color.onSurfaceMuted)
           : (icon ?? const SizedBox.shrink()),
       style: IconButton.styleFrom(
         splashFactory: NoSplash.splashFactory,
         fixedSize: iconSize,
         foregroundColor: colors.fg,
+        disabledForegroundColor: colors.disabledFg,
         backgroundColor: colors.bg,
+        disabledBackgroundColor: colors.disabledBg,
         overlayColor: colors.overlay,
         shadowColor: colors.shadow,
         elevation: colors.elevation,

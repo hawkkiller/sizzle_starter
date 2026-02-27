@@ -18,6 +18,8 @@ class DsPreviewScreen extends StatelessWidget {
           SizedBox(height: theme.spacing.s4),
           const _ButtonsPreview(role: UiButtonRole.destructive),
           SizedBox(height: theme.spacing.s8),
+          const _ButtonsPreview(role: UiButtonRole.normal, enabled: false),
+          SizedBox(height: theme.spacing.s8),
           const _IconButtonsPreview(role: UiButtonRole.normal),
           SizedBox(height: theme.spacing.s8),
           const _IconButtonsPreview(role: UiButtonRole.destructive),
@@ -38,9 +40,10 @@ class DsPreviewScreen extends StatelessWidget {
 }
 
 class _ButtonsPreview extends StatelessWidget {
-  const _ButtonsPreview({required this.role});
+  const _ButtonsPreview({required this.role, this.enabled = true});
 
   final UiButtonRole role;
+  final bool enabled;
 
   @override
   Widget build(BuildContext context) {
@@ -53,24 +56,28 @@ class _ButtonsPreview extends StatelessWidget {
         UiButton(
           label: 'Primary',
           onPressed: () {},
+          enabled: enabled,
           role: role,
         ),
         UiButton(
           label: 'Secondary',
           onPressed: () {},
           style: UiButtonStyle.secondary,
+          enabled: enabled,
           role: role,
         ),
         UiButton(
           label: 'Outline',
           onPressed: () {},
           style: UiButtonStyle.outline,
+          enabled: enabled,
           role: role,
         ),
         UiButton(
           label: 'Ghost',
           onPressed: () {},
           style: UiButtonStyle.ghost,
+          enabled: enabled,
           role: role,
         ),
       ],
