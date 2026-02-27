@@ -2,6 +2,7 @@ export 'src/components/badge.dart';
 export 'src/components/button.dart';
 export 'src/components/card.dart';
 export 'src/components/color_scale_preview.dart';
+export 'src/components/flyout.dart';
 export 'src/components/input.dart';
 export 'src/components/loader.dart';
 export 'src/components/text.dart';
