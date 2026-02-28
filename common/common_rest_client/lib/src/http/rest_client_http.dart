@@ -1,38 +1,13 @@
 import 'dart:async';
 
-import 'package:common_rest_client/common_rest_client.dart';
-import 'package:common_rest_client/src/http/check_exception_io.dart'
-    if (dart.library.js_interop) 'package:common_rest_client/src/http/check_exception_browser.dart';
-import 'package:cronet_http/cronet_http.dart' show CronetClient;
-import 'package:cupertino_http/cupertino_http.dart' show CupertinoClient;
-import 'package:flutter/foundation.dart' show TargetPlatform, defaultTargetPlatform;
+import 'package:common_rest_client/src/exception/rest_client_exception.dart';
+import 'package:common_rest_client/src/interceptor/rest_client_interceptor.dart';
+import 'package:common_rest_client/src/rest_client_base.dart';
 import 'package:http/http.dart' as http;
 
-// coverage:ignore-start
-/// Creates an [http.Client] based on the current platform.
-///
-/// For Android, it returns a [CronetClient] with the default Cronet engine.
-/// For iOS and macOS, it returns a [CupertinoClient]
-/// with the default session configuration.
 http.Client createDefaultHttpClient() {
-  http.Client? client;
-  final platform = defaultTargetPlatform;
-
-  try {
-    client = switch (platform) {
-      TargetPlatform.android => CronetClient.defaultCronetEngine(),
-      TargetPlatform.iOS || TargetPlatform.macOS => CupertinoClient.defaultSessionConfiguration(),
-      _ => null,
-    };
-  } on Object catch (e, stackTrace) {
-    Zone.current.print(
-      'Failed to create a default http client for platform $platform $e $stackTrace',
-    );
-  }
-
-  return client ?? http.Client();
+  return http.Client();
 }
-// coverage:ignore-end
 
 /// {@template rest_client_http}
 /// Rest client that uses [http] for making requests.
@@ -44,57 +19,57 @@ final class RestClientHttp extends RestClientBase {
   ///
   /// If you provide a [client], you are responsible for closing it.
   ///
+  /// The [interceptors] are called in order for requests (first to last),
+  /// and in reverse order for responses and errors (last to first).
+  ///
   /// ```dart
   /// final client = http.Client();
   ///
-  /// final restClient = RestClientHTTP(
-  ///  baseUrl: 'https://example.com',
-  ///  client: client,
+  /// final restClient = RestClientHttp(
+  ///   baseUrl: 'https://example.com',
+  ///   client: client,
+  ///   interceptors: [
+  ///     LoggingInterceptor(),
+  ///     AuthInterceptor(() => authService.getToken()),
+  ///   ],
   /// );
   /// ```
-  RestClientHttp({required super.baseUrl, http.Client? client}) : _client = client ?? http.Client();
+  RestClientHttp({
+    required super.baseUrl,
+    super.interceptors,
+    http.Client? client,
+  }) : _client = client ?? http.Client();
 
   final http.Client _client;
 
   @override
-  Future<Map<String, Object?>?> send({
-    required String path,
-    required String method,
-    Map<String, String?>? queryParams,
-    Map<String, String>? headers,
-    Map<String, Object?>? body,
-  }) async {
+  Future<RestClientResponse> sendRequest(RestClientRequest request) async {
     try {
-      final uri = buildUri(path: path, queryParams: queryParams);
-      final request = http.Request(method, uri);
+      final httpRequest = http.Request(request.method, request.uri);
+      httpRequest.headers.addAll(request.headers);
 
-      if (body != null) {
-        request.bodyBytes = encodeBody(body);
-        request.headers['content-type'] = 'application/json;charset=utf-8';
+      if (request.body != null) {
+        httpRequest.bodyBytes = encodeBody(request.body!);
+        httpRequest.headers['content-type'] = 'application/json;charset=utf-8';
       }
 
-      if (headers != null) {
-        request.headers.addAll(headers);
-      }
+      final response = await _client.send(httpRequest).then(http.Response.fromStream);
 
-      final response = await _client.send(request).then(http.Response.fromStream);
-
-      final result = await decodeResponse(
-        BytesResponseBody(response.bodyBytes),
+      final data = await decodeResponse(
+        response.bodyBytes,
         statusCode: response.statusCode,
       );
 
-      return result;
+      return RestClientResponse(
+        statusCode: response.statusCode,
+        data: data,
+        request: request,
+        headers: response.headers,
+      );
     } on RestClientException {
       rethrow;
     } on http.ClientException catch (e, stack) {
-      final checkedException = checkHttpException(e);
-
-      if (checkedException != null) {
-        Error.throwWithStackTrace(checkedException, stack);
-      }
-
-      Error.throwWithStackTrace(ClientException(message: e.message, cause: e), stack);
+      Error.throwWithStackTrace(NetworkException(message: e.message), stack);
     }
   }
 }

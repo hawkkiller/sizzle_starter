@@ -1,102 +1,73 @@
-import 'package:common_rest_client/common_rest_client.dart';
+import 'package:common_rest_client/src/rest_client.dart';
 import 'package:meta/meta.dart';
 
 /// {@template rest_client_exception}
-/// Base class for all [RestClient] exceptions
+/// Base class for all [RestClient] exceptions.
 /// {@endtemplate}
 @immutable
 sealed class RestClientException implements Exception {
-  /// {@macro network_exception}
-  const RestClientException({required this.message, this.statusCode, this.cause});
+  /// {@macro rest_client_exception}
+  const RestClientException({required this.message, this.statusCode});
 
-  /// Message of the exception
+  /// The message of the exception
   final String message;
 
   /// The status code of the response (if any)
   final int? statusCode;
-
-  /// The cause of the exception
-  ///
-  /// It is the exception that caused this exception to be thrown.
-  ///
-  /// If the exception is not caused by another exception, this field is `null`.
-  final Object? cause;
 }
 
-/// {@template client_exception}
-/// [ClientException] is thrown if something went wrong on client side
+/// {@template api_exception}
+/// RFC 7807 API error exception.
+///
+/// Thrown when server returns 400-599 with a RFC 7807 compliant error response.
 /// {@endtemplate}
-final class ClientException extends RestClientException {
-  /// {@macro client_exception}
-  const ClientException({required super.message, super.statusCode, super.cause});
+final class ApiException extends RestClientException {
+  /// {@macro api_exception}
+  const ApiException({
+    required super.message,
+    required super.statusCode,
+    required this.type,
+    this.extensions,
+  });
+
+  /// The type of the error
+  final String type;
+
+  /// Optional extra properties from the server
+  final Map<String, Object?>? extensions;
 
   @override
-  String toString() =>
-      'ClientException('
-      'message: $message, '
-      'statusCode: $statusCode, '
-      'cause: $cause'
-      ')';
-}
-
-/// {@template structured_backend_exception}
-/// Exception that is used for structured backend errors
-///
-/// [error] is a map that contains the error details
-///
-/// This exception is raised by [RestClientBase] when the response contains
-/// 'error' field like the following:
-/// ```json
-/// {
-///  "error": {
-///   "message": "Some error message",
-///   "code": 123
-/// }
-/// ```
-///
-/// This class exists to make handling of structured errors easier.
-/// Basically, in data providers that use [RestClientBase], you can catch
-/// this exception and convert it to a system-wide error.
-///
-/// For example, if backend returns an error with code "not_allowed" that means that the action
-/// is not allowed and you can convert this exception to a NotAllowedException
-/// and rethrow. This way, the rest of the application does not need to know
-/// about the structure of the error and should only handle system-wide
-/// exceptions.
-/// {@endtemplate}
-final class StructuredBackendException extends RestClientException {
-  /// {@macro structured_backend_exception}
-  const StructuredBackendException({required this.error, super.statusCode})
-    : super(message: 'Backend returned structured error');
-
-  /// The error returned by the backend
-  final Map<String, Object?> error;
-
-  @override
-  String toString() =>
-      'StructuredBackendException('
-      'message: $message, '
-      'error: $error, '
-      'statusCode: $statusCode, '
-      ')';
+  String toString() => 'ApiException(type: $type, message: $message, ext: $extensions)';
 }
 
 /// {@template network_exception}
-/// Exception caused by internet connection issues.
+/// [NetworkException] is thrown if response is not returned at all.
 ///
-/// This can be raised in multiple scenarios:
-/// - When device is offline
-/// - When the host is unreachable (due to DNS issues, firewall, etc.)
+/// Potential reasons for this:
+/// - No internet connection
+/// - Host is unreachable
 /// {@endtemplate}
 final class NetworkException extends RestClientException {
-  /// {@macro connection_exception}
-  const NetworkException({required super.message, super.statusCode, super.cause});
+  /// {@macro network_exception}
+  const NetworkException({required super.message, super.statusCode});
 
   @override
-  String toString() =>
-      'NetworkException('
-      'message: $message, '
-      'statusCode: $statusCode, '
-      'cause: $cause'
-      ')';
+  String toString() => 'NetworkException(message: $message)';
+}
+
+/// {@template unexpected_response_exception}
+/// [UnexpectedResponseException] is thrown when body doesn't match the expected format.
+///
+/// It can be thrown for any status code.
+/// {@endtemplate}
+final class UnexpectedResponseException extends RestClientException {
+  /// {@macro unexpected_response_exception}
+  const UnexpectedResponseException({super.statusCode, this.cause})
+    : super(message: 'Unexpected response format');
+
+  /// Optional cause of the exception
+  final Object? cause;
+
+  @override
+  String toString() => 'UnexpectedResponseException(statusCode: $statusCode, cause: $cause)';
 }

@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
 
-import 'package:common_rest_client/common_rest_client.dart';
+import 'package:common_rest_client/src/exception/rest_client_exception.dart';
+import 'package:common_rest_client/src/interceptor/rest_client_interceptor.dart';
+import 'package:common_rest_client/src/rest_client.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path/path.dart' as p;
 
@@ -9,21 +11,79 @@ import 'package:path/path.dart' as p;
 @immutable
 abstract base class RestClientBase implements RestClient {
   /// {@macro rest_client}
-  RestClientBase({required String baseUrl}) : baseUri = Uri.parse(baseUrl);
+  RestClientBase({
+    required String baseUrl,
+    List<RestClientInterceptor>? interceptors,
+  }) : baseUri = Uri.parse(baseUrl),
+       _interceptors = interceptors ?? const [];
 
   /// The base url for the client
   final Uri baseUri;
 
+  /// List of interceptors to process requests and responses.
+  ///
+  /// Interceptors are called in order for requests (first to last),
+  /// and in reverse order for responses and errors (last to first).
+  final List<RestClientInterceptor> _interceptors;
+
   static final _jsonUTF8 = json.fuse(utf8);
 
-  /// Sends a request to the server
+  /// Sends a request to the server.
+  ///
+  /// This method should be implemented by subclasses to perform the actual
+  /// HTTP request. It receives the request after all interceptors have
+  /// processed it.
+  @protected
+  Future<RestClientResponse> sendRequest(RestClientRequest request);
+
+  /// Sends a request through the interceptor chain.
   Future<Map<String, Object?>?> send({
     required String path,
     required String method,
     Map<String, Object?>? body,
     Map<String, String>? headers,
     Map<String, String?>? queryParams,
-  });
+  }) async {
+    // Build initial request
+    var request = RestClientRequest(
+      uri: buildUri(path: path, queryParams: queryParams),
+      method: method,
+      body: body,
+      headers: headers ?? {},
+    );
+
+    // Run onRequest interceptors (first to last)
+    for (final interceptor in _interceptors) {
+      request = await interceptor.onRequest(request);
+    }
+
+    try {
+      // Send the actual request
+      var response = await sendRequest(request);
+
+      // Run onResponse interceptors (last to first)
+      for (final interceptor in _interceptors.reversed) {
+        response = await interceptor.onResponse(response);
+      }
+
+      return response.data;
+    } catch (error, stackTrace) {
+      // Run onError interceptors (last to first)
+      for (final interceptor in _interceptors.reversed) {
+        try {
+          final response = await interceptor.onError(error, stackTrace, request);
+          return response.data;
+        } catch (newError, newStackTrace) {
+          // If the interceptor rethrew the same error, continue to the next one.
+          // If it threw something new (likely a bug), let it propagate.
+          if (identical(newError, error)) continue;
+          Error.throwWithStackTrace(newError, newStackTrace);
+        }
+      }
+
+      rethrow;
+    }
+  }
 
   @override
   Future<Map<String, Object?>?> delete(
@@ -66,16 +126,7 @@ abstract base class RestClientBase implements RestClient {
   /// Encodes [body] to JSON and then to UTF8
   @protected
   @visibleForTesting
-  List<int> encodeBody(Map<String, Object?> body) {
-    try {
-      return _jsonUTF8.encode(body);
-    } on Object catch (e, stackTrace) {
-      Error.throwWithStackTrace(
-        ClientException(message: 'Error occurred during encoding', cause: e),
-        stackTrace,
-      );
-    }
-  }
+  List<int> encodeBody(Map<String, Object?> body) => _jsonUTF8.encode(body);
 
   /// Builds [Uri] from [path], [queryParams] and [baseUri]
   @protected
@@ -90,113 +141,34 @@ abstract base class RestClientBase implements RestClient {
 
   /// Decodes the response [body]
   ///
-  /// This method decodes the response body to a map and checks if the response
-  /// is an error or successful. If the response is an error, it throws a
-  /// [StructuredBackendException] with the error details.
-  ///
-  /// If the response is successful, it returns the data from the response.
-  ///
-  /// If the response is neither an error nor successful, it returns the decoded
-  /// body as is.
+  /// This method decodes the response body to a map.
   @protected
   @visibleForTesting
   Future<Map<String, Object?>?> decodeResponse(
-    ResponseBody<Object>? body, {
-    int? statusCode,
+    List<int> body, {
+    required int statusCode,
   }) async {
-    if (body == null) return null;
-
     try {
-      final decodedBody = switch (body) {
-        MapResponseBody(:final data) => data,
-        StringResponseBody(:final data) => await _decodeString(data),
-        BytesResponseBody(:final data) => await _decodeBytes(data),
-      };
+      if (body.isEmpty) return null;
 
-      if (decodedBody case {'error': final Map<String, Object?> error}) {
-        throw StructuredBackendException(error: error, statusCode: statusCode);
+      // If the body is too large, decode it in a separate isolate
+      // 32 KB is a reasonable threshold for offloading JSON decoding to an isolate.
+      if (body.length > 1024 * 32) {
+        final decodedJson = await compute(
+          _jsonUTF8.decode,
+          body,
+          debugLabel: kDebugMode ? 'Decode Bytes Compute' : null,
+        );
+
+        return decodedJson as Map<String, Object?>?;
       }
 
-      if (decodedBody case {'data': final Map<String, Object?> data}) {
-        return data;
-      }
-
-      // Return decoded body if it is not an error or data
-      return decodedBody;
-    } on RestClientException {
-      rethrow;
-    } on Object catch (e, stackTrace) {
+      return _jsonUTF8.decode(body)! as Map<String, Object?>;
+    } catch (e, stackTrace) {
       Error.throwWithStackTrace(
-        ClientException(message: 'Error occured during decoding', statusCode: statusCode, cause: e),
+        UnexpectedResponseException(statusCode: statusCode, cause: e),
         stackTrace,
       );
     }
   }
-
-  /// Decodes a [String] to a [Map<String, Object?>]
-  Future<Map<String, Object?>?> _decodeString(String stringBody) async {
-    if (stringBody.isEmpty) return null;
-
-    if (stringBody.length > 1000) {
-      return (await compute(
-            json.decode,
-            stringBody,
-            debugLabel: kDebugMode ? 'Decode String Compute' : null,
-          ))
-          as Map<String, Object?>;
-    }
-
-    return json.decode(stringBody) as Map<String, Object?>;
-  }
-
-  /// Decodes a [List<int>] to a [Map<String, Object?>]
-  Future<Map<String, Object?>?> _decodeBytes(List<int> bytesBody) async {
-    if (bytesBody.isEmpty) return null;
-
-    if (bytesBody.length > 1000) {
-      return (await compute(
-            _jsonUTF8.decode,
-            bytesBody,
-            debugLabel: kDebugMode ? 'Decode Bytes Compute' : null,
-          ))!
-          as Map<String, Object?>;
-    }
-
-    return _jsonUTF8.decode(bytesBody)! as Map<String, Object?>;
-  }
-}
-
-/// {@template response_body}
-/// A sealed class representing the response body
-/// {@endtemplate}
-sealed class ResponseBody<T> {
-  /// {@macro response_body}
-  const ResponseBody(this.data);
-
-  /// The data of the response.
-  final T data;
-}
-
-/// {@template string_response_body}
-/// A [ResponseBody] for a [String] response
-/// {@endtemplate}
-class StringResponseBody extends ResponseBody<String> {
-  /// {@macro string_response_body}
-  const StringResponseBody(super.data);
-}
-
-/// {@template map_response_body}
-/// A [ResponseBody] for a [Map<String, Object?>] response
-/// {@endtemplate}
-class MapResponseBody extends ResponseBody<Map<String, Object?>> {
-  /// {@macro map_response_body}
-  const MapResponseBody(super.data);
-}
-
-/// {@template bytes_response_body}
-/// A [ResponseBody] for both [Uint8List] and [List<int>] responses
-/// {@endtemplate}
-class BytesResponseBody extends ResponseBody<List<int>> {
-  /// {@macro bytes_response_body}
-  const BytesResponseBody(super.data);
 }
