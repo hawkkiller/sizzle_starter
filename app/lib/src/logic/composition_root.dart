@@ -1,10 +1,9 @@
 import 'package:clock/clock.dart';
-import 'package:common_error_reporter/common_error_reporter.dart';
 import 'package:common_logger/common_logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:sizzle_starter/src/feature/settings/injection.dart';
-import 'package:sizzle_starter/src/model/application_config.dart';
+import 'package:sizzle_starter/src/model/app_config.dart';
 import 'package:sizzle_starter/src/model/dependencies_container.dart';
 
 /// A place where Application-Wide dependencies are initialized.
@@ -13,16 +12,15 @@ import 'package:sizzle_starter/src/model/dependencies_container.dart';
 /// used in the entire application and have a lifetime that is the same as the application.
 /// Composes dependencies and returns the result of composition.
 Future<CompositionResult> composeDependencies({
-  required ApplicationConfig config,
+  required AppConfig config,
   required Logger logger,
-  required ErrorReporter errorReporter,
 }) async {
   final stopwatch = clock.stopwatch()..start();
 
   logger.info('Initializing dependencies...');
 
   // Create the dependencies container using functions.
-  final dependencies = await createDependenciesContainer(config, logger, errorReporter);
+  final dependencies = await createDependenciesContainer(config, logger);
 
   stopwatch.stop();
   logger.info('Dependencies initialized successfully in ${stopwatch.elapsedMilliseconds} ms.');
@@ -48,11 +46,7 @@ final class CompositionResult {
 }
 
 /// Creates the initialized [DependenciesContainer].
-Future<DependenciesContainer> createDependenciesContainer(
-  ApplicationConfig config,
-  Logger logger,
-  ErrorReporter errorReporter,
-) async {
+Future<DependenciesContainer> createDependenciesContainer(AppConfig config, Logger logger) async {
   // Create or obtain the shared preferences instance.
   final sharedPreferences = SharedPreferencesAsync();
 
@@ -63,7 +57,6 @@ Future<DependenciesContainer> createDependenciesContainer(
   return DependenciesContainer(
     logger: logger,
     config: config,
-    errorReporter: errorReporter,
     packageInfo: packageInfo,
     settingsContainer: settingsContainer,
   );
@@ -78,18 +71,4 @@ Logger createAppLogger({List<LogObserver> observers = const []}) {
   }
 
   return logger;
-}
-
-/// Creates the [ErrorReporter] instance and initializes it if needed.
-Future<ErrorReporter> createErrorReporter(ApplicationConfig config) async {
-  final errorReporter = SentryErrorReporter(
-    sentryDsn: config.sentryDsn,
-    environment: config.environment.value,
-  );
-
-  if (config.sentryDsn.isNotEmpty) {
-    await errorReporter.initialize();
-  }
-
-  return errorReporter;
 }

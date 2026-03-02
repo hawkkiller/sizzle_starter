@@ -1,22 +1,19 @@
-import 'package:common_error_reporter/common_error_reporter.dart';
 import 'package:common_logger/common_logger.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:sizzle_starter/src/feature/settings/injection.dart';
-import 'package:sizzle_starter/src/model/application_config.dart';
+import 'package:sizzle_starter/src/model/app_config.dart';
 
 /// Container for global dependencies.
 class DependenciesContainer {
   const DependenciesContainer({
     required this.logger,
     required this.config,
-    required this.errorReporter,
     required this.packageInfo,
     required this.settingsContainer,
   });
 
   final Logger logger;
-  final ApplicationConfig config;
-  final ErrorReporter errorReporter;
+  final AppConfig config;
   final PackageInfo packageInfo;
   final SettingsContainer settingsContainer;
 }

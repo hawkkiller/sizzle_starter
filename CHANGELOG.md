@@ -17,6 +17,9 @@ Version format: `major.minor`. Major version is incremented for brea
 - Move `home` and `settings` feature packages to `app`
 - Rename common packages to have `common` prefix
 - Refactor and simplify `common_rest_client` package
+- Simplified `common_error_reporter`, removed lifecycle methods, added `NoopErrorReporter`
+- Renamed Environment -> AppEnv, ApplicationConfig -> AppConfig
+- Simplified `AppBlocObserver`, removed event duplication.
 
 ## [3.10] - Jan 4, 2025
 

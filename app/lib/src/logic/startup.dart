@@ -8,18 +8,15 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:sizzle_starter/src/bloc/app_bloc_observer.dart';
 import 'package:sizzle_starter/src/bloc/bloc_transformer.dart';
 import 'package:sizzle_starter/src/logic/composition_root.dart';
-import 'package:sizzle_starter/src/model/application_config.dart';
+import 'package:sizzle_starter/src/model/app_config.dart';
 import 'package:sizzle_starter/src/widget/initialization_failed_app.dart';
 import 'package:sizzle_starter/src/widget/root_context.dart';
 
 /// Initializes dependencies and runs app
 Future<void> startup() async {
-  const config = ApplicationConfig();
-  final errorReporter = await createErrorReporter(config);
-
+  const config = AppConfig();
   final logger = createAppLogger(
     observers: [
-      ErrorReporterLogObserver(errorReporter),
       if (!kReleaseMode) const PrintingLogObserver(logLevel: LogLevel.trace),
     ],
   );
@@ -35,16 +32,13 @@ Future<void> startup() async {
 
       // Setup bloc observer and transformer
       Bloc.observer = AppBlocObserver(logger);
-      Bloc.transformer = SequentialBlocTransformer<Object?>().transform;
+      Bloc.transformer = sequentialBlocTransformer;
+      final errorReporter = createErrorReporter();
+      logger.addObserver(ErrorReporterLogObserver(errorReporter));
 
       Future<void> composeAndRun() async {
         try {
-          final compositionResult = await composeDependencies(
-            config: config,
-            logger: logger,
-            errorReporter: errorReporter,
-          );
-
+          final compositionResult = await composeDependencies(config: config, logger: logger);
           runApp(RootContext(compositionResult: compositionResult));
         } on Object catch (e, stackTrace) {
           logger.error('Initialization failed', error: e, stackTrace: stackTrace);
@@ -64,3 +58,6 @@ Future<void> startup() async {
     logger.logZoneError,
   );
 }
+
+/// Creates the [ErrorReporter] instance.
+ErrorReporter createErrorReporter() => const NoopErrorReporter();
