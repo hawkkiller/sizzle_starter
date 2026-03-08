@@ -137,7 +137,6 @@ class SandgoldTheme extends UiTheme {
           hairline: 0.5,
           subtle: 1,
           strong: 2,
-          focus: 2,
         ),
         opacity: const UiOpacityTokens(
           disabled: 0.38,

@@ -284,7 +284,7 @@ class UiButton extends StatelessWidget {
         elevation: e.none,
       ),
       (UiButtonStyle.secondary, UiButtonRole.destructive) => (
-        bg: c.surface,
+        bg: c.errorContainer,
         disabledBg: dim(c.surface),
         fg: c.error,
         disabledFg: dim(c.error),

@@ -8,7 +8,6 @@ class UiBorderWidthTokens {
     required this.hairline,
     required this.subtle,
     required this.strong,
-    required this.focus,
   });
 
   /// Width for no border.
@@ -23,23 +22,18 @@ class UiBorderWidthTokens {
   /// Width for emphasized borders.
   final double strong;
 
-  /// Width for focus outline/ring borders.
-  final double focus;
-
   /// Creates a copy with selected overrides.
   UiBorderWidthTokens copyWith({
     double? none,
     double? hairline,
     double? subtle,
     double? strong,
-    double? focus,
   }) {
     return UiBorderWidthTokens(
       none: none ?? this.none,
       hairline: hairline ?? this.hairline,
       subtle: subtle ?? this.subtle,
       strong: strong ?? this.strong,
-      focus: focus ?? this.focus,
     );
   }
 
@@ -50,7 +44,6 @@ class UiBorderWidthTokens {
       hairline: lerpDouble(hairline, other.hairline, t) ?? hairline,
       subtle: lerpDouble(subtle, other.subtle, t) ?? subtle,
       strong: lerpDouble(strong, other.strong, t) ?? strong,
-      focus: lerpDouble(focus, other.focus, t) ?? focus,
     );
   }
 }

@@ -82,35 +82,24 @@ class UiInput extends StatelessWidget {
                 color: theme.color.onSurfaceMuted,
                 height: 1,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: theme.color.outline, width: theme.borderWidth.subtle),
-                borderRadius: borderRadius,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: theme.color.focus, width: theme.borderWidth.focus),
-                borderRadius: borderRadius,
-              ),
               border: OutlineInputBorder(
                 borderSide: BorderSide(color: theme.color.outline, width: theme.borderWidth.subtle),
                 borderRadius: borderRadius,
               ),
+              enabledBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: theme.color.outline, width: theme.borderWidth.subtle),
+              ),
               errorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: theme.color.error,
-                  width: theme.borderWidth.subtle,
-                ),
-                borderRadius: borderRadius,
+                borderSide: BorderSide(color: theme.color.error, width: theme.borderWidth.subtle),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderSide: BorderSide(color: theme.color.focus, width: theme.borderWidth.strong),
               ),
               focusedErrorBorder: OutlineInputBorder(
-                borderSide: BorderSide(
-                  color: theme.color.error,
-                  width: theme.borderWidth.focus,
-                ),
-                borderRadius: borderRadius,
+                borderSide: BorderSide(color: theme.color.error, width: theme.borderWidth.strong),
               ),
               disabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: theme.color.outline),
-                borderRadius: borderRadius,
+                borderSide: BorderSide(color: theme.color.outline, width: theme.borderWidth.subtle),
               ),
             ),
           ),
