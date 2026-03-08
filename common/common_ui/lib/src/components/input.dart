@@ -51,7 +51,7 @@ class UiInput extends StatelessWidget {
             ExcludeSemantics(
               child: UiText.labelLarge(
                 labelText!,
-                color: enabled ? theme.color.onSurface : theme.color.onSurfaceMuted,
+                color: theme.color.onSurface.withValues(alpha: enabled ? 1 : theme.opacity.disabled),
               ),
             ),
           TextField(
@@ -82,24 +82,25 @@ class UiInput extends StatelessWidget {
                 color: theme.color.onSurfaceMuted,
                 height: 1,
               ),
-              border: OutlineInputBorder(
+              enabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: theme.color.outline, width: theme.borderWidth.subtle),
                 borderRadius: borderRadius,
               ),
-              enabledBorder: OutlineInputBorder(
-                borderSide: BorderSide(color: theme.color.outline, width: theme.borderWidth.subtle),
-              ),
               errorBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: theme.color.error, width: theme.borderWidth.subtle),
+                borderRadius: borderRadius,
               ),
               focusedBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: theme.color.focus, width: theme.borderWidth.strong),
+                borderRadius: borderRadius,
               ),
               focusedErrorBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: theme.color.error, width: theme.borderWidth.strong),
+                borderRadius: borderRadius,
               ),
               disabledBorder: OutlineInputBorder(
                 borderSide: BorderSide(color: theme.color.outline, width: theme.borderWidth.subtle),
+                borderRadius: borderRadius,
               ),
             ),
           ),
