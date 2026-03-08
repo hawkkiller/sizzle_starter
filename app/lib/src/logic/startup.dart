@@ -33,6 +33,8 @@ Future<void> startup() async {
       // Setup bloc observer and transformer
       Bloc.observer = AppBlocObserver(logger);
       Bloc.transformer = sequentialBlocTransformer;
+
+      // Setup error reporter and add log observer
       final errorReporter = createErrorReporter();
       logger.addObserver(ErrorReporterLogObserver(errorReporter));
 

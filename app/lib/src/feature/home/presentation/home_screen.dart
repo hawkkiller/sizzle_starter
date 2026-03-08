@@ -1,3 +1,4 @@
+import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/feature/settings/presentation/settings_scope.dart';
 
@@ -16,38 +17,42 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final settings = SettingsScope.of(context);
+    final theme = UiTheme.of(context);
+    final spacing = theme.spacing;
 
     return Scaffold(
       body: ListView(
         children: [
           Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
+            padding: spacing.s16.ph,
             child: Text(
               'Seed color',
               style: Theme.of(context).textTheme.titleMedium,
             ),
           ),
-          const SizedBox(height: 8),
-          SizedBox(
-            height: 48,
-            child: ListView.separated(
-              separatorBuilder: (context, index) => const SizedBox(width: 8),
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              itemCount: Colors.accents.length,
-              scrollDirection: Axis.horizontal,
-              itemBuilder: (context, index) {
-                final color = Colors.accents[index];
-                final isSelected = settings.general.seedColor.toARGB32() == color.toARGB32();
-
-                return _ColorItem(
-                  color: color,
-                  isSelected: isSelected,
-                  onTap: (color) => _onSeedColorChanged(context, color),
-                );
-              },
+          Padding(
+            padding: spacing.s8.ph,
+            child: SizedBox(
+              height: 48,
+              child: ListView.separated(
+                separatorBuilder: (context, index) => SizedBox(width: spacing.s8),
+                padding: spacing.s16.ph,
+                itemCount: Colors.accents.length,
+                scrollDirection: Axis.horizontal,
+                itemBuilder: (context, index) {
+                  final color = Colors.accents[index];
+                  final isSelected = settings.general.seedColor.toARGB32() == color.toARGB32();
+            
+                  return _ColorItem(
+                    color: color,
+                    isSelected: isSelected,
+                    onTap: (color) => _onSeedColorChanged(context, color),
+                  );
+                },
+              ),
             ),
           ),
-          const SizedBox(height: 16),
+          SizedBox(height: spacing.s16),
         ],
       ),
     );

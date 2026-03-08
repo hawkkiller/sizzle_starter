@@ -51,7 +51,9 @@ class UiInput extends StatelessWidget {
             ExcludeSemantics(
               child: UiText.labelLarge(
                 labelText!,
-                color: theme.color.onSurface.withValues(alpha: enabled ? 1 : theme.opacity.disabled),
+                color: theme.color.onSurface.withValues(
+                  alpha: enabled ? 1 : theme.opacity.disabled,
+                ),
               ),
             ),
           TextField(

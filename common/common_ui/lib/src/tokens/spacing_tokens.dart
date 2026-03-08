@@ -2,6 +2,8 @@
 
 import 'dart:ui' show lerpDouble;
 
+import 'package:flutter/widgets.dart';
+
 /// Spacing tokens based on a configurable base unit.
 class UiSpacing {
   /// Creates spacing tokens from a base unit.
@@ -15,58 +17,58 @@ class UiSpacing {
   final double _base;
 
   /// Spacing step equal to 2 px in the default profile.
-  double get s2 => _base * 0.125;
+  UiSpacingUnit get s2 => UiSpacingUnit(_base * 0.125);
 
   /// Spacing step equal to 4 px in the default profile.
-  double get s4 => _base * .25;
+  UiSpacingUnit get s4 => UiSpacingUnit(_base * .25);
 
   /// Spacing step equal to 8 px in the default profile.
-  double get s8 => _base * 0.5;
+  UiSpacingUnit get s8 => UiSpacingUnit(_base * 0.5);
 
   /// Spacing step equal to 12 px in the default profile.
-  double get s12 => _base * 0.75;
+  UiSpacingUnit get s12 => UiSpacingUnit(_base * 0.75);
 
   /// Spacing step equal to 16 px in the default profile.
-  double get s16 => _base;
+  UiSpacingUnit get s16 => UiSpacingUnit(_base);
 
   /// Spacing step equal to 24 px in the default profile.
-  double get s24 => _base * 1.5;
+  UiSpacingUnit get s24 => UiSpacingUnit(_base * 1.5);
 
   /// Spacing step equal to 32 px in the default profile.
-  double get s32 => _base * 2;
+  UiSpacingUnit get s32 => UiSpacingUnit(_base * 2);
 
   /// Spacing step equal to 48 px in the default profile.
-  double get s48 => _base * 3;
+  UiSpacingUnit get s48 => UiSpacingUnit(_base * 3);
 
   /// Spacing step equal to 64 px in the default profile.
-  double get s64 => _base * 4;
+  UiSpacingUnit get s64 => UiSpacingUnit(_base * 4);
 
   /// Spacing step equal to 96 px in the default profile.
-  double get s96 => _base * 6;
+  UiSpacingUnit get s96 => UiSpacingUnit(_base * 6);
 
   /// Spacing step equal to 128 px in the default profile.
-  double get s128 => _base * 8;
+  UiSpacingUnit get s128 => UiSpacingUnit(_base * 8);
 
   /// Spacing step equal to 192 px in the default profile.
-  double get s192 => _base * 12;
+  UiSpacingUnit get s192 => UiSpacingUnit(_base * 12);
 
   /// Spacing step equal to 256 px in the default profile.
-  double get s256 => _base * 16;
+  UiSpacingUnit get s256 => UiSpacingUnit(_base * 16);
 
   /// Spacing step equal to 384 px in the default profile.
-  double get s384 => _base * 24;
+  UiSpacingUnit get s384 => UiSpacingUnit(_base * 24);
 
   /// Spacing step equal to 512 px in the default profile.
-  double get s512 => _base * 32;
+  UiSpacingUnit get s512 => UiSpacingUnit(_base * 32);
 
   /// Spacing step equal to 640 px in the default profile.
-  double get s640 => _base * 40;
+  UiSpacingUnit get s640 => UiSpacingUnit(_base * 40);
 
   /// Spacing step equal to 768 px in the default profile.
-  double get s768 => _base * 48;
+  UiSpacingUnit get s768 => UiSpacingUnit(_base * 48);
 
   /// Returns the configured base spacing unit.
-  double get base => _base;
+  UiSpacingUnit get base => UiSpacingUnit(_base);
 
   /// Creates a copy with selected overrides.
   UiSpacing copyWith({double? base}) => UiSpacing(base: base ?? _base);
@@ -74,4 +76,14 @@ class UiSpacing {
   /// Linearly interpolates this token set with another one.
   UiSpacing lerp(UiSpacing other, double t) =>
       UiSpacing(base: lerpDouble(_base, other._base, t) ?? _base);
+}
+
+extension type UiSpacingUnit(double value) implements double {
+  EdgeInsets get pa => EdgeInsets.all(value);
+  EdgeInsets get ph => EdgeInsets.symmetric(horizontal: value);
+  EdgeInsets get pv => EdgeInsets.symmetric(vertical: value);
+  EdgeInsets get pl => EdgeInsets.only(left: value);
+  EdgeInsets get pr => EdgeInsets.only(right: value);
+  EdgeInsets get pt => EdgeInsets.only(top: value);
+  EdgeInsets get pb => EdgeInsets.only(bottom: value);
 }
