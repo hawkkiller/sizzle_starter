@@ -1,6 +1,9 @@
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/widgets.dart';
 
+/// Wraps the positioned flyout overlay with additional presentation.
+typedef UiFlyoutOverlayBuilder = Widget Function(BuildContext context, Widget flyout);
+
 /// Defines the width behavior of the flyout.
 enum UiFlyoutWidth {
   /// The flyout will hug the content regardless of the target.
@@ -80,6 +83,7 @@ class UiFlyout extends StatefulWidget {
     required this.flyoutBuilder,
     required this.child,
     this.anchor = const UiFlyoutAnchor(),
+    this.overlayBuilder,
     this.width = UiFlyoutWidth.fixed,
     super.key,
   });
@@ -89,6 +93,9 @@ class UiFlyout extends StatefulWidget {
 
   /// The width behavior of the flyout.
   final UiFlyoutWidth width;
+
+  /// Optional wrapper for the positioned overlay content.
+  final UiFlyoutOverlayBuilder? overlayBuilder;
 
   /// Whether the flyout is open.
   final bool isOpen;
@@ -189,7 +196,7 @@ class _UiFlyoutState extends State<UiFlyout> {
         final targetInOverlay = overlay.globalToLocal(targetGlobalOffset);
         final targetRect = targetInOverlay & target.size;
 
-        return CustomSingleChildLayout(
+        final flyout = CustomSingleChildLayout(
           delegate: _UiFlyoutDelegate(
             anchor: widget.anchor,
             targetRect: targetRect,
@@ -198,6 +205,8 @@ class _UiFlyoutState extends State<UiFlyout> {
           ),
           child: widget.flyoutBuilder(flyoutContext),
         );
+
+        return widget.overlayBuilder?.call(flyoutContext, flyout) ?? flyout;
       },
     );
   }

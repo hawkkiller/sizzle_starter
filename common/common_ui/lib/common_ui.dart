@@ -5,6 +5,7 @@ export 'src/components/color_scale_preview.dart';
 export 'src/components/flyout.dart';
 export 'src/components/input.dart';
 export 'src/components/loader.dart';
+export 'src/components/pulldown_button.dart';
 export 'src/components/text.dart';
 export 'src/primitives/color_primitives.dart';
 export 'src/primitives/color_scale.dart';

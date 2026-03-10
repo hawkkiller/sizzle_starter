@@ -24,6 +24,8 @@ class DsPreviewScreen extends StatelessWidget {
           SizedBox(height: theme.spacing.s8),
           const _IconButtonsPreview(role: UiButtonRole.destructive),
           SizedBox(height: theme.spacing.s8),
+          const PulldownPreview(),
+          SizedBox(height: theme.spacing.s8),
           const BadgesPreview(),
           SizedBox(height: theme.spacing.s8),
           const BadgesPreview(spacious: true),
@@ -144,11 +146,125 @@ class BadgesPreview extends StatelessWidget {
       runSpacing: theme.spacing.s16,
       children: [
         UiBadge(label: 'Info', spacious: spacious),
-        UiBadge(label: 'Warning', variant: UiBadgeVariant.warning, spacious: spacious),
-        UiBadge(label: 'Error', variant: UiBadgeVariant.error, spacious: spacious),
-        UiBadge(label: 'Success', variant: UiBadgeVariant.success, spacious: spacious),
-        UiBadge(label: 'Neutral', variant: UiBadgeVariant.neutral, spacious: spacious),
+        UiBadge(
+          label: 'Warning',
+          variant: UiBadgeVariant.warning,
+          spacious: spacious,
+        ),
+        UiBadge(
+          label: 'Error',
+          variant: UiBadgeVariant.error,
+          spacious: spacious,
+        ),
+        UiBadge(
+          label: 'Success',
+          variant: UiBadgeVariant.success,
+          spacious: spacious,
+        ),
+        UiBadge(
+          label: 'Neutral',
+          variant: UiBadgeVariant.neutral,
+          spacious: spacious,
+        ),
       ],
+    );
+  }
+}
+
+class PulldownPreview extends StatelessWidget {
+  const PulldownPreview({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = UiTheme.of(context);
+
+    return Wrap(
+      spacing: theme.spacing.s16,
+      runSpacing: theme.spacing.s16,
+      crossAxisAlignment: WrapCrossAlignment.center,
+      children: const [
+        UiPulldownButton(content: _PulldownMenuCard()),
+        UiPulldownButton(
+          label: 'Actions',
+          iconOnly: false,
+          icon: Icon(Icons.more_vert),
+          content: _PulldownMenuCard(),
+        ),
+      ],
+    );
+  }
+}
+
+class _PulldownMenuCard extends StatelessWidget {
+  const _PulldownMenuCard();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = UiTheme.of(context);
+
+    return UiCard(
+      hasBorder: true,
+      padding: EdgeInsets.all(theme.spacing.s8),
+      child: SizedBox(
+        width: 220,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Padding(
+              padding: EdgeInsets.fromLTRB(
+                theme.spacing.s8,
+                theme.spacing.s8,
+                theme.spacing.s8,
+                theme.spacing.s4,
+              ),
+              child: UiText.labelLarge(
+                'Quick actions',
+                color: theme.color.onSurfaceMuted,
+              ),
+            ),
+            const _PulldownAction(label: 'Edit', icon: Icons.edit_outlined),
+            const _PulldownAction(
+              label: 'Duplicate',
+              icon: Icons.copy_outlined,
+            ),
+            const _PulldownAction(
+              label: 'Share',
+              icon: Icons.ios_share_outlined,
+            ),
+            const _PulldownAction(
+              label: 'Delete',
+              icon: Icons.delete_outline,
+              role: UiButtonRole.destructive,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class _PulldownAction extends StatelessWidget {
+  const _PulldownAction({
+    required this.label,
+    required this.icon,
+    this.role = UiButtonRole.normal,
+  });
+
+  final String label;
+  final IconData icon;
+  final UiButtonRole role;
+
+  @override
+  Widget build(BuildContext context) {
+    return UiButton(
+      label: label,
+      icon: Icon(icon),
+      style: UiButtonStyle.ghost,
+      role: role,
+      width: UiButtonWidth.fill,
+      alignment: Alignment.centerLeft,
+      onPressed: () {},
     );
   }
 }
@@ -224,7 +340,11 @@ class CardPreview extends StatelessWidget {
               mainAxisSize: .min,
               spacing: theme.spacing.s4,
               children: [
-                Icon(Icons.account_balance_wallet, size: 16, color: theme.color.onSurfaceMuted),
+                Icon(
+                  Icons.account_balance_wallet,
+                  size: 16,
+                  color: theme.color.onSurfaceMuted,
+                ),
                 UiText.bodyMedium('**61305', color: theme.color.onSurfaceMuted),
               ],
             ),
@@ -242,9 +362,6 @@ class LoaderPreview extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Align(
-      alignment: Alignment.centerLeft,
-      child: UiLoader(),
-    );
+    return const Align(alignment: Alignment.centerLeft, child: UiLoader());
   }
 }
