@@ -1,7 +1,6 @@
 import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
 
-export 'component_themes.dart';
 export 'themes/sandgold_theme.dart';
 
 /// Aggregated design theme used by UI components.
@@ -16,7 +15,6 @@ class UiTheme extends ThemeExtension<UiTheme> {
     required this.borderWidth,
     required this.opacity,
     required this.elevation,
-    required this.component,
   });
 
   /// Retrieves the [UiTheme] from the nearest [Theme] ancestor.
@@ -35,7 +33,7 @@ class UiTheme extends ThemeExtension<UiTheme> {
         cursorColor: color.focus,
         selectionColor: color.focus.withValues(alpha: opacity.focus),
         selectionHandleColor: color.focus,
-      )
+      ),
     );
   }
 
@@ -63,9 +61,6 @@ class UiTheme extends ThemeExtension<UiTheme> {
   /// Semantic elevation tokens.
   final UiElevationTokens elevation;
 
-  /// Semantic component themes.
-  final UiComponentThemes component;
-
   @override
   UiTheme copyWith({
     UiColorTokens? color,
@@ -75,7 +70,6 @@ class UiTheme extends ThemeExtension<UiTheme> {
     UiBorderWidthTokens? borderWidth,
     UiOpacityTokens? opacity,
     UiElevationTokens? elevation,
-    UiComponentThemes? component,
     Brightness? brightness,
   }) {
     return UiTheme(
@@ -86,7 +80,6 @@ class UiTheme extends ThemeExtension<UiTheme> {
       borderWidth: borderWidth ?? this.borderWidth,
       opacity: opacity ?? this.opacity,
       elevation: elevation ?? this.elevation,
-      component: component ?? this.component,
       brightness: brightness ?? this.brightness,
     );
   }
@@ -105,7 +98,6 @@ class UiTheme extends ThemeExtension<UiTheme> {
       borderWidth: borderWidth.lerp(other.borderWidth, t),
       opacity: opacity.lerp(other.opacity, t),
       elevation: elevation.lerp(other.elevation, t),
-      component: component.lerp(other.component, t),
       brightness: other.brightness,
     );
   }

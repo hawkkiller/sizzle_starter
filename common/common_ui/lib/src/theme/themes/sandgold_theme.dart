@@ -153,6 +153,5 @@ class SandgoldTheme extends UiTheme {
           overlay: 6,
           modal: 8,
         ),
-        component: const UiComponentThemes(),
       );
 }

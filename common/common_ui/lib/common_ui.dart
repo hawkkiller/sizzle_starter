@@ -9,7 +9,6 @@ export 'src/components/pulldown_button.dart';
 export 'src/components/text.dart';
 export 'src/primitives/color_primitives.dart';
 export 'src/primitives/color_scale.dart';
-export 'src/theme/component_themes.dart';
 export 'src/theme/theme.dart';
 export 'src/tokens/border_width_tokens.dart';
 export 'src/tokens/breakpoint_tokens.dart';
