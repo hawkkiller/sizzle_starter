@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 /// A button that shows anchored overlay content when pressed.
 ///
@@ -60,6 +61,7 @@ class UiPulldownButton extends StatefulWidget {
 class _UiPulldownButtonState extends State<UiPulldownButton> with SingleTickerProviderStateMixin {
   final Object _tapRegionGroupId = Object();
 
+  late final _flyoutFocusNode = FocusNode(debugLabel: 'Pulldown Flyout');
   late final AnimationController _animationController;
   late final Animation<double> _scaleAnimation;
   late final Animation<double> _opacityAnimation;
@@ -103,16 +105,16 @@ class _UiPulldownButtonState extends State<UiPulldownButton> with SingleTickerPr
   @override
   void dispose() {
     _animationController.dispose();
+    _flyoutFocusNode.dispose();
     super.dispose();
   }
 
   void _show() {
     if (_isOpen || !widget.enabled) return;
 
-    setState(() {
-      _isOpen = true;
-    });
+    setState(() => _isOpen = true);
     unawaited(_animationController.forward(from: 0));
+    _flyoutFocusNode.requestFocus();
   }
 
   void _hide() {
@@ -128,13 +130,12 @@ class _UiPulldownButtonState extends State<UiPulldownButton> with SingleTickerPr
 
     if (!mounted || !_isOpen) return;
 
-    setState(() {
-      _isOpen = false;
-    });
+    setState(() => _isOpen = false);
   }
 
   @override
   Widget build(BuildContext context) {
+    final buttonLabel = widget.label ?? 'More actions';
     final spacing = UiTheme.of(context).spacing;
 
     return TapRegion(
@@ -165,22 +166,52 @@ class _UiPulldownButtonState extends State<UiPulldownButton> with SingleTickerPr
         flyoutBuilder: (context) {
           return TapRegion(
             groupId: _tapRegionGroupId,
-            child: ScaleTransition(
-              alignment: widget.followerAnchor,
-              scale: _scaleAnimation,
-              child: FadeTransition(opacity: _opacityAnimation, child: widget.content),
+            child: FocusTraversalGroup(
+              child: Shortcuts(
+                shortcuts: const {
+                  SingleActivator(LogicalKeyboardKey.escape): DismissIntent(),
+                },
+                child: Actions(
+                  actions: {
+                    DismissIntent: CallbackAction<DismissIntent>(
+                      onInvoke: (intent) {
+                        _hide();
+                        return null;
+                      },
+                    ),
+                  },
+                  child: FocusScope(
+                    child: Focus(
+                      skipTraversal: true,
+                      focusNode: _flyoutFocusNode,
+                      child: Semantics(
+                        container: true,
+                        explicitChildNodes: true,
+                        child: ScaleTransition(
+                          alignment: widget.followerAnchor,
+                          scale: _scaleAnimation,
+                          child: FadeTransition(opacity: _opacityAnimation, child: widget.content),
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ),
             ),
           );
         },
-        child: UiButton(
-          label: widget.label ?? 'More actions', // TODO(mlazebny): Add localizations
-          style: UiButtonStyle.outline,
-          iconOnly: widget.iconOnly,
-          icon: widget.icon ?? const Icon(Icons.more_horiz),
-          size: widget.size,
-          width: widget.width,
-          enabled: widget.enabled,
-          onPressed: _show,
+        child: Semantics(
+          expanded: _isOpen,
+          child: UiButton(
+            label: buttonLabel,
+            style: UiButtonStyle.outline,
+            iconOnly: widget.iconOnly,
+            icon: widget.icon ?? const Icon(Icons.more_horiz),
+            size: widget.size,
+            width: widget.width,
+            enabled: widget.enabled,
+            onPressed: _show,
+          ),
         ),
       ),
     );
