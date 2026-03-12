@@ -4,6 +4,44 @@ import 'package:flutter/widgets.dart';
 /// Wraps the positioned flyout overlay with additional presentation.
 typedef UiFlyoutOverlayBuilder = Widget Function(BuildContext context, Widget flyout);
 
+/// A controller that manages flyout visibility.
+abstract interface class FlyoutController {
+  /// Requests the flyout to hide.
+  void hide();
+}
+
+/// Provides access to the nearest [FlyoutController].
+class FlyoutScope extends InheritedWidget {
+  /// Creates a scope for accessing a flyout controller from descendants.
+  const FlyoutScope({
+    required this.controller,
+    required super.child,
+    super.key,
+  });
+
+  /// The controller for the current flyout.
+  final FlyoutController controller;
+
+  /// Returns the nearest [FlyoutScope], if one exists.
+  static FlyoutScope? maybeOf(BuildContext context, {bool listen = true}) {
+    return listen
+        ? context.dependOnInheritedWidgetOfExactType<FlyoutScope>()
+        : context.getInheritedWidgetOfExactType<FlyoutScope>();
+  }
+
+  /// Returns the nearest [FlyoutScope].
+  static FlyoutScope of(BuildContext context, {bool listen = true}) {
+    final scope = maybeOf(context, listen: listen);
+    assert(scope != null, 'No FlyoutScope found in context.');
+    return scope!;
+  }
+
+  @override
+  bool updateShouldNotify(covariant FlyoutScope oldWidget) {
+    return controller != oldWidget.controller;
+  }
+}
+
 /// Defines the width behavior of the flyout.
 enum UiFlyoutWidth {
   /// The flyout will hug the content regardless of the target.
@@ -84,6 +122,7 @@ class UiFlyout extends StatefulWidget {
     required this.child,
     this.anchor = const UiFlyoutAnchor(),
     this.overlayBuilder,
+    this.onHideRequested,
     this.width = UiFlyoutWidth.fixed,
     super.key,
   });
@@ -96,6 +135,9 @@ class UiFlyout extends StatefulWidget {
 
   /// Optional wrapper for the positioned overlay content.
   final UiFlyoutOverlayBuilder? overlayBuilder;
+
+  /// Called when a descendant requests the flyout to hide.
+  final VoidCallback? onHideRequested;
 
   /// Whether the flyout is open.
   final bool isOpen;
@@ -110,7 +152,7 @@ class UiFlyout extends StatefulWidget {
   State<UiFlyout> createState() => _UiFlyoutState();
 }
 
-class _UiFlyoutState extends State<UiFlyout> {
+class _UiFlyoutState extends State<UiFlyout> implements FlyoutController {
   late final OverlayPortalController _overlayPortalController;
   ScrollNotificationObserverState? _scrollNotificationObserver;
 
@@ -167,6 +209,11 @@ class _UiFlyoutState extends State<UiFlyout> {
     }
   }
 
+  @override
+  void hide() {
+    widget.onHideRequested?.call();
+  }
+
   /// Schedules the visibility change for the next frame.
   ///
   /// This is necessary because [OverlayPortal] does not allow toggling
@@ -186,28 +233,33 @@ class _UiFlyoutState extends State<UiFlyout> {
   }
 
   Widget _overlayChildBuilder(BuildContext flyoutContext) {
-    return LayoutBuilder(
-      builder: (_, constraints) {
-        final direction = Directionality.of(context);
-        final target = context.findRenderObject()! as RenderBox;
-        final overlay = Overlay.of(flyoutContext).context.findRenderObject()! as RenderBox;
+    return FlyoutScope(
+      controller: this,
+      child: Builder(
+        builder: (scopeContext) => LayoutBuilder(
+          builder: (_, constraints) {
+            final direction = Directionality.of(context);
+            final target = context.findRenderObject()! as RenderBox;
+            final overlay = Overlay.of(flyoutContext).context.findRenderObject()! as RenderBox;
 
-        final targetGlobalOffset = target.localToGlobal(Offset.zero);
-        final targetInOverlay = overlay.globalToLocal(targetGlobalOffset);
-        final targetRect = targetInOverlay & target.size;
+            final targetGlobalOffset = target.localToGlobal(Offset.zero);
+            final targetInOverlay = overlay.globalToLocal(targetGlobalOffset);
+            final targetRect = targetInOverlay & target.size;
 
-        final flyout = CustomSingleChildLayout(
-          delegate: _UiFlyoutDelegate(
-            anchor: widget.anchor,
-            targetRect: targetRect,
-            direction: direction,
-            width: widget.width,
-          ),
-          child: widget.flyoutBuilder(flyoutContext),
-        );
+            final flyout = CustomSingleChildLayout(
+              delegate: _UiFlyoutDelegate(
+                anchor: widget.anchor,
+                targetRect: targetRect,
+                direction: direction,
+                width: widget.width,
+              ),
+              child: widget.flyoutBuilder(scopeContext),
+            );
 
-        return widget.overlayBuilder?.call(flyoutContext, flyout) ?? flyout;
-      },
+            return widget.overlayBuilder?.call(scopeContext, flyout) ?? flyout;
+          },
+        ),
+      ),
     );
   }
 

@@ -217,34 +217,48 @@ class _PulldownMenuContent extends StatelessWidget {
             color: theme.color.onSurfaceMuted,
           ),
         ),
-        const UiMenuItem(
-          label: 'Edit',
-          icon: Icon(Icons.edit_outlined),
-          onPressed: _noop,
-        ),
-        const UiMenuItem(
+        const _PreviewMenuItem(label: 'Edit', icon: Icon(Icons.edit_outlined)),
+        const _PreviewMenuItem(
           label: 'Duplicate',
           icon: Icon(Icons.copy_outlined),
-          onPressed: _noop,
         ),
-        const UiMenuItem(
+        const _PreviewMenuItem(
           label: 'Share',
           icon: Icon(Icons.ios_share_outlined),
-          onPressed: _noop,
         ),
         const UiMenuDivider(),
-        const UiMenuItem(
+        const _PreviewMenuItem(
           label: 'Delete',
           icon: Icon(Icons.delete_outline),
           role: UiButtonRole.destructive,
-          onPressed: _noop,
         ),
       ],
     );
   }
 }
 
-void _noop() {}
+class _PreviewMenuItem extends StatelessWidget {
+  const _PreviewMenuItem({
+    required this.label,
+    required this.icon,
+    this.role = UiButtonRole.normal,
+  });
+
+  final String label;
+  final Widget icon;
+  final UiButtonRole role;
+
+  @override
+  Widget build(BuildContext context) {
+    return UiMenuItem(
+      label: label,
+      icon: icon,
+      role: role,
+      onPressed: () =>
+          FlyoutScope.of(context, listen: false).controller.hide(),
+    );
+  }
+}
 
 class InputPreview extends StatelessWidget {
   const InputPreview({super.key});

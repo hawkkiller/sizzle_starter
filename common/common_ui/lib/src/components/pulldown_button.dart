@@ -8,7 +8,6 @@ import 'package:flutter/services.dart';
 ///
 /// The button defaults to an icon-only overflow affordance and animates the
 /// pulldown content with a fade-and-scale transition.
-/// TODO(mlazebny): provide a way for content to dismiss the overlay.
 class UiPulldownButton extends StatefulWidget {
   /// Creates a pulldown button.
   const UiPulldownButton({
@@ -136,6 +135,7 @@ class _UiPulldownButtonState extends State<UiPulldownButton> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
+    // TODO(mlazebny): translations
     final buttonLabel = widget.label ?? 'More actions';
     final spacing = UiTheme.of(context).spacing;
 
@@ -144,6 +144,7 @@ class _UiPulldownButtonState extends State<UiPulldownButton> with SingleTickerPr
       onTapOutside: (_) => _hide(),
       child: UiFlyout(
         isOpen: _isOpen,
+        onHideRequested: _hide,
         anchor: UiFlyoutAnchor(
           offset: widget.offset ?? Offset(spacing.s4, -spacing.s2),
           anchorAlignment: widget.targetAnchor,
