@@ -17,5 +17,6 @@ workspace:
   - common/common_logger
   - common/common_rest_client
   - common/common_error_reporter
+  - common/common_translations
   - common/common_ui
   - common/common_database
