@@ -151,7 +151,8 @@ enum LogLevel implements Comparable<LogLevel> {
 
   /// One or more key business functionalities are not working
   /// and the whole system doesn’t fulfill the business functionalities.
-  fatal._();
+  fatal._()
+  ;
 
   const LogLevel._();
 

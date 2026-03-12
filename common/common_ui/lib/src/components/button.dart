@@ -108,7 +108,8 @@ enum UiButtonRole { normal, destructive }
 enum UiButtonSize {
   standard,
   medium,
-  large;
+  large
+  ;
 
   double get height => switch (this) {
     UiButtonSize.standard => 36,
@@ -126,7 +127,8 @@ enum UiButtonSize {
 
 enum UiButtonWidth {
   hug,
-  fill;
+  fill
+  ;
 
   double? get value => switch (this) {
     UiButtonWidth.hug => null,
@@ -340,7 +342,17 @@ class UiButton extends StatelessWidget {
 
   Widget _buildLabelButton(
     UiTheme theme,
-    ({Color bg, Color disabledBg, Color fg, Color disabledFg, Color? border, Color overlay, Color shadow, double elevation}) colors,
+    ({
+      Color bg,
+      Color disabledBg,
+      Color fg,
+      Color disabledFg,
+      Color? border,
+      Color overlay,
+      Color shadow,
+      double elevation,
+    })
+    colors,
   ) {
     final shape = RoundedSuperellipseBorder(
       borderRadius: BorderRadius.circular(theme.radius.component),
@@ -400,7 +412,17 @@ class UiButton extends StatelessWidget {
 
   Widget _buildIconButton(
     UiTheme theme,
-    ({Color bg, Color disabledBg, Color fg, Color disabledFg, Color? border, Color overlay, Color shadow, double elevation}) colors,
+    ({
+      Color bg,
+      Color disabledBg,
+      Color fg,
+      Color disabledFg,
+      Color? border,
+      Color overlay,
+      Color shadow,
+      double elevation,
+    })
+    colors,
   ) {
     final dimension = size.height;
     final iconSize = Size(dimension, dimension);

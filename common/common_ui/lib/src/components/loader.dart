@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 enum UiLoaderSize {
   small(16),
   medium(24),
-  large(32);
+  large(32)
+  ;
 
   const UiLoaderSize(this.dimension);
 

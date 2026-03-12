@@ -1,7 +1,7 @@
 import 'package:sizzle_starter/src/model/app_env.dart';
 
 /// App configuration
-/// 
+///
 /// Configurations are read from environment variables, which are set with --dart-define.
 class AppConfig {
   /// Creates a new [AppConfig] instance.

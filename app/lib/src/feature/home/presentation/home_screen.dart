@@ -42,7 +42,7 @@ class HomeScreen extends StatelessWidget {
                 itemBuilder: (context, index) {
                   final color = Colors.accents[index];
                   final isSelected = settings.general.seedColor.toARGB32() == color.toARGB32();
-            
+
                   return _ColorItem(
                     color: color,
                     isSelected: isSelected,
