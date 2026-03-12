@@ -200,34 +200,21 @@ class _PulldownMenuContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final theme = UiTheme.of(context);
-
-    return UiMenu(
+    return const UiMenu(
       width: 220,
       children: [
-        Padding(
-          padding: EdgeInsets.fromLTRB(
-            theme.spacing.s8,
-            theme.spacing.s8,
-            theme.spacing.s8,
-            theme.spacing.s4,
-          ),
-          child: UiText.labelLarge(
-            'Quick actions',
-            color: theme.color.onSurfaceMuted,
-          ),
-        ),
-        const _PreviewMenuItem(label: 'Edit', icon: Icon(Icons.edit_outlined)),
-        const _PreviewMenuItem(
+        UiMenuSectionTitle('Quick actions'),
+        _PreviewMenuItem(label: 'Edit', icon: Icon(Icons.edit_outlined)),
+        _PreviewMenuItem(
           label: 'Duplicate',
           icon: Icon(Icons.copy_outlined),
         ),
-        const _PreviewMenuItem(
+        _PreviewMenuItem(
           label: 'Share',
           icon: Icon(Icons.ios_share_outlined),
         ),
-        const UiMenuDivider(),
-        const _PreviewMenuItem(
+        UiMenuDivider(),
+        _PreviewMenuItem(
           label: 'Delete',
           icon: Icon(Icons.delete_outline),
           role: UiButtonRole.destructive,
@@ -254,8 +241,7 @@ class _PreviewMenuItem extends StatelessWidget {
       label: label,
       icon: icon,
       role: role,
-      onPressed: () =>
-          FlyoutScope.of(context, listen: false).controller.hide(),
+      onPressed: () => FlyoutScope.of(context, listen: false).controller.hide(),
     );
   }
 }

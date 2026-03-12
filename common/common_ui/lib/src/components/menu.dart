@@ -112,3 +112,30 @@ class UiMenuDivider extends StatelessWidget {
     );
   }
 }
+
+/// A muted label that introduces a group of menu items.
+class UiMenuSectionTitle extends StatelessWidget {
+  /// Creates a section title for menu content.
+  const UiMenuSectionTitle(this.label, {super.key});
+
+  /// The text shown for the section.
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = UiTheme.of(context);
+
+    return Padding(
+      padding: EdgeInsets.fromLTRB(
+        theme.spacing.s8,
+        theme.spacing.s8,
+        theme.spacing.s8,
+        theme.spacing.s4,
+      ),
+      child: UiText.labelLarge(
+        label,
+        color: theme.color.onSurfaceMuted,
+      ),
+    );
+  }
+}
