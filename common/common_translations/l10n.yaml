@@ -3,5 +3,4 @@ template-arb-file: common_en.arb
 output-localization-file: common_translations_localizations.dart
 output-class: CommonTranslationsLocalizations
 output-dir: lib/src/l10n/generated
-synthetic-package: false
 nullable-getter: false

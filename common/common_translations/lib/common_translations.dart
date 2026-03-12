@@ -17,3 +17,9 @@ abstract final class CommonTranslations {
   /// The locales supported by the package translations.
   static const supportedLocales = CommonTranslationsLocalizations.supportedLocales;
 }
+
+/// Extension methods on [BuildContext] for working with common translations.
+extension CommonTranslationsExtension on BuildContext {
+  /// Get the [CommonTranslationsLocalizations] instance for the current context.
+  CommonTranslationsLocalizations get translations => CommonTranslationsLocalizations.of(this);
+}

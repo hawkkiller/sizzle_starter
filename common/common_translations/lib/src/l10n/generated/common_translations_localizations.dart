@@ -97,19 +97,19 @@ abstract class CommonTranslationsLocalizations {
   /// A list of this localizations delegate's supported locales.
   static const List<Locale> supportedLocales = <Locale>[Locale('en')];
 
-  /// Generic confirmation action label.
+  /// No description provided for @ok.
   ///
   /// In en, this message translates to:
   /// **'OK'**
   String get ok;
 
-  /// Generic cancellation action label.
+  /// No description provided for @cancel.
   ///
   /// In en, this message translates to:
   /// **'Cancel'**
   String get cancel;
 
-  /// Generic retry action label.
+  /// No description provided for @retry.
   ///
   /// In en, this message translates to:
   /// **'Retry'**
