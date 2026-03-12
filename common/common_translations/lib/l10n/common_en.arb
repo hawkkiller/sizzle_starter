@@ -2,5 +2,7 @@
   "@@locale": "en",
   "ok": "OK",
   "cancel": "Cancel",
+  "confirm": "Confirm",
+  "moreActions": "More actions",
   "retry": "Retry"
 }

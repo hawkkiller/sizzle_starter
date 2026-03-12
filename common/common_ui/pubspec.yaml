@@ -11,6 +11,8 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  common_translations:
+    path: ../common_translations
   collection: ^1.19.1
   oklab_flutter: ^0.0.1 
 

@@ -1,3 +1,4 @@
+import 'package:common_translations/common_translations.dart';
 import 'package:common_ui/common_ui.dart';
 import 'package:example/ds_preview_screen.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +12,11 @@ class MainApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(theme: SandgoldTheme().buildThemeData(), home: const DsPreviewScreen());
+    return MaterialApp(
+      localizationsDelegates: CommonTranslations.localizationsDelegates,
+      supportedLocales: CommonTranslations.supportedLocales,
+      theme: SandgoldTheme().buildThemeData(),
+      home: const DsPreviewScreen(),
+    );
   }
 }

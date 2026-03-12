@@ -36,6 +36,8 @@ dependencies:
     path: ../common/common_database
   common_logger:
     path: ../common/common_logger
+  common_translations:
+    path: ../common/common_translations
   common_error_reporter:
     path: ../common/common_error_reporter
   common_utils:

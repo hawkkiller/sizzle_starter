@@ -1,3 +1,4 @@
+import 'package:common_translations/common_translations.dart';
 import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
 
@@ -287,6 +288,7 @@ class UiConfirmDialog extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = UiTheme.of(context);
     final hasBody = description != null || content != null;
+    final translations = context.translations;
 
     return UiDialog(
       child: Column(
@@ -304,12 +306,12 @@ class UiConfirmDialog extends StatelessWidget {
           UiDialogActions(
             children: [
               UiButton(
-                label: cancelLabel ?? 'Cancel', // TODO(mlazebny): translations
+                label: cancelLabel ?? translations.cancel,
                 style: cancelStyle,
                 onPressed: () => Navigator.of(context).pop(false),
               ),
               UiButton(
-                label: confirmLabel ?? 'Confirm',
+                label: confirmLabel ?? translations.confirm,
                 style: confirmStyle,
                 role: confirmRole,
                 onPressed: () => Navigator.of(context).pop(true),

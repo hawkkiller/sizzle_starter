@@ -15,5 +15,11 @@ class CommonTranslationsLocalizationsEn extends CommonTranslationsLocalizations 
   String get cancel => 'Cancel';
 
   @override
+  String get confirm => 'Confirm';
+
+  @override
+  String get moreActions => 'More actions';
+
+  @override
   String get retry => 'Retry';
 }

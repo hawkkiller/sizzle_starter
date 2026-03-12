@@ -1,0 +1,1 @@
+Do not add descriptions to the translations.

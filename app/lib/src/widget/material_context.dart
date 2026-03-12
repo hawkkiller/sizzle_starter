@@ -1,3 +1,4 @@
+import 'package:common_translations/common_translations.dart';
 import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:sizzle_starter/src/feature/home/presentation/home_screen.dart';
@@ -28,6 +29,8 @@ class MaterialContext extends StatelessWidget {
     final lightTheme = SandgoldTheme().buildThemeData();
 
     return MaterialApp(
+      localizationsDelegates: CommonTranslations.localizationsDelegates,
+      supportedLocales: CommonTranslations.supportedLocales,
       theme: lightTheme,
       themeMode: materialThemeMode,
       locale: locale,

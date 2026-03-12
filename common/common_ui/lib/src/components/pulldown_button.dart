@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:common_translations/common_translations.dart';
 import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -135,8 +136,7 @@ class _UiPulldownButtonState extends State<UiPulldownButton> with SingleTickerPr
 
   @override
   Widget build(BuildContext context) {
-    // TODO(mlazebny): translations
-    final buttonLabel = widget.label ?? 'More actions';
+    final buttonLabel = widget.label ?? context.translations.moreActions;
     final spacing = UiTheme.of(context).spacing;
 
     return TapRegion(

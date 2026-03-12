@@ -11,6 +11,8 @@ dependencies:
     sdk: flutter
   common_ui:
     path: ../
+  common_translations:
+    path: ../../common_translations
   flutter_svg: ^2.2.3
 
 dev_dependencies:
