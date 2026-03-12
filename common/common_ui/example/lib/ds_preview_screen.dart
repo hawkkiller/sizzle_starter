@@ -200,48 +200,37 @@ class _PulldownMenuContent extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const UiMenu(
+    void hideFlyout() {
+      FlyoutScope.of(context, listen: false).controller.hide();
+    }
+
+    return UiMenu(
       width: 220,
       children: [
-        UiMenuSectionTitle('Quick actions'),
-        _PreviewMenuItem(label: 'Edit', icon: Icon(Icons.edit_outlined)),
-        _PreviewMenuItem(
+        const UiMenuSectionTitle('Quick actions'),
+        UiMenuItem(
+          label: 'Edit',
+          icon: const Icon(Icons.edit_outlined),
+          onPressed: hideFlyout,
+        ),
+        UiMenuItem(
           label: 'Duplicate',
-          icon: Icon(Icons.copy_outlined),
+          icon: const Icon(Icons.copy_outlined),
+          onPressed: hideFlyout,
         ),
-        _PreviewMenuItem(
+        UiMenuItem(
           label: 'Share',
-          icon: Icon(Icons.ios_share_outlined),
+          icon: const Icon(Icons.ios_share_outlined),
+          onPressed: hideFlyout,
         ),
-        UiMenuDivider(),
-        _PreviewMenuItem(
+        const UiMenuDivider(),
+        UiMenuItem(
           label: 'Delete',
-          icon: Icon(Icons.delete_outline),
+          icon: const Icon(Icons.delete_outline),
           role: UiButtonRole.destructive,
+          onPressed: hideFlyout,
         ),
       ],
-    );
-  }
-}
-
-class _PreviewMenuItem extends StatelessWidget {
-  const _PreviewMenuItem({
-    required this.label,
-    required this.icon,
-    this.role = UiButtonRole.normal,
-  });
-
-  final String label;
-  final Widget icon;
-  final UiButtonRole role;
-
-  @override
-  Widget build(BuildContext context) {
-    return UiMenuItem(
-      label: label,
-      icon: icon,
-      role: role,
-      onPressed: () => FlyoutScope.of(context, listen: false).controller.hide(),
     );
   }
 }
