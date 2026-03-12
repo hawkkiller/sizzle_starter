@@ -183,92 +183,68 @@ class PulldownPreview extends StatelessWidget {
       runSpacing: theme.spacing.s16,
       crossAxisAlignment: WrapCrossAlignment.center,
       children: const [
-        UiPulldownButton(content: _PulldownMenuCard()),
+        UiPulldownButton(content: _PulldownMenuContent()),
         UiPulldownButton(
           label: 'Actions',
           iconOnly: false,
           icon: Icon(Icons.more_vert),
-          content: _PulldownMenuCard(),
+          content: _PulldownMenuContent(),
         ),
       ],
     );
   }
 }
 
-class _PulldownMenuCard extends StatelessWidget {
-  const _PulldownMenuCard();
+class _PulldownMenuContent extends StatelessWidget {
+  const _PulldownMenuContent();
 
   @override
   Widget build(BuildContext context) {
     final theme = UiTheme.of(context);
 
-    return UiCard(
-      hasBorder: true,
-      padding: EdgeInsets.all(theme.spacing.s8),
-      child: SizedBox(
-        width: 220,
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Padding(
-              padding: EdgeInsets.fromLTRB(
-                theme.spacing.s8,
-                theme.spacing.s8,
-                theme.spacing.s8,
-                theme.spacing.s4,
-              ),
-              child: UiText.labelLarge(
-                'Quick actions',
-                color: theme.color.onSurfaceMuted,
-              ),
-            ),
-            const _PulldownAction(label: 'Edit', icon: Icons.edit_outlined),
-            const _PulldownAction(
-              label: 'Duplicate',
-              icon: Icons.copy_outlined,
-            ),
-            const _PulldownAction(
-              label: 'Share',
-              icon: Icons.ios_share_outlined,
-            ),
-            const _PulldownAction(
-              label: 'Delete',
-              icon: Icons.delete_outline,
-              role: UiButtonRole.destructive,
-            ),
-          ],
+    return UiMenu(
+      width: 220,
+      children: [
+        Padding(
+          padding: EdgeInsets.fromLTRB(
+            theme.spacing.s8,
+            theme.spacing.s8,
+            theme.spacing.s8,
+            theme.spacing.s4,
+          ),
+          child: UiText.labelLarge(
+            'Quick actions',
+            color: theme.color.onSurfaceMuted,
+          ),
         ),
-      ),
+        const UiMenuItem(
+          label: 'Edit',
+          icon: Icon(Icons.edit_outlined),
+          onPressed: _noop,
+        ),
+        const UiMenuItem(
+          label: 'Duplicate',
+          icon: Icon(Icons.copy_outlined),
+          onPressed: _noop,
+        ),
+        const UiMenuItem(
+          label: 'Share',
+          icon: Icon(Icons.ios_share_outlined),
+          onPressed: _noop,
+        ),
+        const UiMenuDivider(),
+        const UiMenuItem(
+          label: 'Delete',
+          icon: Icon(Icons.delete_outline),
+          role: UiButtonRole.destructive,
+          onPressed: _noop,
+        ),
+      ],
     );
   }
 }
 
-// TODO(mlazebny): Maybe rework pulldown button to accept actions? Or create a separate component?
-class _PulldownAction extends StatelessWidget {
-  const _PulldownAction({
-    required this.label,
-    required this.icon,
-    this.role = UiButtonRole.normal,
-  });
-
-  final String label;
-  final IconData icon;
-  final UiButtonRole role;
-
-  @override
-  Widget build(BuildContext context) {
-    return UiButton(
-      label: label,
-      icon: Icon(icon),
-      style: UiButtonStyle.ghost,
-      role: role,
-      width: UiButtonWidth.fill,
-      alignment: Alignment.centerLeft,
-      onPressed: () {},
-    );
-  }
-}
+void _noop() {}
 
 class InputPreview extends StatelessWidget {
   const InputPreview({super.key});
