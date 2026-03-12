@@ -132,6 +132,196 @@ class UiDialog extends StatelessWidget {
   }
 }
 
+/// A standard header block for dialog title, description, and trailing actions.
+class UiDialogHeader extends StatelessWidget {
+  /// Creates a dialog header.
+  const UiDialogHeader({
+    required this.title,
+    this.description,
+    this.trailing,
+    super.key,
+  });
+
+  /// The primary dialog title.
+  final String title;
+
+  /// The optional supporting description shown below the title.
+  final String? description;
+
+  /// An optional trailing widget, such as a dismiss button.
+  final Widget? trailing;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = UiTheme.of(context);
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Row(
+          spacing: theme.spacing.s12,
+          children: [
+            Expanded(child: UiText.titleLarge(title)),
+            if (trailing != null) trailing!,
+          ],
+        ),
+        if (description != null) ...[
+          SizedBox(height: theme.spacing.s8),
+          UiText.bodyMedium(
+            description!,
+            color: theme.color.onSurfaceMuted,
+            overflow: TextOverflow.visible,
+          ),
+        ],
+      ],
+    );
+  }
+}
+
+/// A standard content block for dialog body content.
+class UiDialogBody extends StatelessWidget {
+  /// Creates a dialog body with custom content.
+  const UiDialogBody({required this.child, super.key}) : text = null;
+
+  /// Creates a dialog body with standard supporting text.
+  const UiDialogBody.text(this.text, {super.key}) : child = null;
+
+  /// Optional custom body content.
+  final Widget? child;
+
+  /// Optional supporting text rendered with dialog body styling.
+  final String? text;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = UiTheme.of(context);
+
+    if (text != null) {
+      return UiText.bodyMedium(
+        text!,
+        color: theme.color.onSurfaceMuted,
+        overflow: TextOverflow.visible,
+      );
+    }
+
+    return child!;
+  }
+}
+
+/// A standard trailing action row for dialogs.
+class UiDialogActions extends StatelessWidget {
+  /// Creates a dialog action row.
+  const UiDialogActions({
+    required this.children,
+    this.spacing,
+    this.runSpacing,
+    super.key,
+  });
+
+  /// The action buttons shown at the bottom of the dialog.
+  final List<Widget> children;
+
+  /// The horizontal spacing between actions.
+  final double? spacing;
+
+  /// The vertical spacing used when actions wrap onto another line.
+  final double? runSpacing;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = UiTheme.of(context);
+
+    return Align(
+      alignment: Alignment.centerRight,
+      child: Wrap(
+        alignment: WrapAlignment.end,
+        spacing: spacing ?? theme.spacing.s8,
+        runSpacing: runSpacing ?? theme.spacing.s8,
+        children: children,
+      ),
+    );
+  }
+}
+
+/// A ready-to-use confirmation dialog that returns `true` when confirmed.
+class UiConfirmDialog extends StatelessWidget {
+  /// Creates a confirmation dialog.
+  const UiConfirmDialog({
+    required this.title,
+    this.description,
+    this.content,
+    this.confirmLabel,
+    this.cancelLabel,
+    this.confirmRole = UiButtonRole.normal,
+    this.confirmStyle = UiButtonStyle.primary,
+    this.cancelStyle = UiButtonStyle.ghost,
+    super.key,
+  });
+
+  /// The primary confirmation title.
+  final String title;
+
+  /// Optional supporting text shown below the title.
+  final String? description;
+
+  /// Optional custom content shown above the actions.
+  final Widget? content;
+
+  /// The label used for the confirm action.
+  final String? confirmLabel;
+
+  /// The label used for the cancel action.
+  final String? cancelLabel;
+
+  /// The semantic role applied to the confirm action.
+  final UiButtonRole confirmRole;
+
+  /// The visual style used for the confirm action.
+  final UiButtonStyle confirmStyle;
+
+  /// The visual style used for the cancel action.
+  final UiButtonStyle cancelStyle;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = UiTheme.of(context);
+    final hasBody = description != null || content != null;
+
+    return UiDialog(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          UiDialogHeader(title: title),
+          if (hasBody) ...[
+            SizedBox(height: theme.spacing.s16),
+            if (description != null) UiDialogBody.text(description),
+            if (description != null && content != null) SizedBox(height: theme.spacing.s16),
+            if (content != null) UiDialogBody(child: content),
+          ],
+          SizedBox(height: theme.spacing.s16),
+          UiDialogActions(
+            children: [
+              UiButton(
+                label: cancelLabel ?? 'Cancel', // TODO(mlazebny): translations
+                style: cancelStyle,
+                onPressed: () => Navigator.of(context).pop(false),
+              ),
+              UiButton(
+                label: confirmLabel ?? 'Confirm',
+                style: confirmStyle,
+                role: confirmRole,
+                onPressed: () => Navigator.of(context).pop(true),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
 class _UiDialogRouteLayout extends StatelessWidget {
   const _UiDialogRouteLayout({
     required this.child,

@@ -57,12 +57,7 @@ class _ButtonsPreview extends StatelessWidget {
       spacing: theme.spacing.s16,
       runSpacing: theme.spacing.s16,
       children: [
-        UiButton(
-          label: 'Primary',
-          onPressed: () {},
-          enabled: enabled,
-          role: role,
-        ),
+        UiButton(label: 'Primary', onPressed: () {}, enabled: enabled, role: role),
         UiButton(
           label: 'Secondary',
           onPressed: () {},
@@ -148,26 +143,10 @@ class BadgesPreview extends StatelessWidget {
       runSpacing: theme.spacing.s16,
       children: [
         UiBadge(label: 'Info', spacious: spacious),
-        UiBadge(
-          label: 'Warning',
-          variant: UiBadgeVariant.warning,
-          spacious: spacious,
-        ),
-        UiBadge(
-          label: 'Error',
-          variant: UiBadgeVariant.error,
-          spacious: spacious,
-        ),
-        UiBadge(
-          label: 'Success',
-          variant: UiBadgeVariant.success,
-          spacious: spacious,
-        ),
-        UiBadge(
-          label: 'Neutral',
-          variant: UiBadgeVariant.neutral,
-          spacious: spacious,
-        ),
+        UiBadge(label: 'Warning', variant: UiBadgeVariant.warning, spacious: spacious),
+        UiBadge(label: 'Error', variant: UiBadgeVariant.error, spacious: spacious),
+        UiBadge(label: 'Success', variant: UiBadgeVariant.success, spacious: spacious),
+        UiBadge(label: 'Neutral', variant: UiBadgeVariant.neutral, spacious: spacious),
       ],
     );
   }
@@ -210,11 +189,7 @@ class _PulldownMenuContent extends StatelessWidget {
       width: 220,
       children: [
         const UiMenuSectionTitle('Quick actions'),
-        UiMenuItem(
-          label: 'Edit',
-          icon: const Icon(Icons.edit_outlined),
-          onPressed: hideFlyout,
-        ),
+        UiMenuItem(label: 'Edit', icon: const Icon(Icons.edit_outlined), onPressed: hideFlyout),
         UiMenuItem(
           label: 'Duplicate',
           icon: const Icon(Icons.copy_outlined),
@@ -283,63 +258,16 @@ class DialogPreview extends StatelessWidget {
         onPressed: () {
           showUiDialog<void>(
             context: context,
-            builder: (context) => const _PreviewDialog(),
+            builder: (context) => const UiConfirmDialog(
+              title: 'Archive project?',
+              description:
+                  'Archived projects stay available in history, but collaborators lose edit access until you restore them.',
+              confirmLabel: 'Archive',
+              confirmRole: UiButtonRole.destructive,
+            ),
           );
         },
       ),
-    );
-  }
-}
-
-class _PreviewDialog extends StatelessWidget {
-  const _PreviewDialog();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = UiTheme.of(context);
-
-    return UiDialog(
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          const UiText.titleLarge('Archive project?'),
-          SizedBox(height: theme.spacing.s8),
-          UiText.bodyMedium(
-            'Archived projects stay available in history, but collaborators lose edit access until you restore them.',
-            color: theme.color.onSurfaceMuted,
-            maxLines: 4,
-            overflow: TextOverflow.visible,
-          ),
-          SizedBox(height: theme.spacing.s16),
-          const _PreviewDialogActions(),
-        ],
-      ),
-    );
-  }
-}
-
-class _PreviewDialogActions extends StatelessWidget {
-  const _PreviewDialogActions();
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = UiTheme.of(context);
-
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.end,
-      spacing: theme.spacing.s8,
-      children: [
-        UiButton(
-          label: 'Cancel',
-          style: UiButtonStyle.ghost,
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-        UiButton(
-          label: 'Archive',
-          onPressed: () => Navigator.of(context).pop(),
-        ),
-      ],
     );
   }
 }
@@ -366,12 +294,7 @@ class CardPreview extends StatelessWidget {
                 SizedBox(
                   width: 32,
                   height: 32,
-                  child: ClipOval(
-                    child: SvgPicture.asset(
-                      'assets/euflag.svg',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  child: ClipOval(child: SvgPicture.asset('assets/euflag.svg', fit: BoxFit.cover)),
                 ),
                 UiText.titleMedium('EUR', color: theme.color.onSurfaceMuted),
               ],
@@ -381,11 +304,7 @@ class CardPreview extends StatelessWidget {
               mainAxisSize: .min,
               spacing: theme.spacing.s4,
               children: [
-                Icon(
-                  Icons.account_balance_wallet,
-                  size: 16,
-                  color: theme.color.onSurfaceMuted,
-                ),
+                Icon(Icons.account_balance_wallet, size: 16, color: theme.color.onSurfaceMuted),
                 UiText.bodyMedium('**61305', color: theme.color.onSurfaceMuted),
               ],
             ),
