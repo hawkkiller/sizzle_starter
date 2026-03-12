@@ -26,6 +26,8 @@ class DsPreviewScreen extends StatelessWidget {
           SizedBox(height: theme.spacing.s8),
           const PulldownPreview(),
           SizedBox(height: theme.spacing.s8),
+          const DialogPreview(),
+          SizedBox(height: theme.spacing.s8),
           const BadgesPreview(),
           SizedBox(height: theme.spacing.s8),
           const BadgesPreview(spacious: true),
@@ -265,6 +267,79 @@ class InputPreview extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class DialogPreview extends StatelessWidget {
+  const DialogPreview({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: UiButton(
+        label: 'Show dialog',
+        onPressed: () {
+          showUiDialog<void>(
+            context: context,
+            builder: (context) => const _PreviewDialog(),
+          );
+        },
+      ),
+    );
+  }
+}
+
+class _PreviewDialog extends StatelessWidget {
+  const _PreviewDialog();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = UiTheme.of(context);
+
+    return UiDialog(
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const UiText.titleLarge('Archive project?'),
+          SizedBox(height: theme.spacing.s8),
+          UiText.bodyMedium(
+            'Archived projects stay available in history, but collaborators lose edit access until you restore them.',
+            color: theme.color.onSurfaceMuted,
+            maxLines: 4,
+            overflow: TextOverflow.visible,
+          ),
+          SizedBox(height: theme.spacing.s16),
+          const _PreviewDialogActions(),
+        ],
+      ),
+    );
+  }
+}
+
+class _PreviewDialogActions extends StatelessWidget {
+  const _PreviewDialogActions();
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = UiTheme.of(context);
+
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
+      spacing: theme.spacing.s8,
+      children: [
+        UiButton(
+          label: 'Cancel',
+          style: UiButtonStyle.ghost,
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+        UiButton(
+          label: 'Archive',
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ],
     );
   }
 }
