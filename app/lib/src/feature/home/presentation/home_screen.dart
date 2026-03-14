@@ -20,7 +20,7 @@ class HomeScreen extends StatelessWidget {
     final theme = UiTheme.of(context);
     final spacing = theme.spacing;
 
-    return Scaffold(
+    return UiScaffold(
       body: ListView(
         children: [
           Padding(

@@ -9,7 +9,7 @@ class DsPreviewScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = UiTheme.of(context);
 
-    return Scaffold(
+    return UiScaffold(
       backgroundColor: theme.color.background,
       body: SafeArea(
         bottom: false,
@@ -38,6 +38,8 @@ class DsPreviewScreen extends StatelessWidget {
             SizedBox(height: theme.spacing.s8),
             const CardPreview(),
             SizedBox(height: theme.spacing.s8),
+            const SnackbarPreview(),
+            SizedBox(height: theme.spacing.s8),
             const LoaderPreview(),
           ],
         ),
@@ -58,9 +60,14 @@ class _ButtonsPreview extends StatelessWidget {
 
     return Wrap(
       spacing: theme.spacing.s16,
-      runSpacing: theme.spacing.s16,
+      runSpacing: theme.spacing.s4,
       children: [
-        UiButton(label: 'Primary', onPressed: () {}, enabled: enabled, role: role),
+        UiButton(
+          label: 'Primary',
+          onPressed: () {},
+          enabled: enabled,
+          role: role,
+        ),
         UiButton(
           label: 'Secondary',
           onPressed: () {},
@@ -98,7 +105,7 @@ class _IconButtonsPreview extends StatelessWidget {
 
     return Wrap(
       spacing: theme.spacing.s16,
-      runSpacing: theme.spacing.s16,
+      runSpacing: theme.spacing.s4,
       children: [
         UiButton.iconOnly(
           label: 'Primary',
@@ -146,10 +153,26 @@ class BadgesPreview extends StatelessWidget {
       runSpacing: theme.spacing.s16,
       children: [
         UiBadge(label: 'Info', spacious: spacious),
-        UiBadge(label: 'Warning', variant: UiBadgeVariant.warning, spacious: spacious),
-        UiBadge(label: 'Error', variant: UiBadgeVariant.error, spacious: spacious),
-        UiBadge(label: 'Success', variant: UiBadgeVariant.success, spacious: spacious),
-        UiBadge(label: 'Neutral', variant: UiBadgeVariant.neutral, spacious: spacious),
+        UiBadge(
+          label: 'Warning',
+          variant: UiBadgeVariant.warning,
+          spacious: spacious,
+        ),
+        UiBadge(
+          label: 'Error',
+          variant: UiBadgeVariant.error,
+          spacious: spacious,
+        ),
+        UiBadge(
+          label: 'Success',
+          variant: UiBadgeVariant.success,
+          spacious: spacious,
+        ),
+        UiBadge(
+          label: 'Neutral',
+          variant: UiBadgeVariant.neutral,
+          spacious: spacious,
+        ),
       ],
     );
   }
@@ -192,7 +215,11 @@ class _PulldownMenuContent extends StatelessWidget {
       width: 220,
       children: [
         const UiMenuSectionTitle('Quick actions'),
-        UiMenuItem(label: 'Edit', icon: const Icon(Icons.edit_outlined), onPressed: hideFlyout),
+        UiMenuItem(
+          label: 'Edit',
+          icon: const Icon(Icons.edit_outlined),
+          onPressed: hideFlyout,
+        ),
         UiMenuItem(
           label: 'Duplicate',
           icon: const Icon(Icons.copy_outlined),
@@ -297,7 +324,12 @@ class CardPreview extends StatelessWidget {
                 SizedBox(
                   width: 32,
                   height: 32,
-                  child: ClipOval(child: SvgPicture.asset('assets/euflag.svg', fit: BoxFit.cover)),
+                  child: ClipOval(
+                    child: SvgPicture.asset(
+                      'assets/euflag.svg',
+                      fit: BoxFit.cover,
+                    ),
+                  ),
                 ),
                 UiText.titleMedium('EUR', color: theme.color.onSurfaceMuted),
               ],
@@ -307,7 +339,11 @@ class CardPreview extends StatelessWidget {
               mainAxisSize: .min,
               spacing: theme.spacing.s4,
               children: [
-                Icon(Icons.account_balance_wallet, size: 16, color: theme.color.onSurfaceMuted),
+                Icon(
+                  Icons.account_balance_wallet,
+                  size: 16,
+                  color: theme.color.onSurfaceMuted,
+                ),
                 UiText.bodyMedium('**61305', color: theme.color.onSurfaceMuted),
               ],
             ),
@@ -326,5 +362,82 @@ class LoaderPreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return const Align(alignment: Alignment.centerLeft, child: UiLoader());
+  }
+}
+
+class SnackbarPreview extends StatelessWidget {
+  const SnackbarPreview({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = UiTheme.of(context);
+
+    return Wrap(
+      spacing: theme.spacing.s16,
+      runSpacing: theme.spacing.s4,
+      children: [
+        UiButton(
+          label: 'Neutral snackbar',
+          onPressed: () {
+            showUiSnackbar(context, message: 'Changes are ready to review');
+          },
+        ),
+        UiButton(
+          label: 'Info snackbar',
+          style: UiButtonStyle.secondary,
+          onPressed: () {
+            showUiSnackbar(
+              context,
+              message: 'Sync is running in the background',
+              variant: UiSnackbarVariant.info,
+            );
+          },
+        ),
+        UiButton(
+          label: 'Success snackbar',
+          onPressed: () {
+            showUiSnackbar(
+              context,
+              message: 'Saved successfully',
+              variant: UiSnackbarVariant.success,
+            );
+          },
+        ),
+        UiButton(
+          label: 'Warning snackbar',
+          style: UiButtonStyle.secondary,
+          onPressed: () {
+            showUiSnackbar(
+              context,
+              message: 'Storage is almost full',
+              variant: UiSnackbarVariant.warning,
+            );
+          },
+        ),
+        UiButton(
+          label: 'Show action snackbar',
+          style: UiButtonStyle.secondary,
+          onPressed: () {
+            showUiSnackbar(
+              context,
+              message: 'File deleted',
+              action: UiSnackbarAction(label: 'Undo', onPressed: () {}),
+            );
+          },
+        ),
+        UiButton(
+          label: 'Error snackbar',
+          style: UiButtonStyle.secondary,
+          role: UiButtonRole.destructive,
+          onPressed: () {
+            showUiSnackbar(
+              context,
+              message: 'Could not save changes',
+              variant: UiSnackbarVariant.error,
+            );
+          },
+        ),
+      ],
+    );
   }
 }
