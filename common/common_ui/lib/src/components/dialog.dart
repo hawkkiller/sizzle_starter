@@ -94,7 +94,6 @@ class UiDialog extends StatelessWidget {
     this.constraints,
     this.padding,
     this.color,
-    this.hasBorder = true,
     super.key,
   });
 
@@ -113,9 +112,6 @@ class UiDialog extends StatelessWidget {
   /// The surface color of the dialog.
   final Color? color;
 
-  /// Whether the dialog surface shows a border.
-  final bool hasBorder;
-
   @override
   Widget build(BuildContext context) {
     final theme = UiTheme.of(context);
@@ -123,7 +119,7 @@ class UiDialog extends StatelessWidget {
     return ConstrainedBox(
       constraints: constraints ?? BoxConstraints(maxWidth: width ?? double.infinity),
       child: UiCard(
-        hasBorder: hasBorder,
+        hasShadow: true,
         color: color ?? theme.color.surfaceRaised,
         borderRadius: BorderRadius.circular(theme.radius.dialog),
         padding: padding ?? EdgeInsets.all(theme.spacing.s24),

@@ -25,7 +25,7 @@ class UiMenu extends StatelessWidget {
     final theme = UiTheme.of(context);
 
     return UiCard(
-      hasBorder: true,
+      hasShadow: true,
       padding: padding ?? EdgeInsets.all(theme.spacing.s8),
       child: SizedBox(
         width: width,
