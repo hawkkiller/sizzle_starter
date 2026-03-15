@@ -1,4 +1,9 @@
+import 'dart:ui';
+
 import 'package:common_ui/src/primitives/color_scale.dart';
+
+const uiWhite = Color(0xFFFFFFFF);
+const uiBlack = Color(0xFF000000);
 
 // Neutrals
 final uiGray = UiColorScaleOklch(265, peakC: 0.01);

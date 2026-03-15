@@ -4,6 +4,7 @@ import 'package:oklab_flutter/oklab_flutter.dart';
 
 class UiColorScale {
   const UiColorScale({
+    required this.shade25,
     required this.shade50,
     required this.shade75,
     required this.shade100,
@@ -17,6 +18,9 @@ class UiColorScale {
     required this.shade900,
     required this.shade950,
   });
+
+  /// Very light background, subtle highlights, very faint backgrounds
+  final Color shade25;
 
   /// Background surfaces (subtle), highlights, very light backgrounds
   final Color shade50;
@@ -58,6 +62,7 @@ class UiColorScale {
 class UiColorScaleOklch extends UiColorScale {
   UiColorScaleOklch(double hue, {double peakC = 0.18})
     : super(
+        shade25: OklchColor(.99, peakC * 0.05, hue).toColor(),
         shade50: OklchColor(.97, peakC * 0.11, hue).toColor(),
         shade75: OklchColor(.942, peakC * 0.24, hue).toColor(),
         shade100: OklchColor(.93, peakC * 0.28, hue).toColor(),

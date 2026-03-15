@@ -1,7 +1,7 @@
 import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
 
-/// A warm, earthy light theme with sandy golden undertones.
+/// A warm light theme with sandy golden undertones.
 ///
 /// Uses warm blue as the primary accent with warm gray neutrals
 /// for an organic, inviting feel.
@@ -14,7 +14,7 @@ class SandgoldTheme extends UiTheme {
           background: uiWarmGray.shade50,
           surface: uiWarmGray.shade75,
           surfaceInteractive: uiWarmGray.shade100,
-          surfaceRaised: const Color(0xFFFFFFFF),
+          surfaceRaised: uiWhite,
           surfaceInverse: uiWarmGray.shade900,
           onSurface: uiWarmGray.shade900,
           onSurfaceInverse: uiWarmGray.shade50,
@@ -23,21 +23,21 @@ class SandgoldTheme extends UiTheme {
           focus: uiWarmBlue.shade500,
           primary: uiWarmBlue.shade600,
           primaryInverse: uiWarmBlue.shade400,
-          onPrimary: Colors.white,
+          onPrimary: uiWarmBlue.shade25,
           success: uiGreen.shade600,
-          onSuccess: const Color(0xFFFFFFFF),
+          onSuccess: uiGreen.shade25,
           successContainer: uiGreen.shade100,
-          onSuccessContainer: uiGreen.shade600, 
-          warning: uiAmber.shade600,
-          onWarning: const Color(0xFFFFFFFF),
+          onSuccessContainer: uiGreen.shade600,
+          warning: uiOrange.shade500,
+          onWarning: uiOrange.shade25,
           warningContainer: uiAmber.shade100,
           onWarningContainer: uiAmber.shade600,
           error: uiRed.shade600,
-          onError: const Color(0xFFFFFFFF),
+          onError: uiRed.shade25,
           errorContainer: uiRed.shade100,
           onErrorContainer: uiRed.shade600,
           info: uiBlue.shade600,
-          onInfo: const Color(0xFFFFFFFF),
+          onInfo: uiBlue.shade25,
           infoContainer: uiBlue.shade100,
           onInfoContainer: uiBlue.shade600,
           scrim: uiWarmGray.shade950,

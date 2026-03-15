@@ -356,18 +356,9 @@ class UiSnackbar extends StatelessWidget {
         background: color.surfaceInverse,
         foreground: color.onSurfaceInverse,
       ),
-      UiSnackbarVariant.success => (
-        background: color.successContainer,
-        foreground: color.onSuccessContainer,
-      ),
-      UiSnackbarVariant.warning => (
-        background: color.warningContainer,
-        foreground: color.onWarningContainer,
-      ),
-      UiSnackbarVariant.error => (
-        background: color.errorContainer,
-        foreground: color.onErrorContainer,
-      ),
+      UiSnackbarVariant.success => (background: color.success, foreground: color.onSuccess),
+      UiSnackbarVariant.warning => (background: color.warning, foreground: color.onWarning),
+      UiSnackbarVariant.error => (background: color.error, foreground: color.onError),
     };
   }
 }
@@ -387,9 +378,9 @@ class _UiSnackbarContent extends StatelessWidget {
 
     final foreground = switch (snackbar.variant) {
       UiSnackbarVariant.neutral => color.primaryInverse,
-      UiSnackbarVariant.success => color.success,
-      UiSnackbarVariant.warning => color.warning,
-      UiSnackbarVariant.error => color.error,
+      UiSnackbarVariant.success => color.onSuccess,
+      UiSnackbarVariant.warning => color.onWarning,
+      UiSnackbarVariant.error => color.onError,
     };
 
     return UiButtonColors(
