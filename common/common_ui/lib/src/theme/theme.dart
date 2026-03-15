@@ -20,8 +20,7 @@ class UiTheme extends ThemeExtension<UiTheme> {
   /// Retrieves the [UiTheme] from the nearest [Theme] ancestor.
   static UiTheme of(BuildContext context) {
     final theme = Theme.of(context).extension<UiTheme>();
-    assert(theme != null, 'No UiTheme found. Did you forget to add it to ThemeData.extensions?');
-    return theme!;
+    return theme ?? SandgoldTheme();
   }
 
   /// Builds a [ThemeData] from the theme.

@@ -54,7 +54,7 @@ class _PreviewHero extends StatelessWidget {
           UiText.titleLarge('Common UI Preview', color: theme.color.onSurface),
           SizedBox(height: theme.spacing.s8),
           UiText.bodyMedium(
-            'A compact component gallery showing available components and their states.',
+            'A quick overview of the shared UI components.',
             color: theme.color.onSurfaceMuted,
             overflow: TextOverflow.visible,
           ),
@@ -133,8 +133,7 @@ class _ButtonsSectionState extends State<_ButtonsSection> {
 
     return _PreviewSection(
       title: 'Buttons',
-      description:
-          'Switch the role and state, then inspect both text and icon-only buttons.',
+      description: 'Text and icon-only action buttons.',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -320,7 +319,7 @@ class _OverlaysSection extends StatelessWidget {
 
     return _PreviewSection(
       title: 'Overlays',
-      description: 'Transient surfaces for actions and confirmations.',
+      description: 'Menus and dialogs for secondary actions.',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -344,7 +343,7 @@ class _FeedbackSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return const _PreviewSection(
       title: 'Feedback',
-      description: 'Snackbar variants and action handling.',
+      description: 'Snackbars for neutral and semantic states.',
       child: SnackbarPreview(),
     );
   }
@@ -359,7 +358,7 @@ class _BadgesSection extends StatelessWidget {
 
     return _PreviewSection(
       title: 'Badges',
-      description: 'Compact and spacious variants in one place.',
+      description: 'Status labels in semantic variants.',
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -383,7 +382,7 @@ class _FormsSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return const _PreviewSection(
       title: 'Inputs',
-      description: 'Default and disabled text input states.',
+      description: 'Text fields with default and disabled states.',
       child: InputPreview(),
     );
   }
@@ -396,7 +395,7 @@ class _SurfacesSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return const _PreviewSection(
       title: 'Surfaces',
-      description: 'A representative card composition with content hierarchy.',
+      description: 'Cards for grouped content and values.',
       child: CardPreview(),
     );
   }
@@ -409,7 +408,7 @@ class _LoadingSection extends StatelessWidget {
   Widget build(BuildContext context) {
     return const _PreviewSection(
       title: 'Loading',
-      description: 'Simple loader preview.',
+      description: 'Inline loading indicator.',
       child: LoaderPreview(),
     );
   }
