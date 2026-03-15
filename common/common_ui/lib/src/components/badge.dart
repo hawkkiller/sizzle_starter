@@ -1,7 +1,7 @@
 import 'package:common_ui/common_ui.dart';
 import 'package:flutter/widgets.dart';
 
-enum UiBadgeVariant { neutral, info, warning, success, error }
+enum UiBadgeVariant { info, warning, success, error }
 
 class UiBadge extends StatelessWidget {
   const UiBadge({
@@ -18,7 +18,6 @@ class UiBadge extends StatelessWidget {
   final String label;
 
   Color _getBackgroundColor(UiTheme theme) => switch (variant) {
-    UiBadgeVariant.neutral => theme.color.surface,
     UiBadgeVariant.info => theme.color.infoContainer,
     UiBadgeVariant.warning => theme.color.warningContainer,
     UiBadgeVariant.success => theme.color.successContainer,
@@ -26,7 +25,6 @@ class UiBadge extends StatelessWidget {
   };
 
   Color _getForegroundColor(UiTheme theme) => switch (variant) {
-    UiBadgeVariant.neutral => theme.color.onSurfaceMuted,
     UiBadgeVariant.info => theme.color.onInfoContainer,
     UiBadgeVariant.warning => theme.color.onWarningContainer,
     UiBadgeVariant.success => theme.color.onSuccessContainer,

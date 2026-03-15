@@ -6,12 +6,16 @@ class UiColorTokens {
   const UiColorTokens({
     required this.background,
     required this.surface,
+    required this.surfaceInteractive,
     required this.surfaceRaised,
+    required this.surfaceInverse,
     required this.onSurface,
+    required this.onSurfaceInverse,
     required this.onSurfaceMuted,
     required this.outline,
     required this.focus,
     required this.primary,
+    required this.primaryInverse,
     required this.onPrimary,
     required this.success,
     required this.onSuccess,
@@ -38,11 +42,20 @@ class UiColorTokens {
   /// Default component surface color.
   final Color surface;
 
+  /// Interactive neutral surface used for controls like secondary buttons.
+  final Color surfaceInteractive;
+
   /// Elevated component surface color.
   final Color surfaceRaised;
 
+  /// High-contrast inverse surface used for transient overlays.
+  final Color surfaceInverse;
+
   /// Primary foreground color on surface/background.
   final Color onSurface;
+
+  /// Foreground color on [surfaceInverse].
+  final Color onSurfaceInverse;
 
   /// Secondary foreground color on surface/background.
   final Color onSurfaceMuted;
@@ -55,6 +68,9 @@ class UiColorTokens {
 
   /// Main interactive accent color.
   final Color primary;
+
+  /// Accent color used on inverse surfaces.
+  final Color primaryInverse;
 
   /// Foreground color on [primary].
   final Color onPrimary;
@@ -114,12 +130,16 @@ class UiColorTokens {
   UiColorTokens copyWith({
     Color? background,
     Color? surface,
+    Color? surfaceInteractive,
     Color? surfaceRaised,
+    Color? surfaceInverse,
     Color? onSurface,
+    Color? onSurfaceInverse,
     Color? onSurfaceMuted,
     Color? outline,
     Color? focus,
     Color? primary,
+    Color? primaryInverse,
     Color? onPrimary,
     Color? success,
     Color? onSuccess,
@@ -142,12 +162,16 @@ class UiColorTokens {
     return UiColorTokens(
       background: background ?? this.background,
       surface: surface ?? this.surface,
+      surfaceInteractive: surfaceInteractive ?? this.surfaceInteractive,
       surfaceRaised: surfaceRaised ?? this.surfaceRaised,
+      surfaceInverse: surfaceInverse ?? this.surfaceInverse,
       onSurface: onSurface ?? this.onSurface,
+      onSurfaceInverse: onSurfaceInverse ?? this.onSurfaceInverse,
       onSurfaceMuted: onSurfaceMuted ?? this.onSurfaceMuted,
       outline: outline ?? this.outline,
       focus: focus ?? this.focus,
       primary: primary ?? this.primary,
+      primaryInverse: primaryInverse ?? this.primaryInverse,
       onPrimary: onPrimary ?? this.onPrimary,
       success: success ?? this.success,
       onSuccess: onSuccess ?? this.onSuccess,
@@ -174,12 +198,17 @@ class UiColorTokens {
     return UiColorTokens(
       background: Color.lerp(background, other.background, t) ?? background,
       surface: Color.lerp(surface, other.surface, t) ?? surface,
+      surfaceInteractive:
+          Color.lerp(surfaceInteractive, other.surfaceInteractive, t) ?? surfaceInteractive,
       surfaceRaised: Color.lerp(surfaceRaised, other.surfaceRaised, t) ?? surfaceRaised,
+      surfaceInverse: Color.lerp(surfaceInverse, other.surfaceInverse, t) ?? surfaceInverse,
       onSurface: Color.lerp(onSurface, other.onSurface, t) ?? onSurface,
+      onSurfaceInverse: Color.lerp(onSurfaceInverse, other.onSurfaceInverse, t) ?? onSurfaceInverse,
       onSurfaceMuted: Color.lerp(onSurfaceMuted, other.onSurfaceMuted, t) ?? onSurfaceMuted,
       outline: Color.lerp(outline, other.outline, t) ?? outline,
       focus: Color.lerp(focus, other.focus, t) ?? focus,
       primary: Color.lerp(primary, other.primary, t) ?? primary,
+      primaryInverse: Color.lerp(primaryInverse, other.primaryInverse, t) ?? primaryInverse,
       onPrimary: Color.lerp(onPrimary, other.onPrimary, t) ?? onPrimary,
       success: Color.lerp(success, other.success, t) ?? success,
       onSuccess: Color.lerp(onSuccess, other.onSuccess, t) ?? onSuccess,

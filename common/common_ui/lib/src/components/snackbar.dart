@@ -8,11 +8,11 @@ import 'package:flutter/material.dart';
 const _uiSnackbarAnimationDuration = Duration(milliseconds: 125);
 const _uiSnackbarDefaultDuration = Duration(seconds: 4);
 const _uiSnackbarMaxWidth = 560.0;
+const _uiSnackbarMinHeight = 44.0;
 
 /// The visual variant of a snackbar.
 enum UiSnackbarVariant {
   neutral,
-  info,
   success,
   warning,
   error,
@@ -278,8 +278,8 @@ class _UiSnackbarLayer extends StatelessWidget {
         alignment: Alignment.bottomCenter,
         child: Padding(
           padding: EdgeInsets.only(
-            left: mediaQuery.viewPadding.left + theme.spacing.s16,
-            right: mediaQuery.viewPadding.right + theme.spacing.s16,
+            left: mediaQuery.viewPadding.left + theme.spacing.s12,
+            right: mediaQuery.viewPadding.right + theme.spacing.s12,
             bottom: bottomInset + theme.spacing.s16,
           ),
           child: ConstrainedBox(
@@ -328,15 +328,20 @@ class UiSnackbar extends StatelessWidget {
         hasShadow: true,
         color: colors.background,
         borderRadius: BorderRadius.circular(theme.radius.dialog),
-        padding: EdgeInsets.symmetric(
-          horizontal: theme.spacing.s16,
-          vertical: theme.spacing.s12,
+        padding: EdgeInsetsDirectional.only(
+          top: theme.spacing.s4,
+          bottom: theme.spacing.s4,
+          start: theme.spacing.s16,
+          end: snackbar.action == null ? theme.spacing.s16 : theme.spacing.s4,
         ),
         child: DefaultTextStyle(
           style: theme.typography.bodyMedium.copyWith(color: colors.foreground),
-          child: _UiSnackbarContent(
-            snackbar: snackbar,
-            onActionPressed: onActionPressed,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: _uiSnackbarMinHeight),
+            child: _UiSnackbarContent(
+              snackbar: snackbar,
+              onActionPressed: onActionPressed,
+            ),
           ),
         ),
       ),
@@ -348,12 +353,8 @@ class UiSnackbar extends StatelessWidget {
 
     return switch (snackbar.variant) {
       UiSnackbarVariant.neutral => (
-        background: color.surfaceRaised,
-        foreground: color.onSurface,
-      ),
-      UiSnackbarVariant.info => (
-        background: color.infoContainer,
-        foreground: color.onInfoContainer,
+        background: color.surfaceInverse,
+        foreground: color.onSurfaceInverse,
       ),
       UiSnackbarVariant.success => (
         background: color.successContainer,
@@ -380,41 +381,46 @@ class _UiSnackbarContent extends StatelessWidget {
   final UiSnackbarData snackbar;
   final ValueChanged<UiSnackbarAction>? onActionPressed;
 
-  ({UiButtonStyle style, UiButtonRole role}) _resolveActionAppearance() {
-    return switch (snackbar.variant) {
-      UiSnackbarVariant.neutral => (style: UiButtonStyle.ghost, role: UiButtonRole.normal),
-      UiSnackbarVariant.info => (style: UiButtonStyle.secondary, role: UiButtonRole.normal),
-      UiSnackbarVariant.success => (style: UiButtonStyle.secondary, role: UiButtonRole.normal),
-      UiSnackbarVariant.warning => (style: UiButtonStyle.secondary, role: UiButtonRole.normal),
-      UiSnackbarVariant.error => (style: UiButtonStyle.outline, role: UiButtonRole.destructive),
+  UiButtonColors _resolveActionColors(UiTheme theme) {
+    final color = theme.color;
+    final opacity = theme.opacity;
+
+    final foreground = switch (snackbar.variant) {
+      UiSnackbarVariant.neutral => color.primaryInverse,
+      UiSnackbarVariant.success => color.success,
+      UiSnackbarVariant.warning => color.warning,
+      UiSnackbarVariant.error => color.error,
     };
+
+    return UiButtonColors(
+      foreground: foreground,
+      disabledForeground: foreground.withValues(alpha: foreground.a * opacity.disabled),
+      overlay: foreground.withValues(alpha: opacity.hover),
+    );
   }
 
   @override
   Widget build(BuildContext context) {
     final theme = UiTheme.of(context);
-    final actionAppearance = _resolveActionAppearance();
+    final actionColors = _resolveActionColors(theme);
 
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      crossAxisAlignment: CrossAxisAlignment.stretch,
+    return Row(
       children: [
-        Text(
-          snackbar.message,
-          overflow: TextOverflow.visible,
-          maxLines: 3,
+        Expanded(
+          child: Text(
+            snackbar.message,
+            overflow: TextOverflow.visible,
+            maxLines: 3,
+          ),
         ),
         if (snackbar.action != null) ...[
-          SizedBox(height: theme.spacing.s8),
-          Align(
-            alignment: Alignment.centerRight,
-            child: UiButton(
-              label: snackbar.action!.label,
-              style: actionAppearance.style,
-              role: actionAppearance.role,
-              emphasized: true,
-              onPressed: onActionPressed == null ? null : () => onActionPressed!(snackbar.action!),
-            ),
+          SizedBox(width: theme.spacing.s12),
+          UiButton(
+            label: snackbar.action!.label,
+            style: UiButtonStyle.ghost,
+            emphasized: true,
+            colors: actionColors,
+            onPressed: onActionPressed == null ? null : () => onActionPressed!(snackbar.action!),
           ),
         ],
       ],

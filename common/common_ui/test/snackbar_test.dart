@@ -11,6 +11,15 @@ void main() {
 
     expect(find.text('Saved successfully'), findsOneWidget);
 
+    final uiCard = tester.widget<UiCard>(
+      find.ancestor(
+        of: find.text('Saved successfully'),
+        matching: find.byType(UiCard),
+      ),
+    );
+
+    expect(uiCard.color, SandgoldTheme().color.surfaceInverse);
+
     await tester.pump(const Duration(milliseconds: 450));
 
     expect(find.text('Saved successfully'), findsNothing);
@@ -41,12 +50,51 @@ void main() {
     await tester.tap(find.text('Show action snackbar'));
     await tester.pump();
 
-    expect(find.text('File deleted'), findsOneWidget);
+    expect(find.text('Project archived'), findsOneWidget);
 
     await tester.tap(find.text('Undo'));
     await tester.pump();
 
     expect(actionPressed, isTrue);
+  });
+
+  testWidgets('uses inverse accent color for neutral snackbar actions', (tester) async {
+    final theme = SandgoldTheme();
+
+    await tester.pumpWidget(const _TestApp());
+
+    await tester.tap(find.text('Show action snackbar'));
+    await tester.pump();
+
+    final button = tester.widget<FilledButton>(
+      find.descendant(
+        of: find.byType(UiSnackbar),
+        matching: find.byType(FilledButton),
+      ),
+    );
+
+    expect(
+      button.style?.foregroundColor?.resolve(<WidgetState>{}),
+      theme.color.primaryInverse,
+    );
+  });
+
+  testWidgets('keeps single-line snackbars compact with and without actions', (tester) async {
+    await tester.pumpWidget(const _TestApp());
+
+    await tester.tap(find.text('Show snackbar'));
+    await tester.pump();
+
+    final withoutActionHeight = tester.getSize(find.byType(UiSnackbar)).height;
+
+    await tester.pumpWidget(const _TestApp());
+    await tester.tap(find.text('Show action snackbar'));
+    await tester.pump();
+
+    final withActionHeight = tester.getSize(find.byType(UiSnackbar)).height;
+
+    expect(withoutActionHeight, 44);
+    expect(withActionHeight, 44);
   });
 
   testWidgets('applies the snackbar variant colors', (tester) async {
@@ -163,7 +211,7 @@ class _TestHarness extends StatelessWidget {
           onPressed: () {
             showUiSnackbar(
               context,
-              message: 'File deleted',
+              message: 'Project archived',
               duration: const Duration(seconds: 5),
               action: UiSnackbarAction(
                 label: 'Undo',

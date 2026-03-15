@@ -69,7 +69,7 @@ showUiSnackbar(
 ```dart
 showUiSnackbar(
   context,
-  message: 'File deleted',
+  message: 'Project archived',
   action: UiSnackbarAction(
     label: 'Undo',
     onPressed: restoreFile,

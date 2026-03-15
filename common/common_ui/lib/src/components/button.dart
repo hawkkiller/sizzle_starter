@@ -9,6 +9,46 @@ class _PressScaleNotification extends Notification {
   const _PressScaleNotification();
 }
 
+/// Optional color overrides for a [UiButton].
+@immutable
+class UiButtonColors {
+  /// Creates button color overrides.
+  const UiButtonColors({
+    this.background,
+    this.disabledBackground,
+    this.foreground,
+    this.disabledForeground,
+    this.border,
+    this.overlay,
+    this.shadow,
+    this.elevation,
+  });
+
+  /// The background color.
+  final Color? background;
+
+  /// The background color while disabled.
+  final Color? disabledBackground;
+
+  /// The foreground color.
+  final Color? foreground;
+
+  /// The foreground color while disabled.
+  final Color? disabledForeground;
+
+  /// The optional border color.
+  final Color? border;
+
+  /// The pressed and hovered overlay color.
+  final Color? overlay;
+
+  /// The shadow color.
+  final Color? shadow;
+
+  /// The elevation.
+  final double? elevation;
+}
+
 /// A widget that adds a subtle scale down effect when pressed.
 ///
 /// When nested, only the innermost [PressScaleTransition] will animate,
@@ -103,7 +143,7 @@ class _PressScaleTransitionState extends State<PressScaleTransition>
 enum UiButtonStyle { primary, secondary, outline, ghost }
 
 /// The semantic role of the button (affects color).
-enum UiButtonRole { normal, destructive }
+enum UiButtonRole { normal, accent, destructive }
 
 enum UiButtonSize {
   standard,
@@ -155,6 +195,7 @@ class UiButton extends StatelessWidget {
     this.icon,
     this.emphasized = false,
     this.iconOnly = false,
+    this.colors,
     super.key,
   });
 
@@ -169,6 +210,7 @@ class UiButton extends StatelessWidget {
     this.enabled = true,
     this.isLoading = false,
     this.alignment = Alignment.center,
+    this.colors,
     super.key,
   }) : iconOnly = true,
        trailing = null,
@@ -216,12 +258,15 @@ class UiButton extends StatelessWidget {
   /// Whether the button should be emphasized.
   final bool emphasized;
 
+  /// Optional color overrides applied after the built-in style resolution.
+  final UiButtonColors? colors;
+
   bool get _enabled => enabled && onPressed != null && !isLoading;
 
   @override
   Widget build(BuildContext context) {
     final theme = UiTheme.of(context);
-    final colors = _resolveColors(theme);
+    final colors = _applyColorOverrides(_resolveColors(theme));
 
     var button = iconOnly ? _buildIconButton(theme, colors) : _buildLabelButton(theme, colors);
 
@@ -264,6 +309,16 @@ class UiButton extends StatelessWidget {
         shadow: c.primary.withValues(alpha: o.scrim),
         elevation: _enabled ? e.raised : e.none,
       ),
+      (UiButtonStyle.primary, UiButtonRole.accent) => (
+        bg: c.primary,
+        disabledBg: dim(c.primary),
+        fg: c.onPrimary,
+        disabledFg: dim(c.onPrimary),
+        border: null,
+        overlay: c.onPrimary.withValues(alpha: o.hover),
+        shadow: c.primary.withValues(alpha: o.scrim),
+        elevation: _enabled ? e.raised : e.none,
+      ),
       (UiButtonStyle.primary, UiButtonRole.destructive) => (
         bg: c.error,
         disabledBg: dim(c.error),
@@ -276,8 +331,8 @@ class UiButton extends StatelessWidget {
       ),
       // Secondary
       (UiButtonStyle.secondary, UiButtonRole.normal) => (
-        bg: c.surface,
-        disabledBg: dim(c.surface),
+        bg: c.surfaceInteractive,
+        disabledBg: dim(c.surfaceInteractive),
         fg: c.onSurface,
         disabledFg: dim(c.onSurface),
         border: null,
@@ -285,9 +340,19 @@ class UiButton extends StatelessWidget {
         shadow: c.onSurface.withValues(alpha: o.scrim),
         elevation: e.none,
       ),
+      (UiButtonStyle.secondary, UiButtonRole.accent) => (
+        bg: c.surfaceInteractive,
+        disabledBg: dim(c.surfaceInteractive),
+        fg: c.primary,
+        disabledFg: dim(c.primary),
+        border: null,
+        overlay: c.primary.withValues(alpha: o.hover),
+        shadow: c.primary.withValues(alpha: o.scrim),
+        elevation: e.none,
+      ),
       (UiButtonStyle.secondary, UiButtonRole.destructive) => (
         bg: c.errorContainer,
-        disabledBg: dim(c.surface),
+        disabledBg: dim(c.surfaceInteractive),
         fg: c.error,
         disabledFg: dim(c.error),
         border: null,
@@ -303,6 +368,16 @@ class UiButton extends StatelessWidget {
         disabledFg: dim(c.onSurface),
         border: c.outline,
         overlay: c.onSurface.withValues(alpha: o.hover),
+        shadow: Colors.transparent,
+        elevation: e.none,
+      ),
+      (UiButtonStyle.outline, UiButtonRole.accent) => (
+        bg: Colors.transparent,
+        disabledBg: Colors.transparent,
+        fg: c.primary,
+        disabledFg: dim(c.primary),
+        border: c.primary,
+        overlay: c.primary.withValues(alpha: o.hover),
         shadow: Colors.transparent,
         elevation: e.none,
       ),
@@ -327,6 +402,16 @@ class UiButton extends StatelessWidget {
         shadow: Colors.transparent,
         elevation: e.none,
       ),
+      (UiButtonStyle.ghost, UiButtonRole.accent) => (
+        bg: Colors.transparent,
+        disabledBg: Colors.transparent,
+        fg: c.primary,
+        disabledFg: dim(c.primary),
+        border: null,
+        overlay: c.primary.withValues(alpha: o.hover),
+        shadow: Colors.transparent,
+        elevation: e.none,
+      ),
       (UiButtonStyle.ghost, UiButtonRole.destructive) => (
         bg: Colors.transparent,
         disabledBg: Colors.transparent,
@@ -338,6 +423,47 @@ class UiButton extends StatelessWidget {
         elevation: e.none,
       ),
     };
+  }
+
+  ({
+    Color bg,
+    Color disabledBg,
+    Color fg,
+    Color disabledFg,
+    Color? border,
+    Color overlay,
+    Color shadow,
+    double elevation,
+  })
+  _applyColorOverrides(
+    ({
+      Color bg,
+      Color disabledBg,
+      Color fg,
+      Color disabledFg,
+      Color? border,
+      Color overlay,
+      Color shadow,
+      double elevation,
+    })
+    resolvedColors,
+  ) {
+    final overrides = colors;
+
+    if (overrides == null) {
+      return resolvedColors;
+    }
+
+    return (
+      bg: overrides.background ?? resolvedColors.bg,
+      disabledBg: overrides.disabledBackground ?? resolvedColors.disabledBg,
+      fg: overrides.foreground ?? resolvedColors.fg,
+      disabledFg: overrides.disabledForeground ?? resolvedColors.disabledFg,
+      border: overrides.border ?? resolvedColors.border,
+      overlay: overrides.overlay ?? resolvedColors.overlay,
+      shadow: overrides.shadow ?? resolvedColors.shadow,
+      elevation: overrides.elevation ?? resolvedColors.elevation,
+    );
   }
 
   Widget _buildLabelButton(
@@ -372,7 +498,6 @@ class UiButton extends StatelessWidget {
       overlayColor: colors.overlay,
       shape: shape,
       alignment: alignment,
-      tapTargetSize: MaterialTapTargetSize.padded,
       textStyle: theme.typography.labelLarge.copyWith(
         fontWeight: emphasized ? FontWeight.w600 : FontWeight.w500,
       ),
