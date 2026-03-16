@@ -1,12 +1,8 @@
-import 'dart:async';
 import 'dart:ui' show lerpDouble;
 
 import 'package:common_ui/common_ui.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-
-const _uiListItemPressAnimationDuration = Duration(milliseconds: 150);
-const _uiListItemPressAnimationCurve = Curves.easeInOut;
 
 /// A selectable row layout for list content and lightweight actions.
 class UiListItem extends StatelessWidget {
@@ -128,34 +124,9 @@ class _UiListItemButton extends StatefulWidget {
   State<_UiListItemButton> createState() => _UiListItemButtonState();
 }
 
-class _UiListItemButtonState extends State<_UiListItemButton> with SingleTickerProviderStateMixin {
+class _UiListItemButtonState extends State<_UiListItemButton> {
   bool _isFocused = false;
   bool _isHovered = false;
-  bool _isPressed = false;
-  Timer? _releaseTimer;
-  late final AnimationController _pressController;
-  late final Animation<double> _pressAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _pressController = AnimationController(
-      duration: _uiListItemPressAnimationDuration,
-      vsync: this,
-    );
-    _pressAnimation = CurvedAnimation(
-      parent: _pressController,
-      curve: _uiListItemPressAnimationCurve,
-      reverseCurve: _uiListItemPressAnimationCurve,
-    );
-  }
-
-  @override
-  void dispose() {
-    _releaseTimer?.cancel();
-    _pressController.dispose();
-    super.dispose();
-  }
 
   double _baseOverlayOpacity(UiTheme theme) {
     if (_isHovered) {
@@ -183,37 +154,6 @@ class _UiListItemButtonState extends State<_UiListItemButton> with SingleTickerP
     );
   }
 
-  void _handlePressStart() {
-    _releaseTimer?.cancel();
-
-    if (_isPressed) {
-      return;
-    }
-
-    setState(() => _isPressed = true);
-    _pressController.forward();
-  }
-
-  void _handlePressEnd() {
-    _schedulePressedReset();
-  }
-
-  void _handlePressCancel() {
-    _schedulePressedReset();
-  }
-
-  void _schedulePressedReset() {
-    _releaseTimer?.cancel();
-    _releaseTimer = Timer(const Duration(milliseconds: 50), () {
-      if (!mounted) {
-        return;
-      }
-
-      setState(() => _isPressed = false);
-      _pressController.reverse();
-    });
-  }
-
   @override
   Widget build(BuildContext context) {
     final theme = UiTheme.of(context);
@@ -234,30 +174,20 @@ class _UiListItemButtonState extends State<_UiListItemButton> with SingleTickerP
           },
         ),
       },
-      child: Listener(
-        behavior: HitTestBehavior.translucent,
-        onPointerDown: (_) => _handlePressStart(),
-        onPointerUp: (_) => _handlePressEnd(),
-        onPointerCancel: (_) => _handlePressCancel(),
-        child: GestureDetector(
-          behavior: HitTestBehavior.translucent,
-          onTap: widget.onPressed,
-          child: AnimatedBuilder(
-            animation: _pressAnimation,
-            child: widget.child,
-            builder: (context, child) {
-              return Transform.scale(
-                scale: lerpDouble(1, 0.97, _pressAnimation.value) ?? 1,
-                child: _UiListItemSurface(
-                  backgroundColor: _resolvedBackgroundColor(theme, _pressAnimation.value),
-                  hasSubtitle: widget.hasSubtitle,
-                  contentPadding: widget.contentPadding,
-                  child: child!,
-                ),
-              );
-            },
-          ),
-        ),
+      child: PressTransition(
+        onTap: widget.onPressed,
+        child: widget.child,
+        builder: (context, pressProgress, child) {
+          return Transform.scale(
+            scale: lerpDouble(1, 0.97, pressProgress) ?? 1,
+            child: _UiListItemSurface(
+              backgroundColor: _resolvedBackgroundColor(theme, pressProgress),
+              hasSubtitle: widget.hasSubtitle,
+              contentPadding: widget.contentPadding,
+              child: child!,
+            ),
+          );
+        },
       ),
     );
   }
@@ -291,10 +221,7 @@ class _UiListItemSurface extends StatelessWidget {
         child: Padding(
           padding:
               contentPadding ??
-              EdgeInsets.symmetric(
-                horizontal: theme.spacing.s16,
-                vertical: theme.spacing.s12,
-              ),
+              EdgeInsets.symmetric(horizontal: theme.spacing.s16, vertical: theme.spacing.s12),
           child: child,
         ),
       ),

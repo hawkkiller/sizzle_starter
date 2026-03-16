@@ -143,22 +143,24 @@ class _PressTransitionState extends State<PressTransition> with SingleTickerProv
         _childHandledPress = true;
         return false;
       },
-      child: GestureDetector(
+      child: Listener(
         behavior: HitTestBehavior.translucent,
-        onTapDown: (_) => _handlePressStart(),
-        onTapUp: (_) => _handlePressEnd(),
-        onTapCancel: _handlePressCancel,
-        onTap: widget.onTap,
-        child: AnimatedBuilder(
-          animation: _controller,
-          child: widget.child,
-          builder: (context, child) {
-            return widget.builder(
-              context,
-              widget.curve.transform(_controller.value),
-              child,
-            );
-          },
+        onPointerDown: (_) => _handlePressStart(),
+        onPointerUp: (_) => _handlePressEnd(),
+        onPointerCancel: (_) => _handlePressCancel(),
+        child: GestureDetector(
+          onTap: widget.onTap,
+          child: AnimatedBuilder(
+            animation: _controller,
+            child: widget.child,
+            builder: (context, child) {
+              return widget.builder(
+                context,
+                widget.curve.transform(_controller.value),
+                child,
+              );
+            },
+          ),
         ),
       ),
     );
