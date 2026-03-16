@@ -28,6 +28,8 @@ class DsPreviewScreen extends StatelessWidget {
             SizedBox(height: theme.spacing.s12),
             const _FormsSection(),
             SizedBox(height: theme.spacing.s12),
+            const _ListItemsSection(),
+            SizedBox(height: theme.spacing.s12),
             const _SurfacesSection(),
             SizedBox(height: theme.spacing.s12),
             const _LoadingSection(),
@@ -152,8 +154,7 @@ class _ButtonsSectionState extends State<_ButtonsSection> {
                 label: 'Destructive',
                 selected: _role == UiButtonRole.destructive,
                 role: UiButtonRole.destructive,
-                onPressed: () =>
-                    setState(() => _role = UiButtonRole.destructive),
+                onPressed: () => setState(() => _role = UiButtonRole.destructive),
               ),
             ],
           ),
@@ -401,6 +402,19 @@ class _SurfacesSection extends StatelessWidget {
   }
 }
 
+class _ListItemsSection extends StatelessWidget {
+  const _ListItemsSection();
+
+  @override
+  Widget build(BuildContext context) {
+    return const _PreviewSection(
+      title: 'List items',
+      description: 'Reusable rows for settings, metadata, and lightweight actions.',
+      child: ListItemsPreview(),
+    );
+  }
+}
+
 class _LoadingSection extends StatelessWidget {
   const _LoadingSection();
 
@@ -621,6 +635,58 @@ class CardPreview extends StatelessWidget {
             ),
             SizedBox(height: theme.spacing.s4),
             UiText.titleLarge('1,000.00', color: theme.color.onSurface),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ListItemsPreview extends StatelessWidget {
+  const ListItemsPreview({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = UiTheme.of(context);
+
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: ConstrainedBox(
+        constraints: const BoxConstraints(maxWidth: 360),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            UiListItem(
+              title: 'Personal account',
+              subtitle: 'Signed in with mykhailo@example.com',
+              leading: const Icon(Icons.person_outline),
+              trailing: const Icon(Icons.chevron_right),
+              onPressed: () {},
+            ),
+            SizedBox(height: theme.spacing.s8),
+            UiListItem(
+              title: 'Notifications',
+              subtitle: 'Push, email, and product updates',
+              leading: const Icon(Icons.notifications_outlined),
+              trailing: Text('Enabled', style: theme.typography.labelLarge),
+              selected: true,
+              onPressed: () {},
+            ),
+            SizedBox(height: theme.spacing.s8),
+            const UiListItem(
+              title: 'Workspace storage',
+              subtitle: '128 GB used of 256 GB',
+              leading: Icon(Icons.storage_outlined),
+              trailing: Icon(Icons.chevron_right),
+            ),
+            SizedBox(height: theme.spacing.s8),
+            const UiListItem(
+              title: 'Two-factor authentication',
+              subtitle: 'Required for all team members',
+              leading: Icon(Icons.lock_outline),
+              trailing: Icon(Icons.chevron_right),
+              enabled: false,
+            ),
           ],
         ),
       ),

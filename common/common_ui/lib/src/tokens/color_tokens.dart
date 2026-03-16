@@ -15,8 +15,10 @@ class UiColorTokens {
     required this.outline,
     required this.focus,
     required this.primary,
+    required this.primaryContainer,
     required this.primaryInverse,
     required this.onPrimary,
+    required this.onPrimaryContainer,
     required this.success,
     required this.onSuccess,
     required this.successContainer,
@@ -69,11 +71,17 @@ class UiColorTokens {
   /// Main interactive accent color.
   final Color primary;
 
+  /// Accent-tinted background/container color.
+  final Color primaryContainer;
+
   /// Accent color used on inverse surfaces.
   final Color primaryInverse;
 
   /// Foreground color on [primary].
   final Color onPrimary;
+
+  /// Foreground color on [primaryContainer].
+  final Color onPrimaryContainer;
 
   /// Success color.
   final Color success;
@@ -139,8 +147,10 @@ class UiColorTokens {
     Color? outline,
     Color? focus,
     Color? primary,
+    Color? primaryContainer,
     Color? primaryInverse,
     Color? onPrimary,
+    Color? onPrimaryContainer,
     Color? success,
     Color? onSuccess,
     Color? successContainer,
@@ -171,8 +181,10 @@ class UiColorTokens {
       outline: outline ?? this.outline,
       focus: focus ?? this.focus,
       primary: primary ?? this.primary,
+      primaryContainer: primaryContainer ?? this.primaryContainer,
       primaryInverse: primaryInverse ?? this.primaryInverse,
       onPrimary: onPrimary ?? this.onPrimary,
+      onPrimaryContainer: onPrimaryContainer ?? this.onPrimaryContainer,
       success: success ?? this.success,
       onSuccess: onSuccess ?? this.onSuccess,
       successContainer: successContainer ?? this.successContainer,
@@ -208,8 +220,11 @@ class UiColorTokens {
       outline: Color.lerp(outline, other.outline, t) ?? outline,
       focus: Color.lerp(focus, other.focus, t) ?? focus,
       primary: Color.lerp(primary, other.primary, t) ?? primary,
+      primaryContainer: Color.lerp(primaryContainer, other.primaryContainer, t) ?? primaryContainer,
       primaryInverse: Color.lerp(primaryInverse, other.primaryInverse, t) ?? primaryInverse,
       onPrimary: Color.lerp(onPrimary, other.onPrimary, t) ?? onPrimary,
+      onPrimaryContainer:
+          Color.lerp(onPrimaryContainer, other.onPrimaryContainer, t) ?? onPrimaryContainer,
       success: Color.lerp(success, other.success, t) ?? success,
       onSuccess: Color.lerp(onSuccess, other.onSuccess, t) ?? onSuccess,
       successContainer: Color.lerp(successContainer, other.successContainer, t) ?? successContainer,

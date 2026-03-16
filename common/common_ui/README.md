@@ -13,6 +13,7 @@ Core components exported by `common_ui`:
 - `UiDialog`
 - `UiFlyout`
 - `UiInput`
+- `UiListItem`
 - `UiLoader`
 - `UiMenu`
 - `UiPulldownButton`
@@ -27,7 +28,6 @@ The package also provides theme primitives and design tokens through `UiTheme` a
 
 These are the next additions recommended for the shared inventory:
 
-- `UiListItem`
 - `UiCheckbox`
 - `UiRadio`
 - `UiSwitch`

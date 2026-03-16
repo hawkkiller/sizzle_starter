@@ -93,8 +93,8 @@ void main() {
 
     final withActionHeight = tester.getSize(find.byType(UiSnackbar)).height;
 
-    expect(withoutActionHeight, 44);
-    expect(withActionHeight, 44);
+    expect(withoutActionHeight, 52);
+    expect(withActionHeight, 52);
   });
 
   testWidgets('applies the snackbar variant colors', (tester) async {
@@ -110,7 +110,7 @@ void main() {
       ),
     );
 
-    expect(uiCard.color, SandgoldTheme().color.errorContainer);
+    expect(uiCard.color, SandgoldTheme().color.error);
   });
 
   testWidgets('moves the snackbar above the keyboard inset', (tester) async {
