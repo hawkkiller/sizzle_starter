@@ -30,7 +30,7 @@ class SandgoldTheme extends UiTheme {
           onSuccess: uiGreen.shade25,
           successContainer: uiGreen.shade100,
           onSuccessContainer: uiGreen.shade600,
-          warning: uiOrange.shade500,
+          warning: uiOrange.shade600,
           onWarning: uiOrange.shade25,
           warningContainer: uiAmber.shade100,
           onWarningContainer: uiAmber.shade600,

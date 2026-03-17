@@ -24,9 +24,9 @@ Core components exported by `common_ui`:
 
 The package also provides theme primitives and design tokens through `UiTheme` and the token exports in `lib/common_ui.dart`.
 
-## Recommended Next Components
+## Next Components
 
-These are the next additions recommended for the shared inventory:
+These are the next additions for the shared inventory:
 
 - `UiCheckbox`
 - `UiRadio`
