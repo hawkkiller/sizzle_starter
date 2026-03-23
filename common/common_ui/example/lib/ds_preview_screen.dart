@@ -67,11 +67,7 @@ class _PreviewHero extends StatelessWidget {
 }
 
 class _PreviewSection extends StatelessWidget {
-  const _PreviewSection({
-    required this.title,
-    required this.child,
-    this.description,
-  });
+  const _PreviewSection({required this.title, required this.child, this.description});
 
   final String title;
   final String? description;
@@ -111,10 +107,7 @@ class _SectionCaption extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return UiText.labelLarge(
-      label,
-      color: UiTheme.of(context).color.onSurfaceMuted,
-    );
+    return UiText.labelLarge(label, color: UiTheme.of(context).color.onSurfaceMuted);
   }
 }
 
@@ -229,12 +222,7 @@ class _ButtonsRow extends StatelessWidget {
       spacing: theme.spacing.s12,
       runSpacing: theme.spacing.s12,
       children: [
-        UiButton(
-          label: 'Primary',
-          onPressed: () {},
-          enabled: enabled,
-          role: role,
-        ),
+        UiButton(label: 'Primary', onPressed: () {}, enabled: enabled, role: role),
         UiButton(
           label: 'Secondary',
           onPressed: () {},
@@ -442,21 +430,9 @@ class BadgesPreview extends StatelessWidget {
       runSpacing: theme.spacing.s12,
       children: [
         UiBadge(label: 'Info', spacious: spacious),
-        UiBadge(
-          label: 'Warning',
-          variant: UiBadgeVariant.warning,
-          spacious: spacious,
-        ),
-        UiBadge(
-          label: 'Error',
-          variant: UiBadgeVariant.error,
-          spacious: spacious,
-        ),
-        UiBadge(
-          label: 'Success',
-          variant: UiBadgeVariant.success,
-          spacious: spacious,
-        ),
+        UiBadge(label: 'Warning', variant: UiBadgeVariant.warning, spacious: spacious),
+        UiBadge(label: 'Error', variant: UiBadgeVariant.error, spacious: spacious),
+        UiBadge(label: 'Success', variant: UiBadgeVariant.success, spacious: spacious),
       ],
     );
   }
@@ -499,11 +475,7 @@ class _PulldownMenuContent extends StatelessWidget {
       width: 220,
       children: [
         const UiMenuSectionTitle('Quick actions'),
-        UiMenuItem(
-          label: 'Edit',
-          icon: const Icon(Icons.edit_outlined),
-          onPressed: hideFlyout,
-        ),
+        UiMenuItem(label: 'Edit', icon: const Icon(Icons.edit_outlined), onPressed: hideFlyout),
         UiMenuItem(
           label: 'Duplicate',
           icon: const Icon(Icons.copy_outlined),
@@ -610,12 +582,7 @@ class CardPreview extends StatelessWidget {
                 SizedBox(
                   width: 32,
                   height: 32,
-                  child: ClipOval(
-                    child: SvgPicture.asset(
-                      'assets/euflag.svg',
-                      fit: BoxFit.cover,
-                    ),
-                  ),
+                  child: ClipOval(child: SvgPicture.asset('assets/euflag.svg', fit: BoxFit.cover)),
                 ),
                 UiText.titleMedium('EUR', color: theme.color.onSurfaceMuted),
               ],
@@ -625,11 +592,7 @@ class CardPreview extends StatelessWidget {
               mainAxisSize: MainAxisSize.min,
               spacing: theme.spacing.s4,
               children: [
-                Icon(
-                  Icons.account_balance_wallet,
-                  size: 16,
-                  color: theme.color.onSurfaceMuted,
-                ),
+                Icon(Icons.account_balance_wallet, size: 16, color: theme.color.onSurfaceMuted),
                 UiText.bodyMedium('**61305', color: theme.color.onSurfaceMuted),
               ],
             ),
