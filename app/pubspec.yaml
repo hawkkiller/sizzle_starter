@@ -52,7 +52,7 @@ dev_dependencies:
 
   # Code Generation
   build_runner: ^2.11.1
-  json_serializable: ^6.12.0
+  json_serializable: ^6.13.1
   freezed: ^3.2.5
 
 flutter:
