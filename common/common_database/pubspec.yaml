@@ -13,7 +13,7 @@ dependencies:
   flutter:
     sdk: flutter
   drift: ^2.27.0
-  drift_flutter: ^0.2.7
+  drift_flutter: ^0.3.0
 
 dev_dependencies:
   flutter_test:
